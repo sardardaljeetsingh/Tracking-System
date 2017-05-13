@@ -28,9 +28,9 @@
             <div class="inner">
               <h3 class="masthead-brand">Tracking System</h3>
               <nav class="nav nav-masthead">
-                <a class="nav-link active" href="#/">Home</a>
-                <a class="nav-link" href="#submitForm">Track Record</a>
-                <a class="nav-link" href="#reports">Reports</a>
+                <a class="nav-link" ng-class="{active: (activetab == 'home' || activetab == null )}" ng-click="activetab = 'home'" href="#/">Home</a>
+                <a class="nav-link" ng-class="{active: activetab == 'track'}" ng-click="activetab = 'track'"  href="#submitForm">Track Record</a>
+                <a class="nav-link" ng-class="{active: activetab == 'report'}" ng-click="activetab = 'report'"   href="#reports">Reports</a>
               </nav>
             </div>
           </div>
@@ -68,18 +68,18 @@
 		  
 		  <div class="form-group text-left col-sm-7 input-sm">
 		    <label for="software" class="control-label">Customer Details</label>
-			<div class="input-sm" style="height:45px">
-			  <input type="email" class="form-control" id="software" ng-model="trackingreq.customer.id" placeholder="Customer ID">
-			</div>	
 			<div class="input-sm" style="height:45px" >
 			  <input type="email" class="form-control" id="software" ng-model="trackingreq.customer.name" placeholder="Customer Name">
 			</div>
 			<div class="input-sm" style="height:45px" >
 			  <input type="email" class="form-control" id="software" ng-model="trackingreq.customer.address" placeholder="Customer Address">
 			</div>			
-			<div class="input-sm">
-			  <input type="email" class="form-control" id="software" ng-model="trackingreq.customer.phone" placeholder="Customer Phone">
+			<div class="input-sm" style="height:45px" >
+			  <input type="email" class="form-control" id="software" ng-model="trackingreq.customer.phone1" placeholder="Phone 1">
 			</div>
+			<div class="input-sm" style="height:45px" >
+			  <input type="email" class="form-control" id="software" ng-model="trackingreq.customer.phone2" placeholder="Phone 2">
+			</div>			
 		  </div>
 	
 		  <div class="form-group text-left col-sm-7 input-sm">
@@ -116,26 +116,23 @@
 			<label for="customer">Installation Done ?</label>
     			<div class="input-group" >
     				<div id="radioBtn" class="btn-group">
-    					<a class="btn btn-success btn-sm active" data-toggle="happy" data-title="Y">YES</a>
-    					<a class="btn btn-danger btn-sm notActive" data-toggle="happy" data-title="N">NO</a>
+    					<a class="btn btn-success btn-sm " 
+						ng-class="{active: (trackingreq.installDone == 'YES' || trackingreq.installDone == null )}" ng-click="trackingreq.installDone = 'YES'"
+						data-toggle="happy" data-title="Y">YES</a>
+    					<a class="btn btn-danger btn-sm " 
+						ng-class="{active: (trackingreq.installDone == 'NO' )}" ng-click="trackingreq.installDone = 'NO'"
+						data-toggle="happy" data-title="N">NO</a>
     				</div>
-    				<input type="hidden" name="happy" id="happy">
-    			</div>			
+    			</div>
 		  </div>
 		  
-		  <div class="form-group text-left col-sm-7">
-			<label for="customer">Any Issues Identified ?</label>
+		  <div class="form-group text-left col-sm-7" ng-show="trackingreq.installDone==='NO'">
+			<label for="customer">Issue Description</label>
     			<div class="input-group">
-    				<div id="radioBtn" class="btn-group">
-    					<a class="btn btn-success btn-sm active" data-toggle="happy" data-title="Y">YES</a>
-    					<a class="btn btn-danger btn-sm notActive" data-toggle="happy" data-title="N">NO</a>
-    				</div>
-    				<input type="hidden" name="happy" id="happy">
+				  <textarea class="form-control" placeholer="Message"></textarea>
     			</div>			
-		  </div>
-
-
-
+		  </div>		  
+		  
 		  <div class="form-group text-left col-sm-7">
 			<label for="customer">Installation Status ?</label>
     			<div class="input-group">
