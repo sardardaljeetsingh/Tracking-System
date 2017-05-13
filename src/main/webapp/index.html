@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://v4-alpha.getbootstrap.com/examples/cover/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+
+    <title>Tracking System</title>
+
+    <!-- Bootstrap core CSS -->
+   <link rel="stylesheet" href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="https://v4-alpha.getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+  </head>
+
+  <body>
+  
+    <div class="site-wrapper" ng-app="trackingApp" >
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Tracking System</h3>
+              <nav class="nav nav-masthead">
+                <a class="nav-link active" href="#/">Home</a>
+                <a class="nav-link" href="#submitForm">Submit Form</a>
+                <a class="nav-link" href="#reports">Reports</a>
+              </nav>
+            </div>
+          </div>
+
+	  
+		  <div ng-view></div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Copy Rights Text @2017</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+	  
+	<script type="text/ng-template" id="/inline-formSubmit.html">
+	  <h1 class="cover-heading">Submit Form Page</h1>
+	  <form class="input-sm" >
+	  <div class="inner cover pre-scrollable"  >
+		
+		  <div class="form-group text-left col-sm-7 input-sm">
+			<label for="employee">Employee</label>
+					  <select class="form-control input-sm" id="employee" ng-model="trackingreq.employee" 
+					  ng-options="employee.name for employee in employees track by employee.id">
+					  <option value="">-- choose Employee --</option>
+					  </select>
+		  </div>
+		  <div class="form-group text-left col-sm-7">
+			<label for="customer">Customer</label>
+					  <select class="form-control input-sm" id="customer" ng-model="trackingreq.customer" 
+					  ng-options="customer.name for customer in customers track by customer.id">
+					  <option value="">-- choose Customer --</option>
+					  </select>
+		  </div>
+		  <div class="form-group text-left col-sm-7">
+			<label for="software" class="control-label">Installation Details</label>
+			<div class="input-sm">
+			   <label for="software" class="control-label input-sm">Software Name</label>
+			  <input type="email" class="form-control" id="software" ng-model="trackingreq.software" placeholder="Software Name">
+			</div>
+			<div>
+			  <label for="software" class="control-label">Date</label>
+			  <input type="email" class="form-control" id="software" ng-model="trackingreq.date" placeholder="Date">
+			</div>	
+			<div>
+			   <label for="software" class="control-label">Time</label>
+			  <input type="email" class="form-control" id="software" ng-model="trackingreq.time" placeholder="Time">
+			</div>			
+			<div>
+			  <label for="software" class="control-label">Installation Charges</label>
+			  <input type="email" class="form-control" id="software" ng-model="trackingreq.price" placeholder="Installation Charges">
+			</div>	
+			<div>
+			  <label for="software" class="control-label">Discount</label>
+			  <input type="email" class="form-control" id="software" ng-model="Discount" placeholder="Discount">
+			</div>
+			<div>
+			  <label for="software" class="control-label">Amount Paid</label>
+			  <input type="email" class="form-control" id="software" ng-model="amountpaid" placeholder="Amount Paid">
+			</div>	
+			<div>
+			  <label for="software" class="control-label">Any Issues Identified</label>
+			  <input type="email" class="form-control" id="software" ng-model="issues" placeholder="Any Issues Identified">
+			</div>		
+			<div>
+			  <label for="software" class="control-label">Installation Status</label>
+			  	<select class="form-control input-sm" id="customer" ng-model="trackingreq.status">
+					  <option value="done">Done</option>
+					  <option value="progress">In Progress</option>
+				</select>
+			</div>			
+		  </div>
+  
+			 
+	</div>	
+		<button type="submit" class="btn btn-default">Submit</button>
+		<button type="reset" class="btn btn-default">Clear</button>
+	  </form>
+	</script>	
+
+	<script type="text/ng-template" id="/inline-home.html">
+	  <div class="inner cover">
+	    <h1 class="cover-heading">
+		
+		Welcome to Tracking System
+		
+		</h1>
+	  </div>
+	</script>		
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
+<script>
+var app = angular.module("trackingApp", ["ngRoute"]);
+app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    $routeProvider
+	.when('/',{templateUrl:'/inline-home.html'})
+	.when('/submitForm'	,
+	      { 
+		    controller: 'submitFormController',
+		    templateUrl :'/inline-formSubmit.html',
+		  })
+	.when('/reports',{template:'This is the Report Route'});
+}]); 
+
+app.controller('submitFormController', function($scope) {
+	$scope.trackingreq = {};
+	$scope.trackingreq.status = "done";
+	$scope.employees = [ {id:1, "name":"pavan"} , {id:2, "name":"daljeet"} ];
+	$scope.customers = [ {id:1, "name":"Cognizant"} , {id:2, "name":"IBM"} ];
+});
+  
+  
+</script>
+
+</body></html>
