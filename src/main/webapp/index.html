@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://v4-alpha.getbootstrap.com/examples/cover/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+
+    <title>Eeshaan Tracking</title>
+
+    <!-- Bootstrap core CSS -->
+   <link rel="stylesheet" href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="https://v4-alpha.getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+	
+	<style>
+	.panel-default {
+		border-color: #ddd;
+	}
+
+	.panel {
+		margin-bottom: 20px;
+		#background-color: #fff;
+		border: 2px solid #f7f7f9;
+		border-radius: 4px;
+		-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+		box-shadow: 0 1px 1px rgba(0,0,0,.05);
+		padding: 10px 15px;
+	}
+	
+	.panel-default>.panel-heading {
+		color: #333;
+		background-color: #f5f5f5;
+		border-color: #ddd;
+	}
+
+	.panel-heading {
+		padding: 10px 15px;
+		border-bottom: 1px solid transparent;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+	}
+	
+	.col-centered{
+		float: none;
+		margin: 0 auto;
+	}
+
+	</style>
+  </head>
+
+  <body>
+  
+    <div class="site-wrapper" ng-app="trackingApp" >
+
+      <div class="site-wrapper-inner" ng-controller="loginController">
+
+        <div class="cover-container" style="width: 55rem;" >
+
+          <div class="masthead clearfix">
+            <div class="inner col-centered">
+              <h3 class="masthead-brand col-centered">Eeshaan Tracking</h3>
+              <nav class="nav nav-masthead" ng-show="user.isValidLogin == true">
+                <a class="nav-link" ng-class="{active: (activetab == 'home' || activetab == null )}" 
+				ng-click="activetab = 'home'" href="#home">Home</a>
+				<a class="nav-link" ng-class="{active: activetab == 'Employees'}"  ng-show="user.type =='admin'"
+				ng-click="activetab = 'Employees'"  href="#employees">Employees</a>
+				<a class="nav-link" ng-class="{active: activetab == 'Companies'}"  ng-show="user.type =='admin'"
+				ng-click="activetab = 'Companies'"  href="#companies">Companies</a>
+				<a class="nav-link" ng-class="{active: activetab == 'submitReq'}" ng-show="user.type =='admin'"
+				ng-click="activetab = 'submitReq'"  href="#submitRequest">Submit Request</a>
+				<a class="nav-link" ng-class="{active: activetab == 'viewRequests'}" ng-show="user.type =='user'"
+				ng-click="activetab = 'viewRequests'"  href="#viewRequests">View Requests</a>	
+				<a class="nav-link" ng-class="{active: activetab == 'viewAdminRequests'}" ng-show="user.type =='admin'"
+				ng-click="activetab = 'viewAdminRequests'"  href="#viewAdminRequests">View Requests</a>	
+				
+              </nav>
+
+		  
+            </div>
+          </div>
+
+	  
+		  <div ng-view></div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Copy Rights Text @2017</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+	  
+	<script type="text/ng-template" id="/inline-submitRequest.html">
+	  <h4 class="cover-heading input-sm">Assign Request to Employee</h4>
+	  <form class="input-sm" >
+	  <div class="inner cover pre-scrollable"  >
+		
+		  <div class="form-group text-left col-sm-7 input-sm">
+			<label for="employee">Employee</label>
+					  <select class="form-control input-sm" id="employee" ng-model="trackingreq.employee" 
+					  ng-options="employee.name for employee in employees track by employee.id">
+					  <option value="">-- choose Employee --</option>
+					  </select>
+		  </div>
+		  <div class="form-group text-left col-sm-7">
+			<label for="customer">Customer</label>
+					  <select class="form-control input-sm" id="customer" ng-model="trackingreq.customer" 
+					  ng-options="customer.name for customer in customers track by customer.id">
+					  <option value="">-- choose Customer --</option>
+					  </select>
+		  </div>
+	
+		  <div class="form-group text-left col-sm-7 input-sm">
+		    <label for="software" class="control-label">Software Installation Details</label>
+		  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+			<textarea class="form-control input-sm" ng-model="trackingreq.install.desc" rows="3" placeholder="Description" ></textarea>
+		  </div>			
+			<div class="input-sm" style="height:45px">
+			  <input type="textl" class="form-control" id="software" ng-model="trackingreq.install.id" placeholder="Target Completion Date">
+			</div>	
+			<div class="input-sm" style="height:45px" >
+			  <input type="textl" class="form-control" id="software" ng-model="trackingreq.install.charges" placeholder="Charges">
+			</div>			
+			<div class="input-sm" style="height:45px">
+			  <input type="textl" class="form-control" id="software" ng-model="trackingreq.install.discamt" placeholder="Discount Amount">
+			</div>
+			<div class="input-sm" style="height:45px" >
+			  <input type="textl" disabled class="form-control" id="software" ng-model="trackingreq.install.discamt" placeholder="Total Installation Charges">
+			</div>			
+		  </div>
+
+		  
+
+		</div>
+  
+			 
+	</div>	
+	<BR>
+		<button type="submit" class="btn btn-danger">Submit</button>
+		<button type="reset" class="btn btn-danger">Clear</button>
+	  </form>
+	</script>	
+
+	<script type="text/ng-template" id="/inline-home.html">
+	  <div class="inner cover">
+	    <h3 class="cover-heading">
+		Welcome to Eeshaan Tracking System
+		</h3>
+	  </div>
+	</script>		
+
+	<script type="text/ng-template" id="/inline-login.html">
+	  <div class="inner cover">
+		    <div class="panel panel-default col-md-7 col-centered">
+			  <form class="center-block">
+				  <div class="form-group">
+					<input type="textl" class="form-control" ng-model="user.name"  placeholder="User Name">
+				  </div>
+				  <div class="form-group">
+					<input type="password" class="form-control" ng-model="user.password" placeholder="Password">
+				  </div>
+				  <div class="form-group">
+					<input type="button" class="form-control btn btn-primary" value="Login" ng-click="login()" placeholder="Password">
+				  </div>				  
+			  </form>
+		  </div>
+		</div>		
+	</script>	
+
+
+	<script type="text/ng-template" id="/inline-companies.html">
+	  <div class="inner cover col-centered"  >
+			<div class="row">
+			  <div class="text-center col-centered">
+			  Please Select Company
+			  <select class="form-control input-sm" id="sel1" ng-model="company" 
+									ng-change="addCompany=false;selectedCompany=true;insertUpdStatus=null" ng-options="company1.name for company1 in companies">
+					<option value="">-- choose Company --</option>
+				</select>
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="input-sm text-center col-centered">
+				   
+				   <a class="text-warning" href="javscript:void(0)" 
+				   ng-click="addCompany=true;selectedCompany=false;company={};insertUpdStatus=null" >Click</a> here to add Company
+			  </div>
+			</div>	 
+
+			<div class="panel panel-default col-md-7 col-centered input-sm" ng-show="addCompany==true || selectedCompany == true">
+			  <form class="center-block" >
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control input-sm" ng-model="company.name" placeholder="Company Name">
+				  </div>
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<textarea class="form-control input-sm" ng-model="company.address" rows="3" placeholder="Company Address" ></textarea>
+				  </div>
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="company.tin"  placeholder="TIN Number">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="company.phone1"  placeholder="Phone1">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="company.phone2"  placeholder="Phone2">
+				  </div>				  
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="button" class="form-control btn btn-primary" ng-show="addCompany==true" value="Create" ng-click="createCompany(company)">
+					<input type="button" class="form-control btn btn-primary" ng-show="addCompany==false" value="Edit" ng-click="editCompany()">
+				  </div>				  
+			  </form>				
+			</div>
+							
+		  			  <div class="form-group col-centered bg-success col-md-7" ng-show="insertUpdStatus != null" >
+						{{insertUpdStatus}}
+					  </div>
+				  
+	  </div>
+	</script>
+	
+	
+	<script type="text/ng-template" id="/inline-employees.html">
+	  <div class="inner cover col-centered"  >
+			<div class="row">
+			  <div class="text-center col-centered">
+			  Please Select Employee
+			  <select class="form-control input-sm" id="sel1" ng-model="employee" 
+									ng-change="addEmployee=false;selectedEmployee=true;insertUpdStatus=null" ng-options="employee1.name for employee1 in employees">
+					<option value="">-- choose Employee --</option>
+				</select>
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="input-sm text-center col-centered">
+				   
+				   <a class="text-warning" href="javscript:void(0)" 
+				   ng-click="addEmployee=true;selectedEmployee=false;employee={};insertUpdStatus=null" >Click</a> here to add Employee
+			  </div>
+			</div>	 
+
+			<div class="panel panel-default col-md-7 col-centered input-sm" ng-show="addEmployee==true || selectedEmployee == true">
+			  <form class="center-block" >
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control input-sm" ng-model="employee.name" placeholder="Employee Name">
+				  </div>
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<textarea class="form-control input-sm" ng-model="employee.address" rows="3" placeholder="Employee address" ></textarea>
+				  </div>
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="employee.email"  placeholder="Email">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="employee.phone1"  placeholder="Phone1">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="employee.phone2"  placeholder="Phone2">
+				  </div>				  
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="button" class="form-control btn btn-primary" ng-show="addEmployee==true" value="Create" ng-click="createEmployee(employee)">
+					<input type="button" class="form-control btn btn-primary" ng-show="addEmployee==false" value="Edit" ng-click="editEmployee()">
+				  </div>				  
+			  </form>				
+			</div>
+							
+		  			  <div class="form-group col-centered bg-success col-md-7" ng-show="insertUpdStatus != null" >
+						{{insertUpdStatus}}
+					  </div>
+				  
+	  </div>
+	</script>
+	
+	<script type="text/ng-template" id="/inline-viewRequests.html">
+	  <div class="inner cover col-centered"  >	
+	       <h4 class="cover-heading input-sm" >View Requests Assigned to Employee</h4>
+		   
+		   
+		   
+		   <table class="table table-bordered input-sm">
+			<tr> <th class="input-sm" >#</th> 
+			<th>Company</th> 
+			<th>Software Desc</th>
+			<th>Start Date</th> 
+			<th>Install Status</th>
+			<th>Payment Status</th> 			
+			<th>View Log</th> 
+			</tr>		   
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">IBM</td>
+			  <td class="warning">VMWAre LAB Setup</td> 
+			  <td class="danger">05/15/2017</td>
+			  <td class="info">In Progress</td>
+			  <td class="info">--</td>
+			  <td class="info"> 
+			  <input type="button" ng-click="chnageSttaus=false;" value="View Log"> 
+			  <input type="button" ng-click="chnageSttaus=true;" value="Change Status"></td>
+			</tr>
+			<tr ng-show="chnageSttaus==null || chnageSttaus==false " >
+			  <td class="active input-sm" colspan="8"  >
+			  
+
+					  <div class="form-group text-left col-sm-7 input-sm">
+						<label for="software" class="control-label">Software Installation Details</label>
+		  <div class="form-group text-left col-sm-7">
+			<label for="customer">Installation Done ?</label>
+    			<div class="input-group" >
+    				<div id="radioBtn" class="btn-group">
+    					<a class="btn btn-success btn-sm " 
+						ng-class="{active: (trackingreq.installDone == 'YES' || trackingreq.installDone == null )}" ng-click="trackingreq.installDone = 'YES'"
+						data-toggle="happy" data-title="Y">YES</a>
+    					<a class="btn btn-danger btn-sm " 
+						ng-class="{active: (trackingreq.installDone == 'NO' )}" ng-click="trackingreq.installDone = 'NO'"
+						data-toggle="happy" data-title="N">NO</a>
+    				</div>
+    			</div>
+		  </div>						
+		  <div class="form-group text-left col-sm-7" ng-show="trackingreq.installDone==='NO'">
+			<label for="customer">Description</label>
+    			<div class="input-group">
+				  <textarea class="form-control" placeholer="Message"></textarea>
+    			</div>			
+		  </div>			
+		  <div class="form-group text-left col-sm-7">
+			<label for="customer">Charges Paid ?</label>
+    			<div class="input-group">
+    				<div id="radioBtn" class="btn-group">
+    					<a class="btn btn-success btn-sm active" data-toggle="happy" data-title="Y">YES</a>
+    					<a class="btn btn-danger btn-sm notActive" data-toggle="happy" data-title="N">NO</a>
+    				</div>
+    			</div>			
+		  </div>		  
+		  
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="button" class="form-control btn btn-primary" value="Send Paymnet Confirmation Mail Link to Customer" 
+					ng-click="createEmployee(employee)">
+				  </div>
+				  
+					  </div>			  
+			  
+			  
+			  </td>	
+			</tr>  
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">IBM</td>
+			  <td class="warning">Java install</td>
+			  <td class="danger">05/13/2017</td>
+			  <td class="info">Completed</td>
+			  <td class="info">Payment Done(Waiting for Cust Feedback)</td>
+			  <td class="info"> <input type="button" value="View Log"> <input type="button" value="Change Status"></td>
+			</tr>	
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">COgnizant</td>
+			  <td class="warning">Hadoop install</td>
+			  <td class="danger">05/10/2017</td>
+			  <td class="info">Completed</td>
+			  <td class="info">Deposited amount to Office</td>
+			  <td class="info"> <input type="button" value="View Log"> </td>
+			</tr>	
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">COgnizant</td>
+			  <td class="warning">Hadoop install</td>
+			  <td class="danger">05/10/2017</td>
+			  <td class="info">No Yet Started</td>
+			  <td class="info">--</td>
+			  <td class="info"> <input type="button" value="View Log"> <input type="button" value="Change Status"></td>
+			</tr>				
+          </table>
+
+	   </div>
+	</script>
+	
+	
+	
+	<script type="text/ng-template" id="/inline-admin-viewRequests.html">
+	  <div class="inner cover col-centered"  >	
+	       <h4 class="cover-heading input-sm" >View All Assinged Tasks</h4>
+		   
+		   
+		   
+		   <table class="table table-bordered input-sm">
+			<tr> <th class="input-sm" >#</th>
+            <th>Employee</th> 			
+			<th>Company</th> 
+			<th>Software Desc</th>
+			<th>Start Date</th> 
+			<th>Install Status</th>
+			<th>Payment Status</th> 			
+			<th>View Log</th> 
+			</tr>		   
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">Pavan</td>
+			  <td class="success">IBM</td>
+			  <td class="warning">Java install</td>
+			  <td class="danger">05/13/2017</td>
+			  <td class="info">Completed</td>
+			  <td class="info">Payment Done(Waiting for Cust Feedback)</td>
+			  <td class="info"> <input type="button" value="View Log"> </td>
+			</tr>	
+			<tr>
+			  <td class="active input-sm" colspan="8">
+			  
+			  <p class="text-left">05/13/2017 Admin : Task assigned to pavan </p>
+			  <p class="text-left">05/14/2017 Pavan : Instllation Done</p>
+			  <p class="text-left">05/14/2017 Pavan : Paymnet Recevied . Send Paymnet Notification to Customer</p>
+			  </td>
+			</tr>	
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">Srinivas</td>
+			  <td class="success">IBM</td>
+			  <td class="warning">VMWAre LAB Setup</td> 
+			  <td class="danger">05/15/2017</td>
+			  <td class="info">In Progress</td>
+			  <td class="info">--</td>
+			  <td class="info"> <input type="button" value="View Log"> </td>
+			</tr>			
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">Daljeet</td>
+			  <td class="success">COgnizant</td>
+			  <td class="warning">Hadoop install</td>
+			  <td class="danger">05/10/2017</td>
+			  <td class="info">Completed</td>
+			  <td class="info">Deposited amount to Office</td>
+			  <td class="info"> <input type="button" value="View Log"> </td>
+			</tr>	
+			<tr>
+			  <td class="active input-sm">1</td>
+			  <td class="success">Santosh</td>
+			  <td class="success">COgnizant</td>
+			  <td class="warning">Hadoop install</td>
+			  <td class="danger">05/10/2017</td>
+			  <td class="info">No Yet Started</td>
+			  <td class="info">--</td>
+			  <td class="info"> <input type="button" value="View Log"> </td>
+			</tr>				
+          </table>
+
+	   </div>
+	</script>
+	
+	
+	
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
+    <script src="js/app.js"></script> 
+
+</body></html>
