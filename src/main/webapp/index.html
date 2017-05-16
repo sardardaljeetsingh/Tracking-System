@@ -47,7 +47,13 @@
 		float: none;
 		margin: 0 auto;
 	}
-
+	
+	.custom-sm{
+		padding: .3rem .50rem;
+	}
+	.input-sm{
+		padding: .3rem .50rem;
+	}
 	</style>
   </head>
 
@@ -63,18 +69,18 @@
             <div class="inner col-centered">
               <h3 class="masthead-brand col-centered">Eeshaan Tracking</h3>
               <nav class="nav nav-masthead" ng-show="user.isValidLogin == true">
-                <a class="nav-link" ng-class="{active: (activetab == 'home' || activetab == null )}" 
+                <a class="nav-link" style="font-weight: normal;" ng-class="{active: (activetab == 'home' || activetab == null )}" 
 				ng-click="activetab = 'home'" href="#home">Home</a>
-				<a class="nav-link" ng-class="{active: activetab == 'Employees'}"  ng-show="user.type =='admin'"
-				ng-click="activetab = 'Employees'"  href="#employees">Employees</a>
-				<a class="nav-link" ng-class="{active: activetab == 'Companies'}"  ng-show="user.type =='admin'"
-				ng-click="activetab = 'Companies'"  href="#companies">Companies</a>
-				<a class="nav-link" ng-class="{active: activetab == 'submitReq'}" ng-show="user.type =='admin'"
-				ng-click="activetab = 'submitReq'"  href="#submitRequest">Submit Request</a>
-				<a class="nav-link" ng-class="{active: activetab == 'viewRequests'}" ng-show="user.type =='user'"
-				ng-click="activetab = 'viewRequests'"  href="#viewRequests">View Requests</a>	
-				<a class="nav-link" ng-class="{active: activetab == 'viewAdminRequests'}" ng-show="user.type =='admin'"
-				ng-click="activetab = 'viewAdminRequests'"  href="#viewAdminRequests">View Requests</a>	
+				<a class="nav-link" style="font-weight: normal;" ng-class="{active: activetab == 'Employees'}"  ng-show="user.type =='admin'"
+				ng-click="activetab = 'Employees'"  href="#employees">Employee Management</a>
+				<a class="nav-link" style="font-weight: normal;" ng-class="{active: activetab == 'Companies'}"  ng-show="user.type =='admin'"
+				ng-click="activetab = 'Companies'"  href="#companies">Company Management</a>
+				<a class="nav-link" style="font-weight: normal;" ng-class="{active: activetab == 'submitReq'}" ng-show="user.type =='admin'"
+				ng-click="activetab = 'submitReq'"  href="#submitRequest">Assign Task</a>
+				<a class="nav-link" style="font-weight: normal;" ng-class="{active: activetab == 'viewRequests'}" ng-show="user.type =='user'"
+				ng-click="activetab = 'viewRequests'"  href="#viewRequests">View Tasks</a>	
+				<a class="nav-link" style="font-weight: normal;" ng-class="{active: activetab == 'viewAdminRequests'}" ng-show="user.type =='admin'"
+				ng-click="activetab = 'viewAdminRequests'"  href="#viewAdminRequests">View Tasks</a>	
 				
               </nav>
 
@@ -85,11 +91,6 @@
 	  
 		  <div ng-view></div>
 
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Copy Rights Text @2017</p>
-            </div>
-          </div>
 
         </div>
 
@@ -195,23 +196,32 @@
 			<div class="panel panel-default col-md-7 col-centered input-sm" ng-show="addCompany==true || selectedCompany == true">
 			  <form class="center-block" >
 				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
-					<input type="text" class="form-control input-sm" ng-model="company.name" placeholder="Company Name">
+					<input type="text" class="form-control custom-sm" ng-model="company.name" placeholder="Company Name">
 				  </div>
 				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
-					<textarea class="form-control input-sm" ng-model="company.address" rows="3" placeholder="Company Address" ></textarea>
+					<textarea class="form-control custom-sm" ng-model="company.address" rows="3" placeholder="Company Address" ></textarea>
 				  </div>
 				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
-					<input type="text" class="form-control" ng-model="company.tin"  placeholder="TIN Number">
+					<input type="text" class="form-control custom-sm" ng-model="company.tin"  placeholder="TIN Number">
 				  </div>
 				  <div class="form-group" style="margin-bottom: 0.5rem;">
-					<input type="text" class="form-control" ng-model="company.phone1"  placeholder="Phone1">
+					<input type="text" class="form-control custom-sm" ng-model="company.phone1"  placeholder="Phone1">
 				  </div>
 				  <div class="form-group" style="margin-bottom: 0.5rem;">
-					<input type="text" class="form-control" ng-model="company.phone2"  placeholder="Phone2">
+					<input type="text" class="form-control custom-sm" ng-model="company.phone2"  placeholder="Phone2">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control custom-sm" ng-model="company.primarycontact"  placeholder="Primary contact">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control custom-sm" ng-model="company.primaryDesg"  placeholder="Primary Contact designation">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control custom-sm" ng-model="company.primaryPhone"  placeholder="Primary Contact Phone">
 				  </div>				  
 				  <div class="form-group" style="margin-bottom: 0.5rem;">
-					<input type="button" class="form-control btn btn-primary" ng-show="addCompany==true" value="Create" ng-click="createCompany(company)">
-					<input type="button" class="form-control btn btn-primary" ng-show="addCompany==false" value="Edit" ng-click="editCompany()">
+					<input type="button" class="form-control btn btn-primary custom-sm" ng-show="addCompany==true" value="Create" ng-click="createCompany(company)">
+					<input type="button" class="form-control btn btn-primary custom-sm" ng-show="addCompany==false" value="Edit" ng-click="editCompany()">
 				  </div>				  
 			  </form>				
 			</div>
@@ -259,6 +269,9 @@
 				  </div>
 				  <div class="form-group" style="margin-bottom: 0.5rem;">
 					<input type="text" class="form-control" ng-model="employee.phone2"  placeholder="Phone2">
+				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" class="form-control" ng-model="employee.referBy"  placeholder="Refered By">
 				  </div>				  
 				  <div class="form-group" style="margin-bottom: 0.5rem;">
 					<input type="button" class="form-control btn btn-primary" ng-show="addEmployee==true" value="Create" ng-click="createEmployee(employee)">
@@ -275,10 +288,8 @@
 	</script>
 	
 	<script type="text/ng-template" id="/inline-viewRequests.html">
-	  <div class="inner cover col-centered"  >	
-	       <h4 class="cover-heading input-sm" >View Requests Assigned to Employee</h4>
-		   
-		   
+	  <h4 class="cover-heading input-sm" >View Requests Assigned to Employee</h4>
+	  <div class="inner cover col-centered pre-scrollable " style="height:500px; font-size: 13px;" >	
 		   
 		   <table class="table table-bordered input-sm">
 			<tr> <th class="input-sm" >#</th> 
@@ -297,56 +308,79 @@
 			  <td class="info">In Progress</td>
 			  <td class="info">--</td>
 			  <td class="info"> 
-			  <input type="button" ng-click="chnageSttaus=false;" value="View Log"> 
-			  <input type="button" ng-click="chnageSttaus=true;" value="Change Status"></td>
+			  <input type="button" ng-click="viewSttaus=true;chnageSttaus=false;" value="View Log"> 
+			  <input type="button" ng-click="chnageSttaus=true;viewSttaus=false;" value="Change Status"></td>
 			</tr>
-			<tr ng-show="chnageSttaus==null || chnageSttaus==false " >
+			<tr ng-show="chnageSttaus==true " >
 			  <td class="active input-sm" colspan="8"  >
 			  
 
 					  <div class="form-group text-left col-sm-7 input-sm">
 						<label for="software" class="control-label">Software Installation Details</label>
-		  <div class="form-group text-left col-sm-7">
-			<label for="customer">Installation Done ?</label>
-    			<div class="input-group" >
-    				<div id="radioBtn" class="btn-group">
-    					<a class="btn btn-success btn-sm " 
-						ng-class="{active: (trackingreq.installDone == 'YES' || trackingreq.installDone == null )}" ng-click="trackingreq.installDone = 'YES'"
-						data-toggle="happy" data-title="Y">YES</a>
-    					<a class="btn btn-danger btn-sm " 
-						ng-class="{active: (trackingreq.installDone == 'NO' )}" ng-click="trackingreq.installDone = 'NO'"
-						data-toggle="happy" data-title="N">NO</a>
-    				</div>
-    			</div>
-		  </div>						
-		  <div class="form-group text-left col-sm-7" ng-show="trackingreq.installDone==='NO'">
-			<label for="customer">Description</label>
-    			<div class="input-group">
-				  <textarea class="form-control" placeholer="Message"></textarea>
-    			</div>			
-		  </div>			
-		  <div class="form-group text-left col-sm-7">
-			<label for="customer">Charges Paid ?</label>
-    			<div class="input-group">
-    				<div id="radioBtn" class="btn-group">
-    					<a class="btn btn-success btn-sm active" data-toggle="happy" data-title="Y">YES</a>
-    					<a class="btn btn-danger btn-sm notActive" data-toggle="happy" data-title="N">NO</a>
-    				</div>
-    			</div>			
-		  </div>		  
+				  <div class="form-group text-left col-sm-7">
+					<label for="customer">Installation Done ?</label>
+						<div class="input-group" >
+							<div id="radioBtn" class="btn-group">
+								<a class="btn btn-success btn-sm " 
+								ng-class="{active: (trackingreq.installDone == 'YES' || trackingreq.installDone == null )}" ng-click="trackingreq.installDone = 'YES'"
+								data-toggle="happy" data-title="Y">YES</a>
+								<a class="btn btn-danger btn-sm " 
+								ng-class="{active: (trackingreq.installDone == 'NO' )}" ng-click="trackingreq.installDone = 'NO'"
+								data-toggle="happy" data-title="N">NO</a>
+							</div>
+						</div>
+				  </div>						
+				  <div class="form-group text-left col-sm-7" ng-show="trackingreq.installDone==='NO'">
+					<label for="customer">Description</label>
+						<div class="input-group">
+						  <textarea class="form-control" placeholer="Message"></textarea>
+						</div>			
+				  </div>			
+				  <div class="form-group text-left col-sm-7">
+					<label for="customer">Charges Paid ?</label>
+						<div class="input-group">
+							<div id="radioBtn" class="btn-group">
+								<a class="btn btn-success btn-sm active" data-toggle="happy" data-title="Y">YES</a>
+								<a class="btn btn-danger btn-sm notActive" data-toggle="happy" data-title="N">NO</a>
+							</div>
+						</div>			
+				  </div>		  
 		  
 				  <div class="form-group" style="margin-bottom: 0.5rem;">
-					<input type="button" class="form-control btn btn-primary" value="Send Paymnet Confirmation Mail Link to Customer" 
+					<input type="text" class="form-control custom-sm" value="Total Amount Paid" 
 					ng-click="createEmployee(employee)">
 				  </div>
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="text" disabled class="form-controlcustom-sm" value="Balance" 
+					ng-click="createEmployee(employee)">
+				  </div>	
+				  <div class="form-group form-group-sm" style="margin-bottom: 0.5rem;">
+					<textarea class="form-control custom-sm" ng-model="employee.address" rows="3" placeholder="Comments" ></textarea>
+				  </div>				  
+				  <div class="form-group" style="margin-bottom: 0.5rem;">
+					<input type="button" class="form-control btn btn-primary custom-sm" value="Send Paymnet Confirmation Mail Link to Customer" 
+					ng-click="createEmployee(employee)">
+				  </div>
+				  
+
 				  
 					  </div>			  
 			  
 			  
 			  </td>	
 			</tr>  
+			
+			<tr ng-show="viewSttaus==true " >
+			  <td class="active input-sm" colspan="8">
+			  
+			  <p class="text-left">05/13/2017 Admin : Task assigned to pavan </p>
+			  <p class="text-left">05/14/2017 Pavan : Instllation Done</p>
+			  <p class="text-left">05/14/2017 Pavan : Paymnet Recevied . Send Paymnet Notification to Customer</p>
+			  </td>
+			</tr>				
+			
 			<tr>
-			  <td class="active input-sm">1</td>
+			  <td class="active input-sm">2</td>
 			  <td class="success">IBM</td>
 			  <td class="warning">Java install</td>
 			  <td class="danger">05/13/2017</td>
@@ -355,7 +389,7 @@
 			  <td class="info"> <input type="button" value="View Log"> <input type="button" value="Change Status"></td>
 			</tr>	
 			<tr>
-			  <td class="active input-sm">1</td>
+			  <td class="active input-sm">3</td>
 			  <td class="success">COgnizant</td>
 			  <td class="warning">Hadoop install</td>
 			  <td class="danger">05/10/2017</td>
@@ -364,7 +398,7 @@
 			  <td class="info"> <input type="button" value="View Log"> </td>
 			</tr>	
 			<tr>
-			  <td class="active input-sm">1</td>
+			  <td class="active input-sm">4</td>
 			  <td class="success">COgnizant</td>
 			  <td class="warning">Hadoop install</td>
 			  <td class="danger">05/10/2017</td>
@@ -380,10 +414,8 @@
 	
 	
 	<script type="text/ng-template" id="/inline-admin-viewRequests.html">
-	  <div class="inner cover col-centered"  >	
-	       <h4 class="cover-heading input-sm" >View All Assinged Tasks</h4>
-		   
-		   
+	  <h4 class="cover-heading input-sm" >View All Assinged Tasks</h4>
+	   <div class="inner cover col-centered pre-scrollable " style="height:500px; font-size: 13px;" >		
 		   
 		   <table class="table table-bordered input-sm">
 			<tr> <th class="input-sm" >#</th>
@@ -403,9 +435,9 @@
 			  <td class="danger">05/13/2017</td>
 			  <td class="info">Completed</td>
 			  <td class="info">Payment Done(Waiting for Cust Feedback)</td>
-			  <td class="info"> <input type="button" value="View Log"> </td>
+			  <td class="info"> <input type="button" ng-click="viewSttaus=true;" value="View Log"> </td>
 			</tr>	
-			<tr>
+			<tr ng-show="viewSttaus==true " >
 			  <td class="active input-sm" colspan="8">
 			  
 			  <p class="text-left">05/13/2017 Admin : Task assigned to pavan </p>
@@ -414,7 +446,7 @@
 			  </td>
 			</tr>	
 			<tr>
-			  <td class="active input-sm">1</td>
+			  <td class="active input-sm">2</td>
 			  <td class="success">Srinivas</td>
 			  <td class="success">IBM</td>
 			  <td class="warning">VMWAre LAB Setup</td> 
@@ -424,7 +456,7 @@
 			  <td class="info"> <input type="button" value="View Log"> </td>
 			</tr>			
 			<tr>
-			  <td class="active input-sm">1</td>
+			  <td class="active input-sm">3</td>
 			  <td class="success">Daljeet</td>
 			  <td class="success">COgnizant</td>
 			  <td class="warning">Hadoop install</td>
@@ -434,7 +466,7 @@
 			  <td class="info"> <input type="button" value="View Log"> </td>
 			</tr>	
 			<tr>
-			  <td class="active input-sm">1</td>
+			  <td class="active input-sm">4</td>
 			  <td class="success">Santosh</td>
 			  <td class="success">COgnizant</td>
 			  <td class="warning">Hadoop install</td>
