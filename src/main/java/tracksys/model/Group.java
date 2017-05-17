@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="group")
+@Table(name="group_dtl")
 public class Group {
 
 	@Id
@@ -37,7 +37,7 @@ public class Group {
 	}
 
 	@NotNull
-	@Column(name = "parent", nullable = false)
+	@Column(name = "parentid", nullable = false)
 	private int parent;	
 
 	public Group() { }
