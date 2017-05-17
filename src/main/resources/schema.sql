@@ -13,3 +13,14 @@ CREATE TABLE company
 	tin NUMBER(19) NOT NULL,
 	phonenumber NUMBER(19) NOT NULL,
 );
+
+CREATE TABLE group
+(
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR2(50) NOT NULL,
+	companyid INT NOT NULL,
+	parent INT NOT NULL,
+);
+
+ALTER TABLE group ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
+ALTER TABLE group ADD FOREIGN KEY ( parent ) REFERENCES group( id ) ;
