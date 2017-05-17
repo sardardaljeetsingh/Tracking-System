@@ -35,7 +35,7 @@ public class CompanyController {
 	  }
 	  
 	  @RequestMapping(value ="/getAll",method = RequestMethod.GET)
-	  public ResponseEntity<List<Company>> getAllCompanies() {
+	  public ResponseEntity<Iterable<Company>> getAllCompanies() {
 	    List<Company> companyList = null;
 	    try {
 	    	companyList = companyRepository.findAll();
@@ -43,7 +43,7 @@ public class CompanyController {
 	    catch (Exception ex) {
 		      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		    }
-		    return new ResponseEntity<List<Company>>(companyList, HttpStatus.OK);
+		    return new ResponseEntity<Iterable<Company>>(companyList, HttpStatus.OK);
 		  }  
 	  
 	  @RequestMapping(value ="/get/{companyId}",method = RequestMethod.GET)
