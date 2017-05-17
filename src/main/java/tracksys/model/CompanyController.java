@@ -36,7 +36,7 @@ public class CompanyController {
 	  
 	  @RequestMapping(value ="/getAll",method = RequestMethod.GET)
 	  public ResponseEntity<Iterable<Company>> getAllCompanies() {
-	    Iterable<Company> companyList = null;
+		  Iterable<Company> companyList = null;
 	    try {
 	    	companyList = companyRepository.findAll();
 	    }
