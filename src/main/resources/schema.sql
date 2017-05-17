@@ -18,3 +18,7 @@ CREATE TABLE group_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCH
 
 ALTER TABLE group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
 ALTER TABLE group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES group_dtl( id ) ;
+CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,totalquandity INT,totalpackets INT);
+ALTER TABLE item_dtl ADD FOREIGN KEY (groupid) REFERENCES group_dtl(id) ;
+CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT);
+ALTER TABLE item_dtl_trans ADD FOREIGN KEY (itemid) REFERENCES item_dtl_trans(id) ;
