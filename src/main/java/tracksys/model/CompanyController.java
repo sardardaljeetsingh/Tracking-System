@@ -47,7 +47,7 @@ public class CompanyController {
 		  }  
 	  
 	  @RequestMapping(value ="/get/{companyId}",method = RequestMethod.GET)
-	  public ResponseEntity<Company> findCompany(@PathVariable String companyId) {
+	  public ResponseEntity<Company> findCompany(@PathVariable("companyId") String companyId) {
 	    Company company = null;
 	    try {
 	    	company = companyRepository.findOne(Integer.valueOf(companyId));

@@ -31,7 +31,7 @@ public class GroupController {
 	}
 	  
 	  @RequestMapping(value ="/find-by-company/{companyId}",method = RequestMethod.GET)
-	  public ResponseEntity<Iterable<Group>> findbyCompany(@PathVariable("id") int companyId) {
+	  public ResponseEntity<Iterable<Group>> findbyCompany(@PathVariable("companyId") int companyId) {
 		  Iterable<Group> grpLableList = null;
 	    try {
 	    	Company company = new Company(companyId) ;
@@ -44,7 +44,7 @@ public class GroupController {
 	}
 	  
 	  @RequestMapping(value ="/find-by-parent/{parentGrpId}",method = RequestMethod.GET)
-	  public ResponseEntity<Iterable<Group>> findAllByParent(@PathVariable("id") int parentGrpId) {
+	  public ResponseEntity<Iterable<Group>> findAllByParent(@PathVariable("parentGrpId") int parentGrpId) {
 		  Iterable<Group> grpLableList = null;
 	    try {
 	    	grpLableList = groupRepository.findAllByParent(parentGrpId);
