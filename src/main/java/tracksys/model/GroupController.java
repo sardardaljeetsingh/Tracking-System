@@ -34,7 +34,8 @@ public class GroupController {
 	  public ResponseEntity<Iterable<Group>> findbyCompany(@PathVariable("id") int companyId) {
 		  Iterable<Group> grpLableList = null;
 	    try {
-	    	grpLableList = groupRepository.findAllByCompanyid(companyId);
+	    	Company company = new Company(companyId) ;
+	    	grpLableList = groupRepository.findAllByCompany(company);
 	    }
 		catch (Exception ex) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
