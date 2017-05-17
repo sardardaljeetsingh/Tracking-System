@@ -14,7 +14,7 @@ CREATE TABLE company
 	phonenumber NUMBER(19) NOT NULL,
 );
 
-CREATE TABLE group_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, companyid INT NOT NULL, parentid INT NOT NULL, )
+CREATE TABLE group_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, companyid INT NOT NULL, parentid INT NOT NULL, );
 
 ALTER TABLE group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
 ALTER TABLE group_dtl ADD FOREIGN KEY ( parent ) REFERENCES group_dtl( id ) ;
