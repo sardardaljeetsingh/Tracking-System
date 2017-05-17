@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Inventory Management System</title>
+
+
+<style>
+body {
+  margin: 15px;
+}
+
+/* text recolor 
+h1, p, a {
+  color: #4DC9C9 !important;
+}*/
+
+/* button recolor */
+.nav-pills > li.active > a, .btn-primary {
+  background-color: #6C6C6C !important;
+  // feeling like it's a rounded corners kind of day
+  border-color: #6C6C6C !important;
+  border-radius: 25px; 
+}
+
+	.col-centered{
+		float: none;
+		margin: 0 auto;
+	}
+	
+	.custom-sm{
+		padding: .3rem .50rem;
+	}
+	
+</style>
+
+</head>
+<body >
+
+<div class="page-header col-centered" style="height:50px; float: none;	margin: 0 auto;" >
+  <h3 >Inventory Management</h3>
+</div>
+
+
+<div class="container" style="display:none">
+<!-- Centered Tabs -->
+<ul class="nav nav-tabs nav-justified">
+  <li><a href="#">Company Management</a></li>
+  <li><a href="#">Group Managemnet</a></li>
+  <li><a href="#">Item Management</a></li>
+</ul>
+</div>
+
+  
+  <div class="container" ng-app="tabApp" style="width:98%; margin:10px">
+  <div class="row" ng-controller="TabController">
+ 
+  	<div class="col-md-3" style="width: 15%; padding: 1px;">
+  		<ul class="nav nav-pills nav-stacked">
+       	<li ng-class="{ active: isSet(1) }">
+          	<a href ng-click="setTab(1)">Home</a>
+       	</li>
+       	<li ng-class="{ active: isSet(2) }">
+          	<a href ng-click="setTab(2)">Company Management</a>
+       	</li>
+       	<li ng-class="{ active: isSet(3) }">
+          	<a href ng-click="setTab(3)">Group Managemnet</a>
+       	</li>
+       	<li ng-class="{ active: isSet(4) }">
+          	<a href ng-click="setTab(4)">Item Managemnet</a>
+       	</li>		
+     	</ul>
+  	</div>
+    <div class="col-md-9" style="width: 85%; padding: 1px;" >
+  		<div class="jumbotron " style="height: 530px;background-color: #dff0d8;">
+       	<div ng-show="isSet(1)">
+		
+					<div class="row">
+					  <div class="col-md-10" style="float: none;margin: 0 auto;">
+		
+						<h3>Home page</h3>
+						<p>Welcome to the Inventory Management System</p>
+					</div>
+					</div>
+        </div>
+		<div ng-show="isSet(2)">
+	  
+					<div class="row">
+					  <div class="col-md-5" style="float: none;	margin: 0 auto;">
+					  Please Select Company  {{greeting}}
+					  <select class="form-control input-sm" id="sel1" ng-model="company" 
+											ng-change="addCompany=null;isCompanyCreated=null;selectedCompany=company" ng-options="company.name for company in companies">
+							<option value="">-- choose Company --</option>
+						</select>
+					  </div>
+					</div>
+					<div class="row">
+					  <div class="input-sm text-center">
+						   if you want to create new compnay please select here <a href="#" ng-click="addCompany=true;selectedCompany=null;isCompanyCreated=null" >Click</a> here
+					  </div>
+					</div>
+
+					<div class="panel panel-primary col-md-6" style="float: none;	margin: 0 auto; padding:0px" ng-show="selectedCompany != null" >
+						<div class="panel-heading">Company Details</div>
+							<div class="row text-center">
+							  <div class="col-md-3 input-sm">
+							  <label for="inputEmail3" class="control-label input-sm">Name</label>
+							  </div>
+							  <div class="col-md-5 input-sm">{{selectedCompany.name}}</div>
+							</div>
+							<div class="row text-center" ng-show="selectedCompany.name">
+							  <div class="col-md-3 input-sm">
+							  <label for="inputEmail3" class="control-label input-sm">Address</label>
+							  </div>
+							  <div class="col-md-5 input-sm">{{selectedCompany.address}}</div>
+							</div>
+							<div class="row text-center" ng-show="selectedCompany.name">
+							  <div class="col-md-3 input-sm">
+							  <label for="inputEmail3" class="control-label input-sm">Tin Number</label>
+							  </div>
+							  <div class="col-md-5 input-sm">{{selectedCompany.tin}}</div>
+							</div>
+					</div>
+					
+					<div class="panel panel-primary col-md-8" style="float: none;	margin: 0 auto; padding:0px"
+					ng-show="addCompany" >
+					<div class="panel-heading">Create Company</div>
+					
+					<form class="form-horizontal" ng-show="addCompany" name="addCompanyForm" style="padding:20px" >
+					  <div class="form-group">
+						<label class="col-sm-2 control-label input-sm">Name</label>
+						<div class="col-sm-10">
+						 <input type="text" class="form-control input-sm" ng-model="inputCompanyName" placeholder="Company Name">
+						</div>
+					  </div>
+					  <div class="form-group">
+						<label for="inputCompanyName" class="col-sm-2 control-label input-sm">Address</label>
+						<div class="col-sm-10">
+						  <textarea class="form-control input-sm" ng-model="inputCompanyAddress" rows="3" placeholder="Company Address" ></textarea>
+						</div>
+					  </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label input-sm">Tin Number</label>
+						<div class="col-sm-10">
+						 <input type="text" class="form-control input-sm" ng-model="inputTinNum" placeholder="Tin Number">
+						</div>
+					  </div>					  
+					  <div class="form-group input-sm">
+						<div class="col-sm-offset-2 col-sm-10">
+						  <button type="button" class="btn btn-primary btn-sm" ng-click="createCompany()">Create Company</button>
+						  <button type="reset" class="btn btn-default btn-sm">Clear</button>
+						</div>
+					  </div>
+					</form>					
+				</div>
+		  			  <div class="form-group text-center bg-success col-md-6" style="float: none;	margin: 0 auto; padding:0px"
+					  ng-show="isCompanyCreated" >
+						Company Created Successfully
+					  </div>
+					  
+					  
+					  
+	
+     	</div>
+        <div ng-show="isSet(3)">
+
+		
+		  		 <div class="Absolute-Center is-Responsive">
+					
+					<form class="form-horizontal" name="groupForm">
+					  <div class="form-group"  ng-repeat="groupDispName in groupsMetaData track by $index" id="groupDiv{{$index}}"
+					  ng-show="groups[$index].length > 0 || showDiv[$index]==true" >
+						<label for="inputEmail3" class="col-sm-2 control-label input-sm">{{groupDispName}}</label>
+						<div class="col-sm-4 input-sm">
+							  <select class="form-control input-sm" id="sel1" ng-model="groups[$index].selGroup" 
+							  ng-change="setChildrenData($index)" ng-options="group.name for group in groups[$index] track by group.id">
+									<option value="">-- choose Group1 --</option>
+							  </select>
+						</div>
+						<div class="col-sm-4 input-sm">
+						  <input type="text" class="form-control input-sm" id="newGroup{{$index}}" 
+						  placeholder="Add New Value to Group"> 
+						</div>	
+						<div class="col-sm-2">
+						  <button type="button" class="btn btn-primary input-sm" ng-click="addGroupData($index)">Add</button>
+						</div>
+					  </div>	
+					</form>	
+
+					<div class="bs-example text-center" data-example-id="btn-variants" ng-show="showSubGroup===true"> 
+						<button type="button" class="btn btn-primary btn-sm" ng-click="addSubGroup()">Add Sub Group</button>
+					</div>
+					  
+					</form>	
+					
+				 </div> 		
+		
+		
+		
+		
+     	</div>
+        <div ng-show="isSet(4)">
+		  
+		  		 <div class="Absolute-Center is-Responsive">
+					
+					<form class="form-horizontal">
+					  <div class="form-group"  ng-repeat="groupDispName in groupsMetaData track by $index" ng-show="groups[$index].length > 0" >
+						<label for="inputEmail3" class="col-sm-2 control-label input-sm">{{groupDispName}}</label>
+						<div class="col-sm-4 input-sm">
+							  <select class="form-control input-sm" id="sel1" ng-model="groups[$index].selGroup" 
+							  ng-change="setChildrenData($index)" ng-options="group.name for group in groups[$index] track by group.id">
+									<option value="">-- choose Group1 --</option>
+							  </select>
+						</div>
+					  </div>	
+					</form>	
+					<form class="form-horizontal">
+					<table class="table table-condensed table-bordered" ng-show="groups[0].selGroup" >
+					<thead>
+					<tr>
+					  <th>#</th>
+					  <th>Name</th>
+					  <th>Code</th>
+					  <th>Description</th>
+					  <th>UOM</th>
+					  <th class="col-md-2" >Quandity</th>
+					  <th class="col-md-2">No Of Packets</th>
+					  <th>Total</th>
+					  <th></th>
+					</tr>
+					</thead>
+					<tr class="success">
+					 <th scope="row">1</th>
+					 <td><input type="text" class="form-control input-sm" size="10" ng-model="item.name"></td>
+					 <td><input type="text" class="form-control input-sm" size="5" ng-model="item.code"></td>
+					 <td><input type="text" class="form-control input-sm" size="10" ng-model="item.desc"></td>
+					 <td>
+
+						 <div class="row">
+						 <div class="col-xs-12">
+						   <select class="form-control input-sm" id="sel1" style="padding-right:0px" ng-model="item.uom">
+									<option selected value="ltr">Liter</option>
+									<option value="kgs">Kgs</option>
+									<option value="mtr">Meter</option>
+									<option value="pcs">Pices</option>
+						   </select>
+						 </div>
+					      </div>
+					 </td>
+					 <td class="col-md-2 input-sm" ><input type="number" min="1" step="1" class="form-control input-sm"  ng-model="item.quandity"></td>
+					 <td><input type="number" min="1" step="1" class="col-md-2 form-control input-sm"  ng-model="item.pices">
+					 </td>
+					 <td>{{item.quandity*item.pices*1}}</td>
+					 <td><button type="button" class="btn btn-primary btn-sm"  ng-click="showSplit=true" ng-show="item.quandity > 0 && item.pices > 0" >Show Split</button></td>
+					 </tr>
+					</table>
+
+					<div class="panel panel-primary col-sm-6" style="padding:0px" ng-show="showSplit== true" >
+					  <div class="panel-heading small">Box Lvel Split</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-1 input-sm">No of Packets</th>
+					  <th class="col-sm-2 input-sm">Each Box Quandity</th>
+					  <th class="col-sm-1 input-sm">Total</th>
+					</tr>
+					</thead>
+					<tr class="success" ng-repeat="selItem in items" > 
+					 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.pices"></td>
+					 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity"></td>	
+					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
+					 <button type="button" class="btn btn-primary btn-sm" ng-click="items.push({ 'quandity': 0, 'pices':0})" ng-if=" (items.length-1 == $index) && grandTotal < item.quandity ">Add</button></td>						 
+					</tr>
+					<tr class="success">
+					 <td colspan="4"> <b> Grand Total {{getTotal()}} </b>
+					 <p class="text-danger input-sm" style="color: #a94442 !important; font-size: 15px !important; " ng-if="grandPices <= item.pices && grandTotal > item.quandity" >
+					 Total Split should not exeeds grandtotal</p>
+					 <p class="text-danger input-sm" style="color: #a94442 !important; font-size: 15px !important; " ng-if="grandPices > item.pices" >
+					 Total Split should not exeeds Declared Pices</p>					 
+					 
+					 
+					 </td>	
+					</tr>
+					<tr class="success">
+					 <td colspan="4" ng-if="grandTotal == item.quandity" >  
+					   <button type="button" class="btn btn-primary btn-sm">Add Item to Inventory</button>
+					 </td>	
+					</tr>					
+					</table>	
+
+				
+					</div>
+					  
+					</form>	
+	
+				 </div> 
+
+		  
+     	</div>		
+  	</div>
+  </div>
+</div>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.min.css" >
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js" ></script>
+<script src="js/angular.min.js"></script>
+<script>
+angular.module('tabApp', [])
+  .controller('TabController', ['$scope','$http', function($scope,$http) {
+    $scope.tab = 1;
+    $scope.isCompanyCreated = null;
+    $scope.setTab = function(newTab){
+      $scope.tab = newTab;
+	  $scope.addCompany = null;
+	  $scope.isCompanyCreated = null;
+	  $scope.groups = [];
+	  $scope.groups[0] = [];
+	  $scope.curGroupLevel = 0;
+	  angular.forEach($scope.groupsData, function (group) {
+			if(group.parent === 0){
+			  $scope.groups[0].push(group);
+			}
+		});
+		
+		if(newTab == 2){
+			$http.get('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/getAll').
+			then(function(response) {
+				$scope.greeting = response.data;
+			});
+		}
+    };
+
+    $scope.isSet = function(tabNum){
+      return $scope.tab === tabNum;
+    };
+	
+	//Compnay Management
+	 //$scope.companies = ["Company 1", "Company 2", "Company 3"];
+	 $scope.companies = [ {"name":"Company 1" , "address" :"address 1","tin":18898} ,{"name":"Company 2" , "address" :"address 2","tin":7589}];
+	 
+	$scope.createCompany= function(){
+      $scope.addCompany = false;
+	  var company = {};
+	  company.name= $scope.inputCompanyName;
+	  company.address = $scope.inputCompanyAddress;
+	  company.tin = $scope.inputTinNum;
+	  $scope.companies = $scope.companies.concat(company);
+	  $scope.selectedCompany = company;
+	  $scope.isCompanyCreated = true;
+    };
+	
+	//Group Management
+	$scope.groupsMetaData = ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5", "Group 6", "Group 7", "Group 8"];
+	$scope.groupConfig = [];
+	$scope.newGroup = [];
+	$scope.addGroupData = function(groupid){ 
+	
+	    var parent =0;
+		if(groupid > 0){
+		  var grpObj = $scope.groups[groupid-1];
+		  parent = grpObj.selGroup.id
+		}
+			  var group ={};
+			  group.id = $scope.groupsData.length+1;
+			  var grpNameObj = angular.element(document.querySelector('#newGroup'+groupid));
+			  console.log(grpNameObj);
+			  group.name = grpNameObj.val();
+			  group.parent = parent;
+			  $scope.groupsData.push(group);
+			  $scope.groups[groupid].push(group);
+	};
+	
+	
+	//Product Management
+	$scope.item = {};
+	$scope.item.uom ="ltr";
+	$scope.item.quandity = 0;
+	$scope.item.pices = 0;
+	//$scope.groups[0] = [ {"name":"Group 1" , id :1, parent: 0} ,{"name":"Group 2" , id :2, parent: 0}];
+	$scope.groupsData = [ {"name":"Group 1" , id :1, parent: 0} ,{"name":"Group 2" , id :2, parent: 0} ,
+	                      {"name":"Group 3" , id :3, parent: 1} ,{"name":"Group 4" , id :4, parent: 1} ,
+	                      {"name":"Group 5" , id :5, parent: 2} ,{"name":"Group 6" , id :6, parent: 2} ,
+						  {"name":"Group 7" , id :7, parent: 3} ,{"name":"Group 8" , id :8, parent: 4} ,
+	                      {"name":"Group 9" , id :9, parent: 5} ,{"name":"Group 10" , id :10, parent: 6} ,
+						  {"name":"Group 11" , id :11, parent: 9} ,{"name":"Group 12" , id :12, parent: 10},
+						  {"name":"Group 13" , id :13, parent: 11} ,{"name":"Group 14" , id :14, parent: 12},
+ 						  ];
+				   
+	$scope.setChildrenData = function(parentGroupNum){ 
+		//Cleanup Existing selection
+		for( i = parentGroupNum+1 ; i <= 6; i++){
+		  $scope.groups[i] = [];
+		}
+		var grpObj = $scope.groups[parentGroupNum];
+		if(grpObj != null && grpObj.selGroup != null){
+			angular.forEach($scope.groupsData, function (group) {
+				if(group.parent === grpObj.selGroup.id){
+					$scope.groups[parentGroupNum+1].push(group);
+			     }
+			});
+		}else{
+			$scope.groups[parentGroupNum+1] =[];
+		}
+		
+		$scope.showDiv = [];
+		if($scope.groups[parentGroupNum+1].length > 0 || grpObj.selGroup == null){
+			$scope.curGroupLevel = parentGroupNum+1;
+			$scope.showSubGroup = false;
+		}else{
+		   $scope.showSubGroup = true;
+		   $scope.curGroupLevel = parentGroupNum;
+		}
+	};
+	
+	$scope.addSubGroup = function(){ 
+			var grpObj = $scope.groups[$scope.curGroupLevel];
+			console.log(grpObj);
+			if(grpObj != null && grpObj.selGroup != null && grpObj.selGroup.id > 0){
+			  /*var group ={};
+			  group.id = $scope.groupsData.length+1;
+			  group.name = "Dummy";
+			  group.parent = grpObj.selGroup.id;
+			  
+			  console.log(group);
+			  
+			  $scope.groupsData.push(group);
+			  $scope.groups[$scope.curGroupLevel+1].push(group);*/
+			  $scope.showDiv[$scope.curGroupLevel+1] = true;
+			  $scope.curGroupLevel =  $scope.curGroupLevel+1;
+			}
+		
+	};
+	
+	$scope.items = [];
+	$scope.items[0] = {'quandity':1 ,'pices':1 };
+    //$scope.items[0] = $scope.item;
+	
+	$scope.getTotal = function(){
+		var total = 0;
+		var splitPices = 0;
+		for(var i = 0; i < $scope.items.length; i++){
+			var item = $scope.items[i];
+			total += (item.quandity * item.pices);
+			splitPices += item.pices;
+		}
+		$scope.grandTotal = total;
+		$scope.grandPices = splitPices;
+		return total;
+	}
+
+	
+}]);
+
+
+</script>
+
+</body>
+</html>
+
+
