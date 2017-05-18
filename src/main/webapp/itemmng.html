@@ -324,14 +324,6 @@ h1, p, a {
 <script src="js/angular.min.js"></script>
 <script>
 var app = angular.module('tabApp', []);
-app.config(function ($httpProvider, $httpParamSerializerJQLikeProvider){
-    $httpProvider.defaults.transformRequest.unshift($httpParamSerializerJQLikeProvider.$get());
-    $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
-});
-
-app.run(function($http, $httpParamSerializerJQLike) {
-  $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
-});
 
   app.controller('TabController', ['$scope','$http', function($scope,$http) {
     $scope.tab = 1;
@@ -373,22 +365,42 @@ app.run(function($http, $httpParamSerializerJQLike) {
 	  company.tin = $scope.inputTinNum;
 	  company.city=$scope.inputCity;
 	  company.phonenumber=$scope.inputPhone;
-	  //alert(JSON.stringify(company));
+	  var payload = $.param(company);
+	  
+	  $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=utf-8";
 	  
 		/*$http({
 		  method: 'PUT',
 		  url: 'http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create',
-		  data : {"name":"545454","address":"dwe","tin":"21243","city":"dswd","phonenumber":"12132"},
-		  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+		  data : payload
 		}).then(function successCallback(response) {
-			//alert(response);
+			alert(response);
 		  }, function errorCallback(response) {
-				//alert(JSON.stringify(response));
+				alert(JSON.stringify(response));
 		  });*/
+		  
+		  var newRentalUrl = 'http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create';
+        var dataObj = JSON.stringify(company);
 
-	  $scope.companies = $scope.companies.concat(company);
-	  $scope.selectedCompany = company;
-	  $scope.isCompanyCreated = true;
+    $http.put(newRentalUrl, dataObj, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+    }).success(function(responseData) {
+		  try {
+			alert(JSON.stringify(responseData));
+			
+			  $scope.companies = $scope.companies.concat(company);
+			  $scope.selectedCompany = company;
+			  $scope.isCompanyCreated = true;
+		  } catch (err) {
+			alert(JSON.stringify(err));
+		  }
+     }).error(function(data, status, headers, config) {
+        alert(JSON.stringify(data) +" Error : "+ JSON.stringify(headers));
+      });
+
+
     };
 	
 	//Group Management
