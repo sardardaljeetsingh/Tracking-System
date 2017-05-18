@@ -121,6 +121,18 @@ h1, p, a {
 							  </div>
 							  <div class="col-md-5 input-sm">{{selectedCompany.tin}}</div>
 							</div>
+							<div class="row text-center" ng-show="selectedCompany.name">
+							  <div class="col-md-3 input-sm">
+							  <label for="inputEmail3" class="control-label input-sm">Phone Number</label>
+							  </div>
+							  <div class="col-md-5 input-sm">{{selectedCompany.inputPhone}}</div>
+							</div>
+							<div class="row text-center" ng-show="selectedCompany.name">
+							  <div class="col-md-3 input-sm">
+							  <label for="inputEmail3" class="control-label input-sm">City</label>
+							  </div>
+							  <div class="col-md-5 input-sm">{{selectedCompany.inputCity}}</div>
+							</div>						
 					</div>
 					
 					<div class="panel panel-primary col-md-8" style="float: none;	margin: 0 auto; padding:0px"
@@ -143,7 +155,7 @@ h1, p, a {
 					  <div class="form-group">
 						<label class="col-sm-2 control-label input-sm">Tin Number</label>
 						<div class="col-sm-10">
-						 <input type="text" class="form-control input-sm" ng-model="inputTinNum" placeholder="Tin Number">
+						 <input type="number" class="form-control input-sm" ng-model="inputTinNum" placeholder="Tin Number">
 						</div>
 					  </div>
 					  <div class="form-group">
@@ -155,7 +167,7 @@ h1, p, a {
 					  <div class="form-group">
 						<label class="col-sm-2 control-label input-sm">Phone Number</label>
 						<div class="col-sm-10">
-						 <input type="text" class="form-control input-sm" ng-model="inputPhone" placeholder="City">
+						 <input type="number" class="form-control input-sm" ng-model="inputPhone" placeholder="Phone Number">
 						</div>
 					  </div>					  
 					  <div class="form-group input-sm">
@@ -382,7 +394,7 @@ var app = angular.module('tabApp', []);
 		  var newRentalUrl = 'http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create';
         var dataObj = JSON.stringify(company);
 
-    $http.put(newRentalUrl, dataObj, {
+    $http.post(newRentalUrl, dataObj, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       },
