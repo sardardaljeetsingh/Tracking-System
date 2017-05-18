@@ -38,7 +38,7 @@ public class Group {
 
 	@NotNull
 	@Column(name = "parentid", nullable = false)
-	private int parent;	
+	private Integer parent;	
 
 	public Group() { }
 
@@ -46,7 +46,7 @@ public class Group {
 		this.id = id;
 	}
 
-	public Group(String name, Company company, int parent) {
+	public Group(String name, Company company, Integer parent) {
 		super();
 		this.name = name;
 		this.company = company;
@@ -69,11 +69,11 @@ public class Group {
 		this.name = name;
 	}
 
-	public int getParent() {
-		return parent;
+	public Integer getParent() {
+		return parent != null ? parent : 0;
 	}
 
-	public void setParent(int parent) {
+	public void setParent(Integer parent) {
 		this.parent = parent;
 	}	  
 }
