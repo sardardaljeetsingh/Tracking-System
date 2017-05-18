@@ -43,8 +43,8 @@ public class Company {
 	@Column(name = "phonenumber", nullable = false)
 	private int phonenumber;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="company") 
-	private Set<Group> groups;
+/*	@OneToMany(cascade=CascadeType.ALL, mappedBy="company") 
+	private Set<Group> groups;*/
 
 	public Company() { }
 
@@ -108,13 +108,13 @@ public class Company {
 		this.phonenumber = phonenumber;
 	}
 
-	public Set<Group> getGroups() {
+/*	public Set<Group> getGroups() {
 		return groups;
 	}
 
 	public void setGroups(Set<Group> groups) {
 		this.groups = groups;
-	}
+	}*/
 
 
 
