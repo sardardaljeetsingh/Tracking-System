@@ -145,6 +145,18 @@ h1, p, a {
 						<div class="col-sm-10">
 						 <input type="text" class="form-control input-sm" ng-model="inputTinNum" placeholder="Tin Number">
 						</div>
+					  </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label input-sm">city</label>
+						<div class="col-sm-10">
+						 <input type="text" class="form-control input-sm" ng-model="inputCity" placeholder="City">
+						</div>
+					  </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label input-sm">Phone Number</label>
+						<div class="col-sm-10">
+						 <input type="text" class="form-control input-sm" ng-model="inputPhone" placeholder="City">
+						</div>
 					  </div>					  
 					  <div class="form-group input-sm">
 						<div class="col-sm-offset-2 col-sm-10">
@@ -252,7 +264,7 @@ h1, p, a {
 					 <td><input type="number" min="1" step="1" class="col-md-2 form-control input-sm"  ng-model="item.pices">
 					 </td>
 					 <td>{{item.quandity*item.pices*1}}</td>
-					 <td><button type="button" class="btn btn-primary btn-sm"  ng-click="showSplit=true" ng-show="item.quandity > 0 && item.pices > 0" >Show Split</button></td>
+					 <td><button type="button" class="btn btn-primary btn-sm"  ng-click="showSplit=true;items[0].pices=item.pices;items[0].quandity=item.quandity" ng-show="item.quandity > 0 && item.pices > 0" >Show Split</button></td>
 					 </tr>
 					</table>
 
@@ -311,8 +323,17 @@ h1, p, a {
 <script src="js/bootstrap.min.js" ></script>
 <script src="js/angular.min.js"></script>
 <script>
-angular.module('tabApp', [])
-  .controller('TabController', ['$scope','$http', function($scope,$http) {
+var app = angular.module('tabApp', []);
+app.config(function ($httpProvider, $httpParamSerializerJQLikeProvider){
+    $httpProvider.defaults.transformRequest.unshift($httpParamSerializerJQLikeProvider.$get());
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
+});
+
+app.run(function($http, $httpParamSerializerJQLike) {
+  $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
+});
+
+  app.controller('TabController', ['$scope','$http', function($scope,$http) {
     $scope.tab = 1;
     $scope.isCompanyCreated = null;
     $scope.setTab = function(newTab){
@@ -331,7 +352,7 @@ angular.module('tabApp', [])
 		if(newTab == 2){
 			$http.get('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/getAll').
 			then(function(response) {
-				$scope.greeting = response.data;
+				$scope.companies = response.data;
 			});
 		}
     };
@@ -350,6 +371,21 @@ angular.module('tabApp', [])
 	  company.name= $scope.inputCompanyName;
 	  company.address = $scope.inputCompanyAddress;
 	  company.tin = $scope.inputTinNum;
+	  company.city=$scope.inputCity;
+	  company.phonenumber=$scope.inputPhone;
+	  //alert(JSON.stringify(company));
+	  
+		/*$http({
+		  method: 'PUT',
+		  url: 'http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create',
+		  data : {"name":"545454","address":"dwe","tin":"21243","city":"dswd","phonenumber":"12132"},
+		  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+		}).then(function successCallback(response) {
+			//alert(response);
+		  }, function errorCallback(response) {
+				//alert(JSON.stringify(response));
+		  });*/
+
 	  $scope.companies = $scope.companies.concat(company);
 	  $scope.selectedCompany = company;
 	  $scope.isCompanyCreated = true;
