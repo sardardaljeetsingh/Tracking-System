@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/company")
 public class CompanyController {
 
-	  @RequestMapping(value ="/create",method = RequestMethod.PUT)
+	  @RequestMapping(value ="/create",method = RequestMethod.POST)
 	  
 	  public ResponseEntity<Company>  create(@RequestBody Company company) {
 	    try {
