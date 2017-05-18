@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/group")
 public class GroupController {
-	@RequestMapping(value ="/create",method = RequestMethod.PUT)
+	@RequestMapping(value ="/create",method = RequestMethod.POST)
 	public ResponseEntity<Group>  create(@RequestBody Group group) {
 		try {
 			groupRepository.save(group);
