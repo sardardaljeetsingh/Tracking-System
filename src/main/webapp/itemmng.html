@@ -298,7 +298,7 @@ h1, p, a {
 					</tr>
 					<tr class="success">
 					 <td colspan="4"> <b> Grand Total {{getTotal()}} </b>
-					 <p class="text-danger input-sm" style="color: #a94442 !important; font-size: 15px !important; " ng-if="grandPices <= item.pices && grandTotal > item.quandity" >
+					 <p class="text-danger input-sm" style="color: #a94442 !important; font-size: 15px !important; " ng-if="grandPices <= item.pices && grandTotal > (item.quandity*item.pices)" >
 					 Total Split should not exeeds grandtotal</p>
 					 <p class="text-danger input-sm" style="color: #a94442 !important; font-size: 15px !important; " ng-if="grandPices > item.pices" >
 					 Total Split should not exeeds Declared Pices</p>					 
@@ -307,7 +307,7 @@ h1, p, a {
 					 </td>	
 					</tr>
 					<tr class="success">
-					 <td colspan="4" ng-if="grandTotal == item.quandity" >  
+					 <td colspan="4" ng-if="grandTotal == (item.quandity*item.pices)" >  
 					   <button type="button" class="btn btn-primary btn-sm">Add Item to Inventory</button>
 					 </td>	
 					</tr>					
