@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://v4-alpha.getbootstrap.com/examples/cover/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+
+    <title>Inventory Management System</title>
+
+  </head>
+
+  <body>
+  <div  class="text-center" style="background-color: #c5efc5; padding:10px;marign:10px" >
+  <h3>Inventory Management System <small></small></h3>
+  </div>
+
+    <div class="container-fluid" ng-app="invenApp">
+		<ol class="breadcrumb" style="background-color: #419641; color:#FFFFFF ;padding:3px;marign:10px; " >
+		 <li>
+			&nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#" ng-class="{'active': currentPage == 'companyList'}" >Companies</a>
+		 </li>
+		<li ng-if="(currentPage == 'createCompany' )" ng-class="{'active': currentPage == 'createCompany'}" style="color:#ccc" >
+			Create Company
+		</li>
+		<li ng-if="(currentPage == 'editCompany' )" ng-class="{'active': currentPage == 'editCompany'}" style="color:#ccc" >
+			Edit Company
+		</li>
+		<li ng-if="(currentPage == 'performAction' || currentPage == 'createStockItems' || currentPage == 'createStockGroups' ||currentPage == 'showStockGroups'  )" 
+			ng-class="{'active': currentPage == 'performAction'}" >
+			<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
+		</li>	
+		<li ng-if="(currentPage == 'createStockGroups' )" ng-class="{'active': currentPage == 'createStockGroups'}" style="color:#ccc" >
+			Create Stock Groups
+		</li>
+		<li ng-if="(currentPage == 'createStockItems' )" ng-class="{'active': currentPage == 'createStockItems'}" style="color:#ccc" >
+			Create Stock Items
+		</li>
+		<li ng-if="(currentPage == 'showStockGroups' )" ng-class="{'active': currentPage == 'showStockGroups'}" style="color:#ccc" >
+			Stock Groups
+		</li>		
+		</ol>
+		
+		
+		
+		<div>
+			<div ng-view class="input-sm"></div>
+		</div>
+
+		  
+	  <script type="text/ng-template" id="/inline-companies.html">
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">List of Companies </div>
+		  <div class="panel-body">
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Company">
+					  </div>
+					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" >
+						Create Company
+					  </button>
+					</form>
+			
+		  </div>
+
+		  <!-- Table -->
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>Company Name</th> <th>Last Entry Date</th> <th></th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="company in companies"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{company.name}}</td> 
+				<td> {{company.lastentry == null ? 'No Vochers Entered' : company.lastentry}} </td> 
+			    <td>
+			    <form class="form-inline">
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editCompany(company)">Edit Company</button>
+					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteCompany(company)" >Delete Company</button>
+					<button type="button" class="btn btn-warning btn-xs" ng-click="performAction(company)"> Perform Actions </button>
+				</form>				
+				</td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		</div>
+
+  
+	  </script>
+	  
+	  <script type="text/ng-template" id="/inline-create-company.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" ng-if="optType=='create'">Company Creation </div>
+			  <div class="panel-heading" ng-if="optType=='edit'">Edit Company details </div>
+			  <div class="panel-body">
+
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm">
+							  <div class="form-group">
+								<label for="inputEmail3" class="col-sm-5 control-label">Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" ng-model="company.name"
+								  placeholder="Name">
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Mailing Name</label>
+								<div class="col-sm-5">
+								  <input type="password" class="form-control input-sm" id="inputPassword3" ng-model="company.mailingname"
+								  placeholder="Mailing Name">
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Address</label>
+								<div class="col-sm-5">
+								  <textarea class="form-control custom-sm input-sm" ng-model="company.address" 
+								  rows="3" placeholder="Company Address" ></textarea>
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Country</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="company.country" 
+											ng-init="company.country = company.country || options[0].value"
+											ng-options="option.id as option.name for option in countries">
+									</select>								
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">State</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="company.state" 
+											ng-init="company.state = company.state || options[0].value"
+											ng-options="option.id as option.name for option in states">
+									</select>									
+								</div>
+							  </div>
+							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">PinCode</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" ng-model="company.picode"
+								  placeholder="Pincode">
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Telephone</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" ng-model="company.phone"
+								  placeholder="Telephone Number">
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Email</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" ng-model="company.email"
+								  placeholder="Email Address">
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Currency Symbol</label>
+								<div class="col-sm-5">
+								  <input disabled type="text" class="form-control input-sm" id="inputPassword3" ng-model="company.currencesymbol"
+								   placeholder="Rs." value="Rs.">
+								</div>
+							  </div>	  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Company Type</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.type" value="1">Maintain Accounts Only
+								  <input type="radio" ng-model="company.type" value="2">Maintain Accounts with Inventory
+								</div>
+							  </div>	
+
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Financial Year From</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" ng-model="company.yearstart"
+								  placeholder="Financial Year Starting From">
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Books Beginning From</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" ng-model="company.booksstart"
+								  placeholder="Books Beginning From">
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editCompany(company)" ng-if="optType=='edit'" class="btn btn-success">Edit Company</button>
+								   <button type="button" ng-click="createCompany(company)" ng-if="optType=='create'" class="btn btn-success">Create Company</button>
+								</div>
+							  </div>
+							</form>
+					
+					  </div>
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					      	<form class="form-horizontal">
+							  <div class="form-group   input-sm">
+								<label for="inputEmail3" class="col-sm-5 control-label">Base Currency Symbol</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" ng-model="company.basecur.symbol"
+								  placeholder="Name">
+								</div>
+							  </div>
+							  <div class="form-group   input-sm">
+								<label for="inputEmail3" class="col-sm-5 control-label">Formal Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" ng-model="company.basecur.name"
+								  placeholder="Name">
+								</div>
+							  </div>	
+							  <div class="form-group   input-sm">
+								<label for="inputEmail3" class="col-sm-5 control-label">Number of Decimals</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="company.name" ng-model="company.basecur.decnumber"
+								  >
+								</div>
+							  </div>
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Is Symbol Suffixed to Amount ?</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.symol.suffix" value="yes">Yes
+								  <input type="radio" ng-model="company.symol.suffix" value="no">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Symbol for Decimal portion </label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control input-sm" id="company.name" ng-model="company.symbol.decimal"  placeholder="Paise" >
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Show Amounts in Millions ?</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.amount.millions" value="yes">Yes
+								  <input type="radio" ng-model="company.amount.millions" value="no">No
+							    </div>
+							 </div>
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Put a Space between Amount and Symbol ?</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.amount.space" value="yes">Yes
+								  <input type="radio" ng-model="company.amount.space" value="no">No
+								</div>
+							  </div>							  
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Dcimal Places for printing amounts in words </label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" ng-model="company.decimal.place" value="2">
+								</div>
+							  </div>							  
+							  
+							</form>  
+							
+					  </div>
+					</div>			
+			  </div>		
+			</div>
+
+		</div>  
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-perform-action.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Masters</div>
+			  <div class="panel-body">
+			  
+					<div class="row input-sm" >
+						  <div class="col-xs-3 panel panel-info" style="margin:10px;padding:0px" >
+							<div class="panel-heading">Accounting Info</div>
+								<div class="panel-body">
+								</div>
+						  </div>
+						  <div class="col-xs-8 panel panel-info" style="margin:10px;padding:0px" >
+							<div class="panel-heading">Inventory Info</div>
+								<div class="panel-body">
+								
+									<div class="row" >
+										<div class="col-xs-5 panel panel-warning" style="margin:10px;padding:0px" >
+											<div class="panel-heading">Stock Groups</div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-stock-groups" class="list-group-item list-group-item-warning">Create Stock Groups</a>
+												  <a href="#view-stock-groups" class="list-group-item list-group-item-warning">View Stock Groups</a>
+												</div>											
+											</div>	
+										</div>									
+										<div class="col-xs-5 panel panel-warning" style="margin:10px;padding:0px" >
+											<div class="panel-heading">Stock Items</div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-stock-items" class="list-group-item list-group-item-warning">Create Stock Items</a>
+												  <a href="#" class="list-group-item list-group-item-warning">View Stock Items</a>
+												</div>											
+											</div>												
+										</div>	
+									</div>									
+								
+								</div>
+						  </div>					  
+			        </div>
+			  </div>			  
+	        </div>
+			
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Transactions</div>
+			  <div class="panel-body">
+			  </div>			  
+	        </div>
+
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Imports</div>
+			  <div class="panel-body">
+			  </div>			  
+	        </div>
+
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Reports</div>
+			  <div class="panel-body">
+			  </div>			  
+	        </div>
+			
+		</div>
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-create-stocks-groups.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Create Stock Groups</div>	
+
+
+			  <div class="panel-body">
+					<div class="row" >
+					     <div class="col-xs-10 panel panel-info" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Single Stock Group</div>
+						
+							<form class="form-inline" style="padding:10px">
+							    <div class="form-group">
+								<div class="col-sm-5">
+									<select class="form-control input-sm" id="sel1" ng-model="singlegroup.selGroup" 
+										ng-options="group.name for group in singlegroups track by group.id"
+										ng-change="setChildrenData(singlegroup.selGroup,0)" 
+										>
+											<option value="">-- choose Group1 --</option>
+									</select>	
+									
+								</div>
+							  </div>
+							  <div class="form-group" ng-if="singlegroup.selGroup == null" >
+								<input type="text" class="form-control input-sm" ng-model="singlegroup.newgroup" placeholder="Single Stock Group Name">
+							  </div>						  
+							  <button type="button" class="btn btn-success btn-sm" ng-click="addGroup(singlegroup.newgroup,0)" >
+								Add Group
+							  </button>
+							</form>							
+							
+					    </div>
+			        </div>
+					
+					<div class="row" ng-if="singlegroup.selGroup != null && singlegroup.selGroup.id > 0">
+					     <div class="col-xs-8 panel panel-danger" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Multi Stock Group</div>
+						
+								<div class="row" ng-repeat=" multigroup in multigroups" >
+									<form class="form-inline" style="padding:10px">
+										<div class="form-group">
+										<div class="col-sm-5">
+											<select class="form-control input-sm" id="sel1" ng-model="multigroup.selGroup" 
+												ng-change="setChildrenData(multigroup.selGroup,$index +1)" 
+												ng-options="group.name for group in multigroup.children track by group.id">
+													<option value="">-- choose Group1 --</option>
+											</select>	
+										</div>
+									  </div>
+									  <div class="form-group" ng-if="multigroup.selGroup == null" >
+										<input type="text" class="form-control input-sm" ng-model="multigroup.newgroup" placeholder="Multi Stock Group Name">
+									  </div>
+									  <button type="button" ng-if="multigroup.selGroup == null" class="btn btn-success btn-sm" ng-click="addGroup(multigroup.newgroup,$index +1)" >
+										Add Group
+									  </button>
+									</form>							
+								</div>	
+					    </div>
+			        </div>					
+					
+			  </div>
+			  
+		  
+
+			  
+			 </div>
+	    </div>
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-create-stocks-items.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Create Stock Items</div>	
+
+
+			  <div class="panel-body">
+				
+					<div class="row">
+					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Select Stock Groups</div>
+						
+								<div class="row" ng-repeat=" stockgroup in stockGroups" >
+									<form class="form-inline"  style="padding:10px">
+										<div class="form-group"     style="width: 100%;" >
+										<div class="col-sm-5" style="width: 80%;" >
+											<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
+												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
+												ng-options="group.name for group in stockgroup.children track by group.id">
+													<option value="">-- choose Group1 --</option>
+											</select>	
+										</div>
+									  </div>
+									</form>							
+								</div>	
+					    </div>
+			        </div>	
+
+					<div class="row">
+					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" ng-show="stockGroups[stockGroups.length-1].selGroup != null" >
+					      <div class="panel-heading">Enter Item Details </div>	
+							    <div class="panel-body">
+									<div class="row" >
+											<table class="table table-condensed table-bordered" style="width:98%; margin-left :10px; padding:30px" >
+											<thead>
+											<tr  class="input-sm">
+											  <th>#</th>
+											  <th>Name</th>
+											  <th>Code</th>
+											  <th>Description</th>
+											  <th>UOM</th>
+											  <th class="col-md-2" > Total Quandity</th>
+											  <th></th>
+											</tr>
+											</thead>
+											<tr class="warning">
+											 <th scope="row">1</th>
+											 <td><input type="text" class="form-control input-sm" size="10" ng-model="item.name"></td>
+											 <td><input type="text" class="form-control input-sm" size="5" ng-model="item.code"></td>
+											 <td><input type="text" class="form-control input-sm" size="10" ng-model="item.desc"></td>
+											 <td>
+
+												 <div class="row">
+												 <div class="col-xs-12">
+												   <select class="form-control input-sm" id="sel1" style="padding-right:0px" ng-model="item.uom">
+															<option selected value="ltr">Liter</option>
+															<option value="kgs">Kgs</option>
+															<option value="mtr">Meter</option>
+															<option value="pcs">Pices</option>
+												   </select>
+												 </div>
+												  </div>
+											 </td>
+											 <td class="col-md-2 input-sm" ><input type="number" min="1" step="1" class="form-control input-sm"  ng-model="item.quandity"></td>
+											 <td>
+											 <button type="button" class="btn btn-warning btn-sm"  
+											 ng-click="showSplit=true;items[0].quandity=item.quandity"
+											 ng-show="item.quandity > 0" >Show Split</button>
+											 </td>
+											 </tr>
+											</table>	
+
+
+					<div class="panel panel-warning col-sm-8" style="padding:0px;margin-left:10px" ng-show="showSplit== true" >
+					  <div class="panel-heading small">Split Quandity</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-1 input-sm">No of Packets</th>
+					  <th class="col-sm-2 input-sm">Each Box Quandity</th>
+					  <th class="col-sm-1 input-sm">Total</th>
+					</tr>
+					</thead>
+					<tr class="warning" ng-repeat="selItem in items" > 
+					 <td><input type="number" min="1" step="1" class="form-control input-sm" ng-model="selItem.pices"></td>
+					 <td> <input type="number" min="1" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity"></td>	
+					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
+					 <button type="button" class="btn btn-warning btn-sm" ng-click="items.push({ 'quandity': 1, 'pices':1})"
+					 ng-if="(grandTotal < item.quandity && items.length == $index+1 && (selItem.quandity*selItem.pices > 0) )">Add</button></td>						 
+					</tr>
+					<tr class="">
+					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
+					 <td> <b>{{getTotal()}} </b>
+					 </td>	
+					</tr>
+					<tr class="warning">
+					<td colspan="3" style="text-align : center" >
+					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (item.quandity)" >
+						ERROR : Split Grand Total <b> {{getTotal()}} </b> should not exeeds Total Quandity <b>{{item.quandity}}</b>
+					 </div>
+					  <button type="button" ng-if="grandTotal == (item.quandity)" class="btn btn-success btn-sm">Add Item to Inventory</button>					
+					</td>
+					</tr>
+					</table>	
+
+				
+					</div>											
+									
+									
+									</div>							
+								</div>							 
+					    </div>
+			        </div>						
+			  </div>
+			  
+		  
+
+			  
+			 </div>
+	    </div>
+	  </script>	  
+	  
+	  
+	  <script type="text/ng-template" id="/inline-view-stock-groups.html">
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">List of Stock Groups </div>
+  
+		  
+		  
+		  <div class="panel-body">
+		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
+					  </div>
+					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					</form>
+		  
+         </div>
+		  <div class="row" >
+		  <!-- Table -->
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
+		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent group Name</th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="group in groups"> 
+				<td>{{group.id}}</td> 
+				<td>{{group.name}} </td> 
+				<td> {{   group.parent > 0 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		 </div> 
+		  </div>
+		  
+		</div>
+
+  
+	  </script>	  
+	  
+	  
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">	
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
+
+	
+	<!--
+	<link rel="stylesheet" href="css/bootstrap.min.css" > 
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css" > 
+	<script src="js/jquery.min.js"></script> 
+	<script src="js/bootstrap.min.js"></script> 
+	<script src="js/angular.min.js"></script> 
+	<script src="js/angular-route.js"></script> 
+
+	-->
+	    <script src="js/item-app.js"></script> 
+
+</body>
+</html>
