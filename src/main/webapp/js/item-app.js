@@ -41,12 +41,17 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 
 
 //
-app.run(function($rootScope,$location) {
+app.run(function($rootScope,$location,$http) {
     $rootScope.countries = [ { id:1, name :"India" } , { id:2, name :"Singapore" }, { id:3, name :"US" },{ id:4, name :"UK" }];
 	$rootScope.states = [ { id:1, name :"Andhra Pradesh" } , { id:2, name :"Telangana" }];
 	
     //Should load Employees from Backend
-	$rootScope.companies = [ {name:'IBM'},{name:'Cohnizant'},{name:'InfoSys'}]; 
+	//$rootScope.companies = [ {name:'IBM'},{name:'Cohnizant'},{name:'InfoSys'}]; 
+	
+	$http.get('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/getAll').
+			then(function(response) {
+				$rootScope.companies = response.data;
+	});
 	
 	$rootScope.groups = [ {"name":"Group 1" , id :1, parent: 0} ,{"name":"Group 2" , id :2, parent: 0} ,
 	                      {"name":"Group 3" , id :3, parent: 1} ,{"name":"Group 4" , id :4, parent: 1} ,
@@ -62,7 +67,7 @@ app.run(function($rootScope,$location) {
 });
 
 //
-app.controller('companiesController', function($scope,$rootScope,$location) {
+app.controller('companiesController', function($scope,$rootScope,$location,$http) {
 	
 	$scope.company ={}; 
 	
@@ -83,7 +88,7 @@ app.controller('companiesController', function($scope,$rootScope,$location) {
 	}
 });
 
-app.controller('createCompanyController', function($scope,$rootScope,$location) {
+app.controller('createCompanyController', function($scope,$rootScope,$location,$http) {
 	$scope.company ={}; 
 	$scope.company.country = 1;	
 	$scope.company.state = 1;	
@@ -91,10 +96,28 @@ app.controller('createCompanyController', function($scope,$rootScope,$location) 
 	$scope.optType = "create";
 	
 	$scope.createCompany = function(company){
-		$rootScope.currentPage = 'companyList';
-		$scope.companies.push(company);
+		//$rootScope.currentPage = 'companyList';
+		//$scope.companies.push(company);
 		//Back end code to Add Company
-		$location.path("/");
+		//$location.path("/");
+			var dataObj = JSON.stringify(company);
+			$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create', dataObj, {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					alert(JSON.stringify(responseData));
+					$rootScope.currentPage = 'companyList';
+					$scope.companies.push(company);
+					//Back end code to Add Company
+					$location.path("/");
+				  } catch (err) {
+					alert(JSON.stringify(err));
+				  }
+			 }).error(function(data, status, headers, config) {
+				alert(JSON.stringify(data) +" Error : "+ JSON.stringify(headers));
+			  });		
 	}
 	
 });
@@ -257,7 +280,3 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
      });
 
 });
-
-
-
-
