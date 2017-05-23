@@ -24,7 +24,7 @@ public class Group {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@ManyToOne(cascade=CascadeType.ALL)  
+	@ManyToOne(cascade=CascadeType.MERGE)  
 	@JoinColumn(name = "companyid", nullable = false)
 	private Company company;	
 

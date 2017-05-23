@@ -76,7 +76,7 @@ public class Company {
 	private String booksstart;
 	
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="company") 
+	/*@OneToMany(cascade=CascadeType.ALL, mappedBy="company") 
 	private Set<Group> groups;
 	
     public Set<Group> getGroups() {
@@ -85,7 +85,7 @@ public class Company {
 
 	public void setGroups(Set<Group> groups) {
 		this.groups = groups;
-	}
+	}*/
 
 
 	public Company() { }
