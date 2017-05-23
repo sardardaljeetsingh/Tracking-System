@@ -338,23 +338,14 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		var dataObj = JSON.stringify(newgroup);
 		console.log(dataObj);
 		
-		$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/group/create', dataObj, {
+		$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/item/create', dataObj, {
 		  headers: {
 			'Content-Type': 'application/json; charset=UTF-8'
 		  },
 		}).success(function(responseData) {
 			  try {
 
-					if(grplevel == 0){
-						$scope.singlegroups.push(newgroup);
-						$scope.groups.push(newgroup);
-					}else if(grplevel == 1){
-						$scope.multigroups[0].children.push(newgroup);
-						$scope.groups.push(newgroup);			
-					}else{
-						$scope.multigroups[grplevel-1].children.push(newgroup);
-						$scope.groups.push(newgroup);			
-					}			  
+		         console.log("Item Created Suucessfully");
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }
@@ -363,7 +354,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		  });		
 	
 
-		console.log(newgroup);
+
 	}
 		
 });
