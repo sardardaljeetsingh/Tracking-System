@@ -25,6 +25,7 @@ public class GroupController {
 			groupRepository.save(group);
 		}
 		catch (Exception ex) {
+			ex.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Group>(group, HttpStatus.OK);
