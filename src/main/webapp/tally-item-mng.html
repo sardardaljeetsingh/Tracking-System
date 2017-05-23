@@ -65,7 +65,6 @@
 					</form>
 			
 		  </div>
-
 		  <!-- Table -->
           <table class="table table-hover input-sm">
 		  <thead> <tr> <th>#</th> <th>Company Name</th> <th>Last Entry Date</th> <th></th> </tr> </thead> 
@@ -85,7 +84,6 @@
 		  </tbody> 
 		  </table>
 		</div>
-
   
 	  </script>
 	  
@@ -96,7 +94,6 @@
 			  <div class="panel-heading" ng-if="optType=='create'">Company Creation </div>
 			  <div class="panel-heading" ng-if="optType=='edit'">Edit Company details </div>
 			  <div class="panel-body">
-
 					<div class="row" >
 					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
 					  
@@ -111,7 +108,7 @@
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label">Mailing Name</label>
 								<div class="col-sm-5">
-								  <input type="password" class="form-control input-sm" id="inputPassword3" ng-model="company.mailingname"
+								  <input type="text" class="form-control input-sm" id="inputPassword3" ng-model="company.mailingname"
 								  placeholder="Mailing Name">
 								</div>
 							  </div>
@@ -144,7 +141,7 @@
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label">PinCode</label>
 								<div class="col-sm-5">
-								  <input type="number" class="form-control input-sm" id="inputPassword3" ng-model="company.picode"
+								  <input type="number" class="form-control input-sm" id="inputPassword3" ng-model="company.pincode"
 								  placeholder="Pincode">
 								</div>
 							  </div>							  
@@ -176,7 +173,6 @@
 								  <input type="radio" ng-model="company.type" value="2">Maintain Accounts with Inventory
 								</div>
 							  </div>	
-
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label">Financial Year From</label>
 								<div class="col-sm-5">
@@ -196,6 +192,7 @@
 								<div class="col-sm-5">
 								   <button type="button" ng-click="editCompany(company)" ng-if="optType=='edit'" class="btn btn-success">Edit Company</button>
 								   <button type="button" ng-click="createCompany(company)" ng-if="optType=='create'" class="btn btn-success">Create Company</button>
+								   {{company}}
 								</div>
 							  </div>
 							</form>
@@ -227,34 +224,34 @@
 							  <div class="form-group input-sm">
 								<label for="inputPassword3" class="col-sm-5 control-label">Is Symbol Suffixed to Amount ?</label>
 								<div class="col-sm-5">
-								  <input type="radio" ng-model="company.symol.suffix" value="yes">Yes
-								  <input type="radio" ng-model="company.symol.suffix" value="no">No
+								  <input type="radio" ng-model="company.basecur.symolsuffix" value="yes">Yes
+								  <input type="radio" ng-model="company.basecur.symolsuffix" value="no">No
 								</div>
 							  </div>	
 							  <div class="form-group input-sm">
 								<label for="inputPassword3" class="col-sm-5 control-label">Symbol for Decimal portion </label>
 								<div class="col-sm-5">
-									<input type="text" class="form-control input-sm" id="company.name" ng-model="company.symbol.decimal"  placeholder="Paise" >
+									<input type="text" class="form-control input-sm" id="company.name" ng-model="company.basecur.symboldecimal"  placeholder="Paise" >
 								</div>
 							  </div>	
 							  <div class="form-group input-sm">
 								<label for="inputPassword3" class="col-sm-5 control-label">Show Amounts in Millions ?</label>
 								<div class="col-sm-5">
-								  <input type="radio" ng-model="company.amount.millions" value="yes">Yes
-								  <input type="radio" ng-model="company.amount.millions" value="no">No
+								  <input type="radio" ng-model="company.basecur.amountmillions" value="yes">Yes
+								  <input type="radio" ng-model="company.basecur.amountmillions" value="no">No
 							    </div>
 							 </div>
 							  <div class="form-group input-sm">
 								<label for="inputPassword3" class="col-sm-5 control-label">Put a Space between Amount and Symbol ?</label>
 								<div class="col-sm-5">
-								  <input type="radio" ng-model="company.amount.space" value="yes">Yes
-								  <input type="radio" ng-model="company.amount.space" value="no">No
+								  <input type="radio" ng-model="company.basecur.amountspace" value="yes">Yes
+								  <input type="radio" ng-model="company.basecur.amountspace" value="no">No
 								</div>
 							  </div>							  
 							  <div class="form-group input-sm">
 								<label for="inputPassword3" class="col-sm-5 control-label">Dcimal Places for printing amounts in words </label>
 								<div class="col-sm-5">
-								  <input type="number" class="form-control input-sm" ng-model="company.decimal.place" value="2">
+								  <input type="number" class="form-control input-sm" ng-model="company.basecur.decimalplace" value="2">
 								</div>
 							  </div>							  
 							  
@@ -264,7 +261,6 @@
 					</div>			
 			  </div>		
 			</div>
-
 		</div>  
 	  </script>
 	  
@@ -319,14 +315,12 @@
 			  <div class="panel-body">
 			  </div>			  
 	        </div>
-
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading">Imports</div>
 			  <div class="panel-body">
 			  </div>			  
 	        </div>
-
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading">Reports</div>
@@ -343,8 +337,6 @@
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading">Create Stock Groups</div>	
-
-
 			  <div class="panel-body">
 					<div class="row" >
 					     <div class="col-xs-10 panel panel-info" style="margin:10px;padding:0px" >
@@ -402,7 +394,6 @@
 			  </div>
 			  
 		  
-
 			  
 			 </div>
 	    </div>
@@ -414,8 +405,6 @@
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading">Create Stock Items</div>	
-
-
 			  <div class="panel-body">
 				
 					<div class="row">
@@ -437,7 +426,6 @@
 								</div>	
 					    </div>
 			        </div>	
-
 					<div class="row">
 					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" ng-show="stockGroups[stockGroups.length-1].selGroup != null" >
 					      <div class="panel-heading">Enter Item Details </div>	
@@ -461,7 +449,6 @@
 											 <td><input type="text" class="form-control input-sm" size="5" ng-model="item.code"></td>
 											 <td><input type="text" class="form-control input-sm" size="10" ng-model="item.desc"></td>
 											 <td>
-
 												 <div class="row">
 												 <div class="col-xs-12">
 												   <select class="form-control input-sm" id="sel1" style="padding-right:0px" ng-model="item.uom">
@@ -481,8 +468,6 @@
 											 </td>
 											 </tr>
 											</table>	
-
-
 					<div class="panel panel-warning col-sm-8" style="padding:0px;margin-left:10px" ng-show="showSplit== true" >
 					  <div class="panel-heading small">Split Quandity</div>
 					<table class="table table-condensed table-bordered"  >
@@ -514,7 +499,6 @@
 					</td>
 					</tr>
 					</table>	
-
 				
 					</div>											
 									
@@ -526,7 +510,6 @@
 			  </div>
 			  
 		  
-
 			  
 			 </div>
 	    </div>
@@ -566,7 +549,6 @@
 		  </div>
 		  
 		</div>
-
   
 	  </script>	  
 	  
@@ -597,7 +579,6 @@
 	<script src="js/bootstrap.min.js"></script> 
 	<script src="js/angular.min.js"></script> 
 	<script src="js/angular-route.js"></script> 
-
 	-->
 	    <script src="js/item-app.js"></script> 
 
