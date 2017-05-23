@@ -53,15 +53,18 @@ app.run(function($rootScope,$location,$http) {
 				$rootScope.companies = response.data;
 	});
 	
-	$rootScope.groups = [ {"name":"Group 1" , id :1, parent: 0} ,{"name":"Group 2" , id :2, parent: 0} ,
+	/*$rootScope.groups = [ {"name":"Group 1" , id :1, parent: 0} ,{"name":"Group 2" , id :2, parent: 0} ,
 	                      {"name":"Group 3" , id :3, parent: 1} ,{"name":"Group 4" , id :4, parent: 1} ,
 	                      {"name":"Group 5" , id :5, parent: 2} ,{"name":"Group 6" , id :6, parent: 2} ,
 						  {"name":"Group 7" , id :7, parent: 3} ,{"name":"Group 8" , id :8, parent: 4} ,
 	                      {"name":"Group 9" , id :9, parent: 5} ,{"name":"Group 10" , id :10, parent: 6} ,
 						  {"name":"Group 11" , id :11, parent: 9} ,{"name":"Group 12" , id :12, parent: 10},
 						  {"name":"Group 13" , id :13, parent: 11} ,{"name":"Group 14" , id :14, parent: 12},
- 						  ];
-						  
+ 						  ];*/
+	$http.get('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/getAll').
+			then(function(response) {
+				$rootScope.companies = response.data;
+	});					  
 	$location.path("/");
 						  
 });
@@ -94,12 +97,15 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 	$scope.company.state = 1;	
 	$scope.company.type =1;
 	$scope.optType = "create";
+	$scope.company.currencesymbol = "Rs.";
+	$scope.submitclick = false;
 	
 	$scope.createCompany = function(company){
-		//$rootScope.currentPage = 'companyList';
-		//$scope.companies.push(company);
-		//Back end code to Add Company
-		//$location.path("/");
+		if(!$scope.companyform.$valid){
+			$scope.submitclick = true;
+			return;
+		}
+
 			var dataObj = JSON.stringify(company);
 			$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create', dataObj, {
 			  headers: {
@@ -107,29 +113,48 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 			  },
 			}).success(function(responseData) {
 				  try {
-					alert(JSON.stringify(responseData));
+					console.log(JSON.stringify(responseData));
 					$rootScope.currentPage = 'companyList';
 					$scope.companies.push(company);
-					//Back end code to Add Company
 					$location.path("/");
 				  } catch (err) {
 					alert(JSON.stringify(err));
 				  }
 			 }).error(function(data, status, headers, config) {
-				alert(JSON.stringify(data) +" Error : "+ JSON.stringify(headers));
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 			  });		
 	}
 	
 });
 
-app.controller('editCompanyController', function($scope,$rootScope,$location) {
+app.controller('editCompanyController', function($scope,$rootScope,$location,$http) {
 
     $scope.optType = "edit";
- 	
+ 	$scope.submitclick = false;
+
 	$scope.editCompany = function(company){
-		$rootScope.currentPage = 'companyList';
-		//Back end code to edit Company
-		$location.path("/");
+		
+		if(!$scope.companyform.$valid){
+			$scope.submitclick = true;
+			return;
+		}		
+			var dataObj = JSON.stringify(company);
+			$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/company/create', dataObj, {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					console.log(JSON.stringify(responseData));
+					$rootScope.currentPage = 'companyList';
+					$scope.companies.push(company);
+					$location.path("/");
+				  } catch (err) {
+					alert(JSON.stringify(err));
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+			  });
 	}
 	
 });
@@ -144,21 +169,31 @@ app.controller('performActionController', function($scope,$rootScope,$location) 
 	
 });
 
-app.controller('stockGroupController', function($scope,$rootScope,$location) {
+app.controller('stockGroupController', function($scope,$rootScope,$location,$http) {
 	$rootScope.currentPage = 'createStockGroups';
 	
-	//Groups data received from backend
-
-						  
 	$scope.singlegroups = [];
 	$scope.singlegroup ={};
     $scope.singlegroup.newgroup	= "";
 	$scope.multigroups =[];	
-	 angular.forEach($scope.groups, function (group) {
-			if(group.parent === 0){
-			  $scope.singlegroups.push(group);
-			}
+	//Groups data received from backend
+	console.log(" Fetching group for Company Id : " + $scope.company.id );
+	$http.get('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/group/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+			$rootScope.groups = response.data;
+			//$scope.groups = response.data;
+			console.log(" Groupth Length : " + $scope.groups.length)			
+			angular.forEach($scope.groups, function (group) 
+			{
+				if(group.parent === 0){
+				  $scope.singlegroups.push(group);
+				}
+			});	
 		});	
+						  
+
+
 
 	$scope.setChildrenData = function(selGroup,grplevel){
 		
@@ -194,29 +229,51 @@ app.controller('stockGroupController', function($scope,$rootScope,$location) {
 	$scope.addGroup = function(selGroup,grplevel){
 		var newgroup = {};
 		newgroup.name = selGroup;
-		newgroup.id = $scope.groups.length;
+		//newgroup.id = $scope.groups.length;
 		newgroup.parent = 0;
+		newgroup.company = $scope.company;
 		
-	
 		if(grplevel == 0){
-			$scope.singlegroups.push(newgroup);
 			$scope.groups.push(newgroup);
 		}else if(grplevel == 1){
 			newgroup.parent = $scope.singlegroup.selGroup.id;
-			$scope.multigroups[0].children.push(newgroup);
-			$scope.groups.push(newgroup);			
 		}else{
 			newgroup.parent = $scope.multigroups[grplevel-2].selGroup.id;
-			$scope.multigroups[grplevel-1].children.push(newgroup);
-			$scope.groups.push(newgroup);			
-		}
+		}		
+		
+		var dataObj = JSON.stringify(newgroup);
+		$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/group/create', dataObj, {
+		  headers: {
+			'Content-Type': 'application/json; charset=UTF-8'
+		  },
+		}).success(function(responseData) {
+			  try {
+
+					if(grplevel == 0){
+						$scope.singlegroups.push(newgroup);
+						$scope.groups.push(newgroup);
+					}else if(grplevel == 1){
+						$scope.multigroups[0].children.push(newgroup);
+						$scope.groups.push(newgroup);			
+					}else{
+						$scope.multigroups[grplevel-1].children.push(newgroup);
+						$scope.groups.push(newgroup);			
+					}			  
+			  } catch (err) {
+				console.log(JSON.stringify(err));
+			  }
+		 }).error(function(data, status, headers, config) {
+			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+		  });		
+	
+
 		console.log(newgroup);
 	}
     		
 						  
 });
 
-app.controller('stockItemController', function($scope,$rootScope,$location) {
+app.controller('stockItemController', function($scope,$rootScope,$location,$http) {
 	$rootScope.currentPage = 'createStockItems';
 	
 	//Groups data received from backend
