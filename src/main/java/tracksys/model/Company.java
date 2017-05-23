@@ -24,7 +24,7 @@ public class Company {
 	
 	@NotNull
 	@Size(min = 3, max = 100)
-	@Column(name = "name", nullable = false)
+	@Column(name = "mailingname", nullable = false)
 	private String mailingname;	
 
 	@NotNull
