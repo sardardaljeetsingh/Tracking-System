@@ -186,7 +186,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 			console.log(" Groupth Length : " + $scope.groups.length)			
 			angular.forEach($scope.groups, function (group) 
 			{
-				if(group.parent === 0){
+				if(group.parent === 1){
 				  $scope.singlegroups.push(group);
 				}
 			});	
@@ -230,7 +230,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		var newgroup = {};
 		newgroup.name = selGroup;
 		//newgroup.id = $scope.groups.length;
-		newgroup.parent = 0;
+		newgroup.parent = 1;
 		newgroup.company = {};
 		newgroup.company.id = $scope.company.id;
 		
@@ -284,7 +284,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	$scope.stockGroups[0] = {};	
 	$scope.stockGroups[0].children = [];
 	 angular.forEach($scope.groups, function (group) {
-			if(group.parent === 0){
+			if(group.parent === 1){
 			  $scope.stockGroups[0].children.push(group);
 			}
 		});	
