@@ -26,7 +26,8 @@ public class GroupController {
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			group.setName(ex.getMessage());
+			return new ResponseEntity<>(group ,  HttpStatus.OK);
 		}
 		return new ResponseEntity<Group>(group, HttpStatus.OK);
 	}
