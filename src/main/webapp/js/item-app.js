@@ -231,10 +231,11 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		newgroup.name = selGroup;
 		//newgroup.id = $scope.groups.length;
 		newgroup.parent = 0;
-		newgroup.company = $scope.company;
+		newgroup.company = {};
+		newgroup.company.id = $scope.company.id;
 		
 		if(grplevel == 0){
-			$scope.groups.push(newgroup);
+			//$scope.groups.push(newgroup);
 		}else if(grplevel == 1){
 			newgroup.parent = $scope.singlegroup.selGroup.id;
 		}else{
@@ -242,6 +243,8 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		}		
 		
 		var dataObj = JSON.stringify(newgroup);
+		console.log(dataObj);
+		
 		$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/group/create', dataObj, {
 		  headers: {
 			'Content-Type': 'application/json; charset=UTF-8'
@@ -324,6 +327,44 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		$scope.grandTotal = total;
 		return total;
 	}	
+	
+	$scope.addItem = function(selItem){
+
+	    selItem.id = null;
+	    selItem.group = {};
+		selItem.group.id = $scope.stockgroup.selGroup.id;
+		//selItem.group = $scope.stockgroup.selGroup;
+	
+		var dataObj = JSON.stringify(newgroup);
+		console.log(dataObj);
+		
+		$http.post('http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com/group/create', dataObj, {
+		  headers: {
+			'Content-Type': 'application/json; charset=UTF-8'
+		  },
+		}).success(function(responseData) {
+			  try {
+
+					if(grplevel == 0){
+						$scope.singlegroups.push(newgroup);
+						$scope.groups.push(newgroup);
+					}else if(grplevel == 1){
+						$scope.multigroups[0].children.push(newgroup);
+						$scope.groups.push(newgroup);			
+					}else{
+						$scope.multigroups[grplevel-1].children.push(newgroup);
+						$scope.groups.push(newgroup);			
+					}			  
+			  } catch (err) {
+				console.log(JSON.stringify(err));
+			  }
+		 }).error(function(data, status, headers, config) {
+			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+		  });		
+	
+
+		console.log(newgroup);
+	}
 		
 });
 
