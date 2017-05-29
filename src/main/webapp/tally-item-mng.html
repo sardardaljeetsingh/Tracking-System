@@ -11,45 +11,146 @@
 
   </head>
 
-  <body>
+  <body ng-app="invenApp" >
   <div  class="text-center" style="background-color: #c5efc5; padding:10px;marign:10px" >
   <h3>Inventory Management System <small></small></h3>
   </div>
+  <p class="bg-info" ng-if="(loggedUser != null)" > 
+  Loggied in as {{ loggedUser.username}} ( {{ loggedUser.type}} )
+  </p>
 
-    <div class="container-fluid" ng-app="invenApp">
-		<ol class="breadcrumb" style="background-color: #419641; color:#FFFFFF ;padding:3px;marign:10px; " >
-		 <li>
-			&nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#" ng-class="{'active': currentPage == 'companyList'}" >Companies</a>
-		 </li>
-		<li ng-if="(currentPage == 'createCompany' )" ng-class="{'active': currentPage == 'createCompany'}" style="color:#ccc" >
-			Create Company
-		</li>
-		<li ng-if="(currentPage == 'editCompany' )" ng-class="{'active': currentPage == 'editCompany'}" style="color:#ccc" >
-			Edit Company
-		</li>
-		<li ng-if="(currentPage == 'performAction' || currentPage == 'createStockItems' || currentPage == 'createStockGroups' ||currentPage == 'showStockGroups'  )" 
-			ng-class="{'active': currentPage == 'performAction'}" >
-			<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
-		</li>	
-		<li ng-if="(currentPage == 'createStockGroups' )" ng-class="{'active': currentPage == 'createStockGroups'}" style="color:#ccc" >
-			Create Stock Groups
-		</li>
-		<li ng-if="(currentPage == 'createStockItems' )" ng-class="{'active': currentPage == 'createStockItems'}" style="color:#ccc" >
-			Create Stock Items
-		</li>
-		<li ng-if="(currentPage == 'showStockGroups' )" ng-class="{'active': currentPage == 'showStockGroups'}" style="color:#ccc" >
-			Stock Groups
-		</li>		
-		</ol>
-		
-		
-		
-		<div>
-			<div ng-view class="input-sm"></div>
-		</div>
+    <div class="container-fluid" >
+	
+		<div class="col-md-3" style="width: 15%; height: 530px; padding: 1px; background-color: #dff0d8;" ng-if="(loggedUser != null &&  loggedUser.type =='admin' )" >
+			<ul class="nav nav-pills nav-stacked panel-success">
+				<li ng-class="{ active: (curTab == null ||  curTab =='companyTab') }">
+					<a href="#show-company" ng-click="curTab='companyTab';">Company Management {{}}</a>
+				</li>
+				<li ng-class="{ active: (curTab =='userTab') }">
+					<a href="#show-user" ng-click="curTab='userTab';">User Managemnet</a>
+				</li>
+			</ul>
+		</div>	
+	
 
+       <div class="col-md-9" style=" padding: 1px;" 
+	   ng-style=" loggedUser.type =='admin' && {width: '85%'} || loggedUser.type =='user' && {width: '100%'}" >
+			<div style="height: 530px;background-color: #FFFFFF;">
+			<div>
+			
+				<div class="row">
+				  <div class="col-md-12" style="float: none;margin: 0 auto;">
+							<ol class="breadcrumb" style="background-color: #419641; color:#FFFFFF ;padding:3px;marign:10px; "
+							ng-if="(loggedUser != null )"  >
+							 <li ng-if="(curTab == null ||  curTab =='companyTab' )" >
+								 &nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#show-company" ng-class="{'active': currentPage == 'companyList'}" >Companies</a>
+							 </li>
+							 <li ng-if="(curTab =='userTab' )" >
+								&nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#show-user" ng-class="{'active': currentPage == 'userList'}" >Users</a>
+							 </li>							 
+							<li ng-if="(currentPage == 'createCompany' )" ng-class="{'active': currentPage == 'createCompany'}" style="color:#ccc" >
+								Create Company
+							</li>
+							<li ng-if="(currentPage == 'createUser' )" ng-class="{'active': currentPage == 'createUser'}" style="color:#ccc" >
+								Create User
+							</li>							
+							<li ng-if="(currentPage == 'editCompany' )" ng-class="{'active': currentPage == 'editCompany'}" style="color:#ccc" >
+								Edit Company
+							</li>
+							<li ng-if="(currentPage == 'editUser' )" ng-class="{'active': currentPage == 'editUser'}" style="color:#ccc" >
+								Edit User
+							</li>		
+							<li ng-if="(currentPage == 'assignUsers' )" ng-class="{'active': currentPage == 'assignUsers'}" style="color:#ccc" >
+								Assign Users
+							</li>							
+							<li ng-if="(currentPage == 'performAction' || currentPage == 'createStockItems' || currentPage == 'createStockGroups' ||currentPage == 'showStockGroups'  )" 
+								ng-class="{'active': currentPage == 'performAction'}" >
+								<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
+							</li>	
+							<li ng-if="(currentPage == 'createStockGroups' )" ng-class="{'active': currentPage == 'createStockGroups'}" style="color:#ccc" >
+								Create Stock Groups
+							</li>
+							<li ng-if="(currentPage == 'createStockItems' )" ng-class="{'active': currentPage == 'createStockItems'}" style="color:#ccc" >
+								Create Stock Items
+							</li>
+							<li ng-if="(currentPage == 'showStockGroups' )" ng-class="{'active': currentPage == 'showStockGroups'}" style="color:#ccc" >
+								Stock Groups
+							</li>		
+							</ol>
+							
+							
+							
+							<div>
+								<div ng-view class="input-sm"></div>
+							</div>
+		
+				</div>
+				</div>
+			</div>
+	       </div>
+	    </div>
+		
+	
+		
+
+	  <script type="text/ng-template" id="/inline-login.html">
+	
+        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-4 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+            <div class="panel panel-success" >
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign In</div>
+                        <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+                    </div>     
+
+                    <div style="padding-top:30px" class="panel-body" >
+
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                            
+                        <form id="loginform" class="form-horizontal" role="form">
+                                    
+                            <div style="margin-bottom: 25px" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input id="login-username" type="text" class="form-control" ng-model="user.username" value="" placeholder="username">                                        
+                                    </div>
+                                
+                            <div style="margin-bottom: 25px" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input id="login-password" type="password" class="form-control" ng-model="user.password" placeholder="password">
+                            </div>
+                                    
+
+                                
+                            <div class="input-group">
+                                      <div class="checkbox">
+                                        <label>
+                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+                                        </label>
+                                      </div>
+                            </div>
+						
+                                <div style="margin-top:10px;align:center" class="form-group">
+                                    <!-- Button -->
+                                    <div class="col-sm-12 controls text-center">
+                                      <a id="btn-login" href="#" ng-click="login(user);" class="btn btn-success">Login</a>
+                                     </div>
+                                </div>
+   
+                            </form>     
+
+
+
+                        </div>                     
+                    </div>  
+        </div>
+		
+	 </script>	
+	 
+	 
+  
 		  
 	  <script type="text/ng-template" id="/inline-companies.html">
+ 
+	  
 		<div class="panel panel-success" ng-controller="companiesController" >
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">List of Companies </div>
@@ -59,7 +160,7 @@
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Company">
 					  </div>
 					  <button type="button" class="btn btn-default btn-sm">Serach</button>
-					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" >
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" ng-if="loggedUser.type =='admin'" >
 						Create Company
 					  </button>
 					</form>
@@ -75,8 +176,12 @@
 				<td> {{company.lastentry == null ? 'No Vochers Entered' : company.lastentry}} </td> 
 			    <td>
 			    <form class="form-inline">
-					<button type="button" class="btn btn-warning btn-xs" ng-click="editCompany(company)">Edit Company</button>
-					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteCompany(company)" >Delete Company</button>
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editCompany(company)"
+					ng-if="loggedUser.type =='admin'">Edit Company</button>
+					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteCompany(company)" 
+					ng-if="loggedUser.type =='admin'">Delete Company</button>
+					<button type="button" class="btn btn-warning btn-xs" ng-click="assignUsers(company)" 
+					ng-if="loggedUser.type =='admin'">Assign Users</button>					
 					<button type="button" class="btn btn-warning btn-xs" ng-click="performAction(company)"> Perform Actions </button>
 				</form>				
 				</td> 
@@ -553,8 +658,241 @@
 	  </script>	  
 	  
 	  
-    </div>
+	  <script type="text/ng-template" id="/inline-users.html">
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">List of Users </div>
+		  <div class="panel-body">
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search User">
+					  </div>
+					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createUser();currentPage = 'createUser'" >
+						Create User
+					  </button>
+					</form>
+			
+		  </div>
+		  <!-- Table -->
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>User Name</th> <th>User Type</th> <th></th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="user in users"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{user.username}}</td> 
+				<td>{{user.type}}</td> 
+			    <td>
+			    <form class="form-inline">
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editUser(user)">Edit User</button>
+				</form>				
+				</td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		</div>
+  
+	  </script>
+	  
+	  <script type="text/ng-template" id="/inline-create-user.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" ng-if="optType=='create'">User Creation </div>
+			  <div class="panel-heading" ng-if="optType=='edit'">Edit User details </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm" name="userform" novalidate >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.username'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">User Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" name="user.username" ng-model="user.username"
+								  placeholder="User Name" required  >						
+								</div>
+							  </div>
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.password'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Password</label>
+								<div class="col-sm-5">
+								  <input type="password" class="form-control input-sm" id="company.name" name="user.password" ng-model="user.password"
+								  placeholder="User Name" required  >						
+								</div>
+							  </div>
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.address'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Address</label>
+								<div class="col-sm-5">
+								  <textarea class="form-control custom-sm input-sm" name="user.address" ng-model="user.address" 
+								  rows="3" placeholder="Company Address" required ></textarea>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.phone'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Telephone</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" name="user.phone" ng-model="user.phone"
+								  placeholder="Telephone Number" required>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.email'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Email</label>
+								<div class="col-sm-5">
+								  <input type="email" class="form-control input-sm" id="inputPassword3" name="user.email" ng-model="user.email"
+								  placeholder="Email Address" required>
+								</div>
+							  </div>							  
+	  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">User Type</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.type" value="Admin">Admin
+								  <input type="radio" ng-model="user.type" value="Application User">Application User
+								</div>
+							  </div>	
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editUser(user)" ng-if="optType=='edit'" class="btn btn-success">Edit User</button>
+								   <button type="button" ng-click="createUser(user);" ng-if="optType=='create'" class="btn btn-success">Create User</button>
+								</div>
+							  </div>
+							</form>
+					  </div>
+					  
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					      	<form class="form-horizontal">
+							
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Accounting Info ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.accountinfo" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.accountinfo" value="false">No
+								</div>
+							  </div>							  
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Inventory Info ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="false">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Transactions ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.transactions" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.transactions" value="false">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Reports ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.reports" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.reports" value="false">No
+								</div>
+							  </div>								  
+							</form>  
+							
+					  </div>					  
+					  
+					  
+					</div>			
+			  </div>		
+			</div>
+		</div>  
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-assign-users-company.html">	
+	  
+	  <style>
+	          .dual-list .list-group {
+            margin-top: 8px;
+        }
 
+        .list-left li, .list-right li {
+            cursor: pointer;
+        }
+
+        .list-arrows {
+            padding-top: 100px;
+        }
+
+            .list-arrows button {
+                margin-bottom: 20px;
+            }
+	  </style>
+
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" > Assign Users to Company </div>
+
+			  <div class="panel-body">	
+
+						<div class="container">
+							<br />
+							<div class="row">
+
+								<div class="dual-list list-left col-md-5">
+									<div class="well text-right">
+										<div class="row">
+											<div class="col-md-10">
+												<div class="input-group">
+													<span class="input-group-addon glyphicon glyphicon-search"></span>
+													<input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="btn-group">
+													<a class="btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+												</div>
+											</div>
+										</div>
+										<ul class="list-group">
+											<li class="list-group-item" ng-repeat="user in availableUsers">{{user.username}}</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="list-arrows col-md-1 text-center">
+									<button class="btn btn-default btn-sm move-left">
+										<span class="glyphicon glyphicon-chevron-left"></span>
+									</button>
+
+									<button class="btn btn-default btn-sm move-right">
+										<span class="glyphicon glyphicon-chevron-right"></span>
+									</button>
+								</div>
+
+								<div class="dual-list list-right col-md-5">
+									<div class="well">
+										<div class="row">
+											<div class="col-md-2">
+												<div class="btn-group">
+													<a class="btn btn-default selector" title="select all"><i class="glyphicon glyphicon-unchecked"></i></a>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="input-group">
+													<input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+													<span class="input-group-addon glyphicon glyphicon-search"></span>
+												</div>
+											</div>
+										</div>
+										<ul class="list-group">
+											<li class="list-group-item" ng-repeat="user in assignedUsers">{{user.username}}</li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+			  
+	          </div>
+	         </div>
+        </div>
+     </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
@@ -570,7 +908,7 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.6.0/angular-local-storage.min.js"></script> 
 	
 	<!--
 	<link rel="stylesheet" href="css/bootstrap.min.css" > 
@@ -579,8 +917,9 @@
 	<script src="js/bootstrap.min.js"></script> 
 	<script src="js/angular.min.js"></script> 
 	<script src="js/angular-route.js"></script> 
+	<script src="js/angular-local-storage.min.js"></script> 
 	-->
 	    <script src="js/item-app.js"></script> 
-
+        <script src="js/user-mng.js"></script> 
 </body>
 </html>
