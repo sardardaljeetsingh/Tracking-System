@@ -4,6 +4,7 @@ app.controller('usersController', function($scope,$rootScope,$location,$http) {
 	$http.get(hostname+'/user/findAll').
 			then(function(response) {
 				$rootScope.users = response.data;
+				$rootScope.curTab = 'userTab';
 	});	
 	
 	$scope.user ={}; 
@@ -25,6 +26,9 @@ app.controller('usersController', function($scope,$rootScope,$location,$http) {
 		$location.path("perform-action");
 	}
 	$rootScope.curTab = 'userTab';
+	console.log("   User Tab ");
+	$rootScope.currentPage = "userList";
+	console.log("   currentPage :  " + $rootScope.currentPage);
 });
 
 app.controller('createUserController', function($scope,$rootScope,$location,$http) {
@@ -98,23 +102,125 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http)
 
 app.controller('assignUsersController', function($scope,$rootScope,$location,$http) {
 
-    $rootScope.users = [];
+
+	$scope.assignedUsers = [];
+	$scope.availableUsers = [];
+	$scope.selectLeftAll = false;
+	$scope.selectRightAll = false;
 	$http.get(hostname+'/user/findAll').
 			then(function(response) {
-				$rootScope.users = response.data;
-				$scope.assignedUsers = $rootScope.users;
-				$scope.availableUsers = $rootScope.users;
+				$scope.assignedUsers = $scope.company.users;
+				console.log(" assignedUsers " + JSON.stringify($scope.assignedUsers));
+				$scope.availableUsers = response.data.filter(function(user) {
+				  for (var i in $scope.assignedUsers) {
+					if (user.id === $scope.assignedUsers[i].id) { return false; }
+				  };
+				  return true;
+				});
 	});	
-	$scope.assignedUsers = $rootScope.users;
-	$scope.availableUsers = $rootScope.users;
+
+	$scope.toggleClick = function(user){
+		console.log(" toggleClick " + user.selected);
+		user.selected = (user.selected === false || user.selected == null ) ? true: false;
+		console.log(" toggleClick " + user.selected);
+	}
+	
+	$scope.selectAll = function(listSide){
+		console.log(" listSide : "+ listSide );
+		if(listSide == 'right'){
+			 console.log(" assignedUsers : "+ $scope.assignedUsers.length  +" $scope.selectRightAll " + $scope.selectRightAll);
+			angular.forEach($scope.assignedUsers, function (user){
+				user.selected = !$scope.selectRightAll;
+			});
+		}else{
+			 console.log(" availableUsers : "+ $scope.availableUsers.length );
+			angular.forEach($scope.availableUsers, function (user){
+				user.selected = !$scope.selectLeftAll;
+			});			
+		}
+	}
+	
+	$scope.moveItem = function(listSide){
+	  console.log(" listSide : "+ listSide );
+	 $scope.selectLeftAll = false;
+	 $scope.selectRightAll = false;
+	  if(listSide == 'right'){
+		  console.log(" availableUsers : "+ $scope.availableUsers.length );
+		 /*angular.forEach($scope.availableUsers, function (user) 
+		{
+			console.log("  User : " + user.username);
+			if(user.selected){
+			    var index = $scope.availableUsers.indexOf(user);
+			    console.log( " remove index : " + index);
+				var selUser = $scope.availableUsers.splice(index, 1);
+				selUser[0].selected = false;
+				console.log( " selUser : " + JSON.stringify(selUser));
+				$scope.assignedUsers.push(selUser[0]);
+			}
+		});	*/
+		
+		for(var i = $scope.availableUsers.length - 1; i >= 0; i--){
+			if($scope.availableUsers[i].selected){
+				var selUser = $scope.availableUsers.splice(i,1);
+				selUser[0].selected = false;
+				$scope.assignedUsers.push(selUser[0]);
+			}
+		}		
+		
+	  }else{
+		  console.log(" assignedUsers : "+ $scope.assignedUsers.length );
+			for(var i = $scope.assignedUsers.length - 1; i >= 0; i--){
+				if($scope.assignedUsers[i].selected){
+					var selUser = $scope.assignedUsers.splice(i,1);
+					selUser[0].selected = false;
+					$scope.availableUsers.push(selUser[0]);
+				}
+			}		  
+	  }
+		
+	}
+	
+	$scope.save = function(){
+		$scope.company.users = [];
+		angular.forEach($scope.assignedUsers, function (user) {
+			console.log( " @id " + user['@id']);
+             user['@id'] = user.id;
+			 user.previliges = null;
+			 console.log( " After @id " + user['@id']);
+			 $scope.company.users.push(user);
+		});
+		
+		    //$scope.company.users = $scope.assignedUsers;
+			console.log( " users : " + JSON.stringify($scope.company.users));
+ 			
+			var dataObj = JSON.stringify($scope.company);
+			console.log( " Save : " + dataObj);
+			
+			$http.post(hostname + '/company/create', dataObj, {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					console.log(JSON.stringify(responseData));
+					$rootScope.currentPage = 'companyList';
+					$location.path("/view-company");
+				  } catch (err) {
+					alert(JSON.stringify(err));
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+			  });		
+	}
 });
 
        $(function () {
 
             $('body').on('click', '.list-group .list-group-item', function () {
-                $(this).toggleClass('active');
+                //$(this).toggleClass('active');
             });
             $('.list-arrows button').click(function () {
+				console.log(" list-arrows button cicked");
                 var $button = $(this), actives = '';
                 if ($button.hasClass('move-left')) {
                     actives = $('.list-right ul li.active');

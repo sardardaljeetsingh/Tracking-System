@@ -1,6 +1,6 @@
 
-//var hostname ="http://localhost:8080";
-var hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
+var hostname ="http://localhost:8080";
+//hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule"]);
@@ -16,6 +16,11 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 		    controller: 'loginController',
 		    templateUrl :'/inline-login.html',
 		  })
+	  .when('/logout',
+	  { 
+		controller: 'logoutController',
+		templateUrl :'/inline-logout.html',
+	  })
 	.when('/show-company'	,
 	      { 
 		    controller: 'companiesController',
@@ -70,6 +75,31 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	      { 
 		    controller: 'assignUsersController',
 		    templateUrl :'/inline-assign-users-company.html',
+		  })
+	.when('/create-account-groups'	,
+	      { 
+		    controller: 'accGroupController',
+		    templateUrl :'/inline-create-account-groups.html',
+		  })
+	.when('/view-account-groups'	,
+	      { 
+		    controller: 'showAccountGroupsController',
+		    templateUrl :'/inline-view-account-groups.html',
+		  })	
+	.when('/create-ledgers'	,
+	      { 
+		    controller: 'createLedgerController',
+		    templateUrl :'/inline-create-ledger.html',
+		  })
+	.when('/edit-ledger'	,
+	      { 
+		    controller: 'editLedgerController',
+		    templateUrl :'/inline-create-ledger.html',
+		  })		  
+	.when('/view-ledgers'	,
+	      { 
+		    controller: 'ledgerController',
+		    templateUrl :'/inline-ledgers.html',
 		  })		  
 	.when('/reports',{template:'This is the Report Route'})
 	.otherwise({template:'This is the Report Route'});
@@ -91,33 +121,21 @@ app.run(function($rootScope,$location,$http,localStorageService) {
     //Should load Employees from Backend
 	//$rootScope.companies = [ {name:'IBM'},{name:'Cohnizant'},{name:'InfoSys'}]; 
 	
-	$http.get(hostname+'/company/getAll').
+	/*$http.get(hostname+'/company/getAll').
 			then(function(response) {
 				$rootScope.companies = response.data;
-	});
-	
-	/*$rootScope.groups = [ {"name":"Group 1" , id :1, parent: 0} ,{"name":"Group 2" , id :2, parent: 0} ,
-	                      {"name":"Group 3" , id :3, parent: 1} ,{"name":"Group 4" , id :4, parent: 1} ,
-	                      {"name":"Group 5" , id :5, parent: 2} ,{"name":"Group 6" , id :6, parent: 2} ,
-						  {"name":"Group 7" , id :7, parent: 3} ,{"name":"Group 8" , id :8, parent: 4} ,
-	                      {"name":"Group 9" , id :9, parent: 5} ,{"name":"Group 10" , id :10, parent: 6} ,
-						  {"name":"Group 11" , id :11, parent: 9} ,{"name":"Group 12" , id :12, parent: 10},
-						  {"name":"Group 13" , id :13, parent: 11} ,{"name":"Group 14" , id :14, parent: 12},
- 						  ];*/
-	$http.get(hostname+'/company/getAll').
-			then(function(response) {
-				$rootScope.companies = response.data;
-	});	
+	});*/
 
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 	  //..do something
 	  //event.stopPropagation();  //if you don't want event to bubble up 
 	  //console.log(" loginedUser : " + localStorageService.get("loggedUser"));
-	  console.log(" current " + current);
+	  //console.log(" current " + current);
 	  console.log(" next.templateUrl " + next.templateUrl);
 			if ( localStorageService.get("loggedUser") == null || $rootScope.loggedUser == null) {
+				 //console.log(" inside if "  + (next.templateUrl == "/inline-logout.html"));
 				// no logged user, we should be going to #login
-				if ( next.templateUrl == "inline-login.html" ) {
+				if ( next.templateUrl == "inline-login.html") {
 				  // already going to #login, no redirect needed
 				} else {
 				  // not going to #login, we should redirect now
@@ -143,15 +161,34 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 		}
 		
 	$scope.login = function(user){
-		//Success
-		if(user.username == "admin"){
-			user.type ="admin";
-		}else{
-			user.type ="user";
-		}
-		localStorageService.set("loggedUser",user);
-		$rootScope.loggedUser = user;
-		$location.path("/show-company");
+		
+		
+			var dataObj = JSON.stringify(user);
+			//$scope.invalidUser = true;
+			$http.post(hostname + '/user/login', dataObj, {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					   console.log("LOgin Response : " + JSON.stringify(responseData));
+						if(responseData != null && responseData.username != null){
+							localStorageService.set("loggedUser",responseData);
+							$rootScope.loggedUser = responseData;
+							$rootScope.user = responseData;
+							$scope.user = responseData;
+							$scope.invalidUser = false;
+							$location.path("/show-company");
+						}
+				  } catch (err) {
+					alert(JSON.stringify(err));
+					$scope.invalidUser = true;
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.invalidUser = true;
+			  });		
+		
 		//window.location.href = "#/show-company";
 		//$window.location.hash = '#/' + "show-company";
 	}
@@ -163,10 +200,42 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 	}	
 });	
 
+
+app.controller('logoutController', function($scope,$rootScope,$location,$http,localStorageService,$window) {
+	
+		localStorageService.remove("loginedUser");
+		localStorageService.clearAll();
+		$rootScope.loggedUser = null;
+		//$location.path("login");	
+	
+	$scope.logout = function(){
+		localStorageService.remove("loginedUser");
+		localStorageService.clearAll();
+		$rootScope.loggedUser = null;
+		$location.path("login");
+	}	
+});	
+
 //
-app.controller('companiesController', function($scope,$rootScope,$location,$http) {
+app.controller('companiesController', function($scope,$rootScope,$location,$http,CompanyService) {
 
 	$scope.company ={}; 
+	$rootScope.currentPage = 'companyList';
+	$rootScope.curTab = 'companyTab';
+	
+	console.log(" Before Calling companyService " );
+   
+     CompanyService.getAllCompanies($scope.user, function(response){
+      console.log(" CompanyService Response " + JSON.stringify(response));
+	  $rootScope.companies = response;
+	  $rootScope.curTab = 'companyTab';
+   });
+	
+	/*$http.get(hostname+'/company/getAll').
+			then(function(response) {
+				$rootScope.companies = response.data;
+				$rootScope.curTab = 'companyTab';
+	});	*/	
 	
 	$scope.createCompany = function(){
 		$rootScope.currentPage = 'createCompany';
@@ -188,11 +257,40 @@ app.controller('companiesController', function($scope,$rootScope,$location,$http
 		$rootScope.currentPage = 'performAction';
 		$rootScope.company = company;
 		$location.path("perform-action");
+		//$scope.curTab = 'companyTab';
 	}
 	
-	$scope.curTab = 'companyTab';
+	$scope.deleteCompany = function(company){
+
+	   var confirmval = confirm("Are you sure you wish to delete Company ? ");
+	   if(!confirmval){ return} ;
+	   
+			var dataObj = JSON.stringify(company);
+			console.log(dataObj);
+			$http.delete(hostname + '/company/'+company.id , dataObj, {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					console.log(JSON.stringify(responseData));
+					$rootScope.currentPage = 'companyList';
+					//$location.path("/show-company");
+					var index = $rootScope.companies.indexOf(company);
+					console.log( " remove index : " + index);
+                    $rootScope.companies.splice(index, 1);    
+				  } catch (err) {
+					alert(JSON.stringify(err));
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+			  });
+	}	
+	
+	
 	
 	$scope.changeTab = function(tabName){
+		console.log("changeTab in company");
 		$location.path("show-user");
 		$scope.curTab = 'userTab';
 	}
@@ -285,7 +383,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 	$scope.multigroups =[];	
 	//Groups data received from backend
 	console.log(" Fetching group for Company Id : " + $scope.company.id );
-	$http.get(hostname + '/group/find-by-company/'+$scope.company.id).
+	$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
 		then(function(response) 
 		{
 			$rootScope.groups = response.data;
@@ -352,13 +450,14 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		var dataObj = JSON.stringify(newgroup);
 		console.log(dataObj);
 		
-		$http.post(hostname + '/group/create', dataObj, {
+		$http.post(hostname + '/stockgroup/create', dataObj, {
 		  headers: {
 			'Content-Type': 'application/json; charset=UTF-8'
 		  },
 		}).success(function(responseData) {
+			console.log("GRP Response : " + responseData.id);
 			  try {
-
+                newgroup.id = responseData.id;
 					if(grplevel == 0){
 						$scope.singlegroups.push(newgroup);
 						$scope.groups.push(newgroup);
@@ -389,11 +488,20 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	//Groups data received from backend
 	$scope.stockGroups = [];
 	$scope.stockGroups[0] = {};	
-	$scope.stockGroups[0].children = [];
-	 angular.forEach($scope.groups, function (group) {
-			if(group.parent === 1){
-			  $scope.stockGroups[0].children.push(group);
-			}
+	$scope.stockGroups[0].children = [];	
+	$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+			$scope.groups = response.data;
+			//$scope.groups = response.data;
+			console.log(" Groupth Length : " + $scope.groups.length)			
+			angular.forEach($scope.groups, function (group) 
+			{
+				 console.log(" group "  + group.id +"  "+ group.parent );
+				if(group.parent === 1){
+				  $scope.stockGroups[0].children.push(group);
+				}
+			});	
 		});	
 
 	$scope.setChildrenData = function(selGroup,grplevel){
@@ -437,12 +545,21 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	
 	$scope.addItem = function(selItem){
 
-	    selItem.id = null;
-	    selItem.group = {};
-		selItem.group.id = $scope.stockgroup.selGroup.id;
+	    //selItem.id = null;
+	    //selItem.stockGroup = {};
+		//selItem.group.id = $scope.stockgroup.selGroup.id;
+		//selItem.stockGroup.id = $scope.stockGroups[$scope.stockGroups.length-1].selGroup.id;
 		//selItem.group = $scope.stockgroup.selGroup;
-	
-		var dataObj = JSON.stringify(newgroup);
+	    selItem.stockGroup = $scope.stockGroups[$scope.stockGroups.length-1].selGroup.id;
+		selItem.itemTrans = $scope.items;
+		
+		angular.forEach(selItem.itemTrans,function(itemTrans,index){
+		  itemTrans.name = selItem.name +"_" + selItem.shade + "_" + index ;
+		  //itemTrans.item = selItem;
+		});		
+		
+		
+		var dataObj = JSON.stringify(selItem);
 		console.log(dataObj);
 		
 		$http.post(hostname+'/item/create', dataObj, {
@@ -452,7 +569,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		}).success(function(responseData) {
 			  try {
 
-		         console.log("Item Created Suucessfully");
+		         console.log("Item Created Suucessfully" + responseData);
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }
@@ -466,13 +583,23 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		
 });
 
-app.controller('showStockGroupsController', function($scope,$rootScope,$location) {
+app.controller('showStockGroupsController', function($scope,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'showStockGroups';
-
-    $scope.groupmap = $scope.groups.map(function(group){ 
+        $scope.singlegroups = [];
+		console.log(" company.id "  + $scope.company.id );
+	    $http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+			$rootScope.groups = response.data;
+			//$scope.groups = response.data;
+			console.log(" Groupth Length : " + $scope.groups.length)			
+		});			
+		
+		
+    /*$scope.groupmap = $scope.groups.map(function(group){ 
 		var rObj = {};
 		rObj[group.id] = group;
 		return rObj;
-     });
+     });*/
 
 });
