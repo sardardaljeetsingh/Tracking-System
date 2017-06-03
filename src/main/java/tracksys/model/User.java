@@ -39,7 +39,7 @@ public class User {
 
 	@NotNull
 	@Column(name = "phone", nullable = false)	
-	private int phone;
+	private long phone;
 
 	@NotNull
 	@Column(name = "email", nullable = false)	
@@ -89,11 +89,11 @@ public class User {
 		this.address = address;
 	}
 
-	public int getPhone() {
+	public long getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(long phone) {
 		this.phone = phone;
 	}
 

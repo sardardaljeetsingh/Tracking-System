@@ -1,5 +1,7 @@
 package tracksys.model;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,19 +10,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class ItemController {
 
 	@RequestMapping(value ="/item/create",method = RequestMethod.POST)
-	public ResponseEntity<Item>  create(@RequestBody Item item) {
-		try {
-			itemRepository.save(item);
+	public @ResponseBody Item  create(@RequestBody Item item) {
+		List<ItemTrasacation> transList = item.getItemTrans();
+		item.setItemTrans(null);
+		item = itemRepository.save(item);
+		if(transList != null){
+			for(ItemTrasacation trasacation : transList){
+				trasacation.setItem(item);
+			}
 		}
-		catch (Exception ex) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<Item>(item, HttpStatus.OK);
+		itemTransactionRepo.save(item.getItemTrans());
+		return itemRepository.findOne(item.getId());
 	}
 
 	@RequestMapping(value ="/item/getAll",method = RequestMethod.GET)
@@ -30,21 +37,20 @@ public class ItemController {
 			itemyList = itemRepository.findAll();
 		}
 		catch (Exception ex) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<Iterable<Item>>(itemyList, HttpStatus.OK);
 	} 	
+	
+	@RequestMapping(value ="/itemtrans/getAll",method = RequestMethod.GET)
+	public  @ResponseBody Iterable<ItemTrasacation> getAllItemtrans() {
+		return itemTransactionRepo.findAll();
+	}
 
 
 	@RequestMapping(value ="/itemtrans/create",method = RequestMethod.POST)
-	public ResponseEntity<ItemTrasacation>  createItemTrans(@RequestBody ItemTrasacation itemTrasacation) {
-		try {
-			itemTransactionRepo.save(itemTrasacation);
-		}
-		catch (Exception ex) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<ItemTrasacation>(itemTrasacation, HttpStatus.OK);
+	public @ResponseBody ItemTrasacation createItemTrans(@RequestBody ItemTrasacation itemTrasacation) {
+			 return itemTransactionRepo.save(itemTrasacation);
 	}
 
 

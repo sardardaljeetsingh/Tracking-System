@@ -24,14 +24,8 @@ public class CompanyController {
 
 	  @RequestMapping(value ="/create",method = RequestMethod.POST)
 	  
-	  public ResponseEntity<Company>  create(@RequestBody Company company) {
-	    try {
-	    	companyRepository.save(company);
-	    }
-	    catch (Exception ex) {
-	      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
-	    return new ResponseEntity<Company>(company, HttpStatus.OK);
+	  public @ResponseBody Company  create(@RequestBody Company company) {
+	    	return companyRepository.save(company);
 	  }
 	  
 	  @RequestMapping(value ="/getAll",method = RequestMethod.GET)
@@ -48,15 +42,32 @@ public class CompanyController {
 	  
 	  @RequestMapping(value ="/get/{companyId}",method = RequestMethod.GET)
 	  public ResponseEntity<Company> findCompany(@PathVariable("companyId") String companyId) {
-	    Company company = null;
-	    try {
-	    	company = companyRepository.findOne(Integer.valueOf(companyId));
-	    }
-	    catch (Exception ex) {
-		      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		    }
-		    return new ResponseEntity<Company>(company, HttpStatus.OK);
-		  } 	  
+		  Company company = null;
+		  try {
+			  company = companyRepository.findOne(Integer.valueOf(companyId));
+		  }
+		  catch (Exception ex) {
+			  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		  }
+		  return new ResponseEntity<Company>(company, HttpStatus.OK);
+	  } 
+	  
+	  @RequestMapping(value ="/find-by-userid/{userId}",method = RequestMethod.GET)
+	  public @ResponseBody List<Company> findCompany(@PathVariable("userId") int userId) {
+		  return companyRepository.findAllByUsers_Id(userId);
+	  } 	  
+	  
+	  
+	  @RequestMapping(value ="/{companyId}",method = RequestMethod.DELETE)
+	  public ResponseEntity<Boolean> deleteCompany(@PathVariable("companyId") int companyId) {
+		  try {
+			  companyRepository.delete(companyId);
+			  return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		  } catch (Exception ex) {
+			  return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		  }
+
+	  } 	  
 	  
 	  @Autowired
 	  private CompanyRepository companyRepository;

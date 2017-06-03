@@ -30,7 +30,7 @@ public class UserController {
 	
 	@RequestMapping(value ="/create",method = RequestMethod.POST)
 	public @ResponseBody User  create(@RequestBody User user) {
-		user.setPhone(123456);
+		//user.setPhone(123456);
 		user.getPreviliges().setUser(user);
 		userRepostory.save(user);
 		return user;
@@ -49,6 +49,11 @@ public class UserController {
 	@RequestMapping(value ="/findAllPrev",method = RequestMethod.GET)
 	public @ResponseBody Iterable<Previliges> findAllPrev() {
 		return userPreviligeReposotory.findAll();
+	}
+	
+	@RequestMapping(value ="/login",method = RequestMethod.POST)
+	public @ResponseBody User  login(@RequestBody User user) {
+		return userRepostory.findByUsernameAndPassword(user.getUsername(), user.getPassword());
 	}
 	  
 }
