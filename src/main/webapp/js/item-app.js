@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
-//hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
-var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+var hostname ="http://localhost:8080";
+  //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule"]);
@@ -52,6 +52,11 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 		    controller: 'stockItemController',
 		    templateUrl :'/inline-create-stocks-items.html',
 		  })
+	.when('/view-stock-items'	,
+	      { 
+		    controller: 'showStockItemController',
+		    templateUrl :'/inline-view-stocks-items.html',
+		  })		  
 	.when('/view-stock-groups'	,
 	      { 
 		    controller: 'showStockGroupsController',
@@ -180,6 +185,8 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 							$scope.user = responseData;
 							$scope.invalidUser = false;
 							$location.path("/show-company");
+						}else{
+							$scope.invalidUser = true;
 						}
 				  } catch (err) {
 					alert(JSON.stringify(err));
@@ -367,6 +374,7 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 
 app.controller('performActionController', function($scope,$rootScope,$location) {
 	
+	$rootScope.currentPage = 'performAction';
 	$scope.stockGrpoups = function(company){
 		$rootScope.currentPage = 'stockGroups';
 		//Back end code to edit Company
@@ -584,6 +592,18 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		
 });
 
+
+app.controller('showStockItemController', function($scope,$rootScope,$location,$http) {
+		$rootScope.currentPage = 'showStockItems';
+	    $http.get(hostname + '/item/getAll').
+		then(function(response) 
+		{
+			$scope.items = response.data;
+			console.log(" items Length : " + $scope.items.length);
+            $rootScope.currentPage = 'showStockItems';			
+		});			
+});
+
 app.controller('showStockGroupsController', function($scope,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'showStockGroups';
         $scope.singlegroups = [];
@@ -593,7 +613,8 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 		{
 			$rootScope.groups = response.data;
 			//$scope.groups = response.data;
-			console.log(" Groupth Length : " + $scope.groups.length)			
+			console.log(" Groupth Length : " + $scope.groups.length)	;
+            $rootScope.currentPage = 'showStockGroups';			
 		});			
 		
 		

@@ -115,6 +115,7 @@ app.controller('showAccountGroupsController', function($scope,$rootScope,$locati
 		{
 			$scope.groups = response.data;
 			//$scope.groups = response.data;
-			console.log(" AccountGRP Length : " + $scope.groups.length)			
+			console.log(" AccountGRP Length : " + $scope.groups.length)	;
+            $rootScope.currentPage = 'showAccountGroups';			
 		});			
 });
