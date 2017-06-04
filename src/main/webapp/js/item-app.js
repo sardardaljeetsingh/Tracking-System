@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
-var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule"]);
@@ -553,6 +553,12 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	}	
 	
 	$scope.addItem = function(selItem){
+		console.log("add item");
+		if(!$scope.itemform.$valid){
+			$scope.submitclick = true;
+			console.log("invalid item form ");
+			return;
+		}		
 
 	    //selItem.id = null;
 	    //selItem.stockGroup = {};
@@ -577,8 +583,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		  },
 		}).success(function(responseData) {
 			  try {
-
 		         console.log("Item Created Suucessfully" + responseData);
+				 $location.path("/view-stock-items");
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }
