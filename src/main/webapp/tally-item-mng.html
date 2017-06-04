@@ -67,7 +67,7 @@
 								Assign Users
 							</li>							
 							<li ng-if="(currentPage == 'performAction' || currentPage == 'createStockItems' 
-							|| currentPage == 'createStockGroups' ||currentPage == 'showStockGroups' 
+							|| currentPage == 'createStockGroups' ||currentPage == 'showStockGroups' ||currentPage == 'showStockItems' 
 							|| currentPage == 'createAccountGroups' ||currentPage == 'showAccountGroups'
 							|| currentPage == 'createLedgers' ||currentPage == 'viewLedgers')" 
 								ng-class="{'active': currentPage == 'performAction'}" >
@@ -82,6 +82,9 @@
 							<li ng-if="(currentPage == 'showStockGroups' )" ng-class="{'active': currentPage == 'showStockGroups'}" style="color:#ccc" >
 								Stock Groups
 							</li>	
+							<li ng-if="(currentPage == 'showStockItems' )" ng-class="{'active': currentPage == 'showStockItems'}" style="color:#ccc" >
+								Stock Items
+							</li>							
 							<li ng-if="(currentPage == 'createAccountGroups' )" ng-class="{'active': currentPage == 'createAccountGroups'}" style="color:#ccc" >
 								Create Account Groups
 							</li>
@@ -410,7 +413,7 @@
 			  <div class="panel-body">
 			  
 					<div class="row input-sm" >
-						  <div class="col-xs-6 panel panel-success" style="margin:10px;padding:0px" >
+						  <div class="col-xs-6 panel panel-success" style="margin:10px;padding:0px" ng-if="user.previliges.accountinfo == 'true' ">
 							<div class="panel-heading">Accounting Info</div>
 								<div class="panel-body">
 									<div class="row" >
@@ -436,7 +439,7 @@
 									
 								</div>
 						  </div>
-						  <div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+						  <div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" ng-if="user.previliges.inventoryinfo == 'true'"  >
 							<div class="panel-heading">Inventory Info</div>
 								<div class="panel-body">
 								
@@ -455,7 +458,7 @@
 											<div class="panel-body">
 												<div class="list-group">
 												  <a href="#create-stock-items" class="list-group-item list-group-item-success">Create Stock Items</a>
-												  <a href="#" class="list-group-item list-group-item-success">View Stock Items</a>
+												  <a href="#view-stock-items" class="list-group-item list-group-item-success">View Stock Items</a>
 												</div>											
 											</div>												
 										</div>	
@@ -568,7 +571,6 @@
 					<div class="row">
 					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" >
 					      <div class="panel-heading">Select Stock Groups</div>
-						{{stockGroups}}
 								<div class="row" ng-repeat=" stockgroup in stockGroups" >
 									<form class="form-inline"  style="padding:10px">
 										<div class="form-group"     style="width: 100%;" >
@@ -672,6 +674,53 @@
 			 </div>
 	    </div>
 	  </script>	  
+	  
+	  <script type="text/ng-template" id="/inline-view-stocks-items.html">
+		<div class="panel panel-success" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">List of Stock Items </div>
+  
+		  
+		  
+		  <div class="panel-body">
+		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Stock Item">
+					  </div>
+					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					</form>
+		  
+         </div>
+		  <div class="row" >
+		  <!-- Table -->
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
+		  <thead> <tr> 
+				  <th>#</th>
+				  <th>Name</th>
+				  <th>Shade</th>
+				  <th>Description</th>
+				  <th>UOM</th>
+				  <th>Total Quandity</th>
+				</tr> 
+		  </thead> 
+		  <tbody> 
+			  <tr ng-repeat="item in items" > 
+				<td>{{item.id}}</td> 
+				<td>{{item.name}} </td> 
+				<td>{{item.shade}} </td> 
+				<td>{{item.desc}} </td> 
+				<td>{{item.uom}} </td> 
+				<td>{{item.quandity}} </td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		 </div> 
+		  </div>
+		  
+		</div>
+  
+	  </script>	 	  
 	  
 	  
 	  <script type="text/ng-template" id="/inline-view-stock-groups.html">
