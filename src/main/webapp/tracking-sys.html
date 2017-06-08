@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://v4-alpha.getbootstrap.com/examples/cover/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+
+    <title>Tracking System</title>
+
+  </head>
+
+  <body ng-app="trackingApp" >
+  <div  class="text-center" style="background-color: #26630e; padding:10px; marign:0px; color:#FFFFFF" >
+  <h3 style="font-family: cursive " >Tracking System <small></small></h3>
+  </div>
+  <p class="bg-success red-text text-right" style="background-color:#26630e; color:#FFFFFF; marign:10px" ng-if="(loggedUser != null)" > 
+  <span class="glyphicon glyphicon-user"></span> Signed in as <strong>{{ loggedUser.username}}</strong> <small>( {{ loggedUser.type}} )</small>
+       &nbsp;&nbsp; <a href="#logout" ng-click="logout()"; style="color:#FFFFFF;" >
+          <span class="glyphicon glyphicon-off"></span>
+        </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </p>
+
+    <div class="container-fluid" >
+	
+		<div class="col-md-3" style="width: 15%; height: 530px; padding: 1px; background-color: #dff0d8;" 
+		ng-if="(loggedUser != null &&  loggedUser.type =='admin' )" >
+			<ul class="nav nav-pills nav-stacked panel-success">
+				<li ng-class="{ active: (curTab == null ||  curTab =='companyTab') }">
+					<a href="#show-company" ng-click="curTab='companyTab';">Company Management {{}}</a>
+				</li>
+				<li ng-class="{ active: (curTab =='userTab') }">
+					<a href="#show-user" ng-click="curTab='userTab';">User Managemnet</a>
+				</li>
+				<li ng-class="{ active: (curTab =='empTab') }">
+					<a href="#show-employee" ng-click="curTab='empTab';">Employee Managemnet</a>
+				</li>
+				<li ng-class="{ active: (curTab =='taskTab') }">
+					<a href="#show-task" ng-click="curTab='taskTab';">Task Managemnet</a>
+				</li>				
+			</ul>
+		</div>	
+
+       <div class="col-md-9" style=" padding: 1px;" 
+	   ng-style=" loggedUser.type =='admin' && {width: '85%'} || (loggedUser.type =='user' )&& {width: '100%'}" >
+			<div style="height: 530px;background-color: #FFFFFF;">
+			<div>
+			
+				<div class="row">
+				  <div class="col-md-12" style="float: none;margin: 0 auto; font-family: cursive;">
+							<ol class="breadcrumb" style="background-color: #419641; color:#FFFFFF ;padding:3px;marign:10px; "
+							ng-if="(loggedUser != null )"  >
+							 <li ng-if="(curTab == null ||  curTab =='companyTab' )" >
+								 &nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#show-company" ng-class="{'active': currentPage == 'companyList'}" >Companies</a>
+							 </li>
+							 <li ng-if="(curTab =='userTab' )" >
+								&nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#show-user" ng-class="{'active': currentPage == 'userList'}" >Users</a>
+							 </li>	
+							 <li ng-if="(curTab =='empTab' )" >
+								&nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#show-employee" ng-class="{'active': currentPage == 'empList'}" >Employees</a>
+							 </li>
+							 <li ng-if="(curTab =='taskTab' )" >
+								&nbsp;&nbsp; &nbsp; &nbsp;  <a style="color:#FFFFFF"  href="#show-task" ng-class="{'active': currentPage == 'taskList'}" >Tasks</a>
+							 </li>							 
+							<li ng-if="(currentPage == 'createCompany' )" ng-class="{'active': currentPage == 'createCompany'}" style="color:#ccc" >
+								Create Company
+							</li>
+							<li ng-if="(currentPage == 'createUser' )" ng-class="{'active': currentPage == 'createUser'}" style="color:#ccc" >
+								Create User
+							</li>							
+							<li ng-if="(currentPage == 'editCompany' )" ng-class="{'active': currentPage == 'editCompany'}" style="color:#ccc" >
+								Edit Company
+							</li>
+							<li ng-if="(currentPage == 'editUser' )" ng-class="{'active': currentPage == 'editUser'}" style="color:#ccc" >
+								Edit User
+							</li>		
+							<li ng-if="(currentPage == 'assignUsers' )" ng-class="{'active': currentPage == 'assignUsers'}" style="color:#ccc" >
+								Assign Users
+							</li>							
+							<li ng-if="(currentPage == 'performAction' || currentPage == 'createStockItems' 
+							|| currentPage == 'createStockGroups' ||currentPage == 'showStockGroups' ||currentPage == 'showStockItems' 
+							|| currentPage == 'createAccountGroups' ||currentPage == 'showAccountGroups'
+							|| currentPage == 'createLedgers' ||currentPage == 'viewLedgers')" 
+								ng-class="{'active': currentPage == 'performAction'}" >
+								<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
+							</li>	
+							<li ng-if="(currentPage == 'createStockGroups' )" ng-class="{'active': currentPage == 'createStockGroups'}" style="color:#ccc" >
+								Create Stock Groups
+							</li>
+							<li ng-if="(currentPage == 'createStockItems' )" ng-class="{'active': currentPage == 'createStockItems'}" style="color:#ccc" >
+								Create Stock Items
+							</li>
+							<li ng-if="(currentPage == 'showStockGroups' )" ng-class="{'active': currentPage == 'showStockGroups'}" style="color:#ccc" >
+								Stock Groups
+							</li>	
+							<li ng-if="(currentPage == 'showStockItems' )" ng-class="{'active': currentPage == 'showStockItems'}" style="color:#ccc" >
+								Stock Items
+							</li>							
+							<li ng-if="(currentPage == 'createAccountGroups' )" ng-class="{'active': currentPage == 'createAccountGroups'}" style="color:#ccc" >
+								Create Account Groups
+							</li>
+							<li ng-if="(currentPage == 'showAccountGroups' )" ng-class="{'active': currentPage == 'showAccountGroups'}" style="color:#ccc" >
+								Account Groups
+							</li>	
+							<li ng-if="(currentPage == 'createLedgers' )" ng-class="{'active': currentPage == 'createLedgers'}" style="color:#ccc" >
+								Create Ledger
+							</li>
+							<li ng-if="(currentPage == 'viewLedgers' )" ng-class="{'active': currentPage == 'viewLedgers'}" style="color:#ccc" >
+								Account Ledgers
+							</li>	
+							<li ng-if="(currentPage == 'createEmployee' )" ng-class="{'active': currentPage == 'createEmployee'}" style="color:#ccc" >
+								Create Employee
+							</li>
+							<li ng-if="(currentPage == 'editEmployee' )" ng-class="{'active': currentPage == 'editEmployee'}" style="color:#ccc" >
+								Edit Employee
+							</li>							
+							</ol>
+						
+							<div>
+								<div ng-view class="input-sm"></div>
+							</div>
+		
+				</div>
+				</div>
+			</div>
+	       </div>
+	    </div>
+		
+	
+		
+
+	  <script type="text/ng-template" id="/inline-login.html">
+	
+        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-4 col-md-offset-6 col-sm-8 col-sm-offset-2">                    
+            <div class="panel panel-success" >
+                    <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+                        <div class="panel-title">Sign In</div>
+                        <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+                    </div>     
+
+                    <div style="padding-top:30px" class="panel-body" >
+
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                            
+                        <form id="loginform" class="form-horizontal" role="form">
+                                    
+                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : invalidUser }" >
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input id="login-username" type="text" class="form-control" ng-model="user.username" value="" placeholder="username">                                        
+                                    </div>
+                                
+                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : invalidUser }" >
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input id="login-password" type="password" class="form-control" ng-model="user.password" placeholder="password">
+                            </div>
+                                    
+                            <div class="input-group" ng-if="invalidUser">
+										<p class="text-danger"> <Strong> Invalid User Name or Password ! <Strong> </p>
+                            </div>
+                                
+                            <div class="input-group">
+                                      <div class="checkbox">
+                                        <label>
+                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+                                        </label>
+                                      </div>
+                            </div>
+						
+                                <div style="margin-top:10px;align:center" class="form-group">
+                                    <!-- Button -->
+                                    <div class="col-sm-12 controls text-center">
+                                      <a id="btn-login" href="#" ng-click="login(user);" class="btn btn-success" style="width: 250px;" >Login</a>
+                                     </div>
+                                </div>
+   
+                            </form>     
+
+
+
+                        </div>                     
+                    </div>  
+        </div>
+		
+	 </script>	
+	 
+	  <script type="text/ng-template" id="/inline-logout.html">
+
+ 
+                 <p class="bg-success red-text text-center" > 
+					<h2> You have successfully logged out! </h2>
+					<br>
+					<a href="#login" class="btn btn-success btn-sm">
+						<span class="glyphicon glyphicon-log-in"></span> Log in
+					</a>
+					
+				 </p>	
+	        
+      </script>	
+		  
+	  <script type="text/ng-template" id="/inline-companies.html">
+ 
+	  
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+		  <strong> List of Companies </strong> </div>
+		  <div class="panel-body">
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Company">
+					  </div>
+					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" ng-if="loggedUser.type =='admin'" >
+						Create Company
+					  </button>
+					</form>
+			
+		  </div>
+		  <!-- Table -->
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>Company Name</th> <th>Last Entry Date</th> <th></th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="company in companies"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{company.name}}</td> 
+				<td> {{company.lastentry == null ? 'No Vochers Entered' : company.lastentry}} </td> 
+			    <td>
+			    <form class="form-inline">
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editCompany(company)"
+					ng-if="loggedUser.type =='admin'">Edit Company</button>
+					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteCompany(company)" 
+					ng-if="loggedUser.type =='admin'">Delete Company</button>
+					<button type="button" class="btn btn-warning btn-xs" ng-click="assignUsers(company)" 
+					ng-if="loggedUser.type =='admin'">Assign Users</button>					
+					<button type="button" class="btn btn-warning btn-xs" ng-click="performAction(company)"> Perform Actions </button>
+
+					
+					
+				</form>				
+				</td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		</div>
+  
+	  </script>
+	  
+	  <script type="text/ng-template" id="/inline-create-company.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='create'">Company Creation </div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='edit'">Edit Company details </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm" name="companyform" novalidate >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.name'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" name="company.name" ng-model="company.name"
+								  placeholder="Name" required  >						
+								</div>
+							  </div>
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.mailingname'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Mailing Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="company.mailingname" ng-model="company.mailingname"
+								  placeholder="Mailing Name" required > 
+								</div>
+							  </div>
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.address'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Address</label>
+								<div class="col-sm-5">
+								  <textarea class="form-control custom-sm input-sm" name="company.address" ng-model="company.address" 
+								  rows="3" placeholder="Company Address" required ></textarea>
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Country</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="company.country" 
+											ng-init="company.country = company.country || options[0].value"
+											ng-options="option.id as option.name for option in countries">
+									</select>								
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">State</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="company.state" 
+											ng-init="company.state = company.state || options[0].value"
+											ng-options="option.id as option.name for option in states">
+									</select>									
+								</div>
+							  </div>
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.pincode'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">PinCode</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" name="company.pincode" ng-model="company.pincode"
+								  placeholder="Pincode" required>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.phone'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Telephone</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" name="company.phone" ng-model="company.phone"
+								  placeholder="Telephone Number" required>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.email'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Email</label>
+								<div class="col-sm-5">
+								  <input type="email" class="form-control input-sm" id="inputPassword3" name="company.email" ng-model="company.email"
+								  placeholder="Email Address" required>
+								</div>
+							  </div>							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Currency Symbol</label>
+								<div class="col-sm-5">
+								  <input readonly type="text" class="form-control input-sm" id="inputPassword3" ng-model="company.currencesymbol"
+								   placeholder="Rs." value="Rs.">
+								</div>
+							  </div>	  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Company Type</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.type" value="1">Maintain Accounts Only
+								  <input type="radio" ng-model="company.type" value="2">Maintain Accounts with Inventory
+								</div>
+							  </div>	
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.yearstart'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Financial Year From</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="company.yearstart" ng-model="company.yearstart"
+								  placeholder="Financial Year Starting From" required>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && companyform['company.booksstart'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Books Beginning From</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="company.booksstart" ng-model="company.booksstart"
+								  placeholder="Books Beginning From" required>
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editCompany(company)" ng-if="optType=='edit'" class="btn btn-success">Edit Company</button>
+								   <button type="button" ng-click="createCompany(company);" ng-if="optType=='create'" class="btn btn-success">Create Company</button>
+								</div>
+							  </div>
+							</form>
+							
+					
+					  </div>
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					      	<form class="form-horizontal">
+							  <div class="form-group   input-sm">
+								<label for="inputEmail3" class="col-sm-5 control-label">Base Currency Symbol</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" ng-model="company.basecur.symbol"
+								  placeholder="Name">
+								</div>
+							  </div>
+							  <div class="form-group   input-sm">
+								<label for="inputEmail3" class="col-sm-5 control-label">Formal Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" ng-model="company.basecur.name"
+								  placeholder="Name">
+								</div>
+							  </div>	
+							  <div class="form-group   input-sm">
+								<label for="inputEmail3" class="col-sm-5 control-label">Number of Decimals</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="company.name" ng-model="company.basecur.decnumber"
+								  >
+								</div>
+							  </div>
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Is Symbol Suffixed to Amount ?</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.basecur.symolsuffix" value="yes">Yes
+								  <input type="radio" ng-model="company.basecur.symolsuffix" value="no">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Symbol for Decimal portion </label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control input-sm" id="company.name" ng-model="company.basecur.symboldecimal"  placeholder="Paise" >
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Show Amounts in Millions ?</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.basecur.amountmillions" value="yes">Yes
+								  <input type="radio" ng-model="company.basecur.amountmillions" value="no">No
+							    </div>
+							 </div>
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Put a Space between Amount and Symbol ?</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="company.basecur.amountspace" value="yes">Yes
+								  <input type="radio" ng-model="company.basecur.amountspace" value="no">No
+								</div>
+							  </div>							  
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Dcimal Places for printing amounts in words </label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" ng-model="company.basecur.decimalplace" value="2">
+								</div>
+							  </div>							  
+							  
+							</form>  
+							
+					  </div>
+					</div>			
+			  </div>		
+			</div>
+		</div>  
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-perform-action.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Masters</strong></div>
+			  <div class="panel-body">
+			  
+					<div class="row input-sm" >
+						  <div class="col-xs-6 panel panel-success" style="margin:10px;padding:0px" ng-if="user.previliges.accountinfo == 'true' ">
+							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000"> 
+							<strong>Accounting Info</strong></div>
+								<div class="panel-body">
+									<div class="row" >
+										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+											<strong>Account Groups</strong></div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-account-groups" class="list-group-item list-group-item-success">
+												  <strong>Create Account Groups</strong></a>
+												  <a href="#view-account-groups" class="list-group-item list-group-item-success">
+												  <strong>View Account Groups</strong></a>
+												</div>											
+											</div>	
+										</div>									
+										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+											<strong>Ledgers</strong></div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-ledgers" class="list-group-item list-group-item-success"><strong>Create Ledgers</strong></a>
+												  <a href="#view-ledgers" class="list-group-item list-group-item-success"><strong>View Ledgers</strong></a>
+												</div>											
+											</div>												
+										</div>	
+									</div>	
+									
+								</div>
+						  </div>
+						  <div class="col-xs-5 panel panel-success" style="margin:5px;padding:0px" ng-if="user.previliges.inventoryinfo == 'true'"  >
+							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+							<strong>Inventory Info</strong></div>
+								<div class="panel-body">
+								
+									<div class="row" >
+										<div class="col-xs-6 panel panel-success" style="margin:10px; margin-right: 0px; padding:0px" >
+											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+											<strong>Stock Groups</strong></div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-stock-groups" class="list-group-item list-group-item-success"><strong>Create Stock Groups</strong></a>
+												  <a href="#view-stock-groups" class="list-group-item list-group-item-success"><strong>View Stock Groups</strong></a>
+												</div>											
+											</div>	
+										</div>									
+										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+											<strong>Stock Items</strong></div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-stock-items" class="list-group-item list-group-item-success"><strong>Create Stock Items</strong></a>
+												  <a href="#view-stock-items" class="list-group-item list-group-item-success"><strong>View Stock Items</strong></a>
+												</div>											
+											</div>												
+										</div>	
+									</div>									
+								
+								</div>
+						  </div>					  
+			        </div>
+			  </div>			  
+	        </div>
+			
+			<div class="panel panel-success" ng-if="user.previliges.transactions == 'true'" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Transactions</strong></div>
+			  <div class="panel-body">
+			  </div>			  
+	        </div>
+			<div class="panel panel-success"  > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Imports</strong></div>
+			  <div class="panel-body">
+			  </div>			  
+	        </div>
+			<div class="panel panel-success" ng-if="user.previliges.reports == 'true'" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Reports</strong></div>
+			  <div class="panel-body">
+			  </div>			  
+	        </div>
+			
+		</div>
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-create-stocks-groups.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >Create Stock Groups</div>	
+			  <div class="panel-body">
+					<div class="row" >
+					     <div class="col-xs-10 panel panel-info" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Single Stock Group</div>
+						
+							<form class="form-inline" style="padding:10px">
+							    <div class="form-group">
+								<div class="col-sm-5">
+									<select class="form-control input-sm" id="sel1" ng-model="singlegroup.selGroup" 
+										ng-options="group.name for group in singlegroups track by group.id"
+										ng-change="setChildrenData(singlegroup.selGroup,0)" 
+										>
+											<option value="">-- choose Group1 --</option>
+									</select>	
+									
+								</div>
+							  </div>
+							  <div class="form-group" ng-if="singlegroup.selGroup == null" >
+								<input type="text" class="form-control input-sm" ng-model="singlegroup.newgroup" placeholder="Single Stock Group Name">
+							  </div>						  
+							  <button type="button" class="btn btn-success btn-sm" ng-click="addGroup(singlegroup.newgroup,0)" ng-if="singlegroup.selGroup == null" >
+								Add Group
+							  </button>
+							</form>							
+							
+					    </div>
+			        </div>
+					
+					<div class="row" ng-if="singlegroup.selGroup != null && singlegroup.selGroup.id > 0">
+					     <div class="col-xs-8 panel panel-danger" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Multi Stock Group</div>
+						
+								<div class="row" ng-repeat=" multigroup in multigroups" >
+									<form class="form-inline" style="padding:10px">
+										<div class="form-group">
+										<div class="col-sm-5">
+											<select class="form-control input-sm" id="sel1" ng-model="multigroup.selGroup" 
+												ng-change="setChildrenData(multigroup.selGroup,$index +1)" 
+												ng-options="group.name for group in multigroup.children track by group.id">
+													<option value="">-- choose Group1 --</option>
+											</select>	
+										</div>
+									  </div>
+									  <div class="form-group" ng-if="multigroup.selGroup == null" >
+										<input type="text" class="form-control input-sm" ng-model="multigroup.newgroup" placeholder="Multi Stock Group Name">
+									  </div>
+									  <button type="button" ng-if="multigroup.selGroup == null" class="btn btn-success btn-sm" ng-click="addGroup(multigroup.newgroup,$index +1)" >
+										Add Group
+									  </button>
+									</form>							
+								</div>	
+					    </div>
+			        </div>					
+					
+			  </div>
+			  
+		  
+			  
+			 </div>
+	    </div>
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-create-stocks-items.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+			 <strong> Create Stock Items</strong>
+			  </div>	
+			  <div class="panel-body">
+				
+					<div class="row">
+					     <div class="col-xs-8 panel panel-success" style="margin:10px;padding:0px" >
+					      <div class="panel-heading"><strong>Select Stock Groups</strong></div>
+								<div class="row" ng-repeat=" stockgroup in stockGroups" >
+									<form class="form-inline"  style="padding:10px">
+										<div class="form-group"     style="width: 100%;" >
+										<div class="col-sm-5" style="width: 80%;" >
+											<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
+												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
+												ng-options="group.name for group in stockgroup.children track by group.id">
+													<option value="">-- choose Group1 --</option>
+											</select>	
+										</div>
+									  </div>
+									</form>							
+								</div>	
+					    </div>
+			        </div>	
+					<div class="row">
+					   <form class="form-horizontal input-sm" name="itemform" novalidate >
+					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" ng-show="stockGroups[stockGroups.length-1].selGroup != null" >
+					      <div class="panel-heading"><strong>Enter Item Details </strong></div>	
+							    <div class="panel-body">
+									<div class="row" >
+											<table class="table table-condensed table-bordered" style="width:98%; margin-left :10px; padding:30px" >
+											<thead>
+											<tr  class="input-sm">
+											  <th>#</th>
+											  <th>Name</th>
+											  <th>Shade</th>
+											  <th>Description</th>
+											  <th>UOM</th>
+											  <th class="col-md-2" > Total Quandity</th>
+											  <th></th>
+											</tr>
+											</thead>
+											<tr class="warning">
+											 <th scope="row">1</th>
+											 <td ng-class="{'has-error' : submitclick && itemform['item.name'].$invalid }">
+											 <input type="text" class="form-control input-sm" size="10" ng-model="item.name" name="item.name" id="item.name"
+											  required> </td>
+											 <td ng-class="{'has-error' : submitclick && itemform['item.shade'].$invalid }">
+											 <input type="text" class="form-control input-sm" size="5" ng-model="item.shade" name="item.shade" id="item.shade" required></td>
+											 <td ng-class="{'has-error' : submitclick && itemform['item.desc'].$invalid }">
+											 <input type="text" class="form-control input-sm" size="10" ng-model="item.desc" name="item.desc" id="item.desc" required></td>
+											 <td ng-class="{'has-error' : submitclick && itemform['item.uom'].$invalid }" >
+												 <div class="row">
+												 <div class="col-xs-12">
+												   <select class="form-control input-sm" id="sel1" style="padding-right:0px" ng-model="item.uom" name="item.uom" id="item.uom" required>
+															<option selected value="ltr">Liter</option>
+															<option value="kgs">Kgs</option>
+															<option value="mtr">Meter</option>
+															<option value="pcs">Pices</option>
+												   </select>
+												 </div>
+												  </div>
+											 </td>
+											 <td class="col-md-2 input-sm" ng-class="{'has-error' : submitclick && itemform['item.quandity'].$invalid }" >
+											 <input type="number" min="1" step="1" class="form-control input-sm" name="item.quandity" id="item.quandity" ng-model="item.quandity" required ></td>
+											 <td>
+											 <button type="button" class="btn btn-warning btn-sm"  
+											 ng-click="showSplit=true;items[0].quandity=item.quandity"
+											 ng-show="item.quandity > 0" >Show Split</button>
+											 </td>
+											 </tr>
+											</table>	
+					<div class="panel panel-warning col-sm-8" style="padding:0px;margin-left:10px" ng-show="showSplit== true" >
+					  <div class="panel-heading small">Split Quandity</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-1 input-sm">No of Packets</th>
+					  <th class="col-sm-2 input-sm">Each Packet Quandity</th>
+					  <th class="col-sm-1 input-sm">Total</th>
+					</tr>
+					</thead>
+					<tr class="warning" ng-repeat="selItem in items" > 
+					 <td><input type="number" min="1" step="1" class="form-control input-sm" ng-model="selItem.pices"></td>
+					 <td> <input type="number" min="1" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity"></td>	
+					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
+					 <button type="button" class="btn btn-warning btn-sm" ng-click="items.push({ 'quandity': 1, 'pices':1})"
+					 ng-if="(grandTotal < item.quandity && items.length == $index+1 && (selItem.quandity*selItem.pices > 0) )">Add</button></td>						 
+					</tr>
+					<tr class="">
+					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
+					 <td> <b>{{getTotal()}} </b>
+					 </td>	
+					</tr>
+					<tr class="warning">
+					<td colspan="3" style="text-align : center" >
+					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (item.quandity)" >
+						ERROR : Split Grand Total <b> {{getTotal()}} </b> should not exeeds Total Quandity <b>{{item.quandity}}</b>
+					 </div>
+					  <button type="button" ng-click="addItem(item);invtBtmHide=true;" ng-if="grandTotal == (item.quandity)" class="btn btn-success btn-sm"
+					   >Add Item to Inventory</button>					
+					</td>
+					</tr>
+					</table>	
+				
+					</div>											
+									
+									
+									</div>							
+								</div>							 
+					    </div>
+						</form>
+			        </div>						
+			  </div>
+			  
+		  
+			  
+			 </div>
+	    </div>
+	  </script>	  
+	  
+	  <script type="text/ng-template" id="/inline-view-stocks-items.html">
+		<div class="panel panel-success" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">List of Stock Items </div>
+  
+		  
+		  
+		  <div class="panel-body">
+		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Stock Item">
+					  </div>
+					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					</form>
+		  
+         </div>
+		  <div class="row" >
+		  <!-- Table -->
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
+		  <thead> <tr> 
+				  <th>#</th>
+				  <th>Name</th>
+				  <th>Shade</th>
+				  <th>Description</th>
+				  <th>UOM</th>
+				  <th>Total Quandity</th>
+				</tr> 
+		  </thead> 
+		  <tbody> 
+			  <tr ng-repeat="item in items" > 
+				<td>{{item.id}}</td> 
+				<td>{{item.name}} </td> 
+				<td>{{item.shade}} </td> 
+				<td>{{item.desc}} </td> 
+				<td>{{item.uom}} </td> 
+				<td>{{item.quandity}} </td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		 </div> 
+		  </div>
+		  
+		</div>
+  
+	  </script>	 	  
+	  
+	  
+	  <script type="text/ng-template" id="/inline-view-stock-groups.html">
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Stock Groups </div>
+  
+		  
+		  
+		  <div class="panel-body">
+		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
+					  </div>
+					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					</form>
+		  
+         </div>
+		  <div class="row" >
+		  <!-- Table -->
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
+		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent Group Name</th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="group in groups" ng-if="group.id > 1" > 
+				<td>{{group.id}}</td> 
+				<td>{{group.name}} </td> 
+				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		 </div> 
+		  </div>
+		  
+		</div>
+  
+	  </script>	  
+	  
+	  
+	  <script type="text/ng-template" id="/inline-users.html">
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Users </div>
+		  <div class="panel-body">
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search User">
+					  </div>
+					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createUser();currentPage = 'createUser'" >
+						Create User
+					  </button>
+					</form>
+			
+		  </div>
+		  <!-- Table -->
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>User Name</th> <th>User Type</th> <th></th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="user in users"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{user.username}}</td> 
+				<td>{{user.type}}</td> 
+			    <td>
+			    <form class="form-inline">
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editUser(user)">Edit User</button>
+				</form>				
+				</td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		</div>
+  
+	  </script>
+	  
+	  <script type="text/ng-template" id="/inline-create-user.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" ng-if="optType=='create'">User Creation </div>
+			  <div class="panel-heading" ng-if="optType=='edit'">Edit User details </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm" name="userform" novalidate >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.username'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">User Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" name="user.username" ng-model="user.username"
+								  placeholder="User Name" required  >						
+								</div>
+							  </div>
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.password'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Password</label>
+								<div class="col-sm-5">
+								  <input type="password" class="form-control input-sm" id="company.name" name="user.password" ng-model="user.password"
+								  placeholder="User Name" required  >						
+								</div>
+							  </div>
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.address'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Address</label>
+								<div class="col-sm-5">
+								  <textarea class="form-control custom-sm input-sm" name="user.address" ng-model="user.address" 
+								  rows="3" placeholder="Company Address" required ></textarea>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.phone'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Telephone</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" name="user.phone" ng-model="user.phone"
+								  placeholder="Telephone Number" required>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && userform['user.email'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Email</label>
+								<div class="col-sm-5">
+								  <input type="email" class="form-control input-sm" id="inputPassword3" name="user.email" ng-model="user.email"
+								  placeholder="Email Address" required>
+								</div>
+							  </div>							  
+	  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">User Type</label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.type" value="admin">Admin
+								  <input type="radio" ng-model="user.type" value="user">Application User
+								</div>
+							  </div>	
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editUser(user)" ng-if="optType=='edit'" class="btn btn-success">Edit User</button>
+								   <button type="button" ng-click="createUser(user);" ng-if="optType=='create'" class="btn btn-success">Create User</button>
+								</div>
+							  </div>
+							</form>
+					  </div>
+					  
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					      	<form class="form-horizontal">
+							
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Accounting Info ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.accountinfo" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.accountinfo" value="false">No
+								</div>
+							  </div>							  
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Inventory Info ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="false">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Transactions ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.transactions" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.transactions" value="false">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Reports ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.reports" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.reports" value="false">No
+								</div>
+							  </div>								  
+							</form>  
+							
+					  </div>					  
+					  
+					  
+					</div>			
+			  </div>		
+			</div>
+		</div>  
+	  </script>
+	  
+	  
+	  <script type="text/ng-template" id="/inline-assign-users-company.html">	
+	  
+	  <style>
+	          .dual-list .list-group {
+            margin-top: 8px;
+        }
+
+        .list-left li, .list-right li {
+            cursor: pointer;
+        }
+
+        .list-arrows {
+            padding-top: 100px;
+        }
+
+            .list-arrows button {
+                margin-bottom: 20px;
+            }
+	  </style>
+
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" > Assign Users to Company </div>
+
+			  <div class="panel-body">	
+
+						<div class="container">
+							<br />
+							<div class="row">
+
+								<div class="dual-list list-left col-md-5">
+									<div class="well text-right">
+										<div class="row">
+											<div class="col-md-10">
+												<div class="input-group">
+													<span class="input-group-addon glyphicon glyphicon-search"></span>
+													<input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="btn-group">
+													<a class="btn btn-default selector" title="select all" ng-click="selectAll('left');selectLeftAll = !selectLeftAll;" >
+													<i class="glyphicon glyphicon-unchecked" 
+													ng-class="{'glyphicon-unchecked': !selectLeftAll, 'glyphicon-check': selectLeftAll}" ></i>
+													</a> 
+												</div>
+											</div>
+										</div>
+										<ul class="list-group">
+											<li class="list-group-item" ng-repeat="user in availableUsers" 
+											ng-click="toggleClick(user);" ng-class="{'active': user.selected}" >{{user.username}}</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="list-arrows col-md-1 text-center" style="padding-top: 50px; " >
+									<button class="btn btn-default btn-sm move-left" ng-click="moveItem('left')" >
+										<span class="glyphicon glyphicon-chevron-left"></span>
+									</button>
+
+									<button class="btn btn-default btn-sm move-right" ng-click="moveItem('right')" >
+										<span class="glyphicon glyphicon-chevron-right"></span>
+									</button>
+								</div>
+
+								<div class="dual-list list-right col-md-5">
+									<div class="well">
+										<div class="row">
+											<div class="col-md-2">
+												<div class="btn-group">
+													<a class="btn btn-default selector" title="select all" ng-click="selectAll('right');selectRightAll = !selectRightAll;" >
+													<i class="glyphicon glyphicon-unchecked" 
+													ng-class="{'glyphicon-unchecked': !selectRightAll, 'glyphicon-check': selectRightAll}"
+													></i></a>
+												</div>
+											</div>
+											<div class="col-md-10">
+												<div class="input-group">
+													<input type="text" name="SearchDualList" class="form-control" placeholder="search" />
+													<span class="input-group-addon glyphicon glyphicon-search"></span>
+												</div>
+											</div>
+										</div>
+										<ul class="list-group">
+											<li class="list-group-item" ng-repeat="user in assignedUsers" ng-click="toggleClick(user);"
+												ng-class="{'active': user.selected}"
+											>{{user.username}}</li>
+										</ul>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+							  <div class="form-group float-center pull-center">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="save();" class="btn btn-success">Assign Users to Company</button>
+								</div>
+							  </div>							
+							</div>
+						</div>
+
+			  
+	          </div>
+	         </div>
+        </div>
+     </script>
+	 
+	 
+	  <script type="text/ng-template" id="/inline-create-account-groups.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >Create Account Group</div>	
+			  <div class="panel-body">
+					<div class="row" >
+					     <div class="col-xs-10 panel panel-info" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Single Account Group</div>
+						
+							<form class="form-inline" style="padding:10px">
+							    <div class="form-group">
+								<div class="col-sm-5">
+									<select class="form-control input-sm" id="sel1" ng-model="singlegroup.selGroup" 
+										ng-options="group.name for group in singlegroups track by group.id"
+										ng-change="setChildrenData(singlegroup.selGroup,0)" 
+										>
+											<option value="">-- choose Group1 --</option>
+									</select>	
+									
+								</div>
+							  </div>
+							  <div class="form-group" ng-if="singlegroup.selGroup == null" >
+								<input type="text" class="form-control input-sm" ng-model="singlegroup.newgroup" placeholder="Single Account Group Name">
+							  </div>						  
+							  <button type="button" class="btn btn-success btn-sm" ng-click="addGroup(singlegroup.newgroup,0)" ng-if="singlegroup.selGroup == null" >
+								Add Group
+							  </button>
+							</form>							
+							
+					    </div>
+			        </div>
+					
+					<div class="row" ng-if="singlegroup.selGroup != null && singlegroup.selGroup.id > 0">
+					     <div class="col-xs-8 panel panel-danger" style="margin:10px;padding:0px" >
+					      <div class="panel-heading">Multi Account Group</div>
+						
+								<div class="row" ng-repeat=" multigroup in multigroups" >
+									<form class="form-inline" style="padding:10px">
+										<div class="form-group">
+										<div class="col-sm-5">
+											<select class="form-control input-sm" id="sel1" ng-model="multigroup.selGroup" 
+												ng-change="setChildrenData(multigroup.selGroup,$index +1)" 
+												ng-options="group.name for group in multigroup.children track by group.id">
+													<option value="">-- choose Group1 --</option>
+											</select>	
+										</div>
+									  </div>
+									  <div class="form-group" ng-if="multigroup.selGroup == null" >
+										<input type="text" class="form-control input-sm" ng-model="multigroup.newgroup" placeholder="Multi Account Group Name">
+									  </div>
+									  <button type="button" ng-if="multigroup.selGroup == null" class="btn btn-success btn-sm" ng-click="addGroup(multigroup.newgroup,$index +1)" >
+										Add Group
+									  </button>
+									</form>							
+								</div>	
+					    </div>
+			        </div>					
+					
+			  </div>
+			  
+		  
+			  
+			 </div>
+	    </div>
+	  </script>
+	  
+	  <script type="text/ng-template" id="/inline-view-account-groups.html">
+		<div class="panel panel-success" ng-controller="companiesController" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Account Groups </div>
+  
+		  
+		  
+		  <div class="panel-body">
+		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
+					  </div>
+					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					</form>
+		  
+         </div>
+		  <div class="row" >
+		  <!-- Table -->
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
+		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent Group Name</th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="group in groups" ng-if="group.id > 1" > 
+				<td>{{group.id}}</td> 
+				<td>{{group.name}} </td> 
+				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		 </div> 
+		  </div>
+		  
+		</div>
+  
+	  </script>	 
+
+
+	  <script type="text/ng-template" id="/inline-create-ledger.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='create'">Ledger Creation </div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='edit'">Edit Ledger details </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm" name="ledgerform" novalidate >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && ledgerform['ledger.name'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="ledger.name" name="ledger.name" ng-model="ledger.name"
+								  placeholder="Ledger Name" required  >						
+								</div>
+							  </div>
+							  <div class="form-group" ng-class="{'has-error' : submitclick && ledgerform['ledger.alias'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Alias</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="ledger.alias" name="ledger.alias" ng-model="ledger.alias"
+								  placeholder="Ledger Name" required  >						
+								</div>
+							  </div>
+  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Under (Group)</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="ledger.accGroup.id" 
+											ng-init="ledger.accGroup.id = ledger.accGroup.id || options[0].value"
+											ng-options="option.id as option.name for option in groups">
+									</select>								
+								</div>
+							  </div>
+
+
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editLedger(ledger)" ng-if="optType=='edit'" class="btn btn-success">Edit Ledger</button>
+								   <button type="button" ng-click="createLedger(ledger);" ng-if="optType=='create'" class="btn btn-success">Create Ledger</button>
+								</div>
+							  </div>
+							</form>
+					  </div>
+					  
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					      	<form class="form-horizontal">
+							
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Maiing Name </label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="ledger.mailingname" name="ledger.mailingname" 
+								  ng-model="ledger.mailingname" placeholder="Mailing Name" >						
+								</div>
+							  </div>							  
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Maiing Address </label>
+								<div class="col-sm-5">
+								  <textarea class="form-control custom-sm input-sm" name="ledger.mailingaddress" ng-model="ledger.mailingaddress" 
+								  rows="3" placeholder="Mailing Address" required ></textarea>								  
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Mailing State </label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="ledger.mailingstate" name="ledger.mailingstate" 
+								  ng-model="ledger.mailingstate" placeholder="Mailing State" >						
+								</div>
+							  </div>	
+							 <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">PAN/IT No </label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="ledger.taxpan" name="ledger.taxpan" 
+								  ng-model="ledger.taxpan" placeholder="PAN/IT No" >						
+								</div>
+							  </div>	
+							 <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Sale Tax No </label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="ledger.saletaxno" name="ledger.saletaxno" 
+								  ng-model="ledger.saletaxno" placeholder="Sale Tax No" >						
+								</div>
+							  </div>							  
+							</form>  
+							
+					  </div>					  
+					  
+					  
+					</div>			
+			  </div>		
+			</div>
+		</div>  
+	  </script>
+
+	  <script type="text/ng-template" id="/inline-ledgers.html">
+		<div class="panel panel-success" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Ledgers </div>
+		  <div class="panel-body">
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Ledger">
+					  </div>
+					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					</form>
+			
+		  </div>
+		  <!-- Table -->
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>Ledger Name</th> <th>Alias</th> <th>Group</th> <th></th></tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="ledger in ledgers"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{ledger.name}}</td> 
+				<td>{{ledger.alias}}</td>
+				<td>{{ledger.accGroup.name}}</td> 				
+			    <td>
+			    <form class="form-inline">
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editLedger(ledger)">Edit Ledger</button>
+				</form>				
+				</td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		</div>
+  
+	  </script>
+	  
+
+	  	  <script type="text/ng-template" id="/inline-employees.html">
+		<div class="panel panel-success" >
+		  <!-- Default panel contents -->
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Employees </div>
+		  <div class="panel-body">
+					<form class="form-inline">
+					  <div class="form-group">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Employee">
+					  </div>
+					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createEmployee();currentPage = 'createEmployee'" >
+						Create Employee
+					  </button>
+					</form>
+			
+		  </div>
+		  <!-- Table -->
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>Employee Name</th> <th>User Type</th> <th></th> </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="employee in employees"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{employee.name}}</td> 
+				<td>{{employee.type}}</td> 
+			    <td>
+			    <form class="form-inline">
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editEmployee(employee)">Edit Employee</button>
+				</form>				
+				</td> 
+			 </tr>  
+		  </tbody> 
+		  </table>
+		</div>
+
+		  </script>
+		 
+
+
+	  <script type="text/ng-template" id="/inline-create-employee.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" ng-if="optType=='create'">Employee Creation </div>
+			  <div class="panel-heading" ng-if="optType=='edit'">Edit Employee details </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm" name="employeeform" novalidate >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && employeeform['employee.name'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Employee Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" name="employee.name" ng-model="employee.name"
+								  placeholder="Employee Name" required  >						
+								</div>
+							  </div>
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								{{employee|json}}
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editEmployee(employee)" ng-if="optType=='edit'" class="btn btn-success">Edit Employee</button>
+								   <button type="button" ng-click="createEmployee(employee);" ng-if="optType=='create'" class="btn btn-success">Create Employee</button>
+								</div>
+							  </div>
+							</form>
+					  </div>
+					  
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					      	<form class="form-horizontal">
+							
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Accounting Info ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.accountinfo" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.accountinfo" value="false">No
+								</div>
+							  </div>							  
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Inventory Info ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="false">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Transactions ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.transactions" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.transactions" value="false">No
+								</div>
+							  </div>	
+							  <div class="form-group input-sm">
+								<label for="inputPassword3" class="col-sm-5 control-label">Reports ? </label>
+								<div class="col-sm-5">
+								  <input type="radio" ng-model="user.previliges.reports" value="true">Yes
+								  <input type="radio" ng-model="user.previliges.reports" value="false">No
+								</div>
+							  </div>								  
+							</form>  
+							
+					  </div>					  
+					  
+					  
+					</div>			
+			  </div>		
+			</div>
+		</div>  
+	  </script>
+		 
+		  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">	
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.6.0/angular-local-storage.min.js"></script> 
+	
+	<!--
+	<link rel="stylesheet" href="css/bootstrap.min.css" > 
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css" > 
+	<script src="js/jquery.min.js"></script> 
+	<script src="js/bootstrap.min.js"></script> 
+	<script src="js/angular.min.js"></script> 
+	<script src="js/angular-route.js"></script> 
+	<script src="js/angular-local-storage.min.js"></script> 
+	-->
+	    <script src="tjs/track-app.js"></script> 
+		<script src="tjs/emp-mng.js"></script> 
+		
+		<script src="js/services.js"></script> 
+		
+        <script src="js/user-mng.js"></script> 
+		<script src="js/acc-grp.js"></script> 
+		<script src="js/acc-ledgers.js"></script> 
+</body>
+</html>
