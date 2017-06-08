@@ -42,3 +42,6 @@ INSERT INTO item_dtl(id,name,groupid,shade,description,uom,totalquandity) values
 
 
 
+
+--------------------- TRACKING SYSTEM ---------------------------------
+insert into employees (id, emp_name) values (1, 'pavan kumar');

@@ -79,3 +79,17 @@ ALTER TABLE acc_group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES acc_group_dtl(
 DROP TABLE IF EXISTS ledger;
 CREATE TABLE ledger( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(100) NOT NULL,alias VARCHAR2(100) NOT NULL, groupid int,mailingname VARCHAR2(100) NOT NULL,mailingaddress VARCHAR2(500) NOT NULL,mailingstate VARCHAR2(100) NOT NULL,saletaxno BIGINT,taxpan BIGINT);
 ALTER TABLE ledger ADD FOREIGN KEY ( groupid ) REFERENCES acc_group_dtl( id ) ;
+
+
+
+
+
+
+
+--------------------- TRACKING SYSTEM ---------------------------------
+DROP TABLE IF EXISTS employees;
+CREATE TABLE employees
+(
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	emp_name VARCHAR2(50) NOT NULL,
+);
