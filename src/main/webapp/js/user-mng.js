@@ -31,13 +31,32 @@ app.controller('usersController', function($scope,$rootScope,$location,$http) {
 	console.log("   currentPage :  " + $rootScope.currentPage);
 });
 
-app.controller('createUserController', function($scope,$rootScope,$location,$http) {
+app.controller('createUserController', function($scope,$rootScope,$location,$http,UserPrevService) {
 	$scope.user ={}; 
 	$scope.user.previliges = {};
 	$scope.user.previliges.accountinfo = "true";
 	$scope.user.previliges.inventoryinfo = "true";
 	$scope.optType = "create";
 	$scope.submitclick = false;
+	
+	
+	$http.get(hostname+'/company/getAll').
+			then(function(response) {
+			
+			    $scope.previliges = [];
+				var count = 0;
+				angular.forEach(response.data, function (company){
+					var previlige = {};
+					previlige.company = company;
+					previlige.accountinfo = true;
+					previlige.inventoryinfo = true;
+					previlige.transactions = true;
+					previlige.reports = true;
+					$scope.previliges[count++] = previlige;
+				});
+				
+				
+	});			
 	
 	$scope.createUser = function(user){
 		if(!$scope.userform.$valid){
@@ -55,6 +74,21 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 					console.log(JSON.stringify(responseData));
 					$rootScope.currentPage = 'userList';
 					$rootScope.users.push(user);
+					
+					 console.log(" User Data : " + responseData);
+					angular.forEach($scope.previliges, function (previlige){
+						previlige.user = responseData;
+						previlige.user['@id'] = responseData.id;
+						previlige.accountinfo = previlige.accountinfo ? true : false;
+						previlige.inventoryinfo = previlige.inventoryinfo ? true : false;
+						previlige.transactions = previlige.transactions ? true : false;
+						previlige.reports = previlige.reports ? true : false;						
+					});
+					console.log( $scope.previliges );
+					 UserPrevService.updateUserPrev($scope.previliges, function(response){
+					  console.log(" User Prev Response " + JSON.stringify(response));
+				   });					
+					
 					$location.path("/show-user");
 				  } catch (err) {
 					alert(JSON.stringify(err));
@@ -67,10 +101,26 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 });
 
 
-app.controller('editUserController', function($scope,$rootScope,$location,$http) {
+app.controller('editUserController', function($scope,$rootScope,$location,$http,UserPrevService) {
 
     $scope.optType = "edit";
  	$scope.submitclick = false;
+	
+	
+	$http.get(hostname+'/user/findAllPrev/'+$rootScope.user.id).
+			then(function(response) {
+			    //$scope.previliges = response.data;
+				$scope.previliges = [];
+					angular.forEach(response.data, function (previlige){
+						previlige.accountinfo = previlige.accountinfo == 'true'  ? true : false;
+						previlige.inventoryinfo = previlige.inventoryinfo == 'true'? true : false;
+						previlige.transactions = previlige.transactions == 'true'? true : false;
+						previlige.reports = previlige.reports == 'true' ? true : false;
+						$scope.previliges.push(previlige);						
+					});				
+				
+	});		
+	
 
 	$scope.editUser = function(user){
 		
@@ -84,10 +134,24 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http)
 				'Content-Type': 'application/json; charset=UTF-8'
 			  },
 			}).success(function(responseData) {
+				
+					angular.forEach($scope.previliges, function (previlige){
+						previlige.user = user;
+						previlige.accountinfo = previlige.accountinfo ? true : false;
+						previlige.inventoryinfo = previlige.inventoryinfo ? true : false;
+						previlige.transactions = previlige.transactions ? true : false;
+						previlige.reports = previlige.reports ? true : false;						
+					});
+					console.log( $scope.previliges );
+					 UserPrevService.updateUserPrev($scope.previliges, function(response){
+					  console.log(" User Prev Update Response " + JSON.stringify(response));
+				   });	
+				   
 				  try {
 					console.log(JSON.stringify(responseData));
 					$rootScope.currentPage = 'companyList';
 					$rootScope.users.push(user);
+					
 					$location.path("/show-user");
 				  } catch (err) {
 					alert(JSON.stringify(err));

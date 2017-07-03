@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule"]);
@@ -372,9 +372,23 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 	
 });
 
-app.controller('performActionController', function($scope,$rootScope,$location) {
+app.controller('performActionController', function($scope,$rootScope,$location,$http) {
 	
 	$rootScope.currentPage = 'performAction';
+	
+	console.log($rootScope.user.id +"   " + $rootScope.company.id);
+	$http.get(hostname+'/user/findPrevByUserAndCompany/'+$rootScope.user.id +'/'+ $rootScope.company.id).
+			then(function(response) {
+				$scope.previliges = {};
+				$scope.previliges.accountinfo = response.data.accountinfo == 'true'  ? true : false;
+				$scope.previliges.inventoryinfo = response.data.inventoryinfo == 'true'? true : false;
+				$scope.previliges.transactions = response.data.transactions == 'true'? true : false;
+				$scope.previliges.reports = response.data.reports == 'true' ? true : false;
+
+				console.log( $scope.previliges );
+	});		
+	
+	
 	$scope.stockGrpoups = function(company){
 		$rootScope.currentPage = 'stockGroups';
 		//Back end code to edit Company
@@ -565,7 +579,13 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		//selItem.group.id = $scope.stockgroup.selGroup.id;
 		//selItem.stockGroup.id = $scope.stockGroups[$scope.stockGroups.length-1].selGroup.id;
 		//selItem.group = $scope.stockgroup.selGroup;
-	    selItem.stockGroup = $scope.stockGroups[$scope.stockGroups.length-1].selGroup.id;
+		var userSelGroup = $scope.stockGroups[$scope.stockGroups.length-1].selGroup;
+		if(userSelGroup != null && userSelGroup.id > 0){
+			selItem.stockGroup = userSelGroup.id;
+		}else{
+			selItem.stockGroup = $scope.stockGroups[$scope.stockGroups.length-2].selGroup.id;
+		}
+	    //alert(selItem.stockGroup);
 		selItem.itemTrans = $scope.items;
 		
 		angular.forEach(selItem.itemTrans,function(itemTrans,index){
