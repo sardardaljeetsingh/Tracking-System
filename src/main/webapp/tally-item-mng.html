@@ -213,7 +213,7 @@
 					ng-if="loggedUser.type =='admin'">Edit Company</button>
 					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteCompany(company)" 
 					ng-if="loggedUser.type =='admin'">Delete Company</button>
-					<button type="button" class="btn btn-warning btn-xs" ng-click="assignUsers(company)" 
+					<button type="button" style="display:none" class="btn btn-warning btn-xs" ng-click="assignUsers(company)" 
 					ng-if="loggedUser.type =='admin'">Assign Users</button>					
 					<button type="button" class="btn btn-warning btn-xs" ng-click="performAction(company)"> Perform Actions </button>
 
@@ -413,8 +413,8 @@
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Masters</strong></div>
 			  <div class="panel-body">
 			  
-					<div class="row input-sm" >
-						  <div class="col-xs-6 panel panel-success" style="margin:10px;padding:0px" ng-if="user.previliges.accountinfo == 'true' ">
+					<div class="row input-sm" > 
+						  <div class="col-xs-6 panel panel-success" style="margin:10px;padding:0px" ng-if="previliges.accountinfo == true ">
 							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000"> 
 							<strong>Accounting Info</strong></div>
 								<div class="panel-body">
@@ -445,7 +445,7 @@
 									
 								</div>
 						  </div>
-						  <div class="col-xs-5 panel panel-success" style="margin:5px;padding:0px" ng-if="user.previliges.inventoryinfo == 'true'"  >
+						  <div class="col-xs-5 panel panel-success" style="margin:5px;padding:0px" ng-if="previliges.inventoryinfo == true"  >
 							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 							<strong>Inventory Info</strong></div>
 								<div class="panel-body">
@@ -479,7 +479,7 @@
 			  </div>			  
 	        </div>
 			
-			<div class="panel panel-success" ng-if="user.previliges.transactions == 'true'" > 
+			<div class="panel panel-success" ng-if="previliges.transactions == true" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Transactions</strong></div>
 			  <div class="panel-body">
@@ -491,7 +491,7 @@
 			  <div class="panel-body">
 			  </div>			  
 	        </div>
-			<div class="panel panel-success" ng-if="user.previliges.reports == 'true'" > 
+			<div class="panel panel-success" ng-if="previliges.reports == true" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Reports</strong></div>
 			  <div class="panel-body">
@@ -579,6 +579,7 @@
 			  </div>	
 			  <div class="panel-body">
 				
+				
 					<div class="row">
 					     <div class="col-xs-8 panel panel-success" style="margin:10px;padding:0px" >
 					      <div class="panel-heading"><strong>Select Stock Groups</strong></div>
@@ -596,10 +597,13 @@
 									</form>							
 								</div>	
 					    </div>
-			        </div>	
+			        </div>					
+
 					<div class="row">
 					   <form class="form-horizontal input-sm" name="itemform" novalidate >
-					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" ng-show="stockGroups[stockGroups.length-1].selGroup != null" >
+					  
+					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" 
+						 ng-show="stockGroups[stockGroups.length-1].selGroup != null || stockGroups.length > 1" >
 					      <div class="panel-heading"><strong>Enter Item Details </strong></div>	
 							    <div class="panel-body">
 									<div class="row" >
@@ -645,6 +649,10 @@
 											 </td>
 											 </tr>
 											</table>	
+											
+						
+											
+											
 					<div class="panel panel-warning col-sm-8" style="padding:0px;margin-left:10px" ng-show="showSplit== true" >
 					  <div class="panel-heading small">Split Quandity</div>
 					<table class="table table-condensed table-bordered"  >
@@ -667,6 +675,14 @@
 					 <td> <b>{{getTotal()}} </b>
 					 </td>	
 					</tr>
+					
+					<tr class="warning">
+					<td colspan="3" style="text-align : center" >
+				
+					</td>
+					</tr>					
+					
+					
 					<tr class="warning">
 					<td colspan="3" style="text-align : center" >
 					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (item.quandity)" >
@@ -685,7 +701,10 @@
 								</div>							 
 					    </div>
 						</form>
-			        </div>						
+			        </div>	
+
+
+					
 			  </div>
 			  
 		  
@@ -883,34 +902,28 @@
 					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
 					      	<form class="form-horizontal">
 							
-							  <div class="form-group input-sm">
-								<label for="inputPassword3" class="col-sm-5 control-label">Accounting Info ? </label>
-								<div class="col-sm-5">
-								  <input type="radio" ng-model="user.previliges.accountinfo" value="true">Yes
-								  <input type="radio" ng-model="user.previliges.accountinfo" value="false">No
-								</div>
-							  </div>							  
-							  <div class="form-group input-sm">
-								<label for="inputPassword3" class="col-sm-5 control-label">Inventory Info ? </label>
-								<div class="col-sm-5">
-								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="true">Yes
-								  <input type="radio" ng-model="user.previliges.inventoryinfo" value="false">No
-								</div>
-							  </div>	
-							  <div class="form-group input-sm">
-								<label for="inputPassword3" class="col-sm-5 control-label">Transactions ? </label>
-								<div class="col-sm-5">
-								  <input type="radio" ng-model="user.previliges.transactions" value="true">Yes
-								  <input type="radio" ng-model="user.previliges.transactions" value="false">No
-								</div>
-							  </div>	
-							  <div class="form-group input-sm">
-								<label for="inputPassword3" class="col-sm-5 control-label">Reports ? </label>
-								<div class="col-sm-5">
-								  <input type="radio" ng-model="user.previliges.reports" value="true">Yes
-								  <input type="radio" ng-model="user.previliges.reports" value="false">No
-								</div>
-							  </div>								  
+          <table class="table table-hover input-sm">
+		  <thead> <tr> <th>#</th> <th>Company Name</th> 
+		  <th>Accounting Info</th> 
+		  <th>Inventory Info</th> 
+		  <th>Transactions</th>
+		  <th>Reports</th>
+		  </tr> </thead> 
+		  <tbody> 
+			  <tr ng-repeat="previlige in previliges"> 
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{previlige.company.name}} {{previlige.accountinfo}}</td> 
+				<td>
+					<input type="checkbox" ng-model="previlige.accountinfo" value="true">
+				</td>
+				<td><input type="checkbox" ng-model="previlige.inventoryinfo" value="true"></td> 	
+				<td><input type="checkbox" ng-model="previlige.transactions" value="true"></td> 
+				<td><input type="checkbox" ng-model="previlige.reports" value="true"></td> 				
+			 </tr>  
+		  </tbody> 
+		  </table>							
+							
+
 							</form>  
 							
 					  </div>					  
