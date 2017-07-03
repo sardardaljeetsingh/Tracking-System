@@ -43,15 +43,19 @@ CREATE TABLE company
 	booksstart VARCHAR2(100) NOT NULL,
 );
 
-DROP TABLE IF EXISTS company_user;
-CREATE TABLE company_user
+DROP TABLE IF EXISTS company_user_previliges;
+CREATE TABLE company_user_previliges
 (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	companyid INT NOT NULL,
 	userid INT NOT NULL,
+	accountinfo VARCHAR2(50) NOT NULL,
+	inventoryinfo VARCHAR2(50) NOT NULL,
+	transactions VARCHAR2(50) NOT NULL,
+	reports VARCHAR2(50) NOT NULL	
 );
-ALTER TABLE company_user ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
-ALTER TABLE company_user ADD FOREIGN KEY ( userid ) REFERENCES users( id ) ;
+ALTER TABLE company_user_previliges ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
+ALTER TABLE company_user_previliges ADD FOREIGN KEY ( userid ) REFERENCES users( id ) ;
 
 
 ---- Inventory Info -------
