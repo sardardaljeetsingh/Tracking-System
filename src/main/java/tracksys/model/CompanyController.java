@@ -1,5 +1,6 @@
 package tracksys.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,24 @@ public class CompanyController {
 	  @RequestMapping(value ="/create",method = RequestMethod.POST)
 	  
 	  public @ResponseBody Company  create(@RequestBody Company company) {
-	    	return companyRepository.save(company);
+		  company =  companyRepository.save(company);
+		  
+		 Iterable<User> users = userRepostory.findAll(); 
+		 List<Previliges> prevList = new ArrayList<Previliges>();
+		 Previliges previliges = null;
+		 for(User user : users){
+			 previliges = new Previliges();
+			 previliges.setUser(user);
+			 previliges.setCompany(company);
+			 previliges.setAccountinfo("false");
+			 previliges.setInventoryinfo("false");
+			 previliges.setReports("false");
+			 previliges.setTransactions("false");
+			 prevList.add(previliges);
+		 }
+		 userPreviligeReposotory.save(prevList);
+		 
+		  return company;
 	  }
 	  
 	  @RequestMapping(value ="/getAll",method = RequestMethod.GET)
@@ -54,7 +72,16 @@ public class CompanyController {
 	  
 	  @RequestMapping(value ="/find-by-userid/{userId}",method = RequestMethod.GET)
 	  public @ResponseBody List<Company> findCompany(@PathVariable("userId") int userId) {
-		  return companyRepository.findAllByUsers_Id(userId);
+		  List<Company> companyList = new ArrayList<>();
+		 // return companyRepository.findAllByUsers_Id(userId);
+		  List<Previliges> previliges = userPreviligeReposotory.findAllByUser_Id(userId);
+		  for(Previliges previlige : previliges){
+			  if(Boolean.valueOf(previlige.getAccountinfo()) || Boolean.valueOf(previlige.getInventoryinfo()) 
+					  || Boolean.valueOf(previlige.getReports()) || Boolean.valueOf(previlige.getTransactions())){
+				  companyList.add(previlige.getCompany()) ;
+			  }
+		  }
+		  return companyList;
 	  } 	  
 	  
 	  
@@ -71,4 +98,10 @@ public class CompanyController {
 	  
 	  @Autowired
 	  private CompanyRepository companyRepository;
+
+	  @Autowired
+	  private UserPreviligeReposotory userPreviligeReposotory;
+	  
+	  @Autowired
+	  private UserRepostory userRepostory;	  
 }

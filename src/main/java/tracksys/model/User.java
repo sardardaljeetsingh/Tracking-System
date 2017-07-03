@@ -15,15 +15,15 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="users")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+//@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@OneToOne(cascade=CascadeType.ALL,  mappedBy="user")
-	private Previliges previliges;
+/*	@OneToOne(cascade=CascadeType.ALL,  mappedBy="user")
+	private Previliges previliges;*/
 
 	@NotNull
 	@Column(name = "usr_name", nullable = false)	
@@ -57,13 +57,13 @@ public class User {
 		this.id = id;
 	}
 
-	public Previliges getPreviliges() {
+/*	public Previliges getPreviliges() {
 		return previliges;
 	}
 
 	public void setPreviliges(Previliges previliges) {
 		this.previliges = previliges;
-	}
+	}*/
 
 	public String getUsername() {
 		return username;

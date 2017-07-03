@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name="previliges")
+@Table(name="company_user_previliges")
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Previliges {
 
@@ -33,6 +33,10 @@ public class Previliges {
 	@OneToOne(cascade=CascadeType.ALL)  
 	@JoinColumn(name = "userid", nullable = false)	
 	private User user;
+	
+	@OneToOne(cascade=CascadeType.ALL)  
+	@JoinColumn(name = "companyid", nullable = false)	
+	private Company company;	
 
 	public int getId() {
 		return id;
@@ -80,6 +84,14 @@ public class Previliges {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 	
 

@@ -69,14 +69,14 @@ public class Company {
 	private String booksstart;
 	
 	
-	@ManyToMany(cascade=CascadeType.ALL) 
+/*	@ManyToMany(cascade=CascadeType.ALL) 
     @JoinTable(name="company_user",
         joinColumns=
             @JoinColumn(name="companyid", referencedColumnName="id"),
         inverseJoinColumns=
             @JoinColumn(name="userid", referencedColumnName="id")
         )
-	private Set<User> users;
+	private Set<User> users;*/
 
 	
 	
@@ -92,13 +92,13 @@ public class Company {
 	}*/
 
 
-	public Set<User> getUsers() {
+/*	public Set<User> getUsers() {
 		return users;
 	}
 
 	public void setUsers(Set<User> users) {
 		this.users = users;
-	}
+	}*/
 
 	public Company() { }
 

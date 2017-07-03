@@ -1,5 +1,7 @@
 package tracksys.model;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +22,25 @@ public class UserController {
 	@Autowired
 	private UserRepostory userRepostory;
 	
+	@Autowired
+	private CompanyRepository companyRepository;
+	
 	@RequestMapping(value ="/createprev",method = RequestMethod.POST)
-	public @ResponseBody User  createprev(@RequestBody User user) {
-		Previliges previliges = user.getPreviliges();
-		previliges.setUser(user);
+	public @ResponseBody List<Previliges>  createprev(@RequestBody List<Previliges> previliges) {
+		for(Previliges previlige : previliges ){
+			previlige.setCompany(companyRepository.findOne(previlige.getCompany().getId()));
+			previlige.setUser(userRepostory.findOne(previlige.getUser().getId()));
+		}
 		userPreviligeReposotory.save(previliges);
-		return previliges.getUser();
+		return previliges;
 	}
 	
 	@RequestMapping(value ="/create",method = RequestMethod.POST)
 	public @ResponseBody User  create(@RequestBody User user) {
 		//user.setPhone(123456);
-		user.getPreviliges().setUser(user);
-		userRepostory.save(user);
-		return user;
+		//user.getPreviliges().setUser(user);
+		return userRepostory.save(user);
+		//return user;
 	}	
 	
 	@RequestMapping(value ="/find/{userId}",method = RequestMethod.GET)
@@ -50,6 +57,18 @@ public class UserController {
 	public @ResponseBody Iterable<Previliges> findAllPrev() {
 		return userPreviligeReposotory.findAll();
 	}
+	
+	@RequestMapping(value ="/findAllPrev/{userId}",method = RequestMethod.GET)
+	public @ResponseBody Iterable<Previliges> findAllPrevByUser(@PathVariable("userId") int userId) {
+		return userPreviligeReposotory.findAllByUser_Id(userId);
+	}	
+	
+	
+	@RequestMapping(value ="/findPrevByUserAndCompany/{userId}/{companyid}",method = RequestMethod.GET)
+	public @ResponseBody Previliges findPrevByUserAndCompany(@PathVariable("userId") int userId,
+			@PathVariable("companyid") int companyid) {
+		return userPreviligeReposotory.findByUser_IdAndCompany_Id(userId, companyid);
+	}		
 	
 	@RequestMapping(value ="/login",method = RequestMethod.POST)
 	public @ResponseBody User  login(@RequestBody User user) {
