@@ -42,7 +42,7 @@ INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (27,'Sundry Credit
 INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (28,'Sundry Debtors',1,4);
 INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (29,'Unsecured Loans',1,12);
 
-INSERT INTO item_dtl(id,name,groupid,shade,description,uom,totalquandity) values (1,'shirts',2,'Lenin','Lenin Shirts','kgs',1234);
+INSERT INTO item_dtl(id,name,groupid,shade,description,uom,initqundty,curqundty,rate) values (1,'shirts',2,'Lenin','Lenin Shirts','kgs',1234,1234,100);
 
 
 

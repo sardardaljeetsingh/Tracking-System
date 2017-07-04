@@ -66,12 +66,24 @@ ALTER TABLE stock_group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id
 ALTER TABLE stock_group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES stock_group_dtl( id ) ;
 
 DROP TABLE IF EXISTS item_dtl;
-CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,totalquandity INT);
+CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,initqundty INT,curqundty INT,rate INT);
 ALTER TABLE item_dtl ADD FOREIGN KEY (groupid) REFERENCES stock_group_dtl(id) ;
 DROP TABLE IF EXISTS item_dtl_trans;
 CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT,quandity INT,pices INT);
-ALTER TABLE item_dtl_trans ADD FOREIGN KEY (itemid) REFERENCES item_dtl_trans(id) ;
+ALTER TABLE item_dtl_trans ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
+
+DROP TABLE IF EXISTS sales;
+CREATE TABLE sales( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT);
+ALTER TABLE sales ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
+
+DROP TABLE IF EXISTS purchages;
+CREATE TABLE purchages( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT);
+ALTER TABLE purchages ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
+
+DROP TABLE IF EXISTS item_current_stock;
+CREATE TABLE item_current_stock( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, itemid INT,quandity INT);
+ALTER TABLE item_current_stock ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
 ---- Accounting INFO -------
 DROP TABLE IF EXISTS acc_group_dtl;
