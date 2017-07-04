@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -77,7 +78,7 @@ public class Item {
 	private int id;
 
 	@NotNull
-	@Size(min = 3, max = 100)
+	@Size(min = 1, max = 100)
 	@Column(name = "name", nullable = false)
 	private String name;
 
@@ -91,24 +92,49 @@ public class Item {
 	private int stockGroup;	
 	
 	@NotNull
-	@Size(min = 3, max = 100)
+	@Size(min = 1, max = 100)
 	@Column(name = "shade", nullable = false)
 	private String shade;	
 	
 	@NotNull
-	@Size(min = 3, max = 1000)
+	@Size(min = 1, max = 1000)
 	@Column(name = "description", nullable = false)
 	private String desc;		
 	
 	@NotNull
-	@Size(min = 3, max = 1000)
+	@Size(min = 1, max = 1000)
 	@Column(name = "uom", nullable = false)
 	private String uom;	
 	
 	@NotNull
-	@Column(name = "totalquandity", nullable = false)
+	@Column(name = "initqundty", nullable = false)
 	private int quandity;
 	
+	public int getCurqundty() {
+		return curqundty;
+	}
+
+	public void setCurqundty(int curqundty) {
+		this.curqundty = curqundty;
+	}
+
+	@NotNull
+	@Column(name = "curqundty", nullable = false)
+	private int curqundty;	
+	
+	@NotNull
+	@Column(name = "rate", nullable = false)
+	private int rate;	
+	
+
+	public int getRate() {
+		return rate;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="item",fetch = FetchType.EAGER)  
 	private List<ItemTrasacation> itemTrans;
 
@@ -127,6 +153,7 @@ public class Item {
 	public void setItemTrans(List<ItemTrasacation> itemTrans) {
 		this.itemTrans = itemTrans;
 	}
+
 
 /*	public StockGroup getStockGroup() {
 		return stockGroup;

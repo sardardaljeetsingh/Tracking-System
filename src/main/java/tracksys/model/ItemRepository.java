@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface ItemRepository extends CrudRepository<Item, Integer> {
 
 	public List<Item> findAllByStockGroup(StockGroup stockGroup);
-
+	public List<Item> findAllByName(String name);
 }

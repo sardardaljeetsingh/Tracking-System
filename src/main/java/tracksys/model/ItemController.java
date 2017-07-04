@@ -42,6 +42,18 @@ public class ItemController {
 		return new ResponseEntity<Iterable<Item>>(itemyList, HttpStatus.OK);
 	} 	
 	
+	@RequestMapping(value ="/item/find-by-name/{itemname}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Item>> findAllByName(@PathVariable("itemname") String itemname) {
+		Iterable<Item> itemList = null;
+		try {
+			itemList = itemRepository.findAllByName(itemname);
+		}
+		catch (Exception ex) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<Item>>(itemList, HttpStatus.OK);
+	}	
+	
 	@RequestMapping(value ="/itemtrans/getAll",method = RequestMethod.GET)
 	public  @ResponseBody Iterable<ItemTrasacation> getAllItemtrans() {
 		return itemTransactionRepo.findAll();
