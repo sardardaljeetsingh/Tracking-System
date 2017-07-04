@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule"]);
@@ -106,6 +106,26 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	      { 
 		    controller: 'ledgerController',
 		    templateUrl :'/inline-ledgers.html',
+		  })
+	.when('/Purchages'	,
+	      { 
+		    controller: 'PurchagesController',
+		    templateUrl :'/inline-Purchages.html',
+		  })
+	.when('/Sales'	,
+	      { 
+		    controller: 'SalesController',
+		    templateUrl :'/inline-Sales.html',
+		  })
+	.when('/Payments'	,
+	      { 
+		    controller: 'PaymentsController',
+		    templateUrl :'/inline-Payments.html',
+		  })
+	.when('/Receipts'	,
+	      { 
+		    controller: 'ReceiptsController',
+		    templateUrl :'/inline-Receipts.html',
 		  })		  
 	.when('/reports',{template:'This is the Report Route'})
 	.otherwise({template:'This is the Report Route'});
@@ -395,6 +415,30 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 		$location.path("/stock-groups");
 	}	
 	
+	$scope.Purchages = function(){
+		$rootScope.currentPage = 'Purchages';
+		//Back end code to edit Company
+		$location.path("/Purchages");
+	}
+
+	$scope.Sales = function(){
+		$rootScope.currentPage = 'Sales';
+		//Back end code to edit Company
+		$location.path("/Sales");
+	}
+
+	$scope.Receipts = function(){
+		$rootScope.currentPage = 'Receipts';
+		//Back end code to edit Company
+		$location.path("/Receipts");
+	}
+
+	$scope.Payments = function(){
+		$rootScope.currentPage = 'Payments';
+		//Back end code to edit Company
+		$location.path("/Payments");
+	}	
+	
 });
 
 app.controller('stockGroupController', function($scope,$rootScope,$location,$http) {
@@ -587,6 +631,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		}
 	    //alert(selItem.stockGroup);
 		selItem.itemTrans = $scope.items;
+		selItem.curqundty = selItem.quandity;
+
 		
 		angular.forEach(selItem.itemTrans,function(itemTrans,index){
 		  itemTrans.name = selItem.name +"_" + selItem.shade + "_" + index ;

@@ -43,3 +43,33 @@ var factory = {};
    
    return factory;
 });
+
+app.factory('ItemService',function ($http){
+var factory = {};
+   
+   factory.getAllItems = function(callback){
+	   
+	  var URL =  hostname+'/item/getAll' ;
+     $http.get(URL)
+	 .success(function (response) {
+         callback(response);
+      });
+   }
+  
+   return factory;
+});
+
+app.factory('AccGroupService',function ($http){
+var factory = {};
+   
+   factory.getAllGroupsByCompanyId = function(companyid,callback){
+	   
+	  var URL =  hostname+'/accgroup/find-by-company/'+ companyid ;
+     $http.get(URL)
+	 .success(function (response) {
+         callback(response);
+      });
+   }
+  
+   return factory;
+});
