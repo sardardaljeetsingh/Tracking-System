@@ -15,6 +15,23 @@ var factory = {};
    return factory;
 });
 
+app.factory('StockGrpSrvc',function ($http){
+var factory = {};
+   
+   factory.getAllGroups = function(companyid,callback){
+	   
+	  var URL =  hostname + '/stockgroup/find-by-company/'+ companyid;
+	  console.log('Stockgroup Fetch URL : ' + URL);
+     $http.get(URL)
+	 .success(function (response) {
+         callback(response);
+      });
+   }
+   
+   return factory;
+});
+	
+
 
 app.factory('UserPrevService',function ($http){
 var factory = {};
@@ -55,6 +72,15 @@ var factory = {};
          callback(response);
       });
    }
+   
+   factory.getItemDetails = function(itemid,callback){
+	   
+	  var URL =  hostname+'/item/find-by-id/'+itemid ;
+     $http.get(URL)
+	 .success(function (response) {
+         callback(response);
+      });
+   }   
   
    return factory;
 });
@@ -71,5 +97,20 @@ var factory = {};
       });
    }
   
+   return factory;
+});
+
+app.factory('GenericSrvc',function ($http){
+var factory = {};
+   
+   factory.getAll = function(URL,callback){
+	   
+	  console.log('Stockgroup Fetch URL : ' + URL);
+     $http.get(hostname + URL)
+	 .success(function (response) {
+         callback(response);
+      });
+   }
+   
    return factory;
 });

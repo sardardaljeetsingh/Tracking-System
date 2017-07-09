@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule"]);
@@ -117,15 +117,15 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 		    controller: 'SalesController',
 		    templateUrl :'/inline-Sales.html',
 		  })
-	.when('/Payments'	,
+	.when('/PurchaseReturn'	,
 	      { 
-		    controller: 'PaymentsController',
-		    templateUrl :'/inline-Payments.html',
+		    controller: 'PurchaseReturnController',
+		    templateUrl :'/inline-PurchaseReturn.html',
 		  })
-	.when('/Receipts'	,
+	.when('/SaleReturn'	,
 	      { 
-		    controller: 'ReceiptsController',
-		    templateUrl :'/inline-Receipts.html',
+		    controller: 'SaleReturnController',
+		    templateUrl :'/inline-SaleReturn.html',
 		  })		  
 	.when('/reports',{template:'This is the Report Route'})
 	.otherwise({template:'This is the Report Route'});
@@ -392,7 +392,7 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 	
 });
 
-app.controller('performActionController', function($scope,$rootScope,$location,$http) {
+app.controller('performActionController', function($scope,$rootScope,$location,$http,AccGroupService) {
 	
 	$rootScope.currentPage = 'performAction';
 	
@@ -406,7 +406,14 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 				$scope.previliges.reports = response.data.reports == 'true' ? true : false;
 
 				console.log( $scope.previliges );
-	});		
+	});	
+
+   $rootScope.accgroups = [];
+     AccGroupService.getAllGroupsByCompanyId($rootScope.company.id,function(response){
+      console.log(" AccGroupService Response " + JSON.stringify(response));
+	  $rootScope.accgroups = response;
+	  $rootScope.curTab = 'companyTab';
+   }); 	
 	
 	
 	$scope.stockGrpoups = function(company){
@@ -427,16 +434,16 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 		$location.path("/Sales");
 	}
 
-	$scope.Receipts = function(){
-		$rootScope.currentPage = 'Receipts';
+	$scope.SaleReturn = function(){
+		$rootScope.currentPage = 'SaleReturn';
 		//Back end code to edit Company
-		$location.path("/Receipts");
+		$location.path("/SaleReturn");
 	}
 
-	$scope.Payments = function(){
-		$rootScope.currentPage = 'Payments';
+	$scope.PurchaseReturn = function(){
+		$rootScope.currentPage = 'PurchaseReturn';
 		//Back end code to edit Company
-		$location.path("/Payments");
+		$location.path("/PurchaseReturn");
 	}	
 	
 });
@@ -630,12 +637,13 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			selItem.stockGroup = $scope.stockGroups[$scope.stockGroups.length-2].selGroup.id;
 		}
 	    //alert(selItem.stockGroup);
-		selItem.itemTrans = $scope.items;
+		selItem.itemDtls = $scope.items;
 		selItem.curqundty = selItem.quandity;
 
 		
-		angular.forEach(selItem.itemTrans,function(itemTrans,index){
+		angular.forEach(selItem.itemDtls,function(itemTrans,index){
 		  itemTrans.name = selItem.name +"_" + selItem.shade + "_" + index ;
+		  itemTrans.curqundty = itemTrans.quandity ;
 		  //itemTrans.item = selItem;
 		});		
 		
