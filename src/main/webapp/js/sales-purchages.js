@@ -53,7 +53,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		}
 		
 		purchage.item.itemDtls = $scope.curItems;
-		//purchage.transactionDetails = [];
+		purchage.transactionDetails = [];
 		angular.forEach(purchage.item.itemDtls,function(itemTrans,index){
 		  itemTrans.name = purchage.item.name +"_" + purchage.item.shade + "_" + index ;
 		});			
@@ -171,7 +171,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 				}
 			});	
 		sale.item.itemDtls = finalItemdtls;
-		//sale.transactionDetails = [];
+		sale.transactionDetails = [];
 		     console.log(sale.item.itemDtls);
 		
 			var dataObj = JSON.stringify(sale);
@@ -319,7 +319,7 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 		transaction.item.itemDtls = finalItemdtls;
 		console.log(transaction.item.itemDtls);
 		
-		//transaction.transactionDetails = [];
+		transaction.transactionDetails = [];
 		transaction.desc = transaction.inputdesc;
 		transaction.type = 3;
 		transaction.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);	
@@ -467,7 +467,7 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 		transaction.item.itemDtls = finalItemdtls;
 		console.log(transaction.item.itemDtls);
 		
-		//transaction.transactionDetails = [];
+		transaction.transactionDetails = [];
 		transaction.desc = transaction.inputdesc;
 		transaction.type = 4;
 		transaction.voucher = "SR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);	
