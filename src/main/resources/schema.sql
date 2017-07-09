@@ -69,16 +69,24 @@ DROP TABLE IF EXISTS item_dtl;
 CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,initqundty INT,curqundty INT,rate INT);
 ALTER TABLE item_dtl ADD FOREIGN KEY (groupid) REFERENCES stock_group_dtl(id) ;
 DROP TABLE IF EXISTS item_dtl_trans;
-CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT,quandity INT,pices INT);
+CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT,quandity INT,curqundty INT, pices INT,curpices INT);
 ALTER TABLE item_dtl_trans ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
 
+DROP TABLE IF EXISTS transactions;
+CREATE TABLE transactions( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transtype INT,description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50));
+ALTER TABLE transactions ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
+
+CREATE TABLE transactions_dtls( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transid INT, itemdtlid INT,quandity INT);
+ALTER TABLE transactions_dtls ADD FOREIGN KEY (transid) REFERENCES transactions(id) ;
+ALTER TABLE transactions_dtls ADD FOREIGN KEY (itemdtlid) REFERENCES item_dtl_trans(id) ;
+
 DROP TABLE IF EXISTS sales;
-CREATE TABLE sales( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT);
+CREATE TABLE sales( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50));
 ALTER TABLE sales ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
 DROP TABLE IF EXISTS purchages;
-CREATE TABLE purchages( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT);
+CREATE TABLE purchages( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50));
 ALTER TABLE purchages ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
 DROP TABLE IF EXISTS item_current_stock;
