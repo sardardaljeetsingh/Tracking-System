@@ -1,24 +1,35 @@
 package tracksys.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
-@Table(name="purchages")
-public class Purchage {
+@Table(name="transactions")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+public class Transaction {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(name = "transtype", nullable = false)
+	private int type;
 	
 	@ManyToOne(cascade=CascadeType.ALL)  
 	@JoinColumn(name = "itemid", nullable = false)
@@ -39,6 +50,17 @@ public class Purchage {
 	@Size(min = 1, max = 1000)
 	@Column(name = "description", nullable = false)
 	private String desc;
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="transaction",fetch = FetchType.EAGER)  
+	private List<TransactionDetails> transactionDetails;	
+
+	public List<TransactionDetails> getTransactionDetails() {
+		return transactionDetails;
+	}
+
+	public void setTransactionDetails(List<TransactionDetails> transactionDetails) {
+		this.transactionDetails = transactionDetails;
+	}
 
 	public int getId() {
 		return id;
@@ -46,6 +68,14 @@ public class Purchage {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public Item getItem() {
@@ -72,20 +102,20 @@ public class Purchage {
 		this.rate = rate;
 	}
 
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
 	public String getVoucher() {
 		return voucher;
 	}
 
 	public void setVoucher(String voucher) {
 		this.voucher = voucher;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}	
 	
 }

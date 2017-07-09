@@ -32,6 +32,10 @@ public class Sale {
 	private int rate;
 	
 	@NotNull
+	@Column(name = "voucher", nullable = false)
+	private String voucher;	
+	
+	@NotNull
 	@Size(min = 1, max = 1000)
 	@Column(name = "description", nullable = false)
 	private String desc;
@@ -74,6 +78,16 @@ public class Sale {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}	
+	}
+
+	public String getVoucher() {
+		return voucher;
+	}
+
+	public void setVoucher(String voucher) {
+		this.voucher = voucher;
+	}
+
+	
 	
 }

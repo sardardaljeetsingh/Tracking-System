@@ -136,7 +136,7 @@ public class Item {
 	}
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="item",fetch = FetchType.EAGER)  
-	private List<ItemTrasacation> itemTrans;
+	private List<ItemDetails> itemDtls;
 
 	public int getStockGroup() {
 		return stockGroup;
@@ -146,13 +146,14 @@ public class Item {
 		this.stockGroup = stockGroup;
 	}
 
-	public List<ItemTrasacation> getItemTrans() {
-		return itemTrans;
+	public List<ItemDetails> getItemDtls() {
+		return itemDtls;
 	}
 
-	public void setItemTrans(List<ItemTrasacation> itemTrans) {
-		this.itemTrans = itemTrans;
+	public void setItemDtls(List<ItemDetails> itemDtls) {
+		this.itemDtls = itemDtls;
 	}
+
 
 
 /*	public StockGroup getStockGroup() {

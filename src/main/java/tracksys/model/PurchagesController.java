@@ -1,5 +1,7 @@
 package tracksys.model;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,9 +16,22 @@ public class PurchagesController {
 	@RequestMapping(value ="/create",method = RequestMethod.POST)
 	public @ResponseBody Purchage createPurchage
 	(@RequestBody Purchage purchage) {
+		ItemDetails tempTrans = null;
+		List<ItemDetails> transList = purchage.getItem().getItemDtls();
 		Item item = itemRepository.findOne(purchage.getItem().getId());
 		item.setCurqundty(item.getCurqundty() + purchage.getQuandity());
-		itemRepository.save(item);
+		item = itemRepository.save(item);
+		
+		if(transList != null){
+			for(ItemDetails trasacation : transList){
+				tempTrans = itemTransactionRepo.findOne(trasacation.getId());
+				tempTrans.setCurqundty(trasacation.getQuandity());
+				tempTrans.setCurpices(trasacation.getCurpices());
+				tempTrans.setItem(item);
+				itemTransactionRepo.save(tempTrans);
+			}
+		}
+		
 		purchage.setItem(item);
 		return purchageRepository.save(purchage);
 	}
@@ -31,5 +46,8 @@ public class PurchagesController {
 	
 	
 	@Autowired
-	private PurchageRepository purchageRepository;		
+	private PurchageRepository purchageRepository;	
+	
+	@Autowired
+	private ItemDtlsRepo itemTransactionRepo;
 }
