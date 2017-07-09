@@ -72,7 +72,7 @@
 							|| currentPage == 'createAccountGroups' ||currentPage == 'showAccountGroups'
 							|| currentPage == 'createLedgers' ||currentPage == 'viewLedgers'
 							|| currentPage == 'Purchages' || currentPage == 'Sales' 
-							|| currentPage == 'Receipts' || currentPage == 'Payments' )" 
+							|| currentPage == 'SaleReturn' || currentPage == 'PurchaseReturn' )" 
 								ng-class="{'active': currentPage == 'performAction'}" >
 								<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
 							</li>	
@@ -106,11 +106,11 @@
 							<li ng-if="(currentPage == 'Sales' )" ng-class="{'active': currentPage == 'Sales'}" style="color:#ccc" >
 								Sales
 							</li>	
-							<li ng-if="(currentPage == 'Receipts' )" ng-class="{'active': currentPage == 'Receipts'}" style="color:#ccc" >
-								Receipts
+							<li ng-if="(currentPage == 'PurchaseReturn' )" ng-class="{'active': currentPage == 'PurchaseReturn'}" style="color:#ccc" >
+								Purchase Return
 							</li>	
-							<li ng-if="(currentPage == 'Payments' )" ng-class="{'active': currentPage == 'Payments'}" style="color:#ccc" >
-								Payments
+							<li ng-if="(currentPage == 'SaleReturn' )" ng-class="{'active': currentPage == 'SaleReturn'}" style="color:#ccc" >
+								Sale Return
 							</li>								
 							</ol>
 						
@@ -507,10 +507,10 @@
 						<button type="button" class="btn btn-success" ng-click="Sales()" >Sales</button>
 					  </div>
 					  <div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" ng-click="Receipts()" >Receipts</button>
+						<button type="button" class="btn btn-success" ng-click="PurchaseReturn()" >Purchase Return</button>
 					  </div>
 					  <div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" ng-click="Payments()" >Payments</button>
+						<button type="button" class="btn btn-success" ng-click="SaleReturn()" >Sale Return</button>
 					  </div>					  
 					</div>			  
 			  
@@ -1321,79 +1321,8 @@
 	  </script>
 	  
 	  
-	  <script type="text/ng-template" id="/inline-Purchages.html">	
-		<div class="container-fluid">
-			<div class="panel panel-success" > 
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Purchases </div>
-			  <div class="panel-body">
-					<div class="row" >
-					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
-					  
-					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
-							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.item'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
-								<div class="col-sm-5">
-									<select class="form-control input-sm" ng-model="purchage.item" name="purchage.item" 
-											ng-init="purchage.item = purchage.item || options[0].value"
-											ng-options="option as option.name for option in items"
-											ng-change="purchage.rate = purchage.item.rate"
-											required>
-											<option value="">-- Choose Item Name --</option>
-									</select>	
-								</div>
-							  </div>	
-							  <div class="form-group" ng-if="purchage.item != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
-								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{purchage.item.shade}}</label>
-								</div>
-							  </div>							  
-							  <div class="form-group" ng-if="purchage.item != null">
-								<label for="inputPassword3" class="col-sm-5 control-label">Avaliable Quantity</label>
-								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{purchage.item.curqundty}}</label>
-								</div>
-							  </div>							  
-							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.quandity'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Quantity</label>
-								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="purchage.quandity" ng-model="purchage.quandity"
-								  placeholder="Quantity" required>
-								</div>
-							  </div>
-							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.rate'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
-								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="purchage.rate" ng-model="purchage.rate"
-								  placeholder="Rate" required>
-								  
-								</div>
-							  </div>	
-							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
-								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="purchage.desc" ng-model="purchage.desc"
-								  placeholder="Description" required>
-								</div>
-							  </div>	
-							  <div class="form-group">
-								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-								   <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase done successfully.</span>
-								   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store purchase details.</span>
-								   <button type="button" ng-click="purchanges(purchage);"  
-								   class="btn btn-success">Submit</button>								   
-								</div>
-							  </div>							  
-					  </form>
-	                  </div>
-			        </div>		
-			  </div>
-			</div>
-		</div>  
-	  </script>
 	  
-	  <script type="text/ng-template" id="/inline-Sales.html">	
+	  <script type="text/ng-template" id="/inline-Sales1.html">	
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Sales </div>
@@ -1465,164 +1394,150 @@
 		</div>  
 	  </script>
 	
-	  <script type="text/ng-template" id="/inline-Receipts.html">	
+
+	  <script type="text/ng-template" id="/inline-Purchages.html">	
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Receipts </div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Purchases </div>
 			  <div class="panel-body">
 					<div class="row" >
 					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
 					  
-					  <form class="form-horizontal input-sm" name="receiptform" novalidate >
-					  		<div class="form-group" ng-class="{'has-error' : submitclick && receiptform['receipt.accgroup'].$invalid  }">
+					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
+					  
+					  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
+								<div class="col-sm-5">
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{purchage.voucher}}</label>
+								</div>
+							  </div>	
+							  
+					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.accgroup'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Account Group</label>
 								<div class="col-sm-5">
-									<select class="form-control input-sm" ng-model="receipt.accgroup" name="receipt.accgroup" 
-											ng-init="receipt.accgroup = receipt.accgroup || options[0].value"
+									<select class="form-control input-sm" ng-model="purchage.accgroup" name="purchage.accgroup" 
+											ng-init="purchage.accgroup = purchage.accgroup || options[0].value"
 											ng-options="option as option.name for option in accgroups"
 											required >
 											<option value="">-- Choose Account Group --</option>
 									</select>	
 								</div>
-							  </div>
-							  <div class="form-group" ng-class="{'has-error' : submitclick && receiptform['receipt.item'].$invalid  }" >
+							  </div>					  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.item'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
 								<div class="col-sm-5">
-									<select class="form-control input-sm" ng-model="receipt.item" name="receipt.item"
-											ng-init="receipt.item = receipt.item || options[0].value"
+									<select class="form-control input-sm" ng-model="purchage.item" name="purchage.item" 
+											ng-init="purchage.item = purchage.item || options[0].value"
 											ng-options="option as option.name for option in items"
-											ng-change="receipt.rate = receipt.item.rate"
-											required >
+											ng-change="purchage.rate = purchage.item.rate"
+											required>
 											<option value="">-- Choose Item Name --</option>
 									</select>	
 								</div>
+							  </div>
+
+							  <div class="form-group" ng-if="purchage.item != null" >
+							  
+								<label for="inputPassword3" class="col-sm-5 control-label">Stock group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{showGrp(stockGroups[purchage.item.stockGroup],'')}}</label>
+								</div>
 							  </div>	
-							  <div class="form-group" ng-if="receipt.item != null" >
+							  
+							  <div class="form-group" ng-if="purchage.item != null" >
 								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
 								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{receipt.item.shade}}</label>
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{purchage.item.shade}}</label>
 								</div>
 							  </div>							  
-							  <div class="form-group" ng-if="receipt.item != null">
+							  <div class="form-group" ng-if="purchage.item != null">
 								<label for="inputPassword3" class="col-sm-5 control-label">Avaliable Quantity</label>
 								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{receipt.item.curqundty}}</label>
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{purchage.item.curqundty}}</label>
 								</div>
-							  </div>							  
-							  <div class="form-group" ng-class="{'has-error' : submitclick && receiptform['receipt.quandity'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Quantity</label>
-								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="receipt.quandity" ng-model="receipt.quandity"
-								  placeholder="Quantity" required>
-								</div>
-							  </div>
-							  <div class="form-group" ng-class="{'has-error' : submitclick && receiptform['receipt.rate'].$invalid }">
+							  </div>	
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.rate'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
 								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="receipt.rate" ng-model="receipt.rate"
+								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="purchage.rate" ng-model="purchage.rate"
 								  placeholder="Rate" required>
 								  
 								</div>
 							  </div>	
-							  <div class="form-group" ng-class="{'has-error' : submitclick && receiptform['receipt.desc'].$invalid }">
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
 								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="receipt.desc" ng-model="receipt.desc"
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="purchage.desc" ng-model="purchage.desc"
 								  placeholder="Description" required>
-								</div>
-							  </div>	
-							  <div class="form-group">
-								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-								   <span class="label label-success" ng-if="optStatus == 'Success'" > Receipt generated successfully.</span>
-								   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to generate receipt details.</span>
-								   <button type="button" ng-click="receipts(receipt);"  
-								   class="btn btn-success">Submit</button>								   
-								</div>
-							  </div>							  
-					  </form>
-	                  </div>
-			        </div>		
-			  </div>
-			</div>
-		</div>  
-	  </script>
-	  
-	  <script type="text/ng-template" id="/inline-Payments.html">	
-		<div class="container-fluid">
-			<div class="panel panel-success" > 
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Payments </div>
-			  <div class="panel-body">
-					<div class="row" >
-					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
-					  
-					  <form class="form-horizontal input-sm" name="paymentsform" novalidate >
-					  		<div class="form-group" ng-class="{'has-error' : submitclick && paymentsform['payment.accgroup'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Account Group</label>
-								<div class="col-sm-5">
-									<select class="form-control input-sm" ng-model="payment.accgroup" name="payment.accgroup" 
-											ng-init="payment.accgroup = payment.accgroup || options[0].value"
-											ng-options="option as option.name for option in accgroups"
-											required >
-											<option value="">-- Choose Account Group --</option>
-									</select>	
-								</div>
-							  </div>
-							  <div class="form-group" ng-class="{'has-error' : submitclick && paymentsform['payment.item'].$invalid  }" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
-								<div class="col-sm-5">
-									<select class="form-control input-sm" ng-model="payment.item" name="payment.item"
-											ng-init="payment.item = payment.item || options[0].value"
-											ng-options="option as option.name for option in items"
-											ng-change="payment.rate = payment.item.rate"
-											required >
-											<option value="">-- Choose Item Name --</option>
-									</select>	
-								</div>
-							  </div>	
-							  <div class="form-group" ng-if="payment.item != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
-								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{payment.item.shade}}</label>
-								</div>
-							  </div>							  
-							  <div class="form-group" ng-if="payment.item != null">
-								<label for="inputPassword3" class="col-sm-5 control-label">Avaliable Quantity</label>
-								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{payment.item.curqundty}}</label>
 								</div>
 							  </div>								  
-							  <div class="form-group" ng-class="{'has-error' : (submitclick && paymentsform['payment.quandity'].$invalid || payment.item.curqundty < payment.quandity) }">
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.quandity'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Quantity</label>
 								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="payment.quandity" ng-model="payment.quandity"
+								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="purchage.quandity" ng-model="purchage.quandity"
 								  placeholder="Quantity" required>
+								  <button type="button" ng-click="selectItems();showSplit=true;curItems[0].quandity=purchage.quandity"  
+								   class="btn btn-warning btn-xs" ng-if="purchage.quandity > 0" >Show Split</button>	
 								</div>
 							  </div>
-							  <div class="form-group" ng-class="{'has-error' : submitclick && paymentsform['payment.rate'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
-								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="payment.rate" ng-model="payment.rate"
-								  placeholder="Rate" required>
-								  
-								</div>
-							  </div>	
-							  <div class="form-group" ng-class="{'has-error' : submitclick && paymentsform['payment.desc'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
-								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="payment.desc" ng-model="payment.desc"
-								  placeholder="Description" required>
-								</div>
-							  </div>	
-							  <div class="form-group">
-								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-								   <span class="label label-success" ng-if="optStatus == 'Success'" > Payment done successfully.</span>
-								   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store payment details.</span>
-								   <button type="button" ng-click="payments(payment);"  
-								   class="btn btn-success">Submit</button>								   
-								</div>
-							  </div>							  
+							  
+
+					<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px"  ng-if="showSplit==true && purchage.quandity > 0">
+					  <div class="panel-heading small">Select Items</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-1 input-sm">No of Packets</th>
+					  <th class="col-sm-2 input-sm">Each Packet Quantity</th>
+					  <th class="col-sm-1 input-sm">Total</th>
+					</tr>
+					</thead>
+					<tr class="warning" ng-repeat="selItem in curItems" > 
+					 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.pices"></td>
+					 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity"></td>	
+					 <td> {{(+selItem.quandity) * (+selItem.pices) }} &nbsp;	&nbsp;	
+					 <button type="button" class="btn btn-warning btn-sm" ng-click="curItems.push({ 'quandity': 1, 'pices':1})"
+					 ng-if="(grandTotal < purchage.quandity && curItems.length == $index+1 && ( (+selItem.quandity)* (+selItem.pices) > 0) )">Add</button></td>						 
+					</tr>
+					<tr class="">
+					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
+					 <td> <b>{{getTotal()}} </b>
+					 </td>	
+					</tr>
+					
+					<tr class="warning">
+					<td colspan="3" style="text-align : center" >
+				
+					</td>
+					</tr>					
+					
+					
+					<tr class="warning">
+					<td colspan="3" style="text-align : center" >
+					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (purchage.quandity)" >
+						ERROR : Split grand total <b> {{getTotal()}} </b> should not exeeds total quantity <b>{{purchage.quandity}}</b>
+					 </div>
+								   <button type="button" ng-click="purchanges(purchage);"   ng-if="grandTotal == (purchage.quandity) "
+								   class="btn btn-success">Submit</button>	
+					   
+					</td>
+					</tr>
+					<tr class="warning">
+					<td colspan="3" style="text-align : center; font-size: 150%;" >
+							   <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase done successfully.</span>
+							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store purchase details.</span>				
+					</td>
+					</tr>						
+					
+					</table>	
+				
+					</div>								  
+
+					  
 					  </form>
 	                  </div>
 			        </div>		
@@ -1630,6 +1545,461 @@
 			</div>
 		</div>  
 	  </script>
+	
+	
+
+	  <script type="text/ng-template" id="/inline-Sales.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Sales </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
+					  
+					  <form class="form-horizontal input-sm" name="salesform" novalidate >
+					  
+					  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
+								<div class="col-sm-5">
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher}}</label>
+								</div>
+							  </div>	
+							  
+					  		<div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.accgroup'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Account Group</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="trasaction.accgroup" name="trasaction.accgroup" 
+											ng-init="trasaction.accgroup = trasaction.accgroup || options[0].value"
+											ng-options="option as option.name for option in accgroups"
+											required >
+											<option value="">-- Choose Account Group --</option>
+									</select>	
+								</div>
+							  </div>					  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.item'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="trasaction.item" name="trasaction.item" 
+											ng-init="trasaction.item = trasaction.item || options[0].value"
+											ng-options="option as option.name for option in items"
+											ng-change="trasaction.rate = trasaction.item.rate ; getItemDetails()"
+											required>
+											<option value="">-- Choose Item Name --</option>
+									</select>	
+								</div>
+							  </div>
+							  
+							  <div class="form-group" ng-if="trasaction.item != null" >
+							  
+								<label for="inputPassword3" class="col-sm-5 control-label">Stock group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{showGrp(stockGroups[trasaction.item.stockGroup],'')}}</label>
+								</div>
+							  </div>	
+							  
+							  <div class="form-group" ng-if="trasaction.item != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
+								<div class="col-sm-5">
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.item.shade}}</label>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-if="trasaction.item != null">
+								<label for="inputPassword3" class="col-sm-5 control-label">Avaliable Quantity</label>
+								<div class="col-sm-5">
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.item.curqundty}}</label>
+								</div>
+							  </div>	
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.rate'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
+								<div class="col-sm-5">
+								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="trasaction.rate" ng-model="trasaction.rate"
+								  placeholder="Rate" required>
+								  
+								</div>
+							  </div>	
+							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
+								  placeholder="Description" required>
+								</div>
+							  </div>								  
+							  
+
+					<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px" ng-if="trasaction.item != null" >
+					  <div class="panel-heading small">Select Items</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-1 input-sm">No of Packets</th>
+					  <th class="col-sm-2 input-sm">Each Packet Quantity</th>
+					  <th class="col-sm-1 input-sm">Total available Quantity</th>
+					  <th class="col-sm-2 input-sm">Choose Quantity</th>
+					</tr>
+					</thead>
+					<tr class="warning" ng-repeat="selItem in trasaction.item.itemDtls" > 
+					 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.pices" readonly></td>
+					 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.curqundty" readonly></td>	
+					 <td> {{(+selItem.curqundty) * (+selItem.pices) }} &nbsp;	&nbsp;	</td>
+                     <td ng-class="{'has-error' : selItem.inputqundty > selItem.curqundty  }" >
+					 <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.inputqundty"
+					 ></td>				 
+					</tr>
+					<tr class="">
+					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
+					 <td> <b>{{getTotal(1)}} </b> </td>	
+					 <td> <b>{{getTotal(2)}} </b> </td>	
+					</tr>
+					
+					<tr class="warning">
+					<td colspan="4" style="text-align : center" >
+				       {{trasaction.itemDtls|json}}
+					</td>
+					</tr>					
+					
+					
+					<tr class="warning">
+					
+					<td colspan="4" style="text-align : center" >
+					 <div class="alert alert-danger" role="alert" ng-if="(grandTotal > (trasaction.item.curqundty))" >
+						ERROR : Current selection <b> {{grandTotal}} </b> should not exeeds total quantity <b>{{trasaction.item.curqundty}}</b>
+					 </div>
+						<button type="button" ng-click="sales(trasaction);"   ng-if="(grandTotal <= (trasaction.item.curqundty)) && !invalidCount"
+								   class="btn btn-success">Submit</button>	
+					   
+					</td>
+					</tr>
+					<tr class="warning">
+					<td colspan="4" style="text-align : center; font-size: 150%;" >
+							   <span class="label label-success" ng-if="optStatus == 'Success'" > Sales done successfully.</span>
+							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store sales details.</span>				
+					</td>
+					</tr>						
+					
+					</table>	
+				
+					</div>								  
+
+					  
+					  </form>
+	                  </div>
+			        </div>		
+			  </div>
+			</div>
+		</div>  
+	  </script>	
+	
+	
+	  <script type="text/ng-template" id="/inline-PurchaseReturn.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Purchase Return </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
+					  
+					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
+					  
+					  
+					  
+					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="trasaction.voucher" name="trasaction.voucher" 
+											ng-init="trasaction.voucher = trasaction.voucher || options[0].value"
+											ng-options="option as option.voucher for option in transactions"
+											ng-change="selectItem(trasaction.voucher)"
+											required >
+											<option value="">-- Choose Vocher --</option>
+									</select>	
+								</div>
+							 </div>							  
+							  
+					  		<div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Account Group</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label"></label>	
+								</div>
+							  </div>					  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.item.name}}</label>	
+								</div>
+							  </div>
+							  
+							  <div class="form-group" >
+							  
+								<label for="inputPassword3" class="col-sm-5 control-label">Stock group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" 
+								 ng-if="trasaction.voucher.item.stockGroup != null"
+								 >{{showGrp(stockGroups[trasaction.voucher.item.stockGroup],'')}}</label>
+								</div>
+							  </div>	
+							  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
+								<div class="col-sm-5">
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.item.shade}}</label>
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.rate}}</label>
+								  
+								</div>
+							  </div>	
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.desc}}</label>
+								</div>
+							  </div>	
+
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.rate}}</label>
+								  
+								</div>
+							  </div>	
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Purchase quandity</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.quandity}}</label>
+								</div>
+							  </div>	
+
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher.inputdesc'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.inputdesc" ng-model="trasaction.voucher.inputdesc"
+								  placeholder="Description" required>
+								</div>
+							  </div>							  
+							  
+
+					<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px" ng-if="trasaction.voucher.item != null" >
+					  <div class="panel-heading small">Select Items</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-1 input-sm">Purchase Quantity</th>
+					  <th class="col-sm-2 input-sm">Avaliable Quantity</th>
+					  <th class="col-sm-2 input-sm">Return Quantity</th>
+					</tr>
+					</thead>
+					<tr class="warning" ng-repeat="selItem in trasaction.voucher.transactionDetails" > 
+					 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.quandity" readonly></td>
+			         <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.curqundty" readonly></td>
+					 <td ng-class="{'has-error' : selItem.inputqundty > selItem.curqundty  }">
+					 <input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.inputqundty"			 
+					 ></td>
+					</tr>
+					<tr class="">
+					 <td style="text-align : right" ><b>Grand Total </b></td>
+					 <td> <b>{{getTotal(1)}} </b> </td>	
+					 <td> <b>{{getTotal(2)}} </b> </td>	
+					</tr>
+					
+			
+					<tr class="warning">
+					<td colspan="4" style="text-align : center" >
+				      
+					</td>
+					</tr>					
+					
+					<tr class="warning">
+					
+					<td colspan="4" style="text-align : center" >
+					 <div class="alert alert-danger" role="alert" ng-if="(grandTotal > grandAvaTotal)" >
+						ERROR : Current selection <b> {{grandTotal}} </b> should not exeeds total quantity <b>{{grandAvaTotal}}</b>
+					 </div>
+						<button type="button" ng-click="purchaseReturn(trasaction.voucher);"   ng-if="(grandTotal <= (grandAvaTotal)) && !invalidCount && grandTotal > 0"
+								   class="btn btn-success">Submit</button>	
+					   
+					</td>
+					</tr>
+					<tr class="warning">
+					<td colspan="4" style="text-align : center; font-size: 150%;" >
+							   <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase Return done successfully.</span>
+							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store Purchase Return details.</span>				
+					</td>
+					</tr>						
+					
+					</table>	
+				
+					</div>								  
+
+					  
+					  </form>
+	                  </div>
+			        </div>		
+			  </div>
+			</div>
+		</div>  
+	  </script>	
+	
+	
+	  <script type="text/ng-template" id="/inline-SaleReturn.html">	
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Sale Return </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
+					  
+					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
+					  
+					  
+					  
+					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="trasaction.voucher" name="trasaction.voucher" 
+											ng-init="trasaction.voucher = trasaction.voucher || options[0].value"
+											ng-options="option as option.voucher for option in transactions"
+											ng-change="selectItem(trasaction.voucher)"
+											required >
+											<option value="">-- Choose Vocher --</option>
+									</select>	
+								</div>
+							 </div>							  
+							  
+					  		<div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Account Group</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label"></label>	
+								</div>
+							  </div>					  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.item.name}}</label>	
+								</div>
+							  </div>
+							  
+							  <div class="form-group" >
+							  
+								<label for="inputPassword3" class="col-sm-5 control-label">Stock group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" 
+								 ng-if="trasaction.voucher.item.stockGroup != null"
+								 >{{showGrp(stockGroups[trasaction.voucher.item.stockGroup],'')}}</label>
+								</div>
+							  </div>	
+							  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
+								<div class="col-sm-5">
+								 <label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.item.shade}}</label>
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.rate}}</label>
+								  
+								</div>
+							  </div>	
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.desc}}</label>
+								</div>
+							  </div>	
+
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.rate}}</label>
+								  
+								</div>
+							  </div>	
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Purchase quandity</label>
+								<div class="col-sm-5">
+									<label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher.quandity}}</label>
+								</div>
+							  </div>	
+
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher.inputdesc'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.inputdesc" ng-model="trasaction.voucher.inputdesc"
+								  placeholder="Description" required>
+								</div>
+							  </div>							  
+							  
+
+					<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px" ng-if="trasaction.voucher.item != null" >
+					  <div class="panel-heading small">Select Items</div>
+					<table class="table table-condensed table-bordered"  >
+					<thead>
+					<tr>
+					  <th class="col-sm-2 input-sm"></th>
+					  <th class="col-sm-5 input-sm">Sale Quantity</th>
+					  <th class="col-sm-5 input-sm">Return Quantity</th>
+					</tr>
+					</thead>
+					<tr class="warning" ng-repeat="selItem in trasaction.voucher.transactionDetails" > 
+					<th class="col-sm-2 input-sm"></th>
+					 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.quandity" readonly></td>
+					 <td ng-class="{'has-error' : selItem.inputqundty > selItem.quandity  }">
+					 <input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.inputqundty"			 
+					 ></td>
+					</tr>
+					<tr class="">
+					 <td style="text-align : right" ><b>Grand Total </b></td>
+					 <td> <b>{{trasaction.voucher.quandity}} </b> </td>	
+					 <td> <b>{{getTotal(2)}} </b> </td>	
+					</tr>
+					
+			
+					<tr class="warning">
+					<td colspan="3" style="text-align : center" >
+				      
+					</td>
+					</tr>					
+					
+					<tr class="warning">
+					
+					<td colspan="4" style="text-align : center" >
+					 <div class="alert alert-danger" role="alert" ng-if="(grandTotal > trasaction.voucher.quandity)" >
+						ERROR : Current selection <b> {{grandTotal}} </b> should not exeeds total quantity <b>{{trasaction.voucher.quandity}}</b>
+					 </div>
+						<button type="button" ng-click="saleReturn(trasaction.voucher);"   ng-if="(grandTotal <= (trasaction.voucher.quandity)) && !invalidCount && grandTotal > 0"
+								   class="btn btn-success">Submit</button>	
+					   
+					</td>
+					</tr>
+					<tr class="warning">
+					<td colspan="4" style="text-align : center; font-size: 150%;" >
+							   <span class="label label-success" ng-if="optStatus == 'Success'" > Sales Return done successfully.</span>
+							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store Sales Return details.</span>				
+					</td>
+					</tr>						
+					
+					</table>	
+				
+					</div>								  
+
+					  
+					  </form>
+	                  </div>
+			        </div>		
+			  </div>
+			</div>
+		</div>  
+	  </script>	
+	
 	
 	  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
