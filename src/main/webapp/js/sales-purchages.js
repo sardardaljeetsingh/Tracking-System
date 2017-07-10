@@ -1,4 +1,4 @@
-app.controller('PurchagesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc) {
+app.controller('PurchagesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
 
     $rootScope.items = [];
 	
@@ -8,7 +8,13 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	  $rootScope.curTab = 'companyTab';
    });
    
-   $scope.stockGroups = [];
+   $scope.ledgers = [];
+     GenericSrvc.getAll('/ledger/findAll',function(response){
+      console.log(" Trsaction Response " + JSON.stringify(response));
+	  $scope.ledgers = response;
+   });    
+   
+    $scope.stockGroups = [];
 	StockGrpSrvc.getAllGroups($rootScope.company.id,function(response){
 	  console.log(" StockGroup Response " + JSON.stringify(response));
 	  $rootScope.stockGroups = response;
@@ -25,7 +31,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			return grpName;
 		}
 		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
-	}	 
+	}
    
     $scope.curItems = [];
    	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
@@ -53,12 +59,21 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		}
 		
 		purchage.item.itemDtls = $scope.curItems;
+		var finalItemsDtls = [];
 		purchage.transactionDetails = [];
+		var count = 1;
 		angular.forEach(purchage.item.itemDtls,function(itemTrans,index){
-		  itemTrans.name = purchage.item.name +"_" + purchage.item.shade + "_" + index ;
+			if(itemTrans.quandity > 0 && itemTrans.pices > 0){
+				itemTrans.name = purchage.item.name +"_" + purchage.item.shade + "_" + (count++) ;
+				finalItemsDtls.push(itemTrans);
+			}
+		  
 		});			
-
+		purchage.item.itemDtls = finalItemsDtls;
+		delete purchage.ledger['@id'];
+		delete purchage.ledger.accGroup;
 			var dataObj = JSON.stringify(purchage);
+			console.log(dataObj);
 			$http.post(hostname+'/transactions/create', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
@@ -79,14 +94,14 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 				$scope.optStatus = 'Failed';
-			  });		
+			  });	
 	}   
    
    
    
 });
 
-app.controller('SalesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc) {
+app.controller('SalesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
 
     $rootScope.items = [];
      ItemService.getAllItems(function(response){
@@ -94,6 +109,12 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	  $rootScope.items = response;
 	  $rootScope.curTab = 'companyTab';
    });
+   
+   $scope.ledgers = [];
+     GenericSrvc.getAll('/ledger/findAll',function(response){
+      console.log(" Trsaction Response " + JSON.stringify(response));
+	  $scope.ledgers = response;
+   });      
    
    $scope.stockGroups = [];
 	StockGrpSrvc.getAllGroups($rootScope.company.id,function(response){
@@ -172,9 +193,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			});	
 		sale.item.itemDtls = finalItemdtls;
 		sale.transactionDetails = [];
-		     console.log(sale.item.itemDtls);
+		     //console.log(sale.item.itemDtls);
+		delete sale.ledger['@id'];
+		delete sale.ledger.accGroup;
 		
 			var dataObj = JSON.stringify(sale);
+			//console.log(dataObj);
+			
 			$http.post(hostname+'/transactions/create', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
@@ -207,6 +232,13 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 	  $rootScope.items = response;
 	  $rootScope.curTab = 'companyTab';
    });
+   
+   $scope.ledgers = [];
+     GenericSrvc.getAll('/ledger/findAll',function(response){
+      console.log(" Trsaction Response " + JSON.stringify(response));
+	  $scope.ledgers = response;
+   });      
+      
    
      $scope.transactions = [];
      GenericSrvc.getAll('/transactions/findAll-by-type/1',function(response){
@@ -325,6 +357,8 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 		transaction.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);	
 		delete transaction['@id'];
 		delete transaction['id'];
+		delete transaction.ledger['@id'];
+		delete transaction.ledger.accGroup;
 		//payment.voucher = 	payment.voucher.voucher		
 		console.log(JSON.stringify(transaction));
 		
@@ -362,6 +396,13 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 	  $rootScope.items = response;
 	  $rootScope.curTab = 'companyTab';
    });
+   
+    $scope.ledgers = [];
+     GenericSrvc.getAll('/ledger/findAll',function(response){
+      console.log(" Trsaction Response " + JSON.stringify(response));
+	  $scope.ledgers = response;
+   });      
+     
    
      $scope.transactions = [];
      GenericSrvc.getAll('/transactions/findAll-by-type/2',function(response){
@@ -473,6 +514,8 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 		transaction.voucher = "SR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);	
 		delete transaction['@id'];
 		delete transaction['id'];
+		delete transaction.ledger['@id'];
+		delete transaction.ledger.accGroup;
 		//payment.voucher = 	payment.voucher.voucher		
 		console.log(JSON.stringify(transaction));
 		

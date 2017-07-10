@@ -25,7 +25,8 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 
 
 	$scope.setChildrenData = function(selGroup,grplevel){
-		
+		$scope.multiGrpMsg = "";
+		$scope.singleGrpMsg = "";		
 		    var selGrpId = (selGroup != null && selGroup.id != null ) ? selGroup.id : -1;
 			var children = [];
 			angular.forEach($scope.groups, function (group) {
@@ -85,12 +86,15 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 					if(grplevel == 0){
 						$scope.singlegroups.push(newgroup);
 						$scope.groups.push(newgroup);
+						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' account created successfully."  ;
 					}else if(grplevel == 1){
 						$scope.multigroups[0].children.push(newgroup);
-						$scope.groups.push(newgroup);			
+						$scope.groups.push(newgroup);	
+						$scope.multiGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
 					}else{
 						$scope.multigroups[grplevel-1].children.push(newgroup);
-						$scope.groups.push(newgroup);			
+						$scope.groups.push(newgroup);
+						$scope.multiGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
 					}			  
 			  } catch (err) {
 				console.log(JSON.stringify(err));
