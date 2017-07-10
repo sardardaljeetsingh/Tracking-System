@@ -72,10 +72,22 @@ DROP TABLE IF EXISTS item_dtl_trans;
 CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT,quandity INT,curqundty INT, pices INT,curpices INT);
 ALTER TABLE item_dtl_trans ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
+---- Accounting INFO -------
+DROP TABLE IF EXISTS acc_group_dtl;
+CREATE TABLE acc_group_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, companyid INT NOT NULL, parentid INT);
+
+ALTER TABLE acc_group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
+ALTER TABLE acc_group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES acc_group_dtl( id ) ;
+
+DROP TABLE IF EXISTS ledger;
+CREATE TABLE ledger( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(100) NOT NULL,alias VARCHAR2(100) NOT NULL, groupid int,mailingname VARCHAR2(100) NOT NULL,mailingaddress VARCHAR2(500) ,mailingstate VARCHAR2(100) ,saletaxno BIGINT,taxpan BIGINT,opbal INT,curbal INT);
+ALTER TABLE ledger ADD FOREIGN KEY ( groupid ) REFERENCES acc_group_dtl( id ) ;
+
 
 DROP TABLE IF EXISTS transactions;
-CREATE TABLE transactions( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transtype INT,description VARCHAR2(50) NOT NULL,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50));
+CREATE TABLE transactions( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transtype INT,description VARCHAR2(50) NOT NULL,ledgerid INT,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50));
 ALTER TABLE transactions ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
+ALTER TABLE transactions ADD FOREIGN KEY (ledgerid) REFERENCES ledger(id) ;
 
 CREATE TABLE transactions_dtls( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transid INT, itemdtlid INT,quandity INT);
 ALTER TABLE transactions_dtls ADD FOREIGN KEY (transid) REFERENCES transactions(id) ;
@@ -93,16 +105,7 @@ DROP TABLE IF EXISTS item_current_stock;
 CREATE TABLE item_current_stock( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, itemid INT,quandity INT);
 ALTER TABLE item_current_stock ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
----- Accounting INFO -------
-DROP TABLE IF EXISTS acc_group_dtl;
-CREATE TABLE acc_group_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, companyid INT NOT NULL, parentid INT);
 
-ALTER TABLE acc_group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
-ALTER TABLE acc_group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES acc_group_dtl( id ) ;
-
-DROP TABLE IF EXISTS ledger;
-CREATE TABLE ledger( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(100) NOT NULL,alias VARCHAR2(100) NOT NULL, groupid int,mailingname VARCHAR2(100) NOT NULL,mailingaddress VARCHAR2(500) NOT NULL,mailingstate VARCHAR2(100) NOT NULL,saletaxno BIGINT,taxpan BIGINT);
-ALTER TABLE ledger ADD FOREIGN KEY ( groupid ) REFERENCES acc_group_dtl( id ) ;
 
 
 
