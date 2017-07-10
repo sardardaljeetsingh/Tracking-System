@@ -32,6 +32,10 @@ public class Transaction {
 	private int type;
 	
 	@ManyToOne(cascade=CascadeType.ALL)  
+	@JoinColumn(name = "ledgerid", nullable = false)
+	private Ledger ledger;	
+	
+	@ManyToOne(cascade=CascadeType.ALL)  
 	@JoinColumn(name = "itemid", nullable = false)
 	private Item item;
 	
@@ -116,6 +120,14 @@ public class Transaction {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public Ledger getLedger() {
+		return ledger;
+	}
+
+	public void setLedger(Ledger ledger) {
+		this.ledger = ledger;
 	}	
 	
 }

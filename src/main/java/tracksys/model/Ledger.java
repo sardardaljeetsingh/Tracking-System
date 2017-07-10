@@ -23,6 +23,18 @@ public class Ledger {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	public int getOpbal() {
+		return opbal;
+	}
+	public void setOpbal(int opbal) {
+		this.opbal = opbal;
+	}
+	public int getCurbal() {
+		return curbal;
+	}
+	public void setCurbal(int curbal) {
+		this.curbal = curbal;
+	}
 	@NotNull
 	@Column(name = "name", nullable = false)		
 	private String name;
@@ -35,20 +47,29 @@ public class Ledger {
 	private AccGroup accGroup;
 	
 	@NotNull
-	@Column(name = "mailingname")		
+	@Column(name = "mailingname", nullable = true)		
 	private String mailingname;
 	@NotNull
-	@Column(name = "mailingaddress", nullable = false)		
+	@Column(name = "mailingaddress", nullable = true)		
 	private String mailingaddress;
 	@NotNull
-	@Column(name = "mailingstate", nullable = false)		
+	@Column(name = "mailingstate", nullable = true)		
 	private String mailingstate;
 	@NotNull
-	@Column(name = "saletaxno", nullable = false)		
+	@Column(name = "saletaxno", nullable = true)		
 	private Long saletaxno;
 	@NotNull
-	@Column(name = "taxpan", nullable = false)		
+	@Column(name = "taxpan", nullable = true)		
 	private Long taxpan;
+	
+	@NotNull
+	@Column(name = "opbal", nullable = false)		
+	private int opbal;
+	
+	@NotNull
+	@Column(name = "curbal", nullable = false)		
+	private int curbal;	
+	
 	public int getId() {
 		return id;
 	}

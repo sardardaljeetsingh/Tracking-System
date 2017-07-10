@@ -24,21 +24,28 @@ public class TransactionController {
 		transaction.setTransactionDetails(new ArrayList<TransactionDetails>());
 		
 		Item item = itemRepository.findOne(transaction.getItem().getId());
+		Ledger ledger = ledgerRepository.findOne(transaction.getLedger().getId());
+		
 		switch(transaction.getType()){
 		case 1:  
 			item.setCurqundty(item.getCurqundty() + transaction.getQuandity());
+			ledger.setCurbal(ledger.getCurbal() + (transaction.getQuandity() * transaction.getRate()));
 			break;
 		case 2:  
 			item.setCurqundty(item.getCurqundty() - transaction.getQuandity());
+			ledger.setCurbal(ledger.getCurbal() - (transaction.getQuandity() * transaction.getRate()));
 			break;
 		case 3:  
 			item.setCurqundty(item.getCurqundty() - transaction.getQuandity());
+			ledger.setCurbal(ledger.getCurbal() - (transaction.getQuandity() * transaction.getRate()));
 			break;
 		case 4:  
 			item.setCurqundty(item.getCurqundty() + transaction.getQuandity());
+			ledger.setCurbal(ledger.getCurbal() + (transaction.getQuandity() * transaction.getRate()));
 			break;
 		}
-		itemRepository.save(item);	
+		itemRepository.save(item);
+		ledgerRepository.save(ledger);
 		
 		if(itemDtls != null){
 			for(ItemDetails itemDetail : itemDtls){
@@ -75,6 +82,7 @@ public class TransactionController {
 		}
 			
 		transaction.setItem(item);
+		transaction.setLedger(ledger);
 		return transactionRepository.save(transaction);
 	}
 	
@@ -96,4 +104,7 @@ public class TransactionController {
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
+	
+	@Autowired
+	private LedgerRepository ledgerRepository;
 }
