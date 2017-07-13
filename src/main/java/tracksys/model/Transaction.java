@@ -32,6 +32,10 @@ public class Transaction {
 	private int type;
 	
 	@ManyToOne(cascade=CascadeType.ALL)  
+	@JoinColumn(name = "fromledger", nullable = false)
+	private Ledger fromledger;		
+	
+	@ManyToOne(cascade=CascadeType.ALL)  
 	@JoinColumn(name = "ledgerid", nullable = false)
 	private Ledger ledger;	
 	
@@ -46,6 +50,7 @@ public class Transaction {
 	@Column(name = "rate", nullable = false)
 	private int rate;
 	
+
 	@NotNull
 	@Column(name = "voucher", nullable = false)
 	private String voucher;	
@@ -54,6 +59,10 @@ public class Transaction {
 	@Size(min = 1, max = 1000)
 	@Column(name = "description", nullable = false)
 	private String desc;
+	
+	@NotNull
+	@Column(name = "transdate", nullable = false)	
+	private String transdate;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="transaction",fetch = FetchType.EAGER)  
 	private List<TransactionDetails> transactionDetails;	
@@ -128,6 +137,22 @@ public class Transaction {
 
 	public void setLedger(Ledger ledger) {
 		this.ledger = ledger;
+	}
+
+	public Ledger getFromledger() {
+		return fromledger;
+	}
+
+	public void setFromledger(Ledger fromledger) {
+		this.fromledger = fromledger;
+	}
+
+	public String getTransdate() {
+		return transdate;
+	}
+
+	public void setTransdate(String transdate) {
+		this.transdate = transdate;
 	}	
 	
 }

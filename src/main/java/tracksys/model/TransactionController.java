@@ -24,28 +24,35 @@ public class TransactionController {
 		transaction.setTransactionDetails(new ArrayList<TransactionDetails>());
 		
 		Item item = itemRepository.findOne(transaction.getItem().getId());
-		Ledger ledger = ledgerRepository.findOne(transaction.getLedger().getId());
+		Ledger fromLedger = ledgerRepository.findOne(transaction.getFromledger().getId());
+		Ledger toLedger = ledgerRepository.findOne(transaction.getLedger().getId());
 		
+		int trasactionAmount = transaction.getQuandity() * transaction.getRate();
 		switch(transaction.getType()){
 		case 1:  
 			item.setCurqundty(item.getCurqundty() + transaction.getQuandity());
-			ledger.setCurbal(ledger.getCurbal() + (transaction.getQuandity() * transaction.getRate()));
+			fromLedger.setCurbal(fromLedger.getCurbal() - (trasactionAmount));
+			toLedger.setCurbal(toLedger.getCurbal() + (trasactionAmount));
 			break;
 		case 2:  
 			item.setCurqundty(item.getCurqundty() - transaction.getQuandity());
-			ledger.setCurbal(ledger.getCurbal() - (transaction.getQuandity() * transaction.getRate()));
+			fromLedger.setCurbal(fromLedger.getCurbal() - (trasactionAmount));
+			toLedger.setCurbal(toLedger.getCurbal() + (trasactionAmount));
 			break;
 		case 3:  
 			item.setCurqundty(item.getCurqundty() - transaction.getQuandity());
-			ledger.setCurbal(ledger.getCurbal() - (transaction.getQuandity() * transaction.getRate()));
+			fromLedger.setCurbal(fromLedger.getCurbal() + (trasactionAmount));
+			toLedger.setCurbal(toLedger.getCurbal() - (trasactionAmount));
 			break;
 		case 4:  
 			item.setCurqundty(item.getCurqundty() + transaction.getQuandity());
-			ledger.setCurbal(ledger.getCurbal() + (transaction.getQuandity() * transaction.getRate()));
+			fromLedger.setCurbal(fromLedger.getCurbal() + (trasactionAmount));
+			toLedger.setCurbal(toLedger.getCurbal() - (trasactionAmount));
 			break;
 		}
 		itemRepository.save(item);
-		ledgerRepository.save(ledger);
+		ledgerRepository.save(fromLedger);
+		ledgerRepository.save(toLedger);
 		
 		if(itemDtls != null){
 			for(ItemDetails itemDetail : itemDtls){
@@ -82,7 +89,8 @@ public class TransactionController {
 		}
 			
 		transaction.setItem(item);
-		transaction.setLedger(ledger);
+		transaction.setLedger(toLedger);
+		transaction.setFromledger(fromLedger);
 		return transactionRepository.save(transaction);
 	}
 	
