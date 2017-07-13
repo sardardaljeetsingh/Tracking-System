@@ -38,6 +38,15 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	$scope.purchage = {};
 	$scope.purchage.type = 1;
 	$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	
+   $scope.purchage.transdate = new Date();
+   $scope.minDate = new Date(
+     $scope.purchage.transdate.getFullYear(),
+     $scope.purchage.transdate.getMonth() - 2,
+     $scope.purchage.transdate.getDate()
+  );	
+	
+	
 	$scope.getTotal = function(){
 		var total = 0;
 		for(var i = 0; i < $scope.curItems.length; i++){
@@ -72,6 +81,9 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		purchage.item.itemDtls = finalItemsDtls;
 		delete purchage.ledger['@id'];
 		delete purchage.ledger.accGroup;
+        delete purchage.fromledger['@id'];
+	    delete purchage.fromledger.accGroup;	
+        purchage.transdate	= $filter('date')($scope.purchage.transdate,'MM/dd/yyyy');	
 			var dataObj = JSON.stringify(purchage);
 			console.log(dataObj);
 			$http.post(hostname+'/transactions/create', dataObj, {
@@ -139,6 +151,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	$scope.trasaction = {};
 	$scope.trasaction.type = 2;
 	$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	
+   $scope.trasaction.transdate = new Date();
+   $scope.minDate = new Date(
+     $scope.trasaction.transdate.getFullYear(),
+     $scope.trasaction.transdate.getMonth() - 2,
+     $scope.trasaction.transdate.getDate()
+  );	
 	$scope.invalidCount = false;
 	$scope.getTotal = function(type){
 		$scope.invalidCount = false;
@@ -196,6 +215,10 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		     //console.log(sale.item.itemDtls);
 		delete sale.ledger['@id'];
 		delete sale.ledger.accGroup;
+        delete sale.fromledger['@id'];
+	    delete sale.fromledger.accGroup;		
+		
+		sale.transdate	= $filter('date')($scope.trasaction.transdate,'MM/dd/yyyy');	
 		
 			var dataObj = JSON.stringify(sale);
 			//console.log(dataObj);
@@ -225,6 +248,15 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 
 
 app.controller('PurchaseReturnController', function($scope,$rootScope,$location,$http,ItemService,AccGroupService,GenericSrvc,StockGrpSrvc,$filter) {
+
+   $scope.trasaction ={};
+   $scope.trasaction.transdate = new Date();
+
+   $scope.minDate = new Date(
+     $scope.trasaction.transdate.getFullYear(),
+     $scope.trasaction.transdate.getMonth() - 2,
+     $scope.trasaction.transdate.getDate()
+  );
 
     $rootScope.items = [];
      ItemService.getAllItems(function(response){
@@ -359,6 +391,11 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 		delete transaction['id'];
 		delete transaction.ledger['@id'];
 		delete transaction.ledger.accGroup;
+		delete transaction.fromledger['@id'];
+		delete transaction.fromledger.accGroup;		
+		
+		transaction.transdate	= $filter('date')($scope.trasaction.transdate,'MM/dd/yyyy');
+		
 		//payment.voucher = 	payment.voucher.voucher		
 		console.log(JSON.stringify(transaction));
 		
@@ -389,6 +426,27 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 
 
 app.controller('SaleReturnController', function($scope,$rootScope,$location,$http,ItemService,AccGroupService,GenericSrvc,StockGrpSrvc,$filter) {
+
+
+   $scope.trasaction ={};
+   $scope.trasaction.transdate = new Date();
+
+   $scope.minDate = new Date(
+     $scope.trasaction.transdate.getFullYear(),
+     $scope.trasaction.transdate.getMonth() - 2,
+     $scope.trasaction.transdate.getDate()
+  );
+
+   /*$scope.maxDate = new Date(
+     $scope.myDate.getFullYear(),
+     $scope.myDate.getMonth() + 2,
+     $scope.myDate.getDate()
+  );*/
+
+   $scope.onlyWeekendsPredicate = function(date) {
+    var day = date.getDay();
+    return day === 0 || day === 6;
+  };
 
     $rootScope.items = [];
      ItemService.getAllItems(function(response){
@@ -516,6 +574,11 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 		delete transaction['id'];
 		delete transaction.ledger['@id'];
 		delete transaction.ledger.accGroup;
+		delete transaction.fromledger['@id'];
+		delete transaction.fromledger.accGroup;	
+
+		transaction.transdate	= $filter('date')($scope.trasaction.transdate,'MM/dd/yyyy');
+		
 		//payment.voucher = 	payment.voucher.voucher		
 		console.log(JSON.stringify(transaction));
 		
