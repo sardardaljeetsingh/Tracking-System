@@ -85,8 +85,9 @@ ALTER TABLE ledger ADD FOREIGN KEY ( groupid ) REFERENCES acc_group_dtl( id ) ;
 
 
 DROP TABLE IF EXISTS transactions;
-CREATE TABLE transactions( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transtype INT,description VARCHAR2(50) NOT NULL,ledgerid INT,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50));
+CREATE TABLE transactions( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transtype INT,description VARCHAR2(50) NOT NULL,fromledger INT,ledgerid INT,itemid INT,quandity INT,rate INT,voucher VARCHAR2(50),transdate VARCHAR2(50));
 ALTER TABLE transactions ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
+ALTER TABLE transactions ADD FOREIGN KEY (fromledger) REFERENCES ledger(id) ;
 ALTER TABLE transactions ADD FOREIGN KEY (ledgerid) REFERENCES ledger(id) ;
 
 CREATE TABLE transactions_dtls( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transid INT, itemdtlid INT,quandity INT);
