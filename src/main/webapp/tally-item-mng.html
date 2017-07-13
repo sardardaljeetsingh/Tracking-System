@@ -1334,79 +1334,6 @@
 	  </script>
 	  
 	  
-	  
-	  <script type="text/ng-template" id="/inline-Sales1.html">	
-		<div class="container-fluid">
-			<div class="panel panel-success" > 
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Sales </div>
-			  <div class="panel-body">
-					<div class="row" >
-					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >	  
-					  
-					  <form class="form-horizontal input-sm" name="salesform" novalidate >
-							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['sale.item'].$invalid  }" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Item Name</label>
-								<div class="col-sm-5">
-									<select class="form-control input-sm" ng-model="sale.item" name="sale.item" 
-											ng-init="sale.item = sale.item || options[0].value"
-											ng-options="option as option.name for option in items"
-											ng-change="sale.rate = sale.item.rate"
-											required>
-											<option value="">-- Choose Item Name --</option>
-									</select>	
-								</div>
-							  </div>
-							  <div class="form-group" ng-if="sale.item != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Shade</label>
-								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{sale.item.shade}}</label>
-								</div>
-							  </div>							  
-							  <div class="form-group" ng-if="sale.item != null">
-								<label for="inputPassword3" class="col-sm-5 control-label">Avaliable Quantity</label>
-								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{sale.item.curqundty}}</label>
-								</div>
-							  </div>							  
-							  <div class="form-group" ng-class="{'has-error' : (submitclick && salesform['sale.quandity'].$invalid  || sale.item.curqundty < sale.quandity) }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Quantity</label>
-								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="sale.quandity" ng-model="sale.quandity"
-								  placeholder="Quantity" required>
-								</div>
-							  </div>
-							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['sale.rate'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Rate</label>
-								<div class="col-sm-5">
-								  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" name="sale.rate" ng-model="sale.rate"
-								  placeholder="Rate" required>
-								  
-								</div>
-							  </div>	
-							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['sale.desc'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
-								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="sale.desc" ng-model="sale.desc"
-								  placeholder="Description" required>
-								</div>
-							  </div>	
-							  <div class="form-group">
-								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-								   <span class="label label-success" ng-if="optStatus == 'Success'" > Sale done successfully.</span>
-								   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store sales details.</span>
-								   <button type="button" ng-click="sales(sale);"  
-								   class="btn btn-success">Submit</button>								   
-								</div>
-							  </div>							  
-					  </form>
-	                  </div>
-			        </div>		
-			  </div>
-			</div>
-		</div>  
-	  </script>
-	
 
 	  <script type="text/ng-template" id="/inline-Purchages.html">	
 		<div class="container-fluid">
@@ -1426,14 +1353,58 @@
 								</div>
 							  </div>	
 							  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Date </label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <md-datepicker ng-model="purchage.transdate" md-placeholder="Enter date"
+									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
+								</div>
+							  </div>								  
+							  
+					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-5 control-label">From Account</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+											ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'!Purchase Accounts'}}  "
+											required >
+											<option value="">-- Choose Account --</option>
+									</select>	
+								</div>
+							  </div>	
+
+							  <div class="form-group" ng-if="purchage.fromledger != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Account group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{purchage.fromledger.accGroup.name}}</label>
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group" ng-if="purchage.fromledger != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Opening balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{purchage.fromledger.opbal}}</label>
+								</div>
+							  </div>	
+							  
+							  <div class="form-group" ng-if="purchage.fromledger != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Current balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{purchage.fromledger.curbal}}</label>
+								</div>
+							  </div>
+							  
 					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.ledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Ledger</label>
+								<label for="inputPassword3" class="col-sm-5 control-label">To Account</label>
 								<div class="col-sm-5">
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
-											ng-options="option as option.name for option in ledgers"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchase Accounts'}} "
 											required >
-											<option value="">-- Choose Account Ledger--</option>
+											<option value="">-- Choose Account --</option>
 									</select>	
 								</div>
 							  </div>	
@@ -1507,8 +1478,8 @@
 							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
 								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="purchage.desc" ng-model="purchage.desc"
-								  placeholder="Description" required>
+								  <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="purchage.desc" ng-model="purchage.desc"
+								  placeholder="Description" required></textarea>
 								</div>
 							  </div>								  
 							  
@@ -1600,16 +1571,60 @@
 								<div class="col-sm-5">
 								 <label for="inputPassword3" class="col-sm-5 control-label">{{trasaction.voucher}}</label>
 								</div>
+							  </div>
+							  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Date </label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <md-datepicker ng-model="trasaction.transdate" md-placeholder="Enter date"
+									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+								</div>
+							  </div>								  
+							  
+					  		<div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.fromledger'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-5 control-label">To Account</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
+											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'!Sales Accounts'}}  "
+											required >
+											<option value="">-- Choose Account --</option>
+									</select>	
+								</div>
 							  </div>	
 							  
+							  <div class="form-group" ng-if="trasaction.fromledger != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Account group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.fromledger.accGroup.name}}</label>
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group" ng-if="trasaction.fromledger != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Opening balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.fromledger.opbal}}</label>
+								</div>
+							  </div>
+
+							  <div class="form-group" ng-if="trasaction.fromledger != null" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Current balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.fromledger.curbal}}</label>
+								</div>
+							  </div>							  
+							  
 					  		<div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.ledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Ledger</label>
+								<label for="inputPassword3" class="col-sm-5 control-label">To Account</label>
 								<div class="col-sm-5">
 									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
 											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
-											ng-options="option as option.name for option in ledgers"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales Accounts'}}  "
 											required >
-											<option value="">-- Choose Account Ledger--</option>
+											<option value="">-- Choose Account --</option>
 									</select>	
 								</div>
 							  </div>	
@@ -1685,8 +1700,8 @@
 							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
 								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
-								  placeholder="Description" required>
+								   <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
+								  placeholder="Description" required></textarea>
 								</div>
 							  </div>								  
 							  
@@ -1765,7 +1780,14 @@
 					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
 					  
 					  
-					  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Date </label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <md-datepicker ng-model="trasaction.transdate" md-placeholder="Enter date"
+									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+								</div>
+							  </div>	
+							  
 					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
 								<div class="col-sm-5">
@@ -1778,9 +1800,43 @@
 									</select>	
 								</div>
 							 </div>		
-
+							 
+							 
 							  <div class="form-group"  >
-								<label for="inputPassword3" class="col-sm-5 control-label">Ledger name</label>
+								<label for="inputPassword3" class="col-sm-5 control-label">From account </label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.name}}</label>
+								</div>
+							  </div>							 
+							  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Account group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.accGroup.name}}</label>
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Opening balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.opbal}}</label>
+								</div>
+							  </div>		
+							  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Current balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.curbal}}</label>
+								</div>
+							  </div>
+							 
+							 
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">To account</label>
 								<div class="col-sm-7" style="text-align : left" >
 								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
 								 >{{trasaction.voucher.ledger.name}}</label>
@@ -1866,8 +1922,8 @@
 							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher.inputdesc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
 								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.inputdesc" ng-model="trasaction.voucher.inputdesc"
-								  placeholder="Description" required>
+								 <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.inputdesc" ng-model="trasaction.voucher.inputdesc"
+								  placeholder="Description" required></textarea>			  
 								</div>
 							  </div>							  
 							  
@@ -1944,7 +2000,15 @@
 					  
 					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
 					  
-					  
+					  								 	
+									  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Date </label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <md-datepicker ng-model="trasaction.transdate" md-placeholder="Enter date"
+									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+								</div>
+							  </div>									  
 					  
 					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
@@ -1957,10 +2021,43 @@
 											<option value="">-- Choose Vocher --</option>
 									</select>	
 								</div>
-							 </div>							  
+							 </div>		
+
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">From account </label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.name}}</label>
+								</div>
+							  </div>							 
+							  
 							  
 							  <div class="form-group"  >
-								<label for="inputPassword3" class="col-sm-5 control-label">Ledger name</label>
+								<label for="inputPassword3" class="col-sm-5 control-label">Account group</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.accGroup.name}}</label>
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group" >
+								<label for="inputPassword3" class="col-sm-5 control-label">Opening balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.opbal}}</label>
+								</div>
+							  </div>		
+							  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">Current balance</label>
+								<div class="col-sm-7" style="text-align : left" >
+								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
+								 >{{trasaction.voucher.fromledger.curbal}}</label>
+								</div>
+							  </div>							 
+							  
+							  <div class="form-group"  >
+								<label for="inputPassword3" class="col-sm-5 control-label">To Account</label>
 								<div class="col-sm-7" style="text-align : left" >
 								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
 								 >{{trasaction.voucher.ledger.name}}</label>
@@ -2046,8 +2143,8 @@
 							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher.inputdesc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Description</label>
 								<div class="col-sm-5">
-								  <input type="text" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.inputdesc" ng-model="trasaction.voucher.inputdesc"
-								  placeholder="Description" required>
+										 <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.inputdesc" ng-model="trasaction.voucher.inputdesc"
+								  placeholder="Description" required></textarea>						  
 								</div>
 							  </div>							  
 							  
@@ -2130,6 +2227,16 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.6.0/angular-local-storage.min.js"></script> 
+
+	
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+      	
+	
 	
 	<!--
 	<link rel="stylesheet" href="css/bootstrap.min.css" > 
