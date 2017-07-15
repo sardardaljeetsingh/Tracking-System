@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -50,7 +51,6 @@ public class Transaction {
 	@Column(name = "rate", nullable = false)
 	private int rate;
 	
-
 	@NotNull
 	@Column(name = "voucher", nullable = false)
 	private String voucher;	
@@ -66,6 +66,9 @@ public class Transaction {
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="transaction",fetch = FetchType.EAGER)  
 	private List<TransactionDetails> transactionDetails;	
+	
+	@Transient
+	private List<Item> itemList;	
 
 	public List<TransactionDetails> getTransactionDetails() {
 		return transactionDetails;
