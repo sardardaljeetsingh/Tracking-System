@@ -2,6 +2,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 
     $rootScope.items = [];
 	
+	
      ItemService.getAllItems(function(response){
       console.log(" ItemService Response " + JSON.stringify(response));
 	  $rootScope.items = response;
@@ -38,6 +39,8 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	$scope.purchage = {};
 	$scope.purchage.type = 1;
 	$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	$scope.purchage.trasactionItems = [];
+	$scope.purchage.trasactionItems.push({});
 	
    $scope.purchage.transdate = new Date();
    $scope.minDate = new Date(
@@ -47,15 +50,35 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
   );	
 	
 	
-	$scope.getTotal = function(){
+	$scope.getTotal = function(curTrasItem){
 		var total = 0;
-		for(var i = 0; i < $scope.curItems.length; i++){
-			var item = $scope.curItems[i];
+		for(var i = 0; i < curTrasItem.curItems.length; i++){
+			var item = curTrasItem.curItems[i];
 			total += ( (+item.quandity) * (+item.pices) );
 		}
-		$scope.grandTotal = total;
+		curTrasItem.grandTotal = total;
 		return total;
 	}
+	
+	$scope.purchaseTotal = function(purchage){
+		var totalTransQuandity = 0;
+		var totalTransPrice = 0;
+		var validQuandity = true;
+		angular.forEach(purchage.trasactionItems,function(curTrasItem,index){
+			var total = 0;
+			angular.forEach(curTrasItem.curItems,function(item,index){
+				total += ( (+item.quandity) * (+item.pices) );
+			});
+			if(total != (+curTrasItem.quandity)){
+			 	validQuandity = false;
+			}
+			totalTransQuandity += (+curTrasItem.quandity);
+			totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.rate);
+		});
+      purchage.quandity = totalTransQuandity;
+	  purchage.rate = totalTransPrice
+	  purchage.validQuandity = validQuandity;
+	}	
    
    $scope.selectItems = function(){
 	   $scope.showSplit = true;
@@ -67,7 +90,8 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			return;
 		}
 		
-		purchage.item.itemDtls = $scope.curItems;
+		purchage.item = purchage.trasactionItems[0].item;
+		purchage.item.itemDtls = purchage.item.curItems;
 		var finalItemsDtls = [];
 		purchage.transactionDetails = [];
 		var count = 1;
@@ -79,6 +103,8 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		  
 		});			
 		purchage.item.itemDtls = finalItemsDtls;
+		
+		
 		delete purchage.ledger['@id'];
 		delete purchage.ledger.accGroup;
         delete purchage.fromledger['@id'];
