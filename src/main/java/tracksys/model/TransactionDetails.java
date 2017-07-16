@@ -9,12 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name="transactions_dtls")
+@Table(name="transactions_item_dtls")
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class TransactionDetails {
 
@@ -27,11 +28,12 @@ public class TransactionDetails {
 	private ItemDetails itemDetails;
 	
 	@ManyToOne(cascade=CascadeType.ALL)  
-	@JoinColumn(name = "transid", nullable = false)
-	private Transaction transaction;
+	@JoinColumn(name = "transitemid", nullable = false)
+	private TrasactionItem trasactionItem;
 	
 	@Column(name = "quandity", nullable = false)
 	private int quandity;
+	
 
 	public int getId() {
 		return id;
@@ -49,20 +51,20 @@ public class TransactionDetails {
 		this.itemDetails = itemDetails;
 	}
 
-	public Transaction getTransaction() {
-		return transaction;
-	}
-
-	public void setTransaction(Transaction transaction) {
-		this.transaction = transaction;
-	}
-
 	public int getQuandity() {
 		return quandity;
 	}
 
 	public void setQuandity(int quandity) {
 		this.quandity = quandity;
+	}
+
+	public TrasactionItem getTrasactionItem() {
+		return trasactionItem;
+	}
+
+	public void setTrasactionItem(TrasactionItem trasactionItem) {
+		this.trasactionItem = trasactionItem;
 	}
 	
 	

@@ -18,45 +18,52 @@ public class TransactionController {
 	@RequestMapping(value ="/create",method = RequestMethod.POST)
 	public @ResponseBody Transaction createTransaction
 	(@RequestBody Transaction transaction) {
-		List<ItemDetails> itemDtls = transaction.getItem().getItemDtls();
-		ItemDetails tempItemDtl = null;
-		TransactionDetails transactionDetails = null;
-		transaction.setTransactionDetails(new ArrayList<TransactionDetails>());
 		
-		Item item = itemRepository.findOne(transaction.getItem().getId());
+		updateLedgers(transaction);
+		
+		updateTransactionItems(transaction);
+		
+		return transactionRepository.save(transaction);
+	}
+	
+	private void updateLedgers(Transaction transaction){
 		Ledger fromLedger = ledgerRepository.findOne(transaction.getFromledger().getId());
 		Ledger toLedger = ledgerRepository.findOne(transaction.getLedger().getId());
-		
-		int trasactionAmount = transaction.getQuandity() * transaction.getRate();
-		switch(transaction.getType()){
-		case 1:  
-			item.setCurqundty(item.getCurqundty() + transaction.getQuandity());
-			fromLedger.setCurbal(fromLedger.getCurbal() - (trasactionAmount));
-			toLedger.setCurbal(toLedger.getCurbal() + (trasactionAmount));
-			break;
-		case 2:  
-			item.setCurqundty(item.getCurqundty() - transaction.getQuandity());
-			fromLedger.setCurbal(fromLedger.getCurbal() - (trasactionAmount));
-			toLedger.setCurbal(toLedger.getCurbal() + (trasactionAmount));
-			break;
-		case 3:  
-			item.setCurqundty(item.getCurqundty() - transaction.getQuandity());
-			fromLedger.setCurbal(fromLedger.getCurbal() + (trasactionAmount));
-			toLedger.setCurbal(toLedger.getCurbal() - (trasactionAmount));
-			break;
-		case 4:  
-			item.setCurqundty(item.getCurqundty() + transaction.getQuandity());
-			fromLedger.setCurbal(fromLedger.getCurbal() + (trasactionAmount));
-			toLedger.setCurbal(toLedger.getCurbal() - (trasactionAmount));
-			break;
+		if(transaction.getType() == 1 || transaction.getType() == 2){
+			fromLedger.setCurbal(fromLedger.getCurbal() - (transaction.getRate()));
+			toLedger.setCurbal(toLedger.getCurbal() + (transaction.getRate()));				
+		}else{
+			fromLedger.setCurbal(fromLedger.getCurbal() + (transaction.getRate()));
+			toLedger.setCurbal(toLedger.getCurbal() - (transaction.getRate()));			
 		}
-		itemRepository.save(item);
-		ledgerRepository.save(fromLedger);
-		ledgerRepository.save(toLedger);
-		
+		transaction.setLedger(toLedger);
+		transaction.setFromledger(fromLedger);
+	}
+	
+	private void updateTransactionItems(Transaction transaction){
+		List<TrasactionItem> TrasactionItemList = transaction.getTrasactionItems();
+		Item item = null;
+		for(TrasactionItem trasactionItem : TrasactionItemList){
+			item = itemRepository.findOne(trasactionItem.getItem().getId());
+			if(transaction.getType() == 1 || transaction.getType() == 4){
+				item.setCurqundty(item.getCurqundty() + trasactionItem.getQuandity());
+			}else{
+				item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
+			}
+			item = itemRepository.save(item);
+			updateTransactionItemDtls(transaction.getType(), trasactionItem, item);
+			trasactionItem.setTransaction(transaction);
+		}
+	}
+	
+	private void updateTransactionItemDtls(int transType, TrasactionItem trasactionItem,Item item){
+		List<ItemDetails> itemDtls = trasactionItem.getItem().getItemDtls();
+		trasactionItem.setTransactionDetails(new ArrayList<TransactionDetails>());
+		ItemDetails tempItemDtl = null;
+		TransactionDetails transactionDetails = null;
 		if(itemDtls != null){
 			for(ItemDetails itemDetail : itemDtls){
-				switch(transaction.getType()){
+				switch(transType){
 				case 1:  
 					tempItemDtl = itemDetail;
 					tempItemDtl.setCurqundty(itemDetail.getQuandity());
@@ -82,16 +89,14 @@ public class TransactionController {
 				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
 				transactionDetails = new TransactionDetails();
 				transactionDetails.setItemDetails(tempItemDtl);
-				transactionDetails.setQuandity(itemDetail.getCurqundty());
-				transactionDetails.setTransaction(transaction);
-				transaction.getTransactionDetails().add(transactionDetails);
+				transactionDetails.setQuandity(itemDetail.getCurqundty() * itemDetail.getCurpices());
+				transactionDetails.setTrasactionItem(trasactionItem);
+				trasactionItem.getTransactionDetails().add(transactionDetails);
 			}
-		}
-			
-		transaction.setItem(item);
-		transaction.setLedger(toLedger);
-		transaction.setFromledger(fromLedger);
-		return transactionRepository.save(transaction);
+		}	
+		
+		trasactionItem.setItem(item);
+		
 	}
 	
 	@RequestMapping(value ="/getAll",method = RequestMethod.GET)

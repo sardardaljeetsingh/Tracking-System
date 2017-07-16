@@ -40,10 +40,6 @@ public class Transaction {
 	@JoinColumn(name = "ledgerid", nullable = false)
 	private Ledger ledger;	
 	
-	@ManyToOne(cascade=CascadeType.ALL)  
-	@JoinColumn(name = "itemid", nullable = false)
-	private Item item;
-	
 	@Column(name = "quandity", nullable = false)
 	private int quandity;
 	
@@ -65,19 +61,8 @@ public class Transaction {
 	private String transdate;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="transaction",fetch = FetchType.EAGER)  
-	private List<TransactionDetails> transactionDetails;	
+	private List<TrasactionItem> trasactionItems;	
 	
-	@Transient
-	private List<Item> itemList;	
-
-	public List<TransactionDetails> getTransactionDetails() {
-		return transactionDetails;
-	}
-
-	public void setTransactionDetails(List<TransactionDetails> transactionDetails) {
-		this.transactionDetails = transactionDetails;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -92,14 +77,6 @@ public class Transaction {
 
 	public void setType(int type) {
 		this.type = type;
-	}
-
-	public Item getItem() {
-		return item;
-	}
-
-	public void setItem(Item item) {
-		this.item = item;
 	}
 
 	public int getQuandity() {
@@ -156,6 +133,14 @@ public class Transaction {
 
 	public void setTransdate(String transdate) {
 		this.transdate = transdate;
+	}
+
+	public List<TrasactionItem> getTrasactionItems() {
+		return trasactionItems;
+	}
+
+	public void setTrasactionItems(List<TrasactionItem> trasactionItems) {
+		this.trasactionItems = trasactionItems;
 	}	
 	
 }
