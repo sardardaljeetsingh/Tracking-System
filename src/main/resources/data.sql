@@ -42,6 +42,11 @@ INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (27,'Sundry Credit
 INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (28,'Sundry Debtors',1,4);
 INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (29,'Unsecured Loans',1,12);
 
+INSERT INTO ledger( id, name ,alias , groupid ,mailingname ,mailingaddress ,mailingstate ,saletaxno ,taxpan ,opbal ,curbal )
+VALUES (1,'Purchase Account','Purchase Account',14,'dd','dfd','dfd',1234,1234,10000,10000);
+INSERT INTO ledger( id, name ,alias , groupid ,mailingname ,mailingaddress ,mailingstate ,saletaxno ,taxpan ,opbal ,curbal )
+VALUES (2,'Sales Account','Sales Account',15,'dd','dfd','dfd',1234,1234,10000,10000);
+
 INSERT INTO item_dtl(id,name,groupid,shade,description,uom,initqundty,curqundty,rate) values (1,'shirts',2,'Lenin','Lenin Shirts','kgs',100,100,100);
 INSERT INTO item_dtl_trans(id, name,itemid ,quandity ,curqundty , pices,curpices) values (1,'shirts',1,100,100,1,1);
 
