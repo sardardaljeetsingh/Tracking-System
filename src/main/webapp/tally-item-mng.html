@@ -151,6 +151,12 @@
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                         <input id="login-password" type="password" class="form-control" ng-model="user.password" placeholder="password">
                             </div>
+							
+                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : invalidUser }" >
+                              
+                                      <md-datepicker ng-model="transDate" md-placeholder="Enter date"
+									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
+                            </div>							
                                     
                             <div class="input-group" ng-if="invalidUser">
 										<p class="text-danger"> <Strong> Invalid User Name or Password ! <Strong> </p>
@@ -1528,7 +1534,7 @@
 					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (purchage.quandity)" >
 						ERROR : Split grand total <b> {{getTotal()}} </b> should not exeeds total quantity <b>{{purchage.quandity}}</b>
 					 </div>
-								   <button type="button" ng-click="purchanges(purchage);"   ng-if="grandTotal == (purchage.quandity) "
+								   <button type="button" ng-click="purchanges(purchage);"   <!--ng-if="grandTotal == (purchage.quandity) " -->
 								   class="btn btn-success">Submit</button>	
 					   
 					</td>
@@ -1555,7 +1561,7 @@
 	
 	
 
-	  <script type="text/ng-template" id="/inline-Sales.html">	
+	  <script type="text/ng-template" id="/inline-Sales1.html">	
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Sales </div>
