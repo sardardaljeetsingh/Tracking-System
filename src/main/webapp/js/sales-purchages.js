@@ -42,11 +42,16 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	$scope.purchage.trasactionItems = [];
 	$scope.purchage.trasactionItems.push({});
 	
-   $scope.purchage.transdate = new Date();
+	  $scope.purchage.inputTrnsDate = new Date(
+		 $rootScope.transDate.getFullYear(),
+		 $rootScope.transDate.getMonth(),
+		 $rootScope.transDate.getDate()
+	  );	
+  
    $scope.minDate = new Date(
-     $scope.purchage.transdate.getFullYear(),
-     $scope.purchage.transdate.getMonth() - 2,
-     $scope.purchage.transdate.getDate()
+     $scope.purchage.inputTrnsDate.getFullYear(),
+     $scope.purchage.inputTrnsDate.getMonth() - 2,
+     $scope.purchage.inputTrnsDate.getDate()
   );	
 	
 	
@@ -75,43 +80,53 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			totalTransQuandity += (+curTrasItem.quandity);
 			totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.rate);
 		});
-      purchage.quandity = totalTransQuandity;
-	  purchage.rate = totalTransPrice
+      purchage.quandity = isNaN(totalTransQuandity)? 0: totalTransQuandity;
+	  purchage.rate = isNaN(totalTransPrice)? 0: totalTransPrice ;
+	  console.log(isNaN(totalTransPrice) +"  "+ totalTransPrice);
 	  purchage.validQuandity = validQuandity;
 	}	
    
-   $scope.selectItems = function(){
-	   $scope.showSplit = true;
-   }
+   $scope.removeItem = function(index,purchage){
+	   purchage.trasactionItems.splice(index, 1);
+	   if(purchage.trasactionItems.length == 0){
+		  $scope.purchage.trasactionItems.push({}); 
+	   }
+   } 
    
 	$scope.purchanges = function(purchage){
-		if(!$scope.purchagesform.$valid){
+		console.log($scope.purchagesform.$valid +"   "+ purchage.validQuandity);
+		if(!($scope.purchagesform.$valid && purchage.validQuandity)){
 			$scope.submitclick = true;
 			return;
-		}
+		} 
 		
-		purchage.item = purchage.trasactionItems[0].item;
-		purchage.item.itemDtls = purchage.item.curItems;
-		var finalItemsDtls = [];
-		purchage.transactionDetails = [];
-		var count = 1;
-		angular.forEach(purchage.item.itemDtls,function(itemTrans,index){
-			if(itemTrans.quandity > 0 && itemTrans.pices > 0){
-				itemTrans.name = purchage.item.name +"_" + purchage.item.shade + "_" + (count++) ;
-				finalItemsDtls.push(itemTrans);
-			}
-		  
-		});			
-		purchage.item.itemDtls = finalItemsDtls;
-		
+		angular.forEach(purchage.trasactionItems,function(transItem,index1){
+			transItem.transactionDetails = [];
+			var finalItemsDtls = [];
+			var count = 1;
+			angular.forEach(transItem.curItems,function(itemTrans,index2){
+				if(itemTrans.quandity > 0 && itemTrans.pices > 0){
+					itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
+					finalItemsDtls.push(itemTrans);
+				}
+			  
+			});
+            transItem.item.itemDtls = finalItemsDtls;
+			console.log(transItem.item.itemDtls);
+			delete transItem.item['@id'];	
+			delete transItem.item.stockGroup['@id'];				
+		});
 		
 		delete purchage.ledger['@id'];
 		delete purchage.ledger.accGroup;
         delete purchage.fromledger['@id'];
 	    delete purchage.fromledger.accGroup;	
-        purchage.transdate	= $filter('date')($scope.purchage.transdate,'MM/dd/yyyy');	
+        purchage.transdate	= $filter('date')($scope.purchage.inputTrnsDate,'MM/dd/yyyy');	
+		console.log(purchage.trasactionItems);
 			var dataObj = JSON.stringify(purchage);
 			console.log(dataObj);
+			
+			//return;
 			$http.post(hostname+'/transactions/create', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
@@ -174,7 +189,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	}	
 	
    
-	$scope.trasaction = {};
+	/*$scope.trasaction = {};
 	$scope.trasaction.type = 2;
 	$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
 	
@@ -220,15 +235,86 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
    
    $scope.selectItems = function(){
 	   $scope.showSplit = true;
-   }  
+   } */ 
    
+     $scope.curItems = [];
+   	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
+	$scope.trasaction = {};
+	$scope.trasaction.type = 2;
+	$scope.trasaction.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	$scope.trasaction.trasactionItems = [];
+	$scope.trasaction.trasactionItems.push({});
+	
+	  $scope.trasaction.inputTrnsDate = new Date(
+		 $rootScope.transDate.getFullYear(),
+		 $rootScope.transDate.getMonth(),
+		 $rootScope.transDate.getDate()
+	  );	
+  
+   $scope.minDate = new Date(
+     $scope.trasaction.inputTrnsDate.getFullYear(),
+     $scope.trasaction.inputTrnsDate.getMonth() - 2,
+     $scope.trasaction.inputTrnsDate.getDate()
+  );	
+	
+	$scope.invalidCount = false;
+	$scope.getTotal = function(curTrasItem,type){
+		var total = 0;
+		for(var i = 0; i < curTrasItem.item.itemDtls.length; i++){
+			var item = curTrasItem.item.itemDtls[i];
+			//total += ( (+item.quandity) * (+item.pices) );
+			if(type==1){
+				total += item.curqundty;
+			}else{
+				total += item.inputqundty;
+				if(item.inputqundty > item.curqundty){
+					$scope.invalidCount = true;
+				}
+			}			
+		}
+		
+		if(type==2)
+		 curTrasItem.grandTotal = total;
+	 
+		return total;
+	}
+	
+	$scope.purchaseTotal = function(trasaction){
+		var totalTransQuandity = 0;
+		var totalTransPrice = 0;
+		var validQuandity = true;
+		angular.forEach(trasaction.trasactionItems,function(curTrasItem,index){
+			var total = 0;
+			if(curTrasItem.item!= null && curTrasItem.item.itemDtls != null ){
+				angular.forEach(curTrasItem.item.itemDtls,function(item,index){
+					total += ( (+item.inputqundty) * (+item.pices) );
+				});
+				if(total != (+curTrasItem.quandity)){
+					validQuandity = false;
+				}
+				totalTransQuandity += (+total);
+				totalTransPrice += (+total) * (+curTrasItem.rate);
+			}
+		});
+      trasaction.quandity = isNaN(totalTransQuandity)? 0: totalTransQuandity;
+	  trasaction.rate = isNaN(totalTransPrice)? 0: totalTransPrice ;
+	  console.log(isNaN(totalTransPrice) +"  "+ totalTransPrice);
+	  trasaction.validQuandity = validQuandity;
+	}	
+   
+   $scope.removeItem = function(index,trasaction){
+	   trasaction.trasactionItems.splice(index, 1);
+	   if(trasaction.trasactionItems.length == 0){
+		  $scope.trasaction.trasactionItems.push({}); 
+	   }
+   }   
    
 	$scope.sales = function(sale){
-		if(!$scope.salesform.$valid ){
+		if(! ( $scope.salesform.$valid && sale.validQuandity) ){
 			$scope.submitclick = true;
 			return;
 		}
-           sale.quandity =  $scope.grandTotal;
+        /*   sale.quandity =  $scope.grandTotal;
 		   var finalItemdtls = [];
 			angular.forEach(sale.item.itemDtls,function(itemTrans,index){
 				if(itemTrans.inputqundty > 0){
@@ -244,7 +330,35 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
         delete sale.fromledger['@id'];
 	    delete sale.fromledger.accGroup;		
 		
-		sale.transdate	= $filter('date')($scope.trasaction.transdate,'MM/dd/yyyy');	
+		sale.transdate	= $filter('date')($scope.trasaction.transdate,'MM/dd/yyyy');*/
+
+		angular.forEach(sale.trasactionItems,function(transItem,index1){
+			transItem.transactionDetails = [];
+			var finalItemsDtls = [];
+			var count = 1;
+			angular.forEach(transItem.item.itemDtls,function(itemTrans,index2){
+				if(itemTrans.inputqundty > 0){
+					itemTrans.curqundty = itemTrans.inputqundty ;
+					delete itemTrans.item;	
+					delete itemTrans['@id'];
+					finalItemsDtls.push(itemTrans);
+					
+				}
+			  
+			});
+            transItem.item.itemDtls = finalItemsDtls;
+			console.log(transItem.item.itemDtls);
+			delete transItem.item['@id'];	
+			delete transItem.item.stockGroup['@id'];				
+		});
+		
+		delete sale.ledger['@id'];
+		delete sale.ledger.accGroup;
+        delete sale.fromledger['@id'];
+	    delete sale.fromledger.accGroup;	
+        sale.transdate	= $filter('date')(sale.inputTrnsDate,'MM/dd/yyyy');	
+		console.log(sale); 
+		
 		
 			var dataObj = JSON.stringify(sale);
 			//console.log(dataObj);
