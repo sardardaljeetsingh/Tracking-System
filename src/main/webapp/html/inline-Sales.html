@@ -132,7 +132,7 @@
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" 
 									  name="curTrasItem.rate" ng-model="curTrasItem.rate" required>
 								  </td>
-								  <td ng-class="{'has-error' : ( (+curTrasItem.quandity) == 0 || curTrasItem.quandity > curTrasItem.item.curqundty || curTrasItem.grandTotal != curTrasItem.quandity ) }" > 
+								  <td ng-class="{'has-error' : ( curTrasItem.quandity > curTrasItem.item.curqundty || curTrasItem.grandTotal != curTrasItem.quandity ) }" > 
 								  
                                   <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;" id="inputPassword3" 
 								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required ng-change="curTrasItem.curItems[0].quandity=curTrasItem.quandity;getTotal(curTrasItem);">
@@ -194,9 +194,13 @@
 								  </td>
 								  <td> 
 								     <button type="button" class="btn btn-success btn-xs" 
-									     ng-click="trasaction.trasactionItems.push({})" ng-if="trasaction.trasactionItems.length == $index+1" >Add Item</button>
+									     ng-click="trasaction.trasactionItems.push({})" ng-if="trasaction.trasactionItems.length == $index+1" >
+										 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
+										 </button>
 								     <button type="button" class="btn btn-danger btn-xs" 
-									     ng-click="removeItem($index,trasaction);purchaseTotal(trasaction);" >Remove Item</button>										 
+									     ng-click="removeItem($index,trasaction);purchaseTotal(trasaction);" >
+										 <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" ></span>
+										 </button>										 
 								  </td>
 							</tr>
 							<tr class="warning">
