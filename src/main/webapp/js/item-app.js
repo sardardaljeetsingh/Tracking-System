@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -186,11 +186,11 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 		  $location.path("login");	
 		}
 	
-	$rootScope.transDate = new Date();;	
+	$scope.transDate = new Date();;	
 		
 	$scope.login = function(user){
 		
-		
+		$rootScope.transDate = $scope.transDate ;
 			var dataObj = JSON.stringify(user);
 			//$scope.invalidUser = true;
 			$http.post(hostname + '/user/login', dataObj, {

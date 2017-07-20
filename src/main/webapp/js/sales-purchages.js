@@ -188,55 +188,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
 	}	
 	
-   
-	/*$scope.trasaction = {};
-	$scope.trasaction.type = 2;
-	$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
-	
-   $scope.trasaction.transdate = new Date();
-   $scope.minDate = new Date(
-     $scope.trasaction.transdate.getFullYear(),
-     $scope.trasaction.transdate.getMonth() - 2,
-     $scope.trasaction.transdate.getDate()
-  );	
-	$scope.invalidCount = false;
-	$scope.getTotal = function(type){
-		$scope.invalidCount = false;
-		var total = 0;
-		for(var i = 0; i < $scope.trasaction.item.itemDtls.length; i++){
-			var item = $scope.trasaction.item.itemDtls[i];
-			if(type==1){
-				total += item.curqundty;
-			}else{
-				total += item.inputqundty;
-				if(item.inputqundty > item.curqundty){
-					$scope.invalidCount = true;
-				}
-			}
-			
-		}
-		
-		if(type==2)
-		 $scope.grandTotal = total;
-		
-		return total;
-	}
-	
-   $scope.getItemDetails = function(){
-	   console.log(" Inside getItemDetails ");
-	    ItemService.getItemDetails($scope.trasaction.item.id,function(response){
-		  console.log(" getItemDetails Response " + JSON.stringify(response));
-		  $rootScope.curItems = response;
-			angular.forEach($rootScope.curItems,function(itemTrans,index){
-			  itemTrans.inputqundty = 0;
-			});			  
-	   });
-   }  	
-   
-   $scope.selectItems = function(){
-	   $scope.showSplit = true;
-   } */ 
-   
+ 
      $scope.curItems = [];
    	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 	$scope.trasaction = {};
