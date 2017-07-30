@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -185,12 +185,14 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
         }else{
 		  $location.path("login");	
 		}
-	
+	$rootScope.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	$scope.transDate = new Date();;	
+	$rootScope.transDay = "";
 		
 	$scope.login = function(user){
 		
 		$rootScope.transDate = $scope.transDate ;
+		$rootScope.transDay = $rootScope.days[$scope.transDate.getDay()];
 			var dataObj = JSON.stringify(user);
 			//$scope.invalidUser = true;
 			$http.post(hostname + '/user/login', dataObj, {
@@ -457,6 +459,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 	$scope.singlegroup ={};
     $scope.singlegroup.newgroup	= "";
 	$scope.multigroups =[];	
+	$scope.grpHierarchy = "";
 	//Groups data received from backend
 	console.log(" Fetching group for Company Id : " + $scope.company.id );
 	$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
@@ -506,13 +509,42 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 				$scope.multigroups[grplevel] = {};
 				$scope.multigroups[grplevel].children = children;
 			}
+
+			var grpHyrhy = "";
+			if($scope.singlegroup.selGroup != null)
+				grpHyrhy = $scope.singlegroup.selGroup.name + " > ";
+			
+			angular.forEach($scope.multigroups, function (multiGrp) {
+				 if(multiGrp.selGroup != null)
+					 grpHyrhy = grpHyrhy + multiGrp.selGroup.name + " > " ;
+			});
+			$scope.grpHierarchy = grpHyrhy;
 		   // $scope.multigroups[grplevel].children.push(children);
 			console.log("After :" + $scope.multigroups.length  +"   "+ children);
 	}
 	
-	$scope.addGroup = function(selGroup,grplevel){
+	$scope.addGroup = function(){
+		
 		var newgroup = {};
+		var selGroup = $scope.groupName;
+		if(selGroup== null || selGroup.length == 0){
+			$scope.submitclick = true;
+			return;
+		}
 		newgroup.name = selGroup;
+		var grplevel = 0;
+		if($scope.singlegroup.selGroup != null)
+			grplevel++;
+		
+		angular.forEach($scope.multigroups, function (multiGrp) {
+			 if(multiGrp.selGroup != null)
+				 grplevel++;
+		});	
+
+		console.log( grplevel );
+		console.log( selGroup );
+		//return;		
+		
 		//newgroup.id = $scope.groups.length;
 		newgroup.parent = 1;
 		newgroup.company = {};
@@ -544,11 +576,11 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 					}else if(grplevel == 1){
 						$scope.multigroups[0].children.push(newgroup);
 						$scope.groups.push(newgroup);
-						$scope.multiGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
+						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
 					}else{
 						$scope.multigroups[grplevel-1].children.push(newgroup);
 						$scope.groups.push(newgroup);
-						$scope.multiGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
+						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
 					}			  
 			  } catch (err) {
 				console.log(JSON.stringify(err));
@@ -556,9 +588,23 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		 }).error(function(data, status, headers, config) {
 			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 		  });		
-	
-
+		$scope.groupName = "";
+	    $scope.submitclick = false;
 		console.log(newgroup);
+	}
+	
+	$scope.addNewGroup = function(){
+		var selGroup ={};
+		var grplevel = 0;
+
+		//if($scope.singlegroup.selGroup != null)
+			//grplevel++;
+		
+		angular.forEach($scope.multigroups, function (multiGrp) {
+			 if(multiGrp.selGroup != null)
+				 grplevel++;
+		});
+		console.log( "Group Level " + grplevel);
 	}
     		
 						  
@@ -588,7 +634,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 
 	$scope.setChildrenData = function(selGroup,grplevel){
 	    $scope.multiGrpMsg = "";
-		$scope.singleGrpMsg = "";	
+		$scope.singleGrpMsg = "";
+        $scope.optStatus = "";		
 		    var selGrpId = (selGroup != null && selGroup.id != null ) ? selGroup.id : -1;
 			var children = [];
 			angular.forEach($scope.groups, function (group) {
@@ -628,7 +675,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	
 	$scope.addItem = function(selItem){
 		console.log("add item");
-		if(!$scope.itemform.$valid){
+		if(!$scope.itemform.$valid || $scope.stockGroups[0].selGroup == null || $scope.grandTotal > ($scope.item.quandity)){
 			$scope.submitclick = true;
 			console.log("invalid item form ");
 			return;
@@ -649,12 +696,25 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		selItem.itemDtls = $scope.items;
 		selItem.curqundty = selItem.quandity;
 
-		
+		var tempItemTrans = [];
+		var count = 0;
 		angular.forEach(selItem.itemDtls,function(itemTrans,index){
-		  itemTrans.name = selItem.name +"_" + selItem.shade + "_" + index ;
-		  itemTrans.curqundty = itemTrans.quandity ;
+		  //itemTrans.name = selItem.name +"_" + selItem.shade + "_" + index ;
+		  //itemTrans.curqundty = itemTrans.quandity ;
 		  //itemTrans.item = selItem;
+		  for(i=0;i<itemTrans.pices;i++){
+			  var itemDtl = {};
+			  itemDtl.name = selItem.name +"_" + selItem.shade + "_" + index  + "_" + (i+1) ;
+			  itemDtl.quandity = itemTrans.quandity ;
+			  itemDtl.curqundty = itemTrans.quandity ;
+			  itemDtl.pices =1;
+			  itemDtl.curpices =1;
+			  tempItemTrans.push(itemDtl);
+		  }
+		  
 		});		
+		console.log(selItem.itemDtls.length+ " , " + tempItemTrans.length);
+		selItem.itemDtls = tempItemTrans;
 		
 		
 		var dataObj = JSON.stringify(selItem);
@@ -667,12 +727,24 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		}).success(function(responseData) {
 			  try {
 		         console.log("Item Created Suucessfully" + responseData);
-				 $location.path("/view-stock-items");
+				 //$location.path("/view-stock-items");
+				 $scope.optStatus = 'Success';
+				 
+			     var tempGrps = [];
+			     tempGrps[0]  = $scope.stockGroups[0];
+			    $scope.stockGroups = tempGrps;
+				$scope.stockGroups[0].selGroup = null;
+				
+				$scope.submitclick = false;
+				$scope.item = { };
+	
 			  } catch (err) {
 				console.log(JSON.stringify(err));
+				$scope.optStatus = 'Failed';
 			  }
 		 }).error(function(data, status, headers, config) {
 			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+			$scope.optStatus = 'Failed';
 		  });		
 	
 
