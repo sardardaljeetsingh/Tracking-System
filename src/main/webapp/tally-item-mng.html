@@ -43,7 +43,7 @@
 			
 				<div class="row">
 				  <div class="col-md-12" style="float: none;margin: 0 auto; font-family: cursive;">
-							<ol class="breadcrumb" style="background-color: #419641; color:#FFFFFF ;padding:3px;marign:10px; "
+							<ol class="breadcrumb" style="background-color: #419641; color:#FFFFFF ;padding:3px;marign:10px;margin-bottom: 5px; "
 							ng-if="(loggedUser != null )"  >
 						
 							 <li ng-if="(curTab == null ||  curTab =='companyTab' )" >
@@ -111,9 +111,25 @@
 							</li>	
 							<li ng-if="(currentPage == 'SaleReturn' )" ng-class="{'active': currentPage == 'SaleReturn'}" style="color:#ccc" >
 								Sale Return
-							</li>								
+							</li>
+				
 							</ol>
-						
+							
+							<table class="table table-condensed" ng-if="(loggedUser != null )" style="margin-bottom: 5px;" >
+							<thead>
+							<tr>
+							  <th class="col-sm-1 input-sm" style="text-align : right;" >
+							  <a style="color:red;"  href="#show-company" class="active" >Date</a>
+								 <md-datepicker ng-model="transDate" disabled  md-min-date="minDate" md-max-date="maxDate"></md-datepicker>		
+{{transDay}}								 
+							  </th>							
+							  <th class="col-sm-1 input-sm" style="text-align : right;" >
+							  <a style="color:red;"  href="#show-company" class="active" >Close Company</a>
+							  </th>
+							</tr>
+							</thead>
+							</table>
+							
 							<div>
 								<div ng-view class="input-sm"></div>
 							</div>
@@ -442,13 +458,13 @@
 									<div class="row" >
 										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
-											<strong>Accounts </strong></div>
+											<strong>Groups </strong></div>
 											<div class="panel-body">
 												<div class="list-group">
 												  <a href="#create-account-groups" class="list-group-item list-group-item-success">
-												  <strong>Create Account </strong></a>
+												  <strong>Create Group </strong></a>
 												  <a href="#view-account-groups" class="list-group-item list-group-item-success">
-												  <strong>View Accounts </strong></a>
+												  <strong>View Groups </strong></a>
 												</div>											
 											</div>	
 										</div>									
@@ -544,9 +560,17 @@
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >Create Stock Groups</div>	
-			  <div class="panel-body">
+			  <div class="panel-body" style="margin-left:50px" >
 					<div class="row" >
-					     <div class="col-xs-10 panel panel-info" style="margin:10px;padding:0px" >
+					
+				  <div class="form-group" ng-class="{'has-error' : submitclick && (groupName== null || groupName.length==0) }" >
+					<label for="inputPassword3" class="col-sm-2 control-label">Enter Group Name</label>
+					<div class="col-sm-4">
+					 <input type="text" class="form-control input-sm" ng-model="groupName" placeholder="Stock Group Name">
+					</div>
+				  </div>					
+					
+					     <div class="col-xs-6 panel panel-info" style="margin:10px;padding:0px" >
 					      <div class="panel-heading">Single Stock Group</div>
 						
 							<form class="form-inline" style="padding:10px">
@@ -556,26 +580,19 @@
 										ng-options="group.name for group in singlegroups track by group.id"
 										ng-change="setChildrenData(singlegroup.selGroup,0)" 
 										>
-											<option value="">-- choose Group1 --</option>
+											<option value="">--  choose group if required --</option>
 									</select>	
 									
 								</div>
 							  </div>
-							  <div class="form-group" ng-if="singlegroup.selGroup == null" >
-								<input type="text" class="form-control input-sm" ng-model="singlegroup.newgroup" placeholder="Single Stock Group Name">
-							  </div>						  
-							  <button type="button" class="btn btn-success btn-sm" ng-click="addGroup(singlegroup.newgroup,0)" ng-if="singlegroup.selGroup == null" >
-								Add Group
-							  </button>
-							  		<span class="label label-success" ng-if="singleGrpMsg.length > 0" > {{singleGrpMsg}}</span>
-							   	
+						   	
 							</form>							
 							
 					    </div>
 			        </div>
 					
 					<div class="row" ng-if="singlegroup.selGroup != null && singlegroup.selGroup.id > 0">
-					     <div class="col-xs-8 panel panel-danger" style="margin:10px;padding:0px" >
+					     <div class="col-xs-6 panel panel-danger" style="margin:10px;padding:0px" >
 					      <div class="panel-heading">Multi Stock Group</div>
 						
 								<div class="row" ng-repeat=" multigroup in multigroups" >
@@ -585,21 +602,42 @@
 											<select class="form-control input-sm" id="sel1" ng-model="multigroup.selGroup" 
 												ng-change="setChildrenData(multigroup.selGroup,$index +1)" 
 												ng-options="group.name for group in multigroup.children track by group.id">
-													<option value="">-- choose Group1 --</option>
+													<option value="">-- choose sub group if required --</option>
 											</select>	
 										</div>
 									  </div>
-									  <div class="form-group" ng-if="multigroup.selGroup == null" >
-										<input type="text" class="form-control input-sm" ng-model="multigroup.newgroup" placeholder="Multi Stock Group Name">
-									  </div>
-									  <button type="button" ng-if="multigroup.selGroup == null" class="btn btn-success btn-sm" ng-click="addGroup(multigroup.newgroup,$index +1)" >
-										Add Group
-									  </button>
-									  <span class="label label-success" ng-if="multiGrpMsg.length > 0" > {{multiGrpMsg}}</span>
 									</form>							
 								</div>	
 					    </div>
-			        </div>					
+			        </div>	
+
+					<div class="row">
+						  <div class="form-group">
+							<label for="inputPassword3" class="col-sm-2 control-label">Group Hierarchy</label>
+							<div class="col-sm-8">
+							 <label for="inputPassword3" class="control-label">
+							   {{grpHierarchy}} {{groupName}}
+							 </label>
+							</div>
+						  </div>
+				    </div>	
+					<div class="row" ng-if="singleGrpMsg.length > 0" >
+						  <div class="form-group">
+							<label for="inputPassword3" class="col-sm-2 control-label"></label>
+							<div class="col-sm-8">
+							  <span class="label label-success" > {{singleGrpMsg}}</span>
+							</div>
+						  </div>
+				    </div>						
+					<div class="row">
+						  <div class="form-group" style="text-align : right;" >
+							<div class="col-sm-5">
+									<button type="button" class="btn btn-success btn-sm" ng-click="addGroup()" >
+										Add Group
+									</button>
+							</div>
+						  </div>					
+					</div>					
 					
 			  </div>
 			  
@@ -618,32 +656,36 @@
 			 <strong> Create Stock Items</strong>
 			  </div>	
 			  <div class="panel-body">
-				
-				
+				 <form class="form-horizontal input-sm" name="itemform" novalidate >
 					<div class="row">
-					     <div class="col-xs-8 panel panel-success" style="margin:10px;padding:0px" >
+					     <div class="col-xs-12 panel panel-success" style="margin:10px;padding:0px" >
 					      <div class="panel-heading"><strong>Select Stock Groups</strong></div>
-								<div class="row" ng-repeat=" stockgroup in stockGroups" >
-									<form class="form-inline"  style="padding:10px">
-										<div class="form-group"     style="width: 100%;" >
-										<div class="col-sm-5" style="width: 80%;" >
+								<div class="row" >
+
+										<div class="col-sm-3" ng-repeat=" stockgroup in stockGroups" style="padding:5px;padding-left:20px;padding-right:20px" >
 											<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
 												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
 												ng-options="group.name for group in stockgroup.children track by group.id">
-													<option value="">-- choose Group1 --</option>
+													<option value="">-- choose group if required --</option>
 											</select>	
 										</div>
-									  </div>
-									</form>							
+					
 								</div>	
+								<div class="row" ng-show="(stockGroups[0].selGroup == null) && submitclick " >
+
+								<div class="col-sm-3" style="padding:5px;padding-left:20px;padding-right:20px;color:red" >
+										Please select Group
+								</div>
+					
+								</div>									
 					    </div>
 			        </div>					
-
-					<div class="row">
-					   <form class="form-horizontal input-sm" name="itemform" novalidate >
+				
+				<div class="row">
 					  
-					     <div class="col-xs-8 panel panel-warning" style="margin:10px;padding:0px" 
-						 ng-show="stockGroups[stockGroups.length-1].selGroup != null || stockGroups.length > 1" >
+					  
+					     <div class="col-xs-12 panel panel-warning" style="margin:10px;padding:0px" >
+						 <!--ng-show="stockGroups[stockGroups.length-1].selGroup != null || stockGroups.length > 1" --> 
 					      <div class="panel-heading"><strong>Enter Item Details </strong></div>	
 							    <div class="panel-body">
 									<div class="row" >
@@ -655,10 +697,10 @@
 											  <th>Shade</th>
 											  <th>Description</th>
 											  <th>UOM</th>
-											  <th>Rate</th>
+											  <th>Purchase Rate</th>
+											  <th>Sale Rate</th>
 											  <th> Total Quantity</th>
-											  <th > Total Rate</th>
-											  <th></th>
+											  <th> Split Quantity</th>
 											</tr>
 											</thead>
 											<tr class="warning">
@@ -682,27 +724,21 @@
 												 </div>
 												  </div>
 											 </td>
+											 <td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.purcrate'].$invalid }" >
+											 <input type="number" min="1" step="1" size="2" class="form-control input-sm" name="item.purcrate"
+											 id="item.purcrate" ng-model="item.purcrate" required size="5" ></td>
+											 
 											 <td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.rate'].$invalid }" >
-											 <input type="number" min="1" step="1" class="form-control input-sm" name="item.rate" id="item.rate" ng-model="item.rate" required ></td>
+											 <input type="number" min="1" step="1" size="3" class="form-control input-sm" name="item.rate" 
+											 id="item.rate" ng-model="item.rate" required size="5"></td>
 																					 
 											 <td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.quandity'].$invalid }" >
-											 <input type="number" min="1" step="1" class="form-control input-sm" name="item.quandity" id="item.quandity" ng-model="item.quandity" required ></td>
-											 <td> {{item.quandity * item.rate}}</td>
-											 <td>
-											 <button type="button" class="btn btn-warning btn-sm"  
-											 ng-click="showSplit=true;items[0].quandity=item.quandity"
-											 ng-show="item.quandity > 0" >Show Split</button>
+											 <input type="number" min="1" step="1" size="5" class="form-control input-sm" name="item.quandity" 
+											 id="item.quandity" ng-model="item.quandity"  required ng-change="showSplit=true;items[0].quandity=item.quandity" >
 											 </td>
 											 
-											 </tr>
-											</table>	
-											
-						
-											
-											
-					<div class="panel panel-warning col-sm-8" style="padding:0px;margin-left:10px" ng-show="showSplit== true" >
-					  <div class="panel-heading small">Split Quantity</div>
-					<table class="table table-condensed table-bordered"  >
+											  <td>
+					<table class="table table-condensed table-bordered" ng-if="item.quandity > 0" >
 					<thead>
 					<tr>
 					  <th class="col-sm-1 input-sm">No of Packets</th>
@@ -710,7 +746,7 @@
 					  <th class="col-sm-1 input-sm">Total</th>
 					</tr>
 					</thead>
-					<tr class="warning" ng-repeat="selItem in items" > 
+					<tr class="warning" ng-repeat="selItem in items" ng-class="{'has-error' : grandTotal > (item.quandity) }" > 
 					 <td><input type="number" min="1" step="1" class="form-control input-sm" ng-model="selItem.pices"></td>
 					 <td> <input type="number" min="1" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity"></td>	
 					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
@@ -735,22 +771,36 @@
 					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (item.quandity)" >
 						ERROR : Split grand total <b> {{getTotal()}} </b> should not exeeds total quantity <b>{{item.quandity}}</b>
 					 </div>
-					  <button type="button" ng-click="addItem(item);invtBtmHide=true;" ng-if="grandTotal == (item.quandity)" class="btn btn-success btn-sm"
-					   >Add item to inventory</button>					
+			
 					</td>
 					</tr>
-					</table>	
-				
-					</div>											
+					</table>												  
+											  
+											  </td>
+											 
+											 </tr>
+					<tr class="warning">
+					<td colspan="9" style="text-align : center" >
+							   <span class="label label-success" ng-if="optStatus == 'Success'" > Stock item added successfully.</span>
+							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to add stock item.</span>				
+					</td>
+					</tr>												 
+					<tr class="warning">
+					<td colspan="9" style="text-align : center" >
+						  <button type="button" ng-click="addItem(item);invtBtmHide=true;" class="btn btn-success btn-sm"
+					   >Add item to inventory</button>				
+					</td>
+					</tr>											 
+											</table>	
 									
 									
 									</div>							
 								</div>							 
 					    </div>
-						</form>
+						
 			        </div>	
 
-
+                 </form>
 					
 			  </div>
 			  
