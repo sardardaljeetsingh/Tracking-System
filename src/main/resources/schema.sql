@@ -66,7 +66,7 @@ ALTER TABLE stock_group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id
 ALTER TABLE stock_group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES stock_group_dtl( id ) ;
 
 DROP TABLE IF EXISTS item_dtl;
-CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,initqundty INT,curqundty INT,rate INT);
+CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,initqundty INT,curqundty INT,rate INT,purcrate INT);
 ALTER TABLE item_dtl ADD FOREIGN KEY (groupid) REFERENCES stock_group_dtl(id) ;
 DROP TABLE IF EXISTS item_dtl_trans;
 CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT,quandity INT,curqundty INT, pices INT,curpices INT);
