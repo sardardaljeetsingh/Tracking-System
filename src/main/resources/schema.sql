@@ -111,7 +111,17 @@ CREATE TABLE item_current_stock( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, i
 ALTER TABLE item_current_stock ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
 
-
+---- LOGIN -------
+DROP TABLE IF EXISTS agents;
+CREATE TABLE agents
+(
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR2(50) NOT NULL,
+	address VARCHAR2(50) NOT NULL,
+	phone BIGINT NOT NULL,
+	email VARCHAR2(50) NOT NULL,
+	commission INT NOT NULL,
+);
 
 
 
