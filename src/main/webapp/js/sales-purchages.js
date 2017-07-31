@@ -13,8 +13,14 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
      GenericSrvc.getAll('/ledger/findAll',function(response){
       console.log(" Trsaction Response " + JSON.stringify(response));
 	  $scope.ledgers = response;
+   });  
+
+    $scope.agents = [];
+     GenericSrvc.getAll('/agent/findAll',function(response){
+      console.log(" Trsaction Response " + JSON.stringify(response));
+	  $scope.agents = response;
    });    
-   
+    
     $scope.stockGroups = [];
 	StockGrpSrvc.getAllGroups($rootScope.company.id,function(response){
 	  console.log(" StockGroup Response " + JSON.stringify(response));
@@ -92,6 +98,13 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		  $scope.purchage.trasactionItems.push({}); 
 	   }
    } 
+   $scope.addItem = function(purchage){
+	   angular.forEach(purchage.trasactionItems,function(transItem,index1){
+		   transItem.showSplit=false;
+		});  
+		purchage.trasactionItems.push({})		
+   }
+   //purchage.trasactionItems.push({})
    
 	$scope.purchanges = function(purchage){
 		console.log($scope.purchagesform.$valid +"   "+ purchage.validQuandity);
@@ -106,8 +119,18 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			var count = 1;
 			angular.forEach(transItem.curItems,function(itemTrans,index2){
 				if(itemTrans.quandity > 0 && itemTrans.pices > 0){
-					itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
-					finalItemsDtls.push(itemTrans);
+					//itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
+					//finalItemsDtls.push(itemTrans);
+					  for(i=0;i<itemTrans.pices;i++){
+						  var itemDtl = {};
+						  itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
+						  itemDtl.quandity = itemTrans.quandity ;
+						  itemDtl.curqundty = itemTrans.quandity ;
+						  itemDtl.pices =1;
+						  itemDtl.curpices =1;
+						  finalItemsDtls.push(itemDtl);
+					  }					
+					
 				}
 			  
 			});

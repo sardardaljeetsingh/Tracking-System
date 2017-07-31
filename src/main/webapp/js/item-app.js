@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -126,6 +126,21 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	      { 
 		    controller: 'SaleReturnController',
 		    templateUrl :'/inline-SaleReturn.html',
+		  })	
+	.when('/create-agent'	,
+	      { 
+		    controller: 'AgentCreateController',
+		    templateUrl :'/html/inline-create-agent.html',
+		  })	
+	.when('/edit-agent'	,
+	      { 
+		    controller: 'AgentEditController',
+		    templateUrl :'/html/inline-create-agent.html',
+		  })	
+	.when('/view-agents'	,
+	      { 
+		    controller: 'AgentsController',
+		    templateUrl :'/html/inline-agents.html',
 		  })		  
 	.when('/reports',{template:'This is the Report Route'})
 	.otherwise({template:'This is the Report Route'});
