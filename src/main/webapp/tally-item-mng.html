@@ -72,6 +72,7 @@
 							|| currentPage == 'createAccountGroups' ||currentPage == 'showAccountGroups'
 							|| currentPage == 'createLedgers' ||currentPage == 'viewLedgers'
 							|| currentPage == 'Purchages' || currentPage == 'Sales' 
+							|| currentPage == 'createAgent' || currentPage == 'showAgents' || currentPage == 'editAgent'
 							|| currentPage == 'SaleReturn' || currentPage == 'PurchaseReturn' )" 
 								ng-class="{'active': currentPage == 'performAction'}" >
 								<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
@@ -112,6 +113,16 @@
 							<li ng-if="(currentPage == 'SaleReturn' )" ng-class="{'active': currentPage == 'SaleReturn'}" style="color:#ccc" >
 								Sale Return
 							</li>
+							<li ng-if="(currentPage == 'showAgents' || currentPage == 'editAgent' )" class="active" style="color:#ccc" >
+								<a style="color:#FFFFFF"  href="#view-agents" class="active">Agents</a>
+							</li>								
+							<li ng-if="(currentPage == 'createAgent' )" ng-class="{'active': currentPage == 'createAgent'}" style="color:#ccc" >
+								Create Agent
+							</li>
+							<li ng-if="(currentPage == 'editAgent' )" ng-class="{'active': currentPage == 'editAgent'}" style="color:#ccc" >
+								Edit Agent
+							</li>							
+						
 				
 							</ol>
 							
@@ -445,6 +456,28 @@
 	  
 	  <script type="text/ng-template" id="/inline-perform-action.html">	
 		<div class="container-fluid">
+		
+			<div class="panel panel-success"  > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Configuration</strong></div>
+			  <div class="panel-body">
+									<div class="row" >
+										<div class="col-xs-3 panel panel-success" style="margin:10px;padding:0px" >
+											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+											<strong>Agents </strong></div>
+											<div class="panel-body">
+												<div class="list-group">
+												  <a href="#create-agent" class="list-group-item list-group-item-success">
+												  <strong>Create Agent </strong></a>
+												  <a href="#view-agents" class="list-group-item list-group-item-success">
+												  <strong>View Agents </strong></a>
+												</div>											
+											</div>	
+										</div>									
+									</div>				  
+			  </div>			  
+	        </div>
+			
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Masters</strong></div>
@@ -538,12 +571,7 @@
 			  
 			  </div>			  
 	        </div>
-			<div class="panel panel-success"  > 
-			  <!-- Default panel contents -->
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Imports</strong></div>
-			  <div class="panel-body">
-			  </div>			  
-	        </div>
+
 			<div class="panel panel-success" ng-if="previliges.reports == true" > 
 			  <!-- Default panel contents -->
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Reports</strong></div>
@@ -679,7 +707,8 @@
 					
 								</div>									
 					    </div>
-			        </div>					
+			        </div>	
+
 				
 				<div class="row">
 					  
@@ -2309,6 +2338,6 @@
 		<script src="js/acc-grp.js"></script> 
 		<script src="js/acc-ledgers.js"></script> 
 		<script src="js/sales-purchages.js"></script> 
-		
+		<script src="js/agents.js"></script> 
 </body>
 </html>
