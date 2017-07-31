@@ -1,0 +1,76 @@
+	<div class="container-fluid">
+			<div class="panel panel-success" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" > 
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" ng-if="optType=='create'">Agent Creation </div>
+			  <div class="panel-heading" ng-if="optType=='edit'">Edit Agent details </div>
+			  <div class="panel-body">
+					<div class="row" >
+					  <div class="col-xs-6 panel panel-info" style="margin:10px;" >
+					  
+							<form class="form-horizontal input-sm" name="agentform" novalidate >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && agentform['agent.name'].$invalid }">
+								<label for="inputEmail3" class="col-sm-5 control-label">Agent Name</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="company.name" name="agent.name" ng-model="agent.name"
+								  placeholder="Agent Name" required  >						
+								</div>
+							  </div>
+							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && agentform['agent.address'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Address</label>
+								<div class="col-sm-5">
+								  <textarea class="form-control custom-sm input-sm" name="agent.address" ng-model="agent.address" 
+								  rows="3" placeholder="Agent Address" required ></textarea>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && agentform['agent.phone'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Telephone</label>
+								<div class="col-sm-5">
+								  <input type="number" class="form-control input-sm" id="inputPassword3" name="agent.phone" ng-model="agent.phone"
+								  placeholder="Telephone Number" required>
+								</div>
+							  </div>							  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && agentform['agent.email'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Email</label>
+								<div class="col-sm-5">
+								  <input type="email" class="form-control input-sm" id="inputPassword3" name="agent.email" ng-model="agent.email"
+								  placeholder="Email Address" required>
+								</div>
+							  </div>							  
+	  
+							  <div class="form-group" ng-class="{'has-error' : submitclick && agentform['agent.commission'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Commission %</label>
+								<div class="col-sm-5">
+								   <input type="number" min="1" max="100" step="1" size="3" class="form-control input-sm" name="agent.commission" 
+										id="agent.commission" ng-model="agent.commission" required size="5">
+								</div>
+							  </div>
+							  
+							  <div class="form-group" ng-if="optStatus != null">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+									<span class="label label-success" ng-if="optStatus == 'Success'" > Agent '<b>{{agent.name}}</b>' creation/alter done successfully.</span>
+									<span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to create agent.</span>	
+								</div>
+							  </div>							  
+							  
+							  <div class="form-group">
+								<label for="inputPassword3" class="col-sm-5 control-label"></label>
+								<div class="col-sm-5">
+								   <button type="button" ng-click="editAgent(agent)" ng-if="optType=='edit'" style="margin-bottom: 10px;"
+								   class="btn btn-success">Edit Agent</button>
+								   <button type="button" ng-click="createAgent(agent);" ng-if="optType=='create'" style="margin-bottom: 10px;"
+								   class="btn btn-success">Create Agent</button>
+								    <button type="button" ng-click="clear();" style="margin-bottom: 10px;" ng-if="optType=='create'"
+								   class="btn btn-success btn-small">Clear</button>
+								    <button type="button" ng-click="cancelAgent();" style="margin-bottom: 10px;" ng-if="optType=='edit'"
+								   class="btn btn-warning btn-small">Cancel</button>								   
+								</div>
+							  </div>
+							</form>
+					  </div>
+					  
+					</div>			
+			  </div>		
+			</div>
+		</div>

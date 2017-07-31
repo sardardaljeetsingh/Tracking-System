@@ -2,30 +2,44 @@
 			<div class="panel panel-success" > 
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Purchases </div>
 			  <div class="panel-body">
+			  <div class="row" >
+				  <div class="form-group pull-right" style="margin-bottom: 0px; margin-top: 0px;"  >
+					<div class="col-sm-7" style="text-align : left" >
+					 <md-datepicker ng-model="purchage.inputTrnsDate" md-placeholder="Enter date"
+						  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
+					</div>
+				  </div>			  
+			  </div>
 					<div class="row" >
-					  <div class="col-xs-10 panel panel-info" style="margin:10px;" >	  
+					  <div class="col-xs-10 panel panel-info" style="margin:10px;padding-top:20px" >	  
 					  
-					  <form class="form-horizontal input-sm" name="purchagesform" novalidate >
+					  <form class="form-inline input-sm" name="purchagesform" novalidate >
 					  
-					  
-							  <div class="form-group">
-								<label for="inputPassword3" class="col-sm-5 control-label">Voucher</label>
+							  <div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.voucher'].$invalid  }" >
+								<label for="inputPassword3" class="col-sm-4 control-label">Voucher</label>
 								<div class="col-sm-5">
-								 <label for="inputPassword3" class="col-sm-5 control-label">{{purchage.voucher}}</label>
+								  <input type="text" class="form-control input-sm" id="purchage.voucher" name="purchage.voucher" ng-model="purchage.voucher"
+								  required  >	
 								</div>
 							  </div>	
 							  
-							  <div class="form-group"  >
-								<label for="inputPassword3" class="col-sm-5 control-label">Date </label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <md-datepicker ng-model="purchage.inputTrnsDate" md-placeholder="Enter date"
-									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
+					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.agent'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-3 control-label">Agent</label>
+								<div class="col-sm-6">
+									<select class="form-control input-sm" ng-model="purchage.agent" name="purchage.agent" 
+											ng-init="purchage.agent = purchage.agent || options[0].value"
+											ng-options="option as option.name for option in agents "
+											required >
+											<option value="">-- Choose Agent --</option>
+									</select>	
 								</div>
+									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="purchage.agent != null"
+											style="text-align : left" >{{purchage.agent.commission}} %</label>
 							  </div>								  
 							  
-					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-5 control-label">From Account</label>
-								<div class="col-sm-5">
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-4 control-label">From Account</label>
+								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 											ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'!Purchase Accounts'}}  "
@@ -33,68 +47,25 @@
 											<option value="">-- Choose Account --</option>
 									</select>	
 								</div>
-							  </div>	
-
-							  <div class="form-group" ng-if="purchage.fromledger != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Account group</label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
-								 >{{purchage.fromledger.accGroup.name}}</label>
-								</div>
-							  </div>							  
-							  
-							  <div class="form-group" ng-if="purchage.fromledger != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Opening balance</label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
-								 >{{purchage.fromledger.opbal}}</label>
-								</div>
+									<label for="inputPassword3" class="col-sm-1 control-label" ng-if="purchage.fromledger != null"
+											style="text-align : left" >{{purchage.fromledger.curbal}}</label>
 							  </div>	
 							  
-							  <div class="form-group" ng-if="purchage.fromledger != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Current balance</label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
-								 >{{purchage.fromledger.curbal}}</label>
-								</div>
-							  </div>
-							  
-					  		<div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.ledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-5 control-label">To Account</label>
-								<div class="col-sm-5">
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.ledger'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-3 control-label">To Account</label>
+								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchase Accounts'}} "
 											required >
 											<option value="">-- Choose Account --</option>
-									</select>	
-								</div>
+									</select>
+									</div>
+									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="purchage.ledger != null"
+								 >{{purchage.ledger.curbal}}</label>									
+								
 							  </div>	
 							  
-							  <div class="form-group" ng-if="purchage.ledger != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Account group</label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
-								 >{{purchage.ledger.accGroup.name}}</label>
-								</div>
-							  </div>							  
-							  
-							  <div class="form-group" ng-if="purchage.ledger != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Opening balance</label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
-								 >{{purchage.ledger.opbal}}</label>
-								</div>
-							  </div>		
-							  
-							  <div class="form-group" ng-if="purchage.ledger != null" >
-								<label for="inputPassword3" class="col-sm-5 control-label">Current balance</label>
-								<div class="col-sm-7" style="text-align : left" >
-								 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"
-								 >{{purchage.ledger.curbal}}</label>
-								</div>
-							  </div>	
-
 					<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px" >
 					  <div class="panel-heading small">Select Items</div>
 						<table class="table table-condensed table-bordered"  >
@@ -111,13 +82,14 @@
 							</thead>
 							<tr class="warning" ng-repeat="curTrasItem in purchage.trasactionItems" > 
 								  <td ng-class="{'has-error' : ( submitclick && !(curTrasItem.item.id >0) ) }" >
-										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item" 
+										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item" style="width:150px" 
 												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
 												ng-options="option as option.name for option in items"
 												ng-change="curTrasItem.rate = curTrasItem.item.rate;
 												curTrasItem.curItems = [];
 												curTrasItem.curItems.push({ 'quandity': 1, 'pices':1});
-												curTrasItem.showSplit=true;";
+												curTrasItem.quandity = 0;
+												curTrasItem.showSplit=false;";
 												required>
 												<option value="">-- Choose Item Name --</option>
 										</select>								  
@@ -130,13 +102,14 @@
 								  <td>  {{curTrasItem.item.shade}} </td>
 								  <td>  {{curTrasItem.item.curqundty}} </td>
 								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" >  
-								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" 
+								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.rate" ng-model="curTrasItem.rate" required>
 								  </td>
 								  <td ng-class="{'has-error' : ( curTrasItem.grandTotal != curTrasItem.quandity ) }" > 
 								  
-                                  <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;" id="inputPassword3" 
-								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required ng-change="curTrasItem.curItems[0].quandity=curTrasItem.quandity;getTotal(curTrasItem);">
+                                  <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;width: 70px;" id="inputPassword3" 
+								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required 
+								  ng-change="curTrasItem.curItems[0].quandity=curTrasItem.quandity;getTotal(curTrasItem);curTrasItem.showSplit=true;">
 								  
 						  
 								  <button type="button" ng-click="curTrasItem.showSplit=true;"  
@@ -158,8 +131,8 @@
 										</tr>
 										</thead>
 										<tr class="warning" ng-repeat="selItem in curTrasItem.curItems" > 
-										 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.pices"></td>
-										 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity"></td>	
+										 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.pices" style="width: 70px;"></td>
+										 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity" style="width: 70px;"></td>	
 										 <td> {{(+selItem.quandity) * (+selItem.pices) }} &nbsp;	&nbsp;	
 										 <button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.curItems.push({ 'quandity': 1, 'pices':1})"
 										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && curTrasItem.curItems.length == $index+1 && ( (+selItem.quandity)* (+selItem.pices) > 0) )">Add</button></td>						 
@@ -188,7 +161,7 @@
 								  </td>
 								  <td> 
 								     <button type="button" class="btn btn-success btn-xs" 
-									     ng-click="purchage.trasactionItems.push({})" ng-if="purchage.trasactionItems.length == $index+1" >
+									     ng-click="addItem(purchage);" ng-if="purchage.trasactionItems.length == $index+1" >
 										 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
 										 </button>
 								     <button type="button" class="btn btn-danger btn-xs" 
