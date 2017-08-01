@@ -1,7 +1,7 @@
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
 			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Purchases </div>
-			  <div class="panel-body">
+			  <div class="panel-body" style="padding-top : 3px" >
 			  <div class="row" >
 				  <div class="form-group pull-right" style="margin-bottom: 0px; margin-top: 0px;"  >
 					<div class="col-sm-7" style="text-align : left" >
@@ -42,7 +42,8 @@
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 											ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'!Purchase Accounts'}}  "
+											<!-- ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'!Purchase Accounts'}}  " -->
+											ng-options="option as option.name for option in ledgers"
 											required >
 											<option value="">-- Choose Account --</option>
 									</select>	
@@ -56,7 +57,7 @@
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchase Accounts'}} "
+											ng-options="option as option.name for option in ledgers"
 											required >
 											<option value="">-- Choose Account --</option>
 									</select>
@@ -145,7 +146,7 @@
 										<tr class="warning">
 											<td colspan="2" style="text-align : right" ><b>Total Price</b></td>
 											<td style="text-align : left" ><b>{{curTrasItem.grandTotal*curTrasItem.rate}}</b></td>
-										</tr>						
+										</tr>	
 										<tr class="warning">
 										<td colspan="3" style="text-align : center" >
 										 <div class="alert alert-danger" role="alert" ng-if="curTrasItem.grandTotal > (curTrasItem.quandity)" >
@@ -182,7 +183,12 @@
 								{{purchage.rate}}
 								</td>
 							</tr>	
-
+							<tr class="warning">
+								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
+								<td colspan="2" style="text-align : left;" >
+								{{ (purchage.rate * purchage.agent.commission) / 100 }}
+								</td>
+							</tr>	
 							<tr class="">
 								<td colspan="7" style="text-align : center;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }">
