@@ -38,7 +38,6 @@ CREATE TABLE company
 	phone INT NOT NULL,
 	email VARCHAR2(100) NOT NULL,
 	currencesymbol VARCHAR2(100),
-	companytype INT NOT NULL,
 	yearstart VARCHAR2(100) NOT NULL,
 	booksstart VARCHAR2(100) NOT NULL,
 );
