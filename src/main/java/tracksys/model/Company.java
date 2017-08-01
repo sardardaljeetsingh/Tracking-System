@@ -52,12 +52,7 @@ public class Company {
 	@Size(min = 2, max = 100)
 	@Column(name = "currencesymbol", nullable = true)
 	private String currencesymbol;
-	
-	@NotNull
-	@Column(name = "companytype", nullable = false)
-	private int type;
-	
-	
+
 	@NotNull
 	@Size(min = 2, max = 100)
 	@Column(name = "yearstart", nullable = false)
@@ -184,14 +179,6 @@ public class Company {
 
 	public void setCurrencesymbol(String currencesymbol) {
 		this.currencesymbol = currencesymbol;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
 	}
 
 	public String getYearstart() {

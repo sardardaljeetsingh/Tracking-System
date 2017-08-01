@@ -126,6 +126,17 @@ public class Item {
 	@Column(name = "rate", nullable = false)
 	private int rate;	
 	
+	@NotNull
+	@Column(name = "purcrate", nullable = false)
+	private int purcrate;		
+	
+	public int getPurcrate() {
+		return purcrate;
+	}
+
+	public void setPurcrate(int purcrate) {
+		this.purcrate = purcrate;
+	}
 
 	public int getRate() {
 		return rate;
