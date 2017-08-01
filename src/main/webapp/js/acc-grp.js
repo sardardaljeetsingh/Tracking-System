@@ -52,13 +52,40 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 				$scope.multigroups[grplevel] = {};
 				$scope.multigroups[grplevel].children = children;
 			}
+			
+			var grpHyrhy = "";
+			if($scope.singlegroup.selGroup != null)
+				grpHyrhy = $scope.singlegroup.selGroup.name + " > ";
+			
+			angular.forEach($scope.multigroups, function (multiGrp) {
+				 if(multiGrp.selGroup != null)
+					 grpHyrhy = grpHyrhy + multiGrp.selGroup.name + " > " ;
+			});
+			$scope.grpHierarchy = grpHyrhy;
+			
 		   // $scope.multigroups[grplevel].children.push(children);
 			console.log("AccountGRP After  :" + $scope.multigroups.length  +"   "+ children);
 	}
 	
-	$scope.addGroup = function(selGroup,grplevel){
+	$scope.addGroup = function(){
 		var newgroup = {};
+		var selGroup = $scope.groupName;
+		if(selGroup== null || selGroup.length == 0){
+			$scope.submitclick = true;
+			return;
+		}
 		newgroup.name = selGroup;
+		var grplevel = 0;
+		if($scope.singlegroup.selGroup != null)
+			grplevel++;
+		
+		angular.forEach($scope.multigroups, function (multiGrp) {
+			 if(multiGrp.selGroup != null)
+				 grplevel++;
+		});	
+
+		console.log( grplevel );
+		console.log( selGroup );
 		//newgroup.id = $scope.groups.length;
 		newgroup.parent = 1;
 		newgroup.company = {};
@@ -90,12 +117,18 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 					}else if(grplevel == 1){
 						$scope.multigroups[0].children.push(newgroup);
 						$scope.groups.push(newgroup);	
-						$scope.multiGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
+						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
 					}else{
 						$scope.multigroups[grplevel-1].children.push(newgroup);
 						$scope.groups.push(newgroup);
-						$scope.multiGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
-					}			  
+						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
+					}	
+
+					$scope.groupName = "";
+					$scope.grpHierarchy ="";
+					$scope.submitclick = false;
+					$scope.singlegroup.selGroup = null;
+					console.log(" success "+ $scope.singleGrpMsg);
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }

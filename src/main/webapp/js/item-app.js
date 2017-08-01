@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -45,7 +45,7 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/create-stock-groups'	,
 	      { 
 		    controller: 'stockGroupController',
-		    templateUrl :'/inline-create-stocks-groups.html',
+		    templateUrl :'/html/inline-create-stocks-groups.html',
 		  })	
 	.when('/create-stock-items'	,
 	      { 
@@ -85,7 +85,7 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/create-account-groups'	,
 	      { 
 		    controller: 'accGroupController',
-		    templateUrl :'/inline-create-account-groups.html',
+		    templateUrl :'/html/inline-create-account-groups.html',
 		  })
 	.when('/view-account-groups'	,
 	      { 
@@ -207,7 +207,8 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 	$scope.login = function(user){
 		
 		$rootScope.transDate = $scope.transDate ;
-		$rootScope.transDay = $rootScope.days[$scope.transDate.getDay()];
+		$rootScope.transDay =  $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) 
+				+"/"+ $scope.transDate.getFullYear() +"("+ $rootScope.days[$scope.transDate.getDay()] +")";
 			var dataObj = JSON.stringify(user);
 			//$scope.invalidUser = true;
 			$http.post(hostname + '/user/login', dataObj, {
@@ -267,6 +268,7 @@ app.controller('logoutController', function($scope,$rootScope,$location,$http,lo
 app.controller('companiesController', function($scope,$rootScope,$location,$http,CompanyService) {
 
 	$scope.company ={}; 
+	$rootScope.company = {} ;
 	$rootScope.currentPage = 'companyList';
 	$rootScope.curTab = 'companyTab';
 	
@@ -340,6 +342,7 @@ app.controller('companiesController', function($scope,$rootScope,$location,$http
 		console.log("changeTab in company");
 		$location.path("show-user");
 		$scope.curTab = 'userTab';
+		$rootScope.company = null;
 	}
 });
 
@@ -347,7 +350,6 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 	$scope.company ={}; 
 	$scope.company.country = 1;	
 	$scope.company.state = 1;	
-	$scope.company.type =1;
 	$scope.optType = "create";
 	$scope.company.currencesymbol = "Rs.";
 	$scope.submitclick = false;
@@ -366,14 +368,23 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 			}).success(function(responseData) {
 				  try {
 					console.log(JSON.stringify(responseData));
-					$rootScope.currentPage = 'companyList';
-					$scope.companies.push(company);
-					$location.path("/");
+					//$rootScope.currentPage = 'companyList';
+					//$scope.companies.push(company);
+					//$location.path("/");
+						$scope.company ={}; 
+						$scope.company.country = 1;	
+						$scope.company.state = 1;	
+						$scope.company.currencesymbol = "Rs.";
+						$scope.submitclick = false;	
+						$scope.optStatus = 'Success'	;					
+					
 				  } catch (err) {
 					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';	
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';	
 			  });		
 	}
 	
@@ -398,14 +409,18 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 			}).success(function(responseData) {
 				  try {
 					console.log(JSON.stringify(responseData));
-					$rootScope.currentPage = 'companyList';
+					//$rootScope.currentPage = 'companyList';
 					//$scope.companies.push(company);
-					$location.path("/");
+					//$location.path("/");
+					$scope.submitclick = false;
+					$scope.optStatus = 'Success';
 				  } catch (err) {
 					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';	
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';	
 			  });
 	}
 	
@@ -596,16 +611,19 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 						$scope.multigroups[grplevel-1].children.push(newgroup);
 						$scope.groups.push(newgroup);
 						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
-					}			  
+					}	
+					$scope.groupName = "";
+					$scope.grpHierarchy ="";
+					$scope.submitclick = false;
+					$scope.singlegroup.selGroup = null;
+					
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }
 		 }).error(function(data, status, headers, config) {
 			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 		  });		
-		$scope.groupName = "";
-	    $scope.submitclick = false;
-		console.log(newgroup);
+
 	}
 	
 	$scope.addNewGroup = function(){
@@ -791,13 +809,6 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 			//$scope.groups = response.data;
 			console.log(" Groupth Length : " + $scope.groups.length)	;
             $rootScope.currentPage = 'showStockGroups';			
-		});			
-		
-		
-    /*$scope.groupmap = $scope.groups.map(function(group){ 
-		var rObj = {};
-		rObj[group.id] = group;
-		return rObj;
-     });*/
+		});		
 
 });

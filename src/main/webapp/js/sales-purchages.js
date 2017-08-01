@@ -162,6 +162,22 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 					
 					 console.log(" Purchage Data : " + responseData);
 					$scope.optStatus = 'Success';
+					
+					$scope.curItems = [];
+					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
+					$scope.purchage = {};
+					$scope.purchage.type = 1;
+					$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					$scope.purchage.trasactionItems = [];
+					$scope.purchage.trasactionItems.push({});
+					
+					  $scope.purchage.inputTrnsDate = new Date(
+						 $rootScope.transDate.getFullYear(),
+						 $rootScope.transDate.getMonth(),
+						 $rootScope.transDate.getDate()
+					  );					
+					
+					
 					//$location.path("/show-user");
 				  } catch (err) {
 					alert(JSON.stringify(err));
@@ -190,7 +206,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
      GenericSrvc.getAll('/ledger/findAll',function(response){
       console.log(" Trsaction Response " + JSON.stringify(response));
 	  $scope.ledgers = response;
-   });      
+   });   
+
+    $scope.agents = [];
+     GenericSrvc.getAll('/agent/findAll',function(response){
+      console.log(" Trsaction Response " + JSON.stringify(response));
+	  $scope.agents = response;
+   });     
    
    $scope.stockGroups = [];
 	StockGrpSrvc.getAllGroups($rootScope.company.id,function(response){
@@ -284,6 +306,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	   }
    }   
    
+   $scope.addItem = function(trasaction){
+	   angular.forEach(trasaction.trasactionItems,function(transItem,index1){
+		   transItem.showSplit=false;
+		});  
+		trasaction.trasactionItems.push({})		
+   }   
+   
 	$scope.sales = function(sale){
 		if(! ( $scope.salesform.$valid && sale.validQuandity) ){
 			$scope.submitclick = true;
@@ -347,6 +376,21 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 					console.log(JSON.stringify(responseData));
 					$scope.optStatus = 'Success';
 					//$location.path("/show-user");
+					
+					 $scope.curItems = [];
+					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
+					$scope.trasaction = {};
+					$scope.trasaction.type = 2;
+					$scope.trasaction.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					$scope.trasaction.trasactionItems = [];
+					$scope.trasaction.trasactionItems.push({});
+					
+					  $scope.trasaction.inputTrnsDate = new Date(
+						 $rootScope.transDate.getFullYear(),
+						 $rootScope.transDate.getMonth(),
+						 $rootScope.transDate.getDate()
+					  );					
+					
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';

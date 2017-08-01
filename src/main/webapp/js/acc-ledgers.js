@@ -56,12 +56,17 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 					console.log(JSON.stringify(responseData));
 					$rootScope.currentPage = 'ledgerList';
 					//$rootScope.ledgers.push(ledger);
-					$location.path("/view-ledgers");
+					//$location.path("/view-ledgers");
+					$scope.ledger = {};
+					$scope.submitclick = false;
+					$scope.optStatus = 'Success';
 				  } catch (err) {
 					console.log(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
 			  });		
 	}	
 	
@@ -103,12 +108,15 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 					console.log(JSON.stringify(responseData));
 					$rootScope.currentPage = 'viewLedgers';
 					//$rootScope.ledgers.push(user);
-					$location.path("/view-ledgers");
+					//$location.path("/view-ledgers");
+					$scope.optStatus = 'Success';
 				  } catch (err) {
 					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
 			  });
 	}
 	

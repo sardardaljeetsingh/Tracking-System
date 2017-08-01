@@ -72,7 +72,7 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 			}).success(function(responseData) {
 				  try {
 					console.log(JSON.stringify(responseData));
-					$rootScope.currentPage = 'userList';
+					//$rootScope.currentPage = 'userList';
 					$rootScope.users.push(user);
 					
 					 console.log(" User Data : " + responseData);
@@ -89,12 +89,22 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 					  console.log(" User Prev Response " + JSON.stringify(response));
 				   });					
 					
-					$location.path("/show-user");
+					//$location.path("/show-user");
+					
+					$scope.user ={}; 
+					$scope.user.previliges = {};
+					$scope.user.previliges.accountinfo = "true";
+					$scope.user.previliges.inventoryinfo = "true";
+					$scope.optType = "create";
+					$scope.submitclick = false;					
+					$scope.optStatus = 'Success';
 				  } catch (err) {
 					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
 			  });		
 	}
 	
@@ -149,15 +159,20 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 				   
 				  try {
 					console.log(JSON.stringify(responseData));
-					$rootScope.currentPage = 'companyList';
+					//$rootScope.currentPage = 'companyList';
 					$rootScope.users.push(user);
 					
-					$location.path("/show-user");
+					//$location.path("/show-user");
+					$scope.optStatus = 'Success';
+					$scope.submitclick = false;
+					
 				  } catch (err) {
 					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
 			  });
 	}
 	
