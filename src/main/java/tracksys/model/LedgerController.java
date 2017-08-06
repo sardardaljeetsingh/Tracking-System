@@ -1,5 +1,7 @@
 package tracksys.model;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,13 @@ public class LedgerController {
 		ledger.setAccGroup(accGroupRepository.findOne(ledger.getAccGroup().getId()));
 		return ledgerRepository.save(ledger);
 	}	
+	
+	@RequestMapping(value ="/delete/{ledgerid}",method = RequestMethod.DELETE)
+	@Transactional
+	public @ResponseBody boolean  delete(@PathVariable("ledgerid") int ledgerid) {
+		ledgerRepository.delete(ledgerid);
+		return true;
+	}		
 	
 	@RequestMapping(value ="/findAll",method = RequestMethod.GET)
 	public @ResponseBody Iterable<Ledger> findAll() {

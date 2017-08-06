@@ -55,6 +55,11 @@ public class Company {
 
 	@NotNull
 	@Size(min = 2, max = 100)
+	@Column(name = "creationdate", nullable = false)
+	private String creationdate;	
+	
+	@NotNull
+	@Size(min = 2, max = 100)
 	@Column(name = "yearstart", nullable = false)
 	private String yearstart;
 	
@@ -62,6 +67,7 @@ public class Company {
 	@Size(min = 2, max = 100)
 	@Column(name = "booksstart", nullable = false)
 	private String booksstart;
+	
 	
 	
 /*	@ManyToMany(cascade=CascadeType.ALL) 
@@ -179,6 +185,14 @@ public class Company {
 
 	public void setCurrencesymbol(String currencesymbol) {
 		this.currencesymbol = currencesymbol;
+	}
+
+	public String getCreationdate() {
+		return creationdate;
+	}
+
+	public void setCreationdate(String creationdate) {
+		this.creationdate = creationdate;
 	}
 
 	public String getYearstart() {

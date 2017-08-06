@@ -44,6 +44,10 @@ public class TrasactionItem {
 	@NotNull
 	@Column(name = "rate", nullable = false)
 	private int rate;	
+	
+	@NotNull
+	@Column(name = "purcrate", nullable = false)
+	private int purcrate;	
 
 	public int getId() {
 		return id;
@@ -83,6 +87,14 @@ public class TrasactionItem {
 
 	public void setRate(int rate) {
 		this.rate = rate;
+	}
+
+	public int getPurcrate() {
+		return purcrate;
+	}
+
+	public void setPurcrate(int purcrate) {
+		this.purcrate = purcrate;
 	}
 
 	public Transaction getTransaction() {

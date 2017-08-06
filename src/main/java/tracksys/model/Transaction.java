@@ -47,6 +47,7 @@ public class Transaction {
 	@Column(name = "rate", nullable = false)
 	private int rate;
 	
+
 	@NotNull
 	@Column(name = "voucher", nullable = false)
 	private String voucher;	
@@ -141,6 +142,7 @@ public class Transaction {
 
 	public void setTrasactionItems(List<TrasactionItem> trasactionItems) {
 		this.trasactionItems = trasactionItems;
-	}	
+	}
+
 	
 }

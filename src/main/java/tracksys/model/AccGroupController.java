@@ -1,5 +1,7 @@
 package tracksys.model;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/accgroup")
@@ -24,6 +27,13 @@ public class AccGroupController {
 		}
 		return new ResponseEntity<AccGroup>(group, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value ="/delete/{grpid}",method = RequestMethod.DELETE)
+	@Transactional
+	public @ResponseBody boolean  delete(@PathVariable("grpid") int grpid) {
+		groupRepository.delete(grpid);
+		return true;
+	}		
 	  
 	  @RequestMapping(value ="/find-by-company/{companyId}",method = RequestMethod.GET)
 	  public ResponseEntity<Iterable<AccGroup>> findbyCompany(@PathVariable("companyId") int companyId) {

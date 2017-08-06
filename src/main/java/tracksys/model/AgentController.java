@@ -33,6 +33,13 @@ public class AgentController {
 		return agentRepository.save(entityMng.merge(agent));
 	}		
 	
+	@RequestMapping(value ="/delete/{agentId}",method = RequestMethod.DELETE)
+	@Transactional
+	public @ResponseBody boolean  delete(@PathVariable("agentId") int agentId) {
+		agentRepository.delete(agentId);
+		return true;
+	}		
+	
 	@RequestMapping(value ="/find/{agentId}",method = RequestMethod.GET)
 	public @ResponseBody Agent findbyId(@PathVariable("agentId") int agentId) {
 		return agentRepository.findOne(agentId);
