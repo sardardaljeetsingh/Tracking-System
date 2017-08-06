@@ -38,6 +38,7 @@ CREATE TABLE company
 	phone INT NOT NULL,
 	email VARCHAR2(100) NOT NULL,
 	currencesymbol VARCHAR2(100),
+	creationdate VARCHAR2(100) NOT NULL,
 	yearstart VARCHAR2(100) NOT NULL,
 	booksstart VARCHAR2(100) NOT NULL,
 );
@@ -88,7 +89,7 @@ CREATE TABLE transactions( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transtyp
 ALTER TABLE transactions ADD FOREIGN KEY (fromledger) REFERENCES ledger(id) ;
 ALTER TABLE transactions ADD FOREIGN KEY (ledgerid) REFERENCES ledger(id) ;
 
-CREATE TABLE transactions_item( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transid INT, itemid INT,quandity INT,rate INT);
+CREATE TABLE transactions_item( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,transid INT, itemid INT,quandity INT,rate INT,purcrate INT);
 ALTER TABLE transactions_item ADD FOREIGN KEY (transid) REFERENCES transactions(id) ;
 ALTER TABLE transactions_item ADD FOREIGN KEY (itemid) REFERENCES item_dtl(id) ;
 
