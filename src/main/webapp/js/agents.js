@@ -21,22 +21,22 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 				  try {
 					console.log(JSON.stringify(responseData));
 					$scope.optStatus = 'Success';
+					$scope.message = 'Agent ' +agent.name + ' creation done successfully.';
 					//$location.path("/show-user");
+					$scope.agent ={}; 
+					//$scope.optStatus = null;
+					$scope.submitclick = false;	
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
+					$scope.message = ' Failed to create agent';
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 				$scope.optStatus = 'Failed';
+				$scope.message = ' Failed to create agent';
 			  });		
 	}
-	
-	$scope.clear = function(){
-		$scope.agent ={}; 
-		$scope.optStatus = null;
-		$scope.submitclick = false;		
-	}	
 	
 });
 
@@ -62,14 +62,17 @@ app.controller('AgentEditController', function($scope,$rootScope,$location,$http
 				  try {
 					console.log(JSON.stringify(responseData));
 					$scope.optStatus = 'Success';
+					$scope.message = 'Agent '+agent.name + ' edit done successfully.';
 					//$location.path("/show-user");
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
+					$scope.message = ' Failed to edit agent';
 				  }
 			 }).error(function(data, status, headers, config) {
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 				$scope.optStatus = 'Failed';
+				$scope.message = ' Failed to edit agent';
 			  });
 	}
 	
@@ -92,14 +95,54 @@ app.controller('AgentsController', function($scope,$rootScope,$location,$http) {
 	});	
 	
 	$scope.agent ={}; 
+	$scope.message ='';
+	$scope.optStatus = null;
 	
 	$scope.editAgent = function(agent){
 		$rootScope.currentPage ='editAgent';
+		$scope.message ='';
 		console.log( " Edit User");
 		$location.path("edit-agent");
 		$rootScope.agent = agent ;
 	}
-	
+
+	$scope.deleteAgent = function(agent){
+		console.log( " delete Agent");
+		$scope.message ='';
+		var flag = confirm("Are you sure you want to delete this Agent ?");
+		if(flag){
+			
+			
+			var dataObj = JSON.stringify(agent);
+			var url = hostname + '/agent/delete/'+agent.id;
+			console.log(url);
+			$http.delete(url, dataObj, {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					console.log(JSON.stringify(responseData));
+					$scope.message = 'Agent '+agent.name + ' deleted successfully.';
+					$scope.optStatus = 'Success';
+					$http.get(hostname+'/agent/findAll').
+							then(function(response) {
+								$rootScope.agents = response.data;
+					});	
+				  } catch (err) {
+					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
+					$scope.message = ' Failed to delete agent' +agent.name ;
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
+				$scope.message = ' Failed to delete agent' +agent.name ;
+			  });			
+		}
+		
+		
+	}	
 	
 	//$rootScope.curTab = 'userTab';
 	//console.log("   User Tab ");

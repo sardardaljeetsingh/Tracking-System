@@ -54,13 +54,6 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		 $rootScope.transDate.getDate()
 	  );	
   
-   $scope.minDate = new Date(
-     $scope.purchage.inputTrnsDate.getFullYear(),
-     $scope.purchage.inputTrnsDate.getMonth() - 2,
-     $scope.purchage.inputTrnsDate.getDate()
-  );	
-	
-	
 	$scope.getTotal = function(curTrasItem){
 		var total = 0;
 		for(var i = 0; i < curTrasItem.curItems.length; i++){
@@ -177,6 +170,9 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 						 $rootScope.transDate.getDate()
 					  );					
 					
+					     ItemService.getAllItems(function(response){
+						  $rootScope.items = response;
+					   });
 					
 					//$location.path("/show-user");
 				  } catch (err) {
@@ -247,12 +243,6 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		 $rootScope.transDate.getMonth(),
 		 $rootScope.transDate.getDate()
 	  );	
-  
-   $scope.minDate = new Date(
-     $scope.trasaction.inputTrnsDate.getFullYear(),
-     $scope.trasaction.inputTrnsDate.getMonth() - 2,
-     $scope.trasaction.inputTrnsDate.getDate()
-  );	
 	
 	$scope.invalidCount = false;
 	$scope.getTotal = function(curTrasItem,type){
@@ -389,7 +379,11 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 						 $rootScope.transDate.getFullYear(),
 						 $rootScope.transDate.getMonth(),
 						 $rootScope.transDate.getDate()
-					  );					
+					  );	
+
+					   ItemService.getAllItems(function(response){
+						  $rootScope.items = response;
+					   });					  
 					
 				  } catch (err) {
 					alert(JSON.stringify(err));
@@ -410,12 +404,6 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 
    $scope.trasaction ={};
    $scope.trasaction.transdate = new Date();
-
-   $scope.minDate = new Date(
-     $scope.trasaction.transdate.getFullYear(),
-     $scope.trasaction.transdate.getMonth() - 2,
-     $scope.trasaction.transdate.getDate()
-  );
 
     $rootScope.items = [];
      ItemService.getAllItems(function(response){
@@ -589,12 +577,6 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 
    $scope.trasaction ={};
    $scope.trasaction.transdate = new Date();
-
-   $scope.minDate = new Date(
-     $scope.trasaction.transdate.getFullYear(),
-     $scope.trasaction.transdate.getMonth() - 2,
-     $scope.trasaction.transdate.getDate()
-  );
 
    /*$scope.maxDate = new Date(
      $scope.myDate.getFullYear(),

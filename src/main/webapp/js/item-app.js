@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -305,6 +305,8 @@ app.controller('companiesController', function($scope,$rootScope,$location,$http
 	$scope.performAction = function(company){
 		$rootScope.currentPage = 'performAction';
 		$rootScope.company = company;
+		$rootScope.minDate = new Date(company.creationdate);	
+		$rootScope.maxDate = new Date(new Date(company.yearstart).setFullYear(new Date(company.yearstart).getFullYear() + 1));		
 		$location.path("perform-action");
 		//$scope.curTab = 'companyTab';
 	}
@@ -354,6 +356,10 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 	$scope.company.currencesymbol = "Rs.";
 	$scope.submitclick = false;
 	
+	$scope.company.yearstart = new Date();
+	$scope.company.booksstart = new Date();
+	$scope.company.creationdate = new Date();
+	
 	$scope.createCompany = function(company){
 		if(!$scope.companyform.$valid){
 			$scope.submitclick = true;
@@ -394,6 +400,9 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 
     $scope.optType = "edit";
  	$scope.submitclick = false;
+	$scope.company.yearstart = new Date($scope.company.yearstart);
+	$scope.company.booksstart = new Date($scope.company.booksstart);
+	$scope.company.creationdate = new Date($scope.company.creationdate);
 
 	$scope.editCompany = function(company){
 		

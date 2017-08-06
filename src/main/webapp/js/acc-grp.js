@@ -154,5 +154,42 @@ app.controller('showAccountGroupsController', function($scope,$rootScope,$locati
 			//$scope.groups = response.data;
 			console.log(" AccountGRP Length : " + $scope.groups.length)	;
             $rootScope.currentPage = 'showAccountGroups';			
-		});			
+		});	
+
+	$scope.deleteAccGrp = function(accgroup){
+		console.log( " delete accgroup");
+		$scope.message ='';
+		var flag = confirm("Are you sure you want to delete this Account Group ?");
+		if(flag){	
+			var url = hostname + '/accgroup/delete/'+accgroup.id;
+			console.log(url);
+			$http.delete(url, '', {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					console.log(JSON.stringify(responseData));
+					$scope.message = 'Account Group '+accgroup.name + ' deleted successfully.';
+					$scope.optStatus = 'Success';
+
+					$http.get(hostname + '/accgroup/find-by-company/'+$scope.company.id).
+					then(function(response) 
+					{
+						$scope.groups = response.data;
+					});	
+					
+				  } catch (err) {
+					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
+					$scope.message = ' Failed to delete Account Group' +accgroup.name ;
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
+				$scope.message = ' Failed to delete Account Group' +accgroup.name ;
+			  });			
+		}	
+	}
+		
 });
