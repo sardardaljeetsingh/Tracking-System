@@ -42,8 +42,7 @@
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 											ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
-											<!-- ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'!Purchase Accounts'}}  " -->
-											ng-options="option as option.name for option in ledgers"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sundry Creditors'}}  "
 											required >
 											<option value="">-- Choose Account --</option>
 									</select>	
@@ -57,7 +56,7 @@
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
-											ng-options="option as option.name for option in ledgers"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
 											required >
 											<option value="">-- Choose Account --</option>
 									</select>
@@ -75,8 +74,9 @@
 							  <th class="col-sm-2 input-sm">Item Name</th>
 							  <th class="col-sm-2 input-sm">Stock Group</th>
 							  <th class="col-sm-1 input-sm">Shade</th>
-							  <th class="col-sm-1 input-sm">Avaliable Quantity</th>
-							  <th class="col-sm-1 input-sm">Rate</th>
+							  <th class="col-sm-1 input-sm">Avaliable Quantity</th> 
+							  <th class="col-sm-1 input-sm">Purchase Rate</th>
+							  <th class="col-sm-1 input-sm">Sale Rate</th>
 							  <th class="col-sm-3 input-sm">Current Quantity</th>
 							  <th class="col-sm-1 input-sm"></th>
 							</tr>
@@ -87,6 +87,7 @@
 												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
 												ng-options="option as option.name for option in items"
 												ng-change="curTrasItem.rate = curTrasItem.item.rate;
+												curTrasItem.purcrate = curTrasItem.item.purcrate;
 												curTrasItem.curItems = [];
 												curTrasItem.curItems.push({ 'quandity': 1, 'pices':1});
 												curTrasItem.quandity = 0;
@@ -102,6 +103,10 @@
 								  </td>
 								  <td>  {{curTrasItem.item.shade}} </td>
 								  <td>  {{curTrasItem.item.curqundty}} </td>
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" >  
+								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
+									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required>
+								  </td>								  
 								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" >  
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.rate" ng-model="curTrasItem.rate" required>

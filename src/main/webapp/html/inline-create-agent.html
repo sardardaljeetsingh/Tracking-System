@@ -49,8 +49,8 @@
 							  <div class="form-group" ng-if="optStatus != null">
 								<label for="inputPassword3" class="col-sm-5 control-label"></label>
 								<div class="col-sm-5">
-									<span class="label label-success" ng-if="optStatus == 'Success'" > Agent '<b>{{agent.name}}</b>' creation/alter done successfully.</span>
-									<span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to create agent.</span>	
+									<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
+									<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
 								</div>
 							  </div>							  
 							  
@@ -61,8 +61,6 @@
 								   class="btn btn-success">Edit Agent</button>
 								   <button type="button" ng-click="createAgent(agent);" ng-if="optType=='create'" style="margin-bottom: 10px;"
 								   class="btn btn-success">Create Agent</button>
-								    <button type="button" ng-click="clear();" style="margin-bottom: 10px;" ng-if="optType=='create'"
-								   class="btn btn-success btn-small">Clear</button>
 								    <button type="button" ng-click="cancelAgent();" style="margin-bottom: 10px;" ng-if="optType=='edit'"
 								   class="btn btn-warning btn-small">Cancel</button>								   
 								</div>
