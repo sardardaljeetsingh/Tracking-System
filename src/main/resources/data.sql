@@ -12,19 +12,25 @@ INSERT INTO stock_group_dtl(id ,name,companyid) VALUES (1, 'DUMMY',1);
 INSERT INTO stock_group_dtl(id ,name,companyid,parentid) VALUES (2, 'Raymonds',1,1);
 
 INSERT INTO acc_group_dtl(id ,name,companyid) VALUES (1, 'DUMMY',1);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (2,'Current Assets',1,1);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (3,'Current Liabilities',1,1);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (2,'Current Assets',1,1);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (3,'Current Liabilities',1,1);
 
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (4,'Bank Accounts',1,2);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (5,'Cash-in-hand',1,2);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (6,'Deposits (Asset)',1,2);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (7,'Duties & Taxes',1,3);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (8,'Loans & Advances (Asset)',1,2);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (9,'Provisions',1,3);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (10,'Stock-in-hand',1,2);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (11,'Sundry Creditors',1,3);
-INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (12,'Sundry Debtors',1,2);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (4,'Bank Accounts',1,2);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (5,'Cash-in-hand',1,2);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (6,'Deposits (Asset)',1,2);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (7,'Duties & Taxes',1,3);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (8,'Loans & Advances (Asset)',1,2);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (9,'Provisions',1,3);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (10,'Stock-in-hand',1,2);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (11,'Sundry Creditors',1,3);
+--INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (12,'Sundry Debtors',1,2);
 
+INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (2,'Sundry Creditors',1,1);
+INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (3,'Sundry Debtors',1,1);
+INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (4,'Purchases',1,1);
+INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (5,'Sales',1,1);
+INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (6,'Cash',1,1);
+INSERT INTO acc_group_dtl(id ,name,companyid,parentid) VALUES (7,'Bank',1,1);
 
 INSERT INTO ledger( id, name ,alias , groupid ,mailingname ,mailingaddress ,mailingstate ,saletaxno ,taxpan ,opbal ,curbal )
 VALUES (1,'Purchase Account','Purchase Account',4,'dd','dfd','dfd',1234,1234,10000,10000);
