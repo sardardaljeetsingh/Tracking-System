@@ -43,6 +43,15 @@ public class CompanyController {
 		 }
 		 userPreviligeReposotory.save(prevList);
 		 
+		 List<AccGroup> accGroupList = new ArrayList<AccGroup>();
+		 accGroupList.add( new AccGroup("Sundry Creditors", company,1));
+		 accGroupList.add( new AccGroup("Sundry Debtors", company,1));
+		 accGroupList.add( new AccGroup("Purchases", company,1));
+		 accGroupList.add( new AccGroup("Sales", company,1));
+		 accGroupList.add( new AccGroup("Cash", company,1));
+		 accGroupList.add( new AccGroup("Bank", company,1));
+		 accGroupRepository.save(accGroupList);
+		 
 		  return company;
 	  }
 	  
@@ -103,5 +112,8 @@ public class CompanyController {
 	  private UserPreviligeReposotory userPreviligeReposotory;
 	  
 	  @Autowired
-	  private UserRepostory userRepostory;	  
+	  private UserRepostory userRepostory;	
+	  
+	  @Autowired
+	  private AccGroupRepository accGroupRepository;
 }
