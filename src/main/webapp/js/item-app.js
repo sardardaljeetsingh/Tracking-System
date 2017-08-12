@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
+ //var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -810,6 +810,8 @@ app.controller('showStockItemController', function($scope,$rootScope,$location,$
 app.controller('showStockGroupsController', function($scope,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'showStockGroups';
         $scope.singlegroups = [];
+		$scope.optStatus = null;
+		$scope.message = ' ' ;
 		console.log(" company.id "  + $scope.company.id );
 	    $http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
 		then(function(response) 
@@ -819,5 +821,38 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 			console.log(" Groupth Length : " + $scope.groups.length)	;
             $rootScope.currentPage = 'showStockGroups';			
 		});		
+		
+	$scope.deleteGroup = function(group){
+		$scope.optStatus = null;
+		$scope.message = ' ' ;
+	   var confirmval = confirm("Are you sure you wish to delete Group ? ");
+	   if(!confirmval){ return} ;
+	   
+			//var dataObj = JSON.stringify(group);
+			$http.delete(hostname + '/stockgroup/delete/'+group.id , '', {
+			  headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			  },
+			}).success(function(responseData) {
+				  try {
+					console.log(JSON.stringify(responseData));
+					$scope.message = 'Group '+group.name + ' deleted successfully.';
+					$scope.optStatus = 'Success';
+					$http.get(hostname+'/stockgroup/find-by-company/'+group.company.id).
+							then(function(response) {
+								$rootScope.groups = response.data;
+					});	
+				  } catch (err) {
+					alert(JSON.stringify(err));
+					$scope.optStatus = 'Failed';
+					$scope.message = ' Failed to delete group' +group.name ;
+				  }
+			 }).error(function(data, status, headers, config) {
+				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.optStatus = 'Failed';
+				$scope.message = ' Failed to delete group' +group.name ;
+			  });
+	}		
+		
 
 });
