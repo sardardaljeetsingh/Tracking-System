@@ -80,7 +80,7 @@
 							  <th class="col-sm-2 input-sm">Stock Group</th>
 							  <th class="col-sm-1 input-sm">Shade</th>
 							  <th class="col-sm-1 input-sm">Avaliable Quantity</th>
-							   <th class="col-sm-1 input-sm">Purchase Rate</th>
+							   <th class="col-sm-1 input-sm" ng-if="false">Purchase Rate</th>
 							  <th class="col-sm-1 input-sm">Sale Rate</th>
 							  <th class="col-sm-3 input-sm">Current Quantity</th>
 							  <th class="col-sm-1 input-sm"></th>
@@ -108,7 +108,7 @@
 								  </td>
 								  <td>  {{curTrasItem.item.shade}} </td>
 								  <td>  {{curTrasItem.item.curqundty}} </td>
-								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" >  
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" ng-if="false" >  
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required readonly>
 								  </td>								  
