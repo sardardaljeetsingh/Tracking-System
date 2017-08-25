@@ -76,7 +76,10 @@
 							|| currentPage == 'SaleReturn' || currentPage == 'PurchaseReturn' )" 
 								ng-class="{'active': currentPage == 'performAction'}" >
 								<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
-							</li>	
+								
+							</li>
+							
+								
 							<li ng-if="(currentPage == 'createStockGroups' )" ng-class="{'active': currentPage == 'createStockGroups'}" style="color:#ccc" >
 								Create Stock Groups
 							</li>
@@ -122,9 +125,10 @@
 							<li ng-if="(currentPage == 'editAgent' )" ng-class="{'active': currentPage == 'editAgent'}" style="color:#ccc" >
 								Edit Agent
 							</li>							
-						
-				
+						     
+						    
 							</ol>
+								
 							
 							<table class="table table-condensed" ng-if="(loggedUser != null )" style="margin-bottom: 5px;" >
 							<thead>
@@ -139,6 +143,8 @@
 							</tr>
 							</thead>
 							</table>
+							
+							
 							
 							<div>
 								<div ng-view class="input-sm"></div>
@@ -264,7 +270,9 @@
 					<button type="button" style="display:none" class="btn btn-warning btn-xs" ng-click="assignUsers(company)" 
 					ng-if="loggedUser.type =='admin'">Assign Users</button>					
 					<button type="button" class="btn btn-warning btn-xs" ng-click="performAction(company)"> Perform Actions </button>
-
+					<button type="button" class="btn btn-warning btn-xs" ng-click="cmpSettingsBtn(company)" 
+					ng-if="loggedUser.type =='admin'">Company Settings</button>					
+					
 					
 					
 				</form>				
@@ -726,6 +734,7 @@
 											<tr  class="input-sm">
 											  <th>#</th>
 											  <th>Name</th>
+											  <th>HSN#</th>
 											  <th>Shade</th>
 											  <th>Description</th>
 											  <th>UOM</th>
@@ -740,6 +749,8 @@
 											 <td ng-class="{'has-error' : submitclick && itemform['item.name'].$invalid }">
 											 <input type="text" class="form-control input-sm" size="10" ng-model="item.name" name="item.name" id="item.name"
 											  required> </td>
+											 <td ng-class="{'has-error' : submitclick && itemform['item.itemHSN'].$invalid }">
+											 <input type="text" class="form-control input-sm" size="10" ng-model="item.itemHSN" name="item.itemHSN" id="item.itemHSN" required> </td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.shade'].$invalid }">
 											 <input type="text" class="form-control input-sm" size="5" ng-model="item.shade" name="item.shade" id="item.shade" required></td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.desc'].$invalid }">
@@ -812,13 +823,13 @@
 											 
 											 </tr>
 					<tr class="warning">
-					<td colspan="9" style="text-align : center" >
+					<td colspan="10" style="text-align : center" >
 							   <span class="label label-success" ng-if="optStatus == 'Success'" > Stock item added successfully.</span>
 							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to add stock item.</span>				
 					</td>
 					</tr>												 
 					<tr class="warning">
-					<td colspan="9" style="text-align : center" >
+					<td colspan="10" style="text-align : center" >
 						  <button type="button" ng-click="addItem(item);invtBtmHide=true;" class="btn btn-success btn-sm"
 					   >Add item to inventory</button>				
 					</td>
@@ -2277,9 +2288,11 @@
 		</div>  
 	  </script>	
 	
+	  
 	
 	  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -2297,7 +2310,8 @@
 
 	
       <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+      
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
@@ -2305,7 +2319,6 @@
       	
 	
 	
-	<!--
 	<link rel="stylesheet" href="css/bootstrap.min.css" > 
 	<link rel="stylesheet" href="css/bootstrap-theme.min.css" > 
 	<script src="js/jquery.min.js"></script> 
@@ -2314,7 +2327,25 @@
 	<script src="js/angular-route.js"></script> 
 	<script src="js/angular-local-storage.min.js"></script> 
 	-->
-	    <script src="js/item-app.js"></script> 
+	
+	<link rel="stylesheet" href="css/bootstrap.min.css" > 
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css" > 
+	<link rel="stylesheet" href="css/angular-material.min.css" > 
+	
+	
+	<script src="js/jquery.min.js"></script> 
+	<script src="js/bootstrap.min.js"></script> 
+	<script src="js/angular.min.js"></script> 
+	<script src="js/angular-route.js"></script> 
+	<script src="js/angular-local-storage.min.js"></script> 
+	<script src="js/angular-animate.min.js"></script> 
+	<script src="js/angular-aria.min.js"></script> 
+	<script src="js/angular-messages.min.js"></script> 
+	<script src="js/angular-material.min.js"></script> 
+	
+	
+
+		<script src="js/item-app.js"></script> 
 		<script src="js/services.js"></script> 
         <script src="js/user-mng.js"></script> 
 		<script src="js/acc-grp.js"></script> 
