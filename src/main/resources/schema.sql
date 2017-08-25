@@ -43,6 +43,20 @@ CREATE TABLE company
 	booksstart VARCHAR2(100) NOT NULL,
 );
 
+------Company settings---------------
+
+DROP TABLE IF EXISTS company_settings;
+CREATE TABLE company_settings
+(
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	companyid INT NOT NULL,
+	invoiceSequence VARCHAR2(20) NOT NULL,
+	uom VARCHAR2(20) NOT NULL,
+	calculateTax INT NOT NULL,
+);
+ALTER TABLE company_settings ADD FOREIGN KEY ( companyid ) REFERENCES company( id ) ;
+
+
 DROP TABLE IF EXISTS company_user_previliges;
 CREATE TABLE company_user_previliges
 (
@@ -66,7 +80,7 @@ ALTER TABLE stock_group_dtl ADD FOREIGN KEY ( companyid ) REFERENCES company( id
 ALTER TABLE stock_group_dtl ADD FOREIGN KEY ( parentid ) REFERENCES stock_group_dtl( id ) ;
 
 DROP TABLE IF EXISTS item_dtl;
-CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,initqundty INT,curqundty INT,rate INT,purcrate INT);
+CREATE TABLE item_dtl( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL, itemHSN VARCHAR2(50) NOT NULL,groupid INT NOT NULL,shade VARCHAR2(50) NOT NULL,description VARCHAR2(50) NOT NULL,uom VARCHAR2(50) NOT NULL,initqundty INT,curqundty INT,rate INT,purcrate INT);
 ALTER TABLE item_dtl ADD FOREIGN KEY (groupid) REFERENCES stock_group_dtl(id) ;
 DROP TABLE IF EXISTS item_dtl_trans;
 CREATE TABLE item_dtl_trans( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name VARCHAR2(50) NOT NULL,itemid INT,quandity INT,curqundty INT, pices INT,curpices INT);

@@ -37,7 +37,7 @@ VALUES (1,'Purchase Account','Purchase Account',4,'dd','dfd','dfd',1234,1234,100
 INSERT INTO ledger( id, name ,alias , groupid ,mailingname ,mailingaddress ,mailingstate ,saletaxno ,taxpan ,opbal ,curbal )
 VALUES (2,'Sales Account','Sales Account',5,'dd','dfd','dfd',1234,1234,10000,10000);
 
-INSERT INTO item_dtl(id,name,groupid,shade,description,uom,initqundty,curqundty,rate,purcrate) values (1,'shirts',2,'Lenin','Lenin Shirts','kgs',100,100,120,100);
+INSERT INTO item_dtl(id,name,itemHSN,groupid,shade,description,uom,initqundty,curqundty,rate,purcrate) values (1,'shirts','hsn number',2,'Lenin','Lenin Shirts','kgs',100,100,120,100);
 INSERT INTO item_dtl_trans(id, name,itemid ,quandity ,curqundty , pices,curpices) values (1,'shirts',1,100,100,1,1);
 
 
