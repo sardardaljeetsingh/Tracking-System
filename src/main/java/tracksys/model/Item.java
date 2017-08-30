@@ -36,6 +36,10 @@ public class Item {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setItemHSN(String itemHSN) {
 		this.itemHSN = itemHSN;
 	}
@@ -44,14 +48,12 @@ public class Item {
 		return itemHSN;
 	}
 
-	
-	public void setShade(String shade) {
-		this.shade = shade;
-	}
-
-
 	public String getShade() {
 		return shade;
+	}
+
+	public void setShade(String shade) {
+		this.shade = shade;
 	}
 
 	public String getDesc() {
@@ -95,7 +97,7 @@ public class Item {
 	@NotNull
 	@Column(name = "groupid")
 	private int stockGroup;	
-
+	
 	@NotNull
 	@Size(min = 1, max = 100)
 	@Column(name = "itemHSN", nullable = false)
