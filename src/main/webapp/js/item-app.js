@@ -1,7 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
- var hostname = "http://service-itemmngtally.8e14.starter-us-west-2.openshiftapps.com"
+// var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -112,6 +112,13 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 		    controller: 'PurchagesController',
 		    templateUrl :'/html/inline-Purchages.html',
 		  })
+      .when('/showReport'	,
+	      { 
+		    controller: 'reportsController',
+		    templateUrl :'/html/showReport.html',
+		  })
+      
+      
 	.when('/Sales'	,
 	      { 
 		    controller: 'SalesController',
@@ -120,7 +127,7 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/PurchaseReturn'	,
 	      { 
 		    controller: 'PurchaseReturnController',
-		    templateUrl :'/inline-PurchaseReturn.html',
+		    templateUrl :'/html/inline-PurchaseReturn.html',
 		  })
 	.when('/SaleReturn'	,
 	      { 
@@ -443,6 +450,7 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 	$http.get(hostname+'/user/findPrevByUserAndCompany/'+$rootScope.user.id +'/'+ $rootScope.company.id).
 			then(function(response) {
 				$scope.previliges = {};
+				$scope.previliges.configuration = response.data.configuration == 'true'  ? true : false;
 				$scope.previliges.accountinfo = response.data.accountinfo == 'true'  ? true : false;
 				$scope.previliges.inventoryinfo = response.data.inventoryinfo == 'true'? true : false;
 				$scope.previliges.transactions = response.data.transactions == 'true'? true : false;
@@ -486,6 +494,24 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 	$scope.PurchaseReturn = function(){
 		$rootScope.currentPage = 'PurchaseReturn';
 		//Back end code to edit Company
+		$location.path("/PurchaseReturn");
+	}
+});
+app.controller('reportsController', function($scope,$rootScope,$location,$http) {
+	$rootScope.currentPage = 'showReport';
+	$scope.transType = $location.search().optType;
+	$http.get(hostname + '/reportController/findAllTransType/' + $scope.transType).then(function(response) 
+		{
+			$rootScope.reports = response.data;
+		});	
+		
+	$scope.editPurchase = function(report){
+		$rootScope.currentPage = 'PurchaseReturn';
+		$rootScope.optType = 'editPurchase';
+		$rootScope.voucher = report.voucher;
+		//$rootScope.trasaction = {};
+		//$rootScope.trasaction.voucher = report;
+		$rootScope.transactionReport = report;
 		$location.path("/PurchaseReturn");
 	}	
 	
@@ -734,7 +760,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		}else{
 			selItem.stockGroup = $scope.stockGroups[$scope.stockGroups.length-2].selGroup.id;
 		}
-	    //alert(selItem.stockGroup);
+	    alert(selItem.stockGroup);
 		selItem.itemDtls = $scope.items;
 		selItem.curqundty = selItem.quandity;
 
@@ -798,7 +824,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 
 app.controller('showStockItemController', function($scope,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'showStockItems';
-	    $http.get(hostname + '/item/getAll').
+	    $http.get(hostname + '/item/find-by-company/'+$scope.company.id).
 		then(function(response) 
 		{
 			$scope.items = response.data;
