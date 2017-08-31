@@ -1,7 +1,12 @@
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Sales </div>
-			  <div class="panel-body" style="padding-top : 3px" >
+			
+
+			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_PR'">Purchase Return </div>
+			
+			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_S'">Sales </div>
+			
+			<div class="panel-body" style="padding-top : 3px" >
 			  
 			  <div class="row" >
 				  <div class="form-group pull-right" style="margin-bottom: 0px; margin-top: 0px;"  >
@@ -46,10 +51,20 @@
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
 											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sundry Debtors'}}  "
-											required >
+											ng-options="option as option.name for option in ledgers | filter:filterForSales"
+											required ng-if="returnType == 'TR_S'">
 											<option value="">-- Choose Account --</option>
 									</select>	
+				
+								<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
+											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:filterForPurchases"
+											required ng-if="returnType == 'TR_PR'">
+											<option value="">-- Choose Account --</option>
+									</select>	
+				
+
+
 								</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" ng-if="trasaction.fromledger != null"
 											style="text-align : left" >{{trasaction.fromledger.curbal}}</label>
@@ -58,12 +73,22 @@
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && salesform['trasaction.ledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-3 control-label">To Account</label>
 								<div class="col-sm-6">
+									
 									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
 											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales'}}  "
-											required >
+											required ng-if="returnType == 'TR_S'">
 											<option value="">-- Choose Account --</option>
 									</select>
+									
+									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
+											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
+											required ng-if="returnType == 'TR_PR'">
+											<option value="">-- Choose Account --</option>
+									</select>
+									
+									
 									</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="trasaction.ledger != null"
 								 >{{trasaction.ledger.curbal}}</label>									
@@ -81,8 +106,8 @@
 							  <th class="col-sm-2 input-sm">Stock Group</th>
 							  <th class="col-sm-1 input-sm">Shade</th>
 							  <th class="col-sm-1 input-sm">Avaliable Quantity</th>
-							   <th class="col-sm-1 input-sm" ng-if="false">Purchase Rate</th>
-							  <th class="col-sm-1 input-sm">Sale Rate</th>
+							   <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_PR'">Purchase Rate</th>
+							  <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_S'">Sale Rate</th>
 							  <th class="col-sm-3 input-sm">Current Quantity</th>
 							  <th class="col-sm-1 input-sm"></th>
 							</tr>
@@ -197,25 +222,25 @@
 								  </td>
 							</tr>
 							<tr class="warning">
-								<td colspan="5" style="text-align : right;" > <b> Grand Total </b> </td>
-								<td colspan="2" style="text-align : left;" >
+								<td colspan="6" style="text-align : right;" > <b> Grand Total </b> </td>
+								<td colspan="3" style="text-align : left;" >
 								{{trasaction.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="5" style="text-align : right;" > <b> Total Price </b>  </td>
-								<td colspan="2" style="text-align : left;" >
+								<td colspan="6" style="text-align : right;" > <b> Total Price </b>  </td>
+								<td colspan="3" style="text-align : left;" >
 								{{trasaction.rate}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
-								<td colspan="2" style="text-align : left;" >
+								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
+								<td colspan="3" style="text-align : left;" >
 								{{ (trasaction.rate * trasaction.agent.commission) / 100 }}
 								</td>
 							</tr>
 							<tr class="">
-								<td colspan="7" style="text-align : center;" >
+								<td colspan="9" style="text-align : center;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Narration</label>
 								<div class="col-sm-5">
@@ -227,16 +252,23 @@
 							</tr>
 							  
 							<tr class="">
-								<td colspan="7" style="text-align : center;" >
+								<td colspan="9" style="text-align : center;" >
 								{{purchaseTotal(trasaction)}}
 			                        <button type="button" ng-click="sales(trasaction);" 
 								    class="btn btn-success">Submit</button>	
 								</td>
 							</tr>							
 							<tr class="warning">
-								<td colspan="7" style="text-align : center; font-size: 150%;" >
-										   <span class="label label-success" ng-if="optStatus == 'Success'" > Sale done successfully.</span>
-										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store sale details.</span>				
+							
+							   <td colspan="7" style="text-align : center; font-size: 150%;" ng-if="returnType == 'TR_S'">
+										 
+										 <span class="label label-success" ng-if="optStatus == 'Success'" > Sale done successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store transaction details.</span>				
+								</td>
+								<td colspan="7" style="text-align : center; font-size: 150%;" ng-if="returnType == 'TR_PR'">
+										 
+										 <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase Return done successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store transaction details.</span>				
 								</td>
 							</tr>	
 						</table>					

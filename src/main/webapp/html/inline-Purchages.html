@@ -1,6 +1,12 @@
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">Purchases </div>
+			  
+			  	<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_P'">Purchase</div>
+			
+			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_SR'">Sales Return</div>
+	
+			  
+			  
 			  <div class="panel-body" style="padding-top : 3px" >
 			  <div class="row" >
 				  <div class="form-group pull-right" style="margin-bottom: 0px; margin-top: 0px;"  >
@@ -40,13 +46,20 @@
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">From Account</label>
 								<div class="col-sm-6">
-									<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
-											ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sundry Creditors'}}  "
-											required >
-											<option value="">-- Choose Account --</option>
-									</select>	
-								</div>
+								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+										ng-options="option as option.name for option in ledgers | filter:filterForPurchases" required ng-if="returnType == 'TR_P'">
+										<option value="">-- Choose Account --</option>
+								</select>	
+								
+								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+										ng-options="option as option.name for option in ledgers | filter:filterForSales" required ng-if="returnType == 'TR_SR'">
+										<option value="">-- Choose Account --</option>
+								</select>	
+								
+								
+							</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" ng-if="purchage.fromledger != null"
 											style="text-align : left" >{{purchage.fromledger.curbal}}</label>
 							  </div>	
@@ -57,9 +70,17 @@
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
-											required >
+											required ng-if="returnType == 'TR_P'">
 											<option value="">-- Choose Account --</option>
 									</select>
+									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
+											ng-init="purchage.ledger = purchage.ledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales'}}  "
+											required ng-if="returnType == 'TR_SR'">
+											<option value="">-- Choose Account --</option>
+									</select>
+									
+									
 									</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="purchage.ledger != null"
 								 >{{purchage.ledger.curbal}}</label>									
@@ -185,25 +206,25 @@
 								  </td>
 							</tr>
 							<tr class="warning">
-								<td colspan="5" style="text-align : right;" > <b> Grand Total </b> </td>
-								<td colspan="2" style="text-align : left;" >
+								<td colspan="6" style="text-align : right;" > <b> Grand Total </b> </td>
+								<td colspan="3" style="text-align : left;" >
 								{{purchage.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="5" style="text-align : right;" > <b> Total Price </b>  </td>
-								<td colspan="2" style="text-align : left;" >
+								<td colspan="6" style="text-align : right;" > <b> Total Price </b>  </td>
+								<td colspan="3" style="text-align : left;" >
 								{{purchage.rate}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
-								<td colspan="2" style="text-align : left;" >
+								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
+								<td colspan="3" style="text-align : left;" >
 								{{ (purchage.rate * purchage.agent.commission) / 100 }}
 								</td>
 							</tr>	
 							<tr class="">
-								<td colspan="7" style="text-align : center;" >
+								<td colspan="9" style="text-align : center;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Narration</label>
 								<div class="col-sm-5">
@@ -222,9 +243,15 @@
 								</td>
 							</tr>							
 							<tr class="warning">
-								<td colspan="7" style="text-align : center; font-size: 150%;" >
-										   <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase done successfully.</span>
-										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store purchase details.</span>				
+								 <td colspan="7" style="text-align : center; font-size: 150%;" ng-if="returnType == 'TR_P'">
+										 
+										 <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase done successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store transaction details.</span>				
+								</td>
+								<td colspan="7" style="text-align : center; font-size: 150%;" ng-if="returnType == 'TR_SR'">
+										 
+										 <span class="label label-success" ng-if="optStatus == 'Success'" > Sale Return done successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store transaction details.</span>				
 								</td>
 							</tr>	
 						</table>					
