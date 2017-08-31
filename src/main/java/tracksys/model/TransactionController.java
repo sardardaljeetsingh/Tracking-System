@@ -73,17 +73,22 @@ public class TransactionController {
 				case 2:  
 					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
 					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
-					//tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
+					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
 					break;
 				case 3:  
 					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
 					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
-					//tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
+					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
 					break;					
 				case 4:  
-					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
-					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() + itemDetail.getCurqundty());
+					//tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
+					//tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() + itemDetail.getCurqundty());
 					//tempItemDtl.setCurpices(tempItemDtl.getCurpices() + itemDetail.getCurpices());
+					tempItemDtl = itemDetail;
+					tempItemDtl.setCurqundty(itemDetail.getQuandity());
+					tempItemDtl.setCurpices(itemDetail.getPices());
+					tempItemDtl.setItem(item);
+					
 					break;
 				}				
 				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
