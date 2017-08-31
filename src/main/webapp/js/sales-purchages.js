@@ -43,8 +43,19 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
     $scope.curItems = [];
    	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 	$scope.purchage = {};
-	$scope.purchage.type = 1;
-	$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	
+	//$scope.purchage.type = 1;
+	//$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	
+	//code added for using this js for both purchases and sales return
+	if($rootScope.returnType == 'TR_P') {
+		$scope.purchage.type = 1;
+		$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	} else {
+		$scope.purchage.type = 4;
+		$scope.purchage.voucher = "SR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	}
+	
 	$scope.purchage.trasactionItems = [];
 	$scope.purchage.trasactionItems.push({});
 	
@@ -159,8 +170,23 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 					$scope.curItems = [];
 					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 					$scope.purchage = {};
-					$scope.purchage.type = 1;
-					$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					
+					//$scope.purchage.type = 1;
+					//$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					//code added for using this js for both purchases and sales return
+					
+					
+					
+					if($rootScope.returnType == 'TR_P') {
+						$scope.purchage.type = 1;
+						$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					} else {
+						$scope.purchage.type = 4;
+						$scope.purchage.voucher = "SR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					}
+
+					alert("TR Type " + $rootScope.returnType + " " + $scope.purchage.type);
+					
 					$scope.purchage.trasactionItems = [];
 					$scope.purchage.trasactionItems.push({});
 					
@@ -186,7 +212,19 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	}   
    
    
-   
+   $scope.selectedPGenres = ['Sundry Creditors','Cash','Bank'];
+
+    $scope.filterForPurchases = function(option) {
+		alert("display " + option.accGroup.name);
+		return ($scope.selectedPGenres.indexOf(option.accGroup.name) !== -1);
+    };
+
+   $scope.selectedSRGenres = ['Sundry Debtors','Cash','Bank'];
+
+    $scope.filterForSales = function(option) {
+		return ($scope.selectedSRGenres.indexOf(option.accGroup.name) !== -1);
+    };
+
 });
 
 app.controller('SalesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
@@ -233,8 +271,15 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
      $scope.curItems = [];
    	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 	$scope.trasaction = {};
-	$scope.trasaction.type = 2;
-	$scope.trasaction.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	
+	if($rootScope.returnType == 'TR_S') {
+		$scope.trasaction.type = 2;
+		$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	} else {
+		$scope.trasaction.type = 3;
+		$scope.trasaction.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+	}
+	
 	$scope.trasaction.trasactionItems = [];
 	$scope.trasaction.trasactionItems.push({});
 	
@@ -370,8 +415,17 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 					 $scope.curItems = [];
 					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 					$scope.trasaction = {};
-					$scope.trasaction.type = 2;
-					$scope.trasaction.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					
+					//$scope.trasaction.type = 2;
+					//$scope.trasaction.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					if($rootScope.returnType == 'TR_S') {
+						$scope.trasaction.type = 2;
+						$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					} else {
+						$scope.trasaction.type = 3;
+						$scope.trasaction.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					}
+					
 					$scope.trasaction.trasactionItems = [];
 					$scope.trasaction.trasactionItems.push({});
 					
@@ -395,7 +449,19 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			  });		
 	}   
    
-   
+    $scope.selectedSGenres = ['Sundry Debtors','Cash','Bank'];
+
+    $scope.filterForSales = function(option) {
+		return ($scope.selectedSGenres.indexOf(option.accGroup.name) !== -1);
+    };
+
+   $scope.selectedPRGenres = ['Sundry Creditors','Cash','Bank'];
+
+    $scope.filterForPurchases = function(option) {
+		return ($scope.selectedPRGenres.indexOf(option.accGroup.name) !== -1);
+    };
+
+
    
 });
 
@@ -477,7 +543,6 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
 	  $rootScope.curTab = 'companyTab';
    }); 
    
- 
    $scope.stockGroups = [];
 	StockGrpSrvc.getAllGroups($rootScope.company.id,function(response){
 	  console.log(" StockGroup Response " + JSON.stringify(response));

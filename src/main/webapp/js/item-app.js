@@ -475,28 +475,37 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 	
 	$scope.Purchages = function(){
 		$rootScope.currentPage = 'Purchages';
-		//Back end code to edit Company
+		//this variable will identify the type of return transaction
+		$rootScope.returnType = 'TR_P';
 		$location.path("/Purchages");
 	}
 
 	$scope.Sales = function(){
 		$rootScope.currentPage = 'Sales';
-		//Back end code to edit Company
+		//this variable will identify the type of return transaction
+		$rootScope.returnType = 'TR_S';
 		$location.path("/Sales");
 	}
 
 	$scope.SaleReturn = function(){
 		$rootScope.currentPage = 'SaleReturn';
+		//this variable will identify the type of return transaction
+		$rootScope.returnType = 'TR_SR';
 		//Back end code to edit Company
-		$location.path("/SaleReturn");
+		//$location.path("/SaleReturn");
+		$location.path("/Purchages");
 	}
 
 	$scope.PurchaseReturn = function(){
 		$rootScope.currentPage = 'PurchaseReturn';
-		//Back end code to edit Company
-		$location.path("/PurchaseReturn");
-	}
+		//this variable will identify the type of return transaction
+		$rootScope.returnType = 'TR_PR';
+		//$location.path("/PurchaseReturn");
+		$location.path("/Sales");
+		}
 });
+
+
 app.controller('reportsController', function($scope,$rootScope,$location,$http) {
 	$rootScope.currentPage = 'showReport';
 	$scope.transType = $location.search().optType;
