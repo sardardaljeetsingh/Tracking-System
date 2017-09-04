@@ -1,8 +1,7 @@
 
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
 // var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
-var hostname = "http://itemngservice-inventory-mng.193b.starter-ca-central-1.openshiftapps.com";
 
 
 var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
@@ -517,11 +516,12 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 		
 	$scope.editPurchase = function(report){
 		$rootScope.currentPage = 'PurchaseReturn';
-		$rootScope.optType = 'editPurchase';
-		$rootScope.voucher = report.voucher;
+		//console.log("mine ----> " + JSON.stringify(report));
+		//$rootScope.optType = 'editPurchase';
+		//$rootScope.voucher = report.voucher;
 		//$rootScope.trasaction = {};
-		//$rootScope.trasaction.voucher = report;
-		$rootScope.transactionReport = report;
+		$rootScope.editTransaction = report;
+		//$rootScope.transactionReport = report;
 		$location.path("/PurchaseReturn");
 	}	
 	
