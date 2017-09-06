@@ -29,6 +29,7 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 					$scope.agent ={}; 
 					//$scope.optStatus = null;
 					$scope.submitclick = false;	
+					$scope.agentform.$dirty = false;
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -40,6 +41,15 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 				$scope.message = ' Failed to create agent';
 			  });		
 	}
+	
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.agentform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 	
 });
 
@@ -67,6 +77,7 @@ app.controller('AgentEditController', function($scope,$rootScope,$location,$http
 					$scope.optStatus = 'Success';
 					$scope.message = 'Agent '+agent.name + ' edit done successfully.';
 					//$location.path("/show-user");
+					$scope.agentform.$dirty = false;
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -84,6 +95,15 @@ app.controller('AgentEditController', function($scope,$rootScope,$location,$http
 		console.log("  Cancel Agent");
 		$location.path("view-agents");
 	}	
+	
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.agentform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 	
 });
 

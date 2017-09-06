@@ -5,6 +5,7 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 	$scope.singlegroup ={};
     $scope.singlegroup.newgroup	= "";
 	$scope.multigroups =[];	
+	
 	//Groups data received from backend
 	console.log(" Fetching Account group for Company Id : " + $scope.company.id );
 	$http.get(hostname + '/accgroup/find-by-company/'+$scope.company.id).
@@ -128,6 +129,7 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 					$scope.grpHierarchy ="";
 					$scope.submitclick = false;
 					$scope.singlegroup.selGroup = null;
+					$scope.accountgroup.$dirty = false;
 					console.log(" success "+ $scope.singleGrpMsg);
 			  } catch (err) {
 				console.log(JSON.stringify(err));
@@ -139,7 +141,17 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 
 		console.log(" AccountGRP " + newgroup);
 	}
-    		
+    
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.accountgroup.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
+	
+
+	
 						  
 });
 

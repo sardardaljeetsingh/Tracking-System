@@ -661,7 +661,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 					$scope.grpHierarchy ="";
 					$scope.submitclick = false;
 					$scope.singlegroup.selGroup = null;
-					
+					$scope.stockgroup.$dirty = false;	
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }
@@ -685,7 +685,17 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		console.log( "Group Level " + grplevel);
 	}
     		
-						  
+		$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.stockgroup.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
+	
+	
+
+	
 });
 
 app.controller('stockItemController', function($scope,$rootScope,$location,$http) {

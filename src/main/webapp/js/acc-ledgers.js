@@ -94,6 +94,7 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 					$scope.ledger = {};
 					$scope.submitclick = false;
 					$scope.optStatus = 'Success';
+					$scope.ledgerform.$dirty = false;
 				  } catch (err) {
 					console.log(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -103,6 +104,18 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 				$scope.optStatus = 'Failed';
 			  });		
 	}	
+	
+	
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.ledgerform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
+	
+	
 	
 });	
 
@@ -145,6 +158,7 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 					//$rootScope.ledgers.push(user);
 					//$location.path("/view-ledgers");
 					$scope.optStatus = 'Success';
+					$scope.ledgerform.$dirty = false;
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -154,6 +168,15 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 				$scope.optStatus = 'Failed';
 			  });
 	}
+	
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.ledgerform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 	
 });
 
