@@ -94,8 +94,8 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 					$scope.ledger = {};
 					$scope.submitclick = false;
 					$scope.optStatus = 'Success';
-					$scope.ledgerform.$dirty = false;
-				  } catch (err) {
+					$scope.ledgerform.$setPristine();
+					} catch (err) {
 					console.log(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
 				  }
@@ -105,7 +105,10 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 			  });		
 	}	
 	
-	
+	$scope.cancelLedger = function(){
+		$rootScope.currentPage ='createLedgers';
+		$location.path("perform-action");
+	}	
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.ledgerform.$dirty){
@@ -158,7 +161,7 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 					//$rootScope.ledgers.push(user);
 					//$location.path("/view-ledgers");
 					$scope.optStatus = 'Success';
-					$scope.ledgerform.$dirty = false;
+					$scope.ledgerform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -168,6 +171,11 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 				$scope.optStatus = 'Failed';
 			  });
 	}
+
+	$scope.cancelLedger = function(){
+		$rootScope.currentPage ='viewLedgers';
+		$location.path("view-ledgers");
+	}	
 	
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {

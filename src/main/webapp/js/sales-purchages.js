@@ -1,9 +1,9 @@
 app.controller('PurchagesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
 
     $rootScope.items = [];
+	$scope.currency = $scope.company.currencesymbol;
 	
-	
-     ItemService.getAllItems($scope.company.id,function(response){
+	ItemService.getAllItems($scope.company.id,function(response){
       console.log(" ItemService Response " + JSON.stringify(response));
 	  $rootScope.items = response;
 	  $rootScope.curTab = 'companyTab';
@@ -204,7 +204,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 							$scope.ledgers = response;
 						});  
 
-	
+					$scope.purchagesform.$setPristine();
 					//$location.path("/show-user");
 				  } catch (err) {
 					alert(JSON.stringify(err));
@@ -230,12 +230,23 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		return ($scope.selectedSRGenres.indexOf(option.accGroup.name) !== -1);
     };
 
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.purchagesform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
+
+	
 });
 
 app.controller('SalesController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
 
     $rootScope.items = [];
-     ItemService.getAllItems($scope.company.id,function(response){
+	$scope.currency = $scope.company.currencesymbol;
+	
+	ItemService.getAllItems($scope.company.id,function(response){
       console.log(" ItemService Response " + JSON.stringify(response));
 	  $rootScope.items = response;
 	  $rootScope.curTab = 'companyTab';
@@ -447,8 +458,9 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 					 GenericSrvc.getAll('/ledger/findAll',function(response){
 							$scope.ledgers = response;
 						});  
-
 					
+					$scope.salesform.setPristine();
+						
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -471,6 +483,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		return ($scope.selectedPRGenres.indexOf(option.accGroup.name) !== -1);
     };
 
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.salesform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 
    
 });
@@ -505,7 +524,8 @@ $scope.trasaction ={};
 	 //$scope.transactions = [];
      
 	 $scope.transaction = $rootScope.editTransaction;
-	 
+	 console.log(" Report Transaction " + JSON.stringify($scope.transaction));
+	  
 	 
 	 //GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/1',function(response){
       //console.log(" Report Transaction " + JSON.stringify($scope.transaction));

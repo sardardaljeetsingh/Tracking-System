@@ -29,7 +29,7 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 					$scope.agent ={}; 
 					//$scope.optStatus = null;
 					$scope.submitclick = false;	
-					$scope.agentform.$dirty = false;
+					$scope.agentform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -42,6 +42,11 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 			  });		
 	}
 	
+	$scope.cancelAgent = function(){
+		$rootScope.currentPage ='showAgents';
+		console.log("  Cancel Agent");
+		$location.path("perform-action");
+	}	
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.agentform.$dirty){
@@ -77,7 +82,7 @@ app.controller('AgentEditController', function($scope,$rootScope,$location,$http
 					$scope.optStatus = 'Success';
 					$scope.message = 'Agent '+agent.name + ' edit done successfully.';
 					//$location.path("/show-user");
-					$scope.agentform.$dirty = false;
+					$scope.agentform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';

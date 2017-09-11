@@ -129,7 +129,7 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 					$scope.grpHierarchy ="";
 					$scope.submitclick = false;
 					$scope.singlegroup.selGroup = null;
-					$scope.accountgroup.$dirty = false;
+					$scope.accountgroup.$setPristine();
 					console.log(" success "+ $scope.singleGrpMsg);
 			  } catch (err) {
 				console.log(JSON.stringify(err));
@@ -141,6 +141,11 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 
 		console.log(" AccountGRP " + newgroup);
 	}
+
+		$scope.cancelGroup = function(){
+			$rootScope.currentPage ='showAgents';
+			$location.path("perform-action");
+		}
     
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.accountgroup.$dirty){

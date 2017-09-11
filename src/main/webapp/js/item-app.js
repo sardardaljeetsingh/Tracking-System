@@ -390,7 +390,7 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 						$scope.company.currencesymbol = "Rs.";
 						$scope.submitclick = false;	
 						$scope.optStatus = 'Success'	;					
-					
+						$scope.companyform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';	
@@ -401,6 +401,13 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 			  });		
 	}
 	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.companyform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 });
 
 app.controller('editCompanyController', function($scope,$rootScope,$location,$http) {
@@ -430,6 +437,7 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 					//$location.path("/");
 					$scope.submitclick = false;
 					$scope.optStatus = 'Success';
+					$scope.companyform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';	
@@ -440,6 +448,13 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 			  });
 	}
 	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.companyform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 });
 
 app.controller('performActionController', function($scope,$rootScope,$location,$http,AccGroupService) {
@@ -661,7 +676,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 					$scope.grpHierarchy ="";
 					$scope.submitclick = false;
 					$scope.singlegroup.selGroup = null;
-					$scope.stockgroup.$dirty = false;	
+					$scope.stockgroup.$setPristine();	
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }
@@ -684,7 +699,14 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		});
 		console.log( "Group Level " + grplevel);
 	}
-    		
+    
+	$scope.cancelGroup = function(){
+		$rootScope.currentPage ='createStockGroups';
+		$location.path("perform-action");
+
+	}
+
+	
 		$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.stockgroup.$dirty){
 			if(confirm("Please save the changes before moving to another page")){
@@ -710,16 +732,18 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		{
 			$scope.groups = response.data;
 			//$scope.groups = response.data;
-			console.log(" Groupth Length : " + $scope.groups.length)			
+			//console.log(" Groupth Length : " + $scope.groups.length)			
 			angular.forEach($scope.groups, function (group) 
 			{
-				 console.log(" group "  + group.id +"  "+ group.parent );
+				 //console.log(" group "  + group.id +"  "+ group.parent );
 				if(group.parent === 1){
 				  $scope.stockGroups[0].children.push(group);
 				}
-			});	
+			});
+			
 		});	
 
+		
 	$scope.setChildrenData = function(selGroup,grplevel){
 	    $scope.multiGrpMsg = "";
 		$scope.singleGrpMsg = "";
@@ -749,8 +773,20 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			}
 	}
 	
+	//code edited for item edit
 	$scope.items = [];
-	$scope.items[0] = {'quandity':1 ,'pices':1 };
+	if($rootScope.showPage == 'edit' && $rootScope.itemSel !=null) {
+		$scope.item = $rootScope.itemSel;
+		$scope.items = $rootScope.itemSel.itemDtls;
+		$rootScope.showPage = '';
+		$scope.showPage = 'edit';
+	} else {
+		$scope.showPage = 'create';
+		$scope.items[0] = {'quandity':1 ,'pices':1 };
+	}
+	// item edit end
+	
+	
 	$scope.getTotal = function(){
 		var total = 0;
 		for(var i = 0; i < $scope.items.length; i++){
@@ -780,7 +816,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		}else{
 			selItem.stockGroup = $scope.stockGroups[$scope.stockGroups.length-2].selGroup.id;
 		}
-	    alert(selItem.stockGroup);
+	    //alert(selItem.stockGroup);
 		selItem.itemDtls = $scope.items;
 		selItem.curqundty = selItem.quandity;
 
@@ -790,25 +826,47 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		  //itemTrans.name = selItem.name +"_" + selItem.shade + "_" + index ;
 		  //itemTrans.curqundty = itemTrans.quandity ;
 		  //itemTrans.item = selItem;
+	
+		  var itemDtl = {};
 		  for(i=0;i<itemTrans.pices;i++){
-			  var itemDtl = {};
+			  
+			if($scope.showPage == 'create') {	
+			  if(itemTrans.quandity > 0) {
+				  itemDtl.name = selItem.name +"_" + selItem.shade + "_" + index  + "_" + (i+1) ;
+				  itemDtl.quandity = itemTrans.quandity ;
+				  itemDtl.curqundty = itemTrans.quandity ;
+				  itemDtl.pices =1;
+				  itemDtl.curpices =1;
+			  }
+			} else {
+			  itemDtl.id = itemTrans.id;
 			  itemDtl.name = selItem.name +"_" + selItem.shade + "_" + index  + "_" + (i+1) ;
 			  itemDtl.quandity = itemTrans.quandity ;
 			  itemDtl.curqundty = itemTrans.quandity ;
 			  itemDtl.pices =1;
 			  itemDtl.curpices =1;
-			  tempItemTrans.push(itemDtl);
+			}
+			tempItemTrans.push(itemDtl);
+		  
 		  }
 		  
 		});		
-		console.log(selItem.itemDtls.length+ " , " + tempItemTrans.length);
+		console.log("check------> " + selItem.itemDtls.length+ " , " + tempItemTrans.length);
 		selItem.itemDtls = tempItemTrans;
 		
 		
 		var dataObj = JSON.stringify(selItem);
 		console.log(dataObj);
 		
-		$http.post(hostname+'/item/create', dataObj, {
+		var perform = '';
+		if ($scope.showPage == 'create')
+		{
+			perform = hostname+'/item/create';
+		} else {
+			perform = hostname+'/item/update';
+		}
+		
+		$http.post(perform, dataObj, {
 		  headers: {
 			'Content-Type': 'application/json; charset=UTF-8'
 		  },
@@ -825,7 +883,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				
 				$scope.submitclick = false;
 				$scope.item = { };
-	
+				$scope.items = [];
+				$scope.itemform.$setPristine();
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 				$scope.optStatus = 'Failed';
@@ -835,14 +894,30 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			$scope.optStatus = 'Failed';
 		  });		
 	
-
-
 	}
+
+	$scope.cancelItem = function(showPage){
+		if(showPage == 'create') {
+			$rootScope.currentPage ='createStockItems';
+			$location.path("perform-action");
+		} else {
+			$rootScope.currentPage ='showStockItems';
+			$location.path("view-stock-items");
+		}
+	}
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.itemform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 		
 });
 
 
-app.controller('showStockItemController', function($scope,$rootScope,$location,$http) {
+app.controller('showStockItemController', function($scope,$route,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'showStockItems';
 	    $http.get(hostname + '/item/find-by-company/'+$scope.company.id).
 		then(function(response) 
@@ -851,6 +926,51 @@ app.controller('showStockItemController', function($scope,$rootScope,$location,$
 			console.log(" items Length : " + $scope.items.length);
             $rootScope.currentPage = 'showStockItems';			
 		});			
+		
+		$scope.editItem = function(item){
+		$rootScope.currentPage = 'createStockItems';
+		$rootScope.itemSel = item;
+		$rootScope.showPage = 'edit';
+		$location.path("/create-stock-items");
+	};	
+		
+	
+	$scope.deleteItem = function(item){
+
+	    $http.get(hostname + '/transactionItem/find-item/'+item.id).
+		then(function(response) 
+		{
+			var itemTransCnt = response.data;
+			if(itemTransCnt == 0) {
+			var confirmval = confirm("Are you sure you wish to delete Item ? ");
+			   if(!confirmval){ return} ;
+			   
+				var dataObj = JSON.stringify(item);console.log(dataObj);
+				$http.delete(hostname + '/item/delete/'+item.id , dataObj, {
+				  headers: {
+					'Content-Type': 'application/json; charset=UTF-8'
+				  },
+				}).success(function(responseData) {
+					  try {
+						$rootScope.currentPage = 'showStockItems';
+						$location.path("/view-stock-items");
+						$route.reload();
+					  } catch (err) {
+						alert("Error in Item --> deleteItem --> " + JSON.stringify(err));
+					  }
+				 }).error(function(data, status, headers, config) {
+					console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				});
+			} else {
+				alert("Transactions exists for this item so cannot be deleted");
+			}
+		});	
+		
+	}	
+	
+		
+		
+		
 });
 
 app.controller('showStockGroupsController', function($scope,$rootScope,$location,$http) {
