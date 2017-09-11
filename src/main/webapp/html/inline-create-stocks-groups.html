@@ -1,11 +1,24 @@
 <div class="container-fluid">
 	<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
-	  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >Create Stock Group</div>	
+	  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Stock Group --> Create </strong></div>	
 	
 		<div class="panel-body" style="margin-left:50px" >
 				
 			<form class="form-inline" name="stockgroup" style="padding:10px">
+			
+				<div class="row" >
+					<div class="form-group" style="margin:0px;padding:0px;">
+						<span class="label label-danger" > *All fields are mandatory </span>	
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="form-group" style="margin:0px;padding:0px;>
+						<label for="inputPassword3" class="col-sm-5 control-label"></label>
+					</div>
+				</div>
+				
 			
 				<div class="row" >
 					
@@ -80,12 +93,14 @@
 				
 				<div class="row">
 				  <!--<div class="form-group" style="text-align : right;" >-->
-				  <div>
-					<label for="inputPassword3" class="col-sm-2 control-label"></label>
+				  <div style="text-align: center;" >
+					<!--<label for="inputPassword3" class="col-sm-2 control-label"></label>-->
 					<div class="col-sm-5" style="margin-left:50px;padding:10px">
-						<button type="button" class="btn btn-success btn-sm" ng-click="addGroup()" >
-							Add Group
+						<button type="button" class="btn btn-success btn-small" style="margin-bottom: 10px;width: 100px;" ng-click="addGroup()" >
+							Save
 						</button>
+						  <button type="button" ng-click="cancelGroup();" style="margin-bottom: 10px;width: 100px;" 
+								   class="btn btn-warning btn-small">Cancel</button>								   
 					</div>
 				  </div>					
 				</div>

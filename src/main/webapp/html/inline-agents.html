@@ -1,12 +1,12 @@
 		<div class="panel panel-success" >
 		  <!-- Default panel contents -->
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Agents </div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Agents --> List</strong></div>
 		  <div class="panel-body">
 					<form class="form-inline">
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
 					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-default btn-sm">Search</button>
 					</form>
 			
 		  </div>
@@ -18,8 +18,8 @@
 								</div>
 							  </div>	  
 		  <!-- Table -->
-          <table class="table table-hover input-sm">
-		  <thead> <tr> <th>#</th> <th>Agent Name</th> <th>Telephone</th> <th>Email</th> <th>Commission %</th>  <th></th> </tr> </thead> 
+          <table class="table table-hover input-sm" >
+		  <thead align="center"> <tr> <th>#</th> <th>Agent Name</th> <th>Telephone</th> <th>Email</th> <th>Commission %</th>  <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th> </tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="agent in agents"> 
 				<th scope="row">{{$index+1}}</th> 

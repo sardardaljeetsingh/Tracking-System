@@ -9,6 +9,12 @@
 			<div class="panel-body" style="padding-top : 3px" >
 			  
 			  <div class="row" >
+			  
+				<div class="col-sm-7" style="text-align : left;"  >
+						<span class="label label-danger" > *All fields are mandatory </span>	
+				  </div>
+			  
+			  
 				  <div class="form-group pull-right" style="margin-bottom: 0px; margin-top: 0px;"  >
 					<div class="col-sm-7" style="text-align : left" >
 					 <md-datepicker ng-model="trasaction.inputTrnsDate" md-placeholder="Enter date"
@@ -18,7 +24,8 @@
 			  </div>
 			  
 					<div class="row" >
-					  <div class="col-xs-10 panel panel-info" style="margin:10px;" >	  
+					  <!--<div class="col-xs-10 panel panel-info" style="margin:10px;" >	  -->
+					  <div class="col-xs-11 panel panel-info" style="margin:10px;" >	  
 					  
 					  <form class="form-inline input-sm" name="salesform" novalidate >
 					  
@@ -165,8 +172,11 @@
 								   <button type="button" ng-click="curTrasItem.showSplit=false;"   
 												class="btn btn-warning btn-xs" ng-if="curTrasItem.showSplit==true && curTrasItem.quandity <= curTrasItem.item.curqundty" >Hide Split</button>
 								  
-										<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px"  
+										<!--<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px"  
+										ng-if="curTrasItem.showSplit==true && curTrasItem.quandity > 0 && curTrasItem.quandity <= curTrasItem.item.curqundty "> -->
+										<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:0px"  
 										ng-if="curTrasItem.showSplit==true && curTrasItem.quandity > 0 && curTrasItem.quandity <= curTrasItem.item.curqundty ">
+										
 										  <div class="panel-heading small">Split Items </div>
 										  
 										<table class="table table-condensed table-bordered"  >
@@ -230,17 +240,21 @@
 							<tr class="warning">
 								<td colspan="6" style="text-align : right;" > <b> Total Price </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{trasaction.rate}}
+								{{currency}} &nbsp; {{trasaction.rate}}
 								</td>
 							</tr>	
 							<tr class="warning">
 								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
-								<td colspan="3" style="text-align : left;" >
-								{{ (trasaction.rate * trasaction.agent.commission) / 100 }}
+								<td colspan="3" style="text-align : left;" ng-if="trasaction.agent.commission != null">
+								{{currency}} &nbsp; {{ (trasaction.rate * trasaction.agent.commission) / 100 }}
+								</td>
+								<td colspan="3" style="text-align : left;" ng-if="trasaction.agent.commission == null">
+								{{currency}} &nbsp; 0
 								</td>
 							</tr>
 							<tr class="">
-								<td colspan="9" style="text-align : center;" >
+							<!--
+							<td colspan="9" style="text-align : center;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Narration</label>
 								<div class="col-sm-5">
@@ -249,10 +263,26 @@
 								</div>
 							  </div>
 								</td>
+							
+							-->
+							
+							<td colspan="6" style="text-align : right;" >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }" >
+								<label for="inputPassword3" class="col-sm-5 control-label" style="padding:0px;margin-right:0px;">Narration</label>
+								</div>
+							</td>	
+								<td colspan="3" style="text-align : left;" >
+								<div class="col-sm-5" style="padding:0px;">
+								  <textarea rows="2" class="form-control input-sm" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
+								  placeholder="Narration" required></textarea>
+								</div>
+							  </td>
+							
+							
 							</tr>
 							  
 							<tr class="">
-								<td colspan="9" style="text-align : center;" >
+								<td colspan="10" style="text-align : center;" >
 								{{purchaseTotal(trasaction)}}
 			                        <button type="button" ng-click="sales(trasaction);" 
 								    class="btn btn-success">Submit</button>	
