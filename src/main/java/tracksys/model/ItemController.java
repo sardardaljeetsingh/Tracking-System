@@ -2,6 +2,10 @@ package tracksys.model;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,46 @@ public class ItemController {
 		return itemRepository.findOne(item.getId());
 	}
 
+	/**
+	Method to update the item details
+	*/
+	
+	@RequestMapping(value ="/item/update",method = RequestMethod.POST)
+	@Transactional
+	public @ResponseBody Item  update(@RequestBody Item item) {
+		List<ItemDetails> itemDtlsList = item.getItemDtls();
+		ItemDetails tempItemDtl = null;
+		item.setItemDtls(null);
+		item = itemRepository.save(item);
+		//System.out.println("item dlt list ------->" + itemDtlsList.size());
+		if(itemDtlsList != null){
+			for(ItemDetails itemDetail : itemDtlsList){
+				tempItemDtl = itemDetail;
+				//System.out.println("item ID ------->" + itemDetail.getId() + " " + tempItemDtl.getId());
+				tempItemDtl.setCurqundty(itemDetail.getQuandity());
+				tempItemDtl.setCurpices(itemDetail.getPices());
+				tempItemDtl.setItem(item);
+				itemDtlsRepo.save(entityMng.merge(tempItemDtl));
+			}
+		}
+		//item.setItemDtls(itemDtlsList);
+		//item = itemRepository.save(item);
+		return itemRepository.findOne(item.getId());
+	}
+
+	/**
+	Method to delete the item
+	*/
+	
+	@RequestMapping(value ="/item/delete/{itemid}",method = RequestMethod.DELETE)
+	@Transactional
+	public @ResponseBody boolean  delete(@PathVariable("itemid") int itemid) {
+		itemRepository.delete(itemid);
+		return true;
+	}		
+	
+	
+	
 	@RequestMapping(value ="/item/getAll",method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Item>> getAllCompanies() {
 		Iterable<Item> itemyList = null;
@@ -125,4 +169,6 @@ public class ItemController {
 	@Autowired
 	private ItemDtlsRepo itemDtlsRepo;	  
 
+	@PersistenceContext
+	private EntityManager entityMng;
 }
