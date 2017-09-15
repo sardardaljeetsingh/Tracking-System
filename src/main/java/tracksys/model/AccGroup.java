@@ -23,7 +23,8 @@ public class AccGroup {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@ManyToOne(cascade=CascadeType.MERGE)  
+	//@ManyToOne(cascade=CascadeType.MERGE)  
+	@ManyToOne(cascade=CascadeType.ALL)  
 	@JoinColumn(name = "companyid", nullable = false)
 	private Company company;	
 

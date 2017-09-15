@@ -1,6 +1,7 @@
 package tracksys.model;
 
 import java.util.Set;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -211,5 +212,25 @@ public class Company {
 		this.booksstart = booksstart;
 	}
 
+	/*@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
+	private List<Previliges> previliges;
+	
+	public List<Previliges> getPreviliges() {
+		return previliges;
+	}
 
+	public void setPreviliges(List<Previliges> previliges) {
+		this.previliges = previliges;
+	}*/
+	
+	/*@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
+	private List<AccGroup> accGroup;
+	
+	public List<AccGroup> getAccGroup() {
+		return accGroup;
+	}
+
+	public void setAccGroup(List<AccGroup> accGroup) {
+		this.accGroup = accGroup;
+	}*/
 }

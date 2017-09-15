@@ -1,5 +1,5 @@
 package tracksys.model;
-
+import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -24,7 +24,9 @@ public class User {
 	
 /*	@OneToOne(cascade=CascadeType.ALL,  mappedBy="user")
 	private Previliges previliges;*/
-
+	
+	
+	
 	@NotNull
 	@Column(name = "usr_name", nullable = false)	
 	private String username;
@@ -57,11 +59,15 @@ public class User {
 		this.id = id;
 	}
 
-/*	public Previliges getPreviliges() {
+	/*
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user",fetch = FetchType.EAGER)  
+	private List<Previliges> previliges;
+	
+	public List<Previliges> getPreviliges() {
 		return previliges;
 	}
 
-	public void setPreviliges(Previliges previliges) {
+	public void setPreviliges(List<Previliges> previliges) {
 		this.previliges = previliges;
 	}*/
 

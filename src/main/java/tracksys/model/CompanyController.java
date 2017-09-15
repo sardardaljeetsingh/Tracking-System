@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import javax.transaction.Transactional;
 
 /**
  * A class to test interactions with the MySQL database using the UserDao class.
@@ -100,6 +101,7 @@ public class CompanyController {
 	  
 	  
 	  @RequestMapping(value ="/{companyId}",method = RequestMethod.DELETE)
+	  @Transactional
 	  public ResponseEntity<Boolean> deleteCompany(@PathVariable("companyId") int companyId) {
 		  try {
 			  companyRepository.delete(companyId);

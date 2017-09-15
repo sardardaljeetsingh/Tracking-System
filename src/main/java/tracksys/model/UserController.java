@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import javax.transaction.Transactional;
 
 @Controller
 @RequestMapping("/user")
@@ -74,5 +75,18 @@ public class UserController {
 	public @ResponseBody User  login(@RequestBody User user) {
 		return userRepostory.findByUsernameAndPassword(user.getUsername(), user.getPassword());
 	}
+	  
+	  
+	  @RequestMapping(value ="/{userId}",method = RequestMethod.DELETE)
+	  @Transactional
+	  public ResponseEntity<Boolean> deleteUser(@PathVariable("userId") int userId) {
+		  try {
+			  userRepostory.delete(userId);
+			  return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		  } catch (Exception ex) {
+			  return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		  }
+
+	  } 	  
 	  
 }

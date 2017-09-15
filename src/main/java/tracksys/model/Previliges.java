@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -32,11 +33,13 @@ public class Previliges {
 	
 	private String reports;
 	
-	@OneToOne(cascade=CascadeType.ALL)  
+	//@OneToOne(cascade=CascadeType.ALL)  
+	@ManyToOne 
 	@JoinColumn(name = "userid", nullable = false)	
 	private User user;
 	
-	@OneToOne(cascade=CascadeType.ALL)  
+	//@OneToOne(cascade=CascadeType.ALL)  
+	@ManyToOne(cascade=CascadeType.ALL)  
 	@JoinColumn(name = "companyid", nullable = false)	
 	private Company company;	
 

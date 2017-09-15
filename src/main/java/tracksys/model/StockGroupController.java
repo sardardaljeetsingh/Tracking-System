@@ -2,6 +2,8 @@ package tracksys.model;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ public class StockGroupController {
 	public ResponseEntity<StockGroup>  create(@RequestBody StockGroup group) {
 		try {
 			groupRepository.save(group);
+						
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -69,4 +72,7 @@ public class StockGroupController {
 	
 	  @Autowired
 	  private StockGroupRepository groupRepository;
+	  
+	  @PersistenceContext
+	private EntityManager entityMng;
 }

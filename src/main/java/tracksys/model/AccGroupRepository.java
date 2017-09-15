@@ -11,4 +11,6 @@ public interface AccGroupRepository extends CrudRepository<AccGroup, Integer> {
 	//public List<Group> findAllByCompanyAndParent(Company company, int parentGrpId);
 	
 	public List<AccGroup> findAllByParent(int parentGrpId);
+	
+
 }
