@@ -21,14 +21,12 @@
 				
 			
 				<div class="row" >
-					
 					 <div class="form-group" ng-class="{'has-error' : submitclick && (groupName== null || groupName.length==0) }" >
 						<label for="inputPassword3" class="col-sm-5 control-label">Enter Group Name</label>
 						<div class="col-sm-5">
 							<input type="text" class="form-control input-sm" ng-model="groupName" placeholder="Stock Group Name">
 						</div>
 					</div>					
-				
 				</div>
 				
 				<div class="row" >
@@ -40,11 +38,19 @@
 							<div class="col-sm-5" style="margin-left:150px;padding:10px">
 								<select class="form-control input-sm" id="sel1" ng-model="singlegroup.selGroup" 
 											ng-options="group.name for group in singlegroups track by group.id"
+											ng-init="singlegroup.selGroup.id = singleGroupParent"
 											ng-change="setChildrenData(singlegroup.selGroup,0)" 
 											required
-											>
+											ng-if="singleGroupParent != null">
 												<option value="">--  choose group if required --</option>
-								</select>	
+								</select>
+								<select class="form-control input-sm" id="sel1" ng-model="singlegroup.selGroup" 
+											ng-options="group.name for group in singlegroups track by group.id"
+											ng-change="setChildrenData(singlegroup.selGroup,0)" 
+											required
+											ng-if="singleGroupParent == null">
+												<option value="">--  choose group if required --</option>
+								</select>								
 							</div>
 						</div>			
 					
@@ -61,9 +67,17 @@
 										<div class="col-sm-5" style="margin-left:150px;padding:10px">
 											<select class="form-control input-sm" id="sel1" ng-model="multigroup.selGroup" 
 												ng-change="setChildrenData(multigroup.selGroup,$index +1)" 
-												ng-options="group.name for group in multigroup.children track by group.id">
+												ng-init="multigroup.selGroup.id = multiGroupParent"
+												ng-options="group.name for group in multigroup.children track by group.id"
+												ng-if="multiGroupParent != null">
 													<option value="">-- choose subgroup if required --</option>
-											</select>	
+											</select>
+											<select class="form-control input-sm" id="sel1" ng-model="multigroup.selGroup" 
+												ng-change="setChildrenData(multigroup.selGroup,$index +1)" 
+												ng-options="group.name for group in multigroup.children track by group.id"
+												ng-if="multiGroupParent == null">
+													<option value="">-- choose subgroup if required --</option>
+											</select>											
 										</div>
 									  </div>
 								</div>	

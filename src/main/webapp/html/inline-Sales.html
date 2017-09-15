@@ -2,9 +2,9 @@
 			<div class="panel panel-success" > 
 			
 
-			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_PR'">Purchase Return </div>
+			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_PR'"><strong>Purchase Return --> Create</strong> </div>
 			
-			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_S'">Sales </div>
+			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_S'"><strong>Sales --> Create </strong> </div>
 			
 			<div class="panel-body" style="padding-top : 3px" >
 			  
@@ -39,7 +39,7 @@
 							  </div>	
 							  
 					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.agent'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-3 control-label">Agent</label>
+								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="trasaction.agent" name="trasaction.agent" 
 											ng-init="trasaction.agent = trasaction.agent || options[0].value"
@@ -54,7 +54,7 @@
 							  
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" 
 							ng-class="{'has-error' : submitclick && salesform['trasaction.fromledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-4 control-label">From Account</label>
+								<label for="inputPassword3" class="col-sm-4 control-label">Party Account Name</label>
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
 											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
@@ -78,7 +78,7 @@
 							  </div>	
 							  
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && salesform['trasaction.ledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-3 control-label">To Account</label>
+								<label for="inputPassword3" class="col-sm-4 control-label">Sales Account</label>
 								<div class="col-sm-6">
 									
 									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
@@ -198,7 +198,7 @@
 										 </td>						 
 										</tr>
 										<tr class="">
-										 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
+										 <td colspan="2" style="text-align : right" ><b>Total Packets </b></td>
 										 <td> <b>{{getTotal(curTrasItem,1);}}</b>
 										 <td> <b>{{getTotal(curTrasItem,2);}}</b>
 										 </td>	
@@ -232,7 +232,7 @@
 								  </td>
 							</tr>
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Grand Total </b> </td>
+								<td colspan="6" style="text-align : right;" > <b> Total Packets </b> </td>
 								<td colspan="3" style="text-align : left;" >
 								{{trasaction.quandity}}
 								</td>
@@ -244,6 +244,26 @@
 								</td>
 							</tr>	
 							<tr class="warning">
+								<td colspan="6" style="text-align : right;" > <b> GST --> SGST </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								2.5%
+								</td>
+							</tr>	
+							<tr class="warning">
+								<td colspan="6" style="text-align : right;" > <b> GST --> CGST </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								2.5%
+								</td>
+							</tr>
+							<tr class="warning">
+								<td colspan="6" style="text-align : right;" > <b> Total Price (with GST) </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{(trasaction.rate + (trasaction.rate * 5/100) )}}
+								</td>
+							</tr>	
+							
+							
+							<tr class="warning">
 								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
 								<td colspan="3" style="text-align : left;" ng-if="trasaction.agent.commission != null">
 								{{currency}} &nbsp; {{ (trasaction.rate * trasaction.agent.commission) / 100 }}
@@ -253,6 +273,7 @@
 								</td>
 							</tr>
 							<tr class="">
+							
 							<!--
 							<td colspan="9" style="text-align : center;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }">
@@ -266,14 +287,14 @@
 							
 							-->
 							
-							<td colspan="6" style="text-align : right;" >
+							<td colspan="1" style="text-align : right;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }" >
 								<label for="inputPassword3" class="col-sm-5 control-label" style="padding:0px;margin-right:0px;">Narration</label>
 								</div>
 							</td>	
-								<td colspan="3" style="text-align : left;" >
-								<div class="col-sm-5" style="padding:0px;">
-								  <textarea rows="2" class="form-control input-sm" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
+								<td colspan="8" style="text-align : left;" >
+								<div class="col-sm-12" style="padding:0px;">
+								  <textarea rows="2" class="form-control" style="min-width: 100%" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
 								  placeholder="Narration" required></textarea>
 								</div>
 							  </td>
@@ -284,8 +305,19 @@
 							<tr class="">
 								<td colspan="10" style="text-align : center;" >
 								{{purchaseTotal(trasaction)}}
-			                        <button type="button" ng-click="sales(trasaction);" 
-								    class="btn btn-success">Submit</button>	
+			                        <button type="button" ng-click="sales(trasaction);" style="margin-bottom: 10px;width: 100px;"
+								    class="btn btn-success">Save</button>	
+								
+								
+								    <label for="inputPassword3" class="col-sm-2 control-label"></label>
+								
+								   <button type="button" ng-click="cancelSale();" style="margin-bottom: 10px;width: 100px;" 
+								   class="btn btn-warning btn-small">Cancel</button>	
+								
+								
+								
+								
+								
 								</td>
 							</tr>							
 							<tr class="warning">
