@@ -205,7 +205,7 @@
                                 <div style="margin-top:10px;align:center" class="form-group">
                                     <!-- Button -->
                                     <div class="col-sm-12 controls text-center">
-                                      <a id="btn-login" href="#" ng-click="login(user);" class="btn btn-success" style="width: 250px;" >Login</a>
+                                      <a id="btn-login" href="#" ng-click="login(user);" class="btn btn-success" style="width: 200px;" >Login</a>
                                      </div>
                                 </div>
    
@@ -239,13 +239,13 @@
 		<div class="panel panel-success" ng-controller="companiesController" >
 		  <!-- Default panel contents -->
 		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
-		  <strong> List of Companies </strong> </div>
+		  <strong>Companies --> List </strong> </div>
 		  <div class="panel-body">
 					<form class="form-inline">
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Company">
 					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-default btn-sm">Search</button>
 					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" ng-if="loggedUser.type =='admin'" >
 						Create Company
 					  </button>
@@ -387,16 +387,19 @@
 							  
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-								   <button type="button" ng-click="editCompany(company)" ng-if="optType=='edit'" class="btn btn-success">Edit Company</button>
-								   <button type="button" ng-click="createCompany(company);" ng-if="optType=='create'" class="btn btn-success">Create Company</button>
+								<div class="col-sm-5" style="margin:10px;padding:0px">
+								<!-- changes to rename button to Save and add Cancel button -->
+								   <button type="button" ng-click="editCompany(company)" ng-if="optType=='edit'" class="btn btn-success" style="margin-bottom: 10px;width: 100px;">Save</button>
+								   <button type="button" ng-click="createCompany(company);" ng-if="optType=='create'" class="btn btn-success" style="margin-bottom: 10px;width: 100px;">Save</button>
+								   <button type="button" ng-click="cancelCompany();" class="btn btn-warning" style="margin-bottom: 10px;width: 100px;">Cancel</button>
+								   <!-- changes end -->
 								</div>
 							  </div>
 							</form>
 							
 					
 					  </div>
-					  <div class="col-xs-5 panel panel-info" style="margin:10px" >
+					  <div class="col-xs-5 panel panel-info" style="margin:10px" ng-if="false">
 					      	<form class="form-horizontal">
 							  <div class="form-group   input-sm">
 								<label for="inputEmail3" class="col-sm-5 control-label">Base Currency Symbol</label>
@@ -711,10 +714,20 @@
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
-			 <strong> Create Stock Items</strong>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="showPage == 'create'">
+			 <strong>Stock Item --> Create </strong>
+			  </div>	
+			    <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="showPage == 'edit'">
+			 <strong>Stock Item --> Edit </strong>
 			  </div>	
 			  <div class="panel-body">
+			  
+				<div class="row" >
+					<div class="form-group" style="margin-left:10px;padding:0px;">
+						<span class="label label-danger" > *All fields are mandatory </span>	
+					</div>
+				</div>
+				
 				 <form class="form-horizontal input-sm" name="itemform" novalidate >
 					<div class="row">
 					     <div class="col-xs-12 panel panel-success" style="margin:10px;padding:0px" >
@@ -722,11 +735,29 @@
 								<div class="row" >
 
 										<div class="col-sm-3" ng-repeat=" stockgroup in stockGroups" style="padding:5px;padding-left:20px;padding-right:20px" >
-											<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
+											
+										<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
 												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
-												ng-options="group.name for group in stockgroup.children track by group.id">
+												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'create'">
 													<option value="">-- choose group if required --</option>
 											</select>	
+										
+										
+										<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
+												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
+												ng-init="stockgroup.selGroup.id = itemSel.stockGroup"
+												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'edit'">
+													<option value="">-- choose group if required --</option>
+											</select>	
+										
+										<!--
+										<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
+												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
+												ng-init="stockgroup.selGroup.id = getDefaultStockId()"
+												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'edit'">
+													<option value="">-- choose group if required --</option>
+											</select>	
+										-->
 										</div>
 					
 								</div>	
@@ -779,10 +810,10 @@
 												 <div class="row">
 												 <div class="col-xs-12">
 												   <select class="form-control input-sm" id="sel1" style="padding-right:0px" ng-model="item.uom" name="item.uom" id="item.uom" required>
-															<option selected value="ltr">Liter</option>
+															<option selected value="ltrs">Ltrs</option>
 															<option value="kgs">Kgs</option>
-															<option value="mtr">Meter</option>
-															<option value="pcs">Pices</option>
+															<option value="mtr">Mtr</option>
+															<option value="pcs">Pcs</option>
 												   </select>
 												 </div>
 												  </div>
@@ -815,7 +846,7 @@
 					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
 					 <button type="button" class="btn btn-warning btn-sm" ng-click="items.push({ 'quandity': 1, 'pices':1})"
 					 ng-if="(grandTotal < item.quandity && items.length == $index+1 && (selItem.quandity*selItem.pices > 0) )">Add</button></td>						 
-					</tr>
+					</tr>a
 					<tr class="">
 					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
 					 <td> <b>{{getTotal()}} </b>
@@ -844,14 +875,19 @@
 											 </tr>
 					<tr class="warning">
 					<td colspan="10" style="text-align : center" >
-							   <span class="label label-success" ng-if="optStatus == 'Success'" > Stock item added successfully.</span>
+							   <span class="label label-success" ng-if="optStatus == 'Success' && showPage == 'create'"> Stock item added successfully.</span>
+							   <span class="label label-success" ng-if="optStatus == 'Success' && showPage == 'edit'"> Stock item updated successfully.</span>
 							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to add stock item.</span>				
 					</td>
 					</tr>												 
 					<tr class="warning">
 					<td colspan="10" style="text-align : center" >
-						  <button type="button" ng-click="addItem(item);invtBtmHide=true;" class="btn btn-success btn-sm"
-					   >Add item to inventory</button>				
+						  <button type="button" ng-click="addItem(item);invtBtmHide=true;" class="btn btn-success btn-small" style="margin-bottom: 10px;width: 100px;"
+					   >Save</button>		
+						<button type="button" ng-click="cancelItem('create');" ng-if="showPage == 'create'" style="margin-bottom: 10px;width: 100px;" 
+								   class="btn btn-warning btn-small">Cancel</button>					
+					<button type="button" ng-click="cancelItem('edit');" ng-if="showPage == 'edit'" style="margin-bottom: 10px;width: 100px;" 
+								   class="btn btn-warning btn-small">Cancel</button>								   					   
 					</td>
 					</tr>											 
 											</table>	
@@ -876,7 +912,7 @@
 	  <script type="text/ng-template" id="/inline-view-stocks-items.html">
 		<div class="panel panel-success" >
 		  <!-- Default panel contents -->
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">List of Stock Items </div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000"><strong>Stock Items --> List</strong></div>
   
 		  
 		  
@@ -886,32 +922,41 @@
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Stock Item">
 					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm">Search</button>
 					</form>
 		  
          </div>
 		  <div class="row" >
 		  <!-- Table -->
-          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
+          <table class="table table-hover input-sm"  style="width:100% ; padding:0px;margin-left:10px" >
 		  <thead> <tr> 
 				  <th>#</th>
 				  <th>Name</th>
+				  <th>Item HSN#</th>
 				  <th>Shade</th>
 				  <th>Description</th>
 				  <th>UOM</th>
 				  <th>Initial Quantity</th>
 				  <th>Current Quantity</th>
+				  <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th>
 				</tr> 
 		  </thead> 
 		  <tbody> 
 			  <tr ng-repeat="item in items" > 
 				<td>{{item.id}}</td> 
 				<td>{{item.name}} </td> 
+				<td>{{item.itemHSN}} </td>
 				<td>{{item.shade}} </td> 
 				<td>{{item.desc}} </td> 
 				<td>{{item.uom}} </td> 
 				<td>{{item.quandity}} </td> 
 				<td>{{item.curqundty}} </td> 
+			    <td>
+					<form class="form-inline">
+						<button type="button" class="btn btn-warning btn-xs" ng-click="editItem(item);">Edit Item</button>
+						<button type="button" class="btn btn-danger btn-xs" ng-click="deleteItem(item)">Delete Item</button>
+					</form>				
+				</td>
 			 </tr>  
 		  </tbody> 
 		  </table>
@@ -926,7 +971,7 @@
 	  <script type="text/ng-template" id="/inline-view-stock-groups.html">
 		<div class="panel panel-success" >
 		  <!-- Default panel contents -->
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Stock Groups </div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Stock Groups --> List</strong></div>
   
 		  
 		  
@@ -936,7 +981,7 @@
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
 					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm">Search</button>
 					</form>
 		  
          </div>
@@ -960,7 +1005,7 @@
 				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
 			    <form class="form-inline">
-					<button type="button" class="btn btn-warning btn-xs" ng-click="editGroup(group)" ng-show="false" >Edit Group</button>
+					<button type="button" class="btn btn-warning btn-xs" ng-click="editGroup(group)">Edit Group</button>
 					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteGroup(group)">Delete Group</button>
 				</form>				
 				</td> 				
@@ -984,7 +1029,7 @@
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search User">
 					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-default btn-sm">Search</button>
 					  <button type="button" class="btn btn-success btn-sm" ng-click="createUser();currentPage = 'createUser'" >
 						Create User
 					  </button>
@@ -1001,7 +1046,8 @@
 				<td>{{user.type}}</td> 
 			    <td>
 			    <form class="form-inline">
-					<button type="button" class="btn btn-warning btn-xs" ng-click="editUser(user)">Edit User</button>
+					<button type="button" class="btn btn-success btn-sm" ng-click="editUser(user)">Edit User</button>
+					<button type="button" class="btn btn-warning btn-sm" ng-click="deleteUser(user)">Delete User</button>
 				</form>				
 				</td> 
 			 </tr>  
@@ -1015,8 +1061,8 @@
 		<div class="container-fluid">
 			<div class="panel panel-success" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" > 
 			  <!-- Default panel contents -->
-			  <div class="panel-heading" ng-if="optType=='create'">User Creation </div>
-			  <div class="panel-heading" ng-if="optType=='edit'">Edit User details </div>
+			  <div class="panel-heading" ng-if="optType=='create'"><strong>User --> Create</strong> </div>
+			  <div class="panel-heading" ng-if="optType=='edit'"><strong>User --> Edit</strong> </div>
 			  <div class="panel-body">
 					<div class="row" >
 					  <div class="col-xs-5 panel panel-info" style="margin:10px;" >
@@ -1033,7 +1079,7 @@
 								<label for="inputEmail3" class="col-sm-5 control-label">Password</label>
 								<div class="col-sm-5">
 								  <input type="password" class="form-control input-sm" id="company.name" name="user.password" ng-model="user.password"
-								  placeholder="User Name" required  >						
+								  placeholder="Password" required  >						
 								</div>
 							  </div>
 							  
@@ -1062,8 +1108,8 @@
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label">User Type</label>
 								<div class="col-sm-6">
-								  <input type="radio" ng-model="user.type" value="admin">Admin
-								  <input type="radio" ng-model="user.type" value="user">Application User
+								  <input type="radio" ng-model="user.type" value="Admin">Admin
+								  <input type="radio" ng-model="user.type" value="User">Application User
 								</div>
 							  </div>	
 							  <div class="form-group" ng-if="optStatus != null">
@@ -1073,11 +1119,13 @@
 										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to create/alter user account .</span>
 								</div>
 							  </div>							  
-							  <div class="form-group">
-								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-								   <button type="button" ng-click="editUser(user)" ng-if="optType=='edit'" class="btn btn-success">Edit User</button>
-								   <button type="button" ng-click="createUser(user);" ng-if="optType=='create'" class="btn btn-success">Create User</button>
+							  <div class="form-group" style="margin-left:10px;text-align:center;">
+								<!--<label for="inputPassword3" class="col-sm-5 control-label"></label>-->
+								<div class="col-sm-12">
+								   <button type="button" ng-click="editUser(user)" ng-if="optType=='edit'" class="btn btn-success" style="margin-bottom: 10px;width: 100px;">Save</button>
+								   <button type="button" ng-click="createUser(user);" ng-if="optType=='create'" class="btn btn-success" style="margin-bottom: 10px;width: 100px;">Save</button>
+									<button type="button" ng-click="cancelUser();" class="btn btn-warning" style="margin-bottom: 10px;width: 100px;">Cancel</button>
+									
 								</div>
 							  </div>
 							</form>
@@ -1234,7 +1282,7 @@
 	  <script type="text/ng-template" id="/inline-view-account-groups.html">
 		<div class="panel panel-success" >
 		  <!-- Default panel contents -->
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Account Groups </div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Account Groups --> List</strong></div>
   
 		  
 		  
@@ -1244,7 +1292,7 @@
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
 					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Serach</button>
+					  <button type="button" class="btn btn-success btn-sm">Search</button>
 					</form>
 		  
          </div>
@@ -1284,8 +1332,8 @@
 		<div class="container-fluid">
 			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='create'">Ledger Creation </div>
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='edit'">Edit Ledger details </div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='create'"><strong> Ledger --> Create</strong></div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="optType=='edit'"></strong>Ledger --> Edit</strong></div>
 			  
 			  <div class="panel-body">
 			
@@ -1295,6 +1343,11 @@
 					  
 					<form class="form-horizontal input-sm" name="ledgerform" novalidate >
 							  
+						<div class="form-group">
+							<span class="label label-danger" > *All fields are mandatory </span>	
+						</div>
+											
+					
 					  <div class="form-group" ng-class="{'has-error' : submitclick && ledgerform['ledger.name'].$invalid }">
 							<label for="inputEmail3" class="col-sm-5 control-label">Name</label>
 							<div class="col-sm-5">
@@ -1378,10 +1431,14 @@
 				    </div>
 					  
 					<div class="form-group" style="padding:20px">
-						<label for="inputPassword3" class="col-sm-5 control-label"></label>
-						<div class="col-sm-5">
-						   <button type="button" ng-click="editLedger(ledger)" ng-if="optType=='edit'" class="btn btn-success">Edit Ledger</button>
-						   <button type="button" ng-click="createLedger(ledger);" ng-if="optType=='create'" class="btn btn-success">Create Ledger</button>
+						<!--<label for="inputPassword3" class="col-sm-5 control-label"></label>-->
+						<div class="col-sm-12" style="text-align:center;">
+						   <button type="button" ng-click="editLedger(ledger)" ng-if="optType=='edit'" class="btn btn-success" style="margin-bottom: 10px;width: 100px;">Save</button>
+						   <button type="button" ng-click="createLedger(ledger);" ng-if="optType=='create'" class="btn btn-success" style="margin-bottom: 10px;width: 100px;">Save</button>
+						  <label for="inputPassword3" class="col-sm-2 control-label"></label>
+						  <button type="button" ng-click="cancelLedger();" style="margin-bottom: 10px;width: 100px;" 
+								   class="btn btn-warning btn-small">Cancel</button>								   
+					
 						</div>
 					</div>
 					<!--</form> 
@@ -1405,13 +1462,13 @@
 	  <script type="text/ng-template" id="/inline-ledgers.html">
 		<div class="panel panel-success" >
 		  <!-- Default panel contents -->
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Ledgers </div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Ledgers --> List</strong></div>
 		  <div class="panel-body">
 					<form class="form-inline">
 					  <div class="form-group">
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Ledger">
 					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Serach</button>
+					  <button type="button" class="btn btn-default btn-sm">Search</button>
 					</form>
 			
 		  </div>
@@ -1424,7 +1481,7 @@
 							  </div>		  
 		  <!-- Table -->
           <table class="table table-hover input-sm">
-		  <thead> <tr> <th>#</th> <th>Ledger Name</th> <th>Group</th> <th>Current Balance</th> <th></th></tr> </thead> 
+		  <thead> <tr> <th>#</th> <th>Ledger Name</th> <th>Group</th> <th>Current Balance</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th></tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="ledger in ledgers"> 
 				<th scope="row">{{$index+1}}</th> 
