@@ -230,6 +230,13 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		return ($scope.selectedSRGenres.indexOf(option.accGroup.name) !== -1);
     };
 
+	$scope.cancelPurchase = function(){
+		$rootScope.currentPage ='performAction';
+		//console.log("  Cancel Agent");
+		$location.path("perform-action");
+	}	
+	
+	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.purchagesform.$dirty){
 			if(confirm("Please save the changes before moving to another page")){
@@ -483,6 +490,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		return ($scope.selectedPRGenres.indexOf(option.accGroup.name) !== -1);
     };
 
+	
+	$scope.cancelSale = function(){
+		$rootScope.currentPage ='performAction';
+		//console.log("  Cancel Agent");
+		$location.path("perform-action");
+	}	
+	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.salesform.$dirty){
 			if(confirm("Please save the changes before moving to another page")){

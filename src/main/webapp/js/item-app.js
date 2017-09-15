@@ -201,6 +201,8 @@ app.run(function($rootScope,$location,$http,localStorageService) {
 app.controller('loginController', function($scope,$rootScope,$location,$http,localStorageService,$window) {
 		console.log("localStorageService : " + localStorageService.isSupported);
 		
+		//code added to clear the authentication fields
+			
 		if(localStorageService.isSupported) {
 			//localStorageService.set(key, val);
 			//localStorageService.get(key);
@@ -224,7 +226,7 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 			  },
 			}).success(function(responseData) {
 				  try {
-					   console.log("LOgin Response : " + JSON.stringify(responseData));
+					   console.log("LOgin Response -----> " + JSON.stringify(responseData));
 						if(responseData != null && responseData.username != null){
 							localStorageService.set("loggedUser",responseData);
 							$rootScope.loggedUser = responseData;
@@ -257,15 +259,22 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 
 
 app.controller('logoutController', function($scope,$rootScope,$location,$http,localStorageService,$window) {
-	
+		
 		localStorageService.remove("loginedUser");
 		localStorageService.clearAll();
 		$rootScope.loggedUser = null;
+		
+		//code added to clear login form fields
+		$scope.user.username = '';
+		$scope.user.password = '';
+		
+		
 		//$location.path("login");	
 	
 	$scope.logout = function(){
-		localStorageService.remove("loginedUser");
+		//localStorageService.remove("loginedUser");
 		localStorageService.clearAll();
+		localStorageService.$reset();
 		$rootScope.loggedUser = null;
 		$location.path("login");
 	}	
@@ -401,6 +410,12 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 			  });		
 	}
 	
+	$scope.cancelCompany = function(){
+		//$rootScope.currentPage = 'stockGroups';
+		//Back end code to edit Company
+		$location.path("/show-company");
+	}
+	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.companyform.$dirty){
 			if(confirm("Please save the changes before moving to another page")){
@@ -446,6 +461,12 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 				$scope.optStatus = 'Failed';	
 			  });
+	}
+	
+	$scope.cancelCompany = function(){
+		//$rootScope.currentPage = 'stockGroups';
+		//Back end code to edit Company
+		$location.path("/show-company");
 	}
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
@@ -544,7 +565,7 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 
 app.controller('stockGroupController', function($scope,$rootScope,$location,$http) {
 	$rootScope.currentPage = 'createStockGroups';
-	
+	$scope.testGrp = {};
 	$scope.singlegroups = [];
 	$scope.singlegroup ={};
     $scope.singlegroup.newgroup	= "";
@@ -567,7 +588,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		});	
 						  
 
-
+	
 
 	$scope.setChildrenData = function(selGroup,grplevel){
 		
@@ -613,6 +634,49 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 			console.log("After :" + $scope.multigroups.length  +"   "+ children);
 	}
 	
+	
+	$scope.multiGroupParent = null;
+	$scope.singleGroupParent = null;
+	$scope.testGrp = null;
+	$scope.showPage = null;
+	$scope.editGroup = null;
+	
+	if($rootScope.showPage == 'edit' && $rootScope.groupSel){
+		$scope.groupName = $rootScope.groupSel.name;
+		$scope.singleGroupParent = $rootScope.groupSel.parent;
+		if($rootScope.groupSel.parent > 1){
+			$scope.multiGroupParent = $rootScope.groupSel.id;
+			$scope.singleGroupParent = $rootScope.groupSel.parent
+			var keepGoing = true;
+			angular.forEach($scope.groups, function (group) {
+				 if(group.id == $scope.singleGroupParent && keepGoing){
+					$scope.testGrp = group;
+					keepGoing = false;
+					//children.push(group);
+					//$scope.multigroups[grplevel].children.push(group);
+				 }
+			});	
+			if($scope.testGrp != null){
+				$scope.setChildrenData($scope.testGrp,0);
+			}
+		} else {
+			$scope.singleGroupParent = $rootScope.groupSel.id;
+		}
+		
+			
+		
+		$scope.showPage = $rootScope.showPage;
+		$scope.editGroup = $rootScope.groupSel;
+		$rootScope.showPage = '';
+		$rootScope.groupSel = null;
+		//alert("singleGroupParent ---> " + $scope.groupName + " " + $scope.singleGroupParent);
+		
+		var dataObj = JSON.stringify($scope.editGroup);
+		console.log("group info for edit -----> " + dataObj);
+	
+	} 
+	
+	
 	$scope.addGroup = function(){
 		
 		var newgroup = {};
@@ -621,7 +685,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 			$scope.submitclick = true;
 			return;
 		}
-		newgroup.name = selGroup;
+		
 		var grplevel = 0;
 		if($scope.singlegroup.selGroup != null)
 			grplevel++;
@@ -636,20 +700,34 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		//return;		
 		
 		//newgroup.id = $scope.groups.length;
-		newgroup.parent = 1;
-		newgroup.company = {};
-		newgroup.company.id = $scope.company.id;
+		if($scope.showPage == 'edit') {
+			newgroup = $scope.editGroup;
+			if(grplevel > 1 && newgroup.parent != $scope.singlegroup.selGroup.id){
+				newgroup.parent = $scope.singlegroup.selGroup.id;
+			} else {
+		//nothing at this moment
+			}
 		
-		if(grplevel == 0){
-			//$scope.groups.push(newgroup);
-		}else if(grplevel == 1){
-			newgroup.parent = $scope.singlegroup.selGroup.id;
-		}else{
-			newgroup.parent = $scope.multigroups[grplevel-2].selGroup.id;
+		} else {
+			//for add code
+			newgroup.parent = 1;
+			newgroup.company = {};
+			newgroup.company.id = $scope.company.id;
+		
+		
+			if(grplevel == 0){
+				//$scope.groups.push(newgroup);
+			}else if(grplevel == 1){
+				newgroup.parent = $scope.singlegroup.selGroup.id;
+			}else{
+				newgroup.parent = $scope.multigroups[grplevel-2].selGroup.id;
+			}
+
 		}		
+		newgroup.name = selGroup;
 		
 		var dataObj = JSON.stringify(newgroup);
-		console.log(dataObj);
+		//console.log("group info for edit -----> " + dataObj);
 		
 		$http.post(hostname + '/stockgroup/create', dataObj, {
 		  headers: {
@@ -658,19 +736,37 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		}).success(function(responseData) {
 			console.log("GRP Response : " + responseData.id);
 			  try {
-                newgroup.id = responseData.id;
+                $scope.userMsg = '';
+				if($scope.showPage == 'edit'){
+					$scope.userMsg = " ' "+ newgroup.name + " ' group updated successfully."  ;
+				} else {
+					$scope.userMsg = " ' "+ newgroup.name + " ' group created successfully."  ;
+				}
+				
+				newgroup.id = responseData.id;
 					if(grplevel == 0){
+						
 						$scope.singlegroups.push(newgroup);
 						$scope.groups.push(newgroup);
-						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;
+						$scope.singleGrpMsg = $scope.userMsg;
 					}else if(grplevel == 1){
-						$scope.multigroups[0].children.push(newgroup);
+						//alert("grplevel == 1 " + grplevel + " " + $scope.multigroups.length);
+						//condition added for Edit when User changes the group name only without changing the parent
+						if($scope.multigroups.length > 0){
+							$scope.multigroups[0].children.push(newgroup);
+						}
 						$scope.groups.push(newgroup);
-						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
+						$scope.singleGrpMsg = $scope.userMsg  ;						
 					}else{
-						$scope.multigroups[grplevel-1].children.push(newgroup);
+						if($scope.showPage == 'edit'){
+							$scope.multigroups[grplevel-2].children.push(newgroup);
+						} else {
+							$scope.multigroups[grplevel-1].children.push(newgroup);
+						}
+						//alert("grplevel == 21");
 						$scope.groups.push(newgroup);
-						$scope.singleGrpMsg = " ' "+ newgroup.name + " ' group created successfully."  ;						
+						//alert("grplevel == 22");
+						$scope.singleGrpMsg = $scope.userMsg ;						
 					}	
 					$scope.groupName = "";
 					$scope.grpHierarchy ="";
@@ -678,10 +774,10 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 					$scope.singlegroup.selGroup = null;
 					$scope.stockgroup.$setPristine();	
 			  } catch (err) {
-				console.log(JSON.stringify(err));
+				console.log("Catch error --> " + JSON.stringify(err));
 			  }
 		 }).error(function(data, status, headers, config) {
-			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+			console.log("Function Error ---> " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 		  });		
 
 	}
@@ -723,10 +819,27 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 app.controller('stockItemController', function($scope,$rootScope,$location,$http) {
 	$rootScope.currentPage = 'createStockItems';
 	
+	
+	//code edited for item edit
+	$scope.items = [];
+	if($rootScope.showPage == 'edit' && $rootScope.itemSel !=null) {
+		$scope.item = $rootScope.itemSel;
+		$scope.items = $rootScope.itemSel.itemDtls;
+		$rootScope.showPage = '';
+		//$rootScope.itemSel == null;
+		$scope.showPage = 'edit';
+	} else {
+		$scope.showPage = 'create';
+		$scope.items[0] = {'quandity':1 ,'pices':1 };
+	}
+	// item edit end
+	
 	//Groups data received from backend
+	
 	$scope.stockGroups = [];
 	$scope.stockGroups[0] = {};	
-	$scope.stockGroups[0].children = [];	
+	$scope.stockGroups[0].children = [];
+	$scope.editMultiGrp = false;	
 	$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
 		then(function(response) 
 		{
@@ -735,17 +848,41 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			//console.log(" Groupth Length : " + $scope.groups.length)			
 			angular.forEach($scope.groups, function (group) 
 			{
-				 //console.log(" group "  + group.id +"  "+ group.parent );
+				// console.log(" group "  + group.id +"  "+ group.name + " " + group.parent );
 				if(group.parent === 1){
 				  $scope.stockGroups[0].children.push(group);
 				}
 			});
 			
 		});	
-
-		
+	
+	
+	$scope.getDefaultStockId = function(){
+		var defaultGroupId;
+		$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+			$scope.groups = response.data;
+			angular.forEach($scope.groups, function (group) 
+			{
+				//alert(" group.id " + group.id + " " + group.parent);
+				if(group.id == $scope.item.stockGroup) {
+				
+					if (group.parent > 1){
+						defaultGroupId = group.parent;
+					} else {
+						defaultGroupId	= $scope.item.stockGroup;
+					}
+				} 
+			});
+		});
+		alert("defaultGroupId --> " + defaultGroupId + " " + $scope.item.stockGroup);
+		return defaultGroupId;	
+	}
+	
 	$scope.setChildrenData = function(selGroup,grplevel){
-	    $scope.multiGrpMsg = "";
+	  // alert(selGroup.id + " " + grplevel);
+	   $scope.multiGrpMsg = "";
 		$scope.singleGrpMsg = "";
         $scope.optStatus = "";		
 		    var selGrpId = (selGroup != null && selGroup.id != null ) ? selGroup.id : -1;
@@ -773,18 +910,6 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			}
 	}
 	
-	//code edited for item edit
-	$scope.items = [];
-	if($rootScope.showPage == 'edit' && $rootScope.itemSel !=null) {
-		$scope.item = $rootScope.itemSel;
-		$scope.items = $rootScope.itemSel.itemDtls;
-		$rootScope.showPage = '';
-		$scope.showPage = 'edit';
-	} else {
-		$scope.showPage = 'create';
-		$scope.items[0] = {'quandity':1 ,'pices':1 };
-	}
-	// item edit end
 	
 	
 	$scope.getTotal = function(){
@@ -987,6 +1112,14 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 			console.log(" Groupth Length : " + $scope.groups.length)	;
             $rootScope.currentPage = 'showStockGroups';			
 		});		
+		
+		
+	$scope.editGroup = function(group){	
+		$rootScope.currentPage = 'createStockGroups';
+		$rootScope.groupSel = group;
+		$rootScope.showPage = 'edit';
+		$location.path("/create-stock-groups");
+	}
 		
 	$scope.deleteGroup = function(group){
 		$scope.optStatus = null;

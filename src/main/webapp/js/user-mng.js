@@ -13,12 +13,42 @@ app.controller('usersController', function($scope,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'createUser';
 		$location.path("create-user");
 	}
+	
 	$scope.editUser = function(user){
 		$rootScope.currentPage = 'editUser';
 		console.log( " Edit User");
 		$location.path("edit-user");
 		$rootScope.user = user ;
 	}
+	
+	$scope.deleteUser = function(user){
+		
+		
+		console.log("logged User --> " + JSON.stringify($rootScope.loggedUser.type));
+		if(	$rootScope.loggedUser != null && $rootScope.loggedUser.type.toLowerCase == 'admin'){
+			
+			var confirmval = confirm("Are you sure you wish to delete the User? : " + $rootScope.loggedUser.username);
+			   if(!confirmval){ return} ;
+			   
+				var dataObj = JSON.stringify(user);
+				$http.delete(hostname + '/user/delete/'+$rootScope.loggedUser.id , dataObj, {
+				  headers: {
+					'Content-Type': 'application/json; charset=UTF-8'
+				  },
+				}).success(function(responseData) {
+					  try {
+						$rootScope.currentPage = 'userTab';
+						$location.path("/show-user");
+						} catch (err) {
+						alert("Error in User --> delete --> " + JSON.stringify(err));
+					  }
+				 }).error(function(data, status, headers, config) {
+					console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				});
+		}
+		
+	}
+	
 	
 	$scope.performAction = function(user){
 		$rootScope.currentPage = 'performAction';
@@ -102,6 +132,7 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 					$scope.optType = "create";
 					$scope.submitclick = false;					
 					$scope.optStatus = 'Success';
+					$scope.userform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -112,6 +143,17 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 			  });		
 	}
 	
+	$scope.cancelUser = function(){
+		$location.path("show-user");
+	}
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.userform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 });
 
 
@@ -171,7 +213,7 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 					//$location.path("/show-user");
 					$scope.optStatus = 'Success';
 					$scope.submitclick = false;
-					
+					$scope.userform.$setPristine();
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -182,6 +224,17 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 			  });
 	}
 	
+	$scope.cancelUser = function(){
+		$location.path("show-user");
+	}
+	
+	$scope.$on('$locationChangeStart',function(event,next,current) {
+		if($scope.userform.$dirty){
+			if(confirm("Please save the changes before moving to another page")){
+				event.preventDefault();
+			}
+		}
+	});
 });
 
 
