@@ -1,5 +1,6 @@
-
 var hostname ="http://localhost:8080";
+
+//var hostname ="http://localhost:8080/Inventory-1.0";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
 // var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
@@ -45,7 +46,7 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/create-stock-groups'	,
 	      { 
 		    controller: 'stockGroupController',
-		    templateUrl :'/html/inline-create-stocks-groups.html',
+		    templateUrl :'html/inline-create-stocks-groups.html',
 		  })	
 	.when('/create-stock-items'	,
 	      { 
@@ -85,7 +86,7 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/create-account-groups'	,
 	      { 
 		    controller: 'accGroupController',
-		    templateUrl :'/html/inline-create-account-groups.html',
+		    templateUrl :'html/inline-create-account-groups.html',
 		  })
 	.when('/view-account-groups'	,
 	      { 
@@ -110,24 +111,24 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/Purchages'	,
 	      { 
 		    controller: 'PurchagesController',
-		    templateUrl :'/html/inline-Purchages.html',
+		    templateUrl :'html/inline-Purchages.html',
 		  })
       .when('/showReport'	,
 	      { 
 		    controller: 'reportsController',
-		    templateUrl :'/html/showReport.html',
+		    templateUrl :'html/showReport.html',
 		  })
       
       
 	.when('/Sales'	,
 	      { 
 		    controller: 'SalesController',
-		    templateUrl :'/html/inline-Sales.html',
+		    templateUrl :'html/inline-Sales.html',
 		  })
 	.when('/PurchaseReturn'	,
 	      { 
 		    controller: 'PurchaseReturnController',
-		    templateUrl :'/html/inline-PurchaseReturn.html',
+		    templateUrl :'html/inline-PurchaseReturn.html',
 		  })
 	.when('/SaleReturn'	,
 	      { 
@@ -137,17 +138,17 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	.when('/create-agent'	,
 	      { 
 		    controller: 'AgentCreateController',
-		    templateUrl :'/html/inline-create-agent.html',
+		    templateUrl :'html/inline-create-agent.html',
 		  })	
 	.when('/edit-agent'	,
 	      { 
 		    controller: 'AgentEditController',
-		    templateUrl :'/html/inline-create-agent.html',
+		    templateUrl :'html/inline-create-agent.html',
 		  })	
 	.when('/view-agents'	,
 	      { 
 		    controller: 'AgentsController',
-		    templateUrl :'/html/inline-agents.html',
+		    templateUrl :'html/inline-agents.html',
 		  })		  
 	.when('/reports',{template:'This is the Report Route'})
 	.otherwise({template:'This is the Report Route'});
@@ -185,8 +186,10 @@ app.run(function($rootScope,$location,$http,localStorageService) {
 				// no logged user, we should be going to #login
 				if ( next.templateUrl == "inline-login.html") {
 				  // already going to #login, no redirect needed
+						 
 				} else {
 				  // not going to #login, we should redirect now
+				  
 				  $location.path( "/login" );
 				}
 			} else if(next.templateUrl == null){
@@ -260,19 +263,25 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 
 app.controller('logoutController', function($scope,$rootScope,$location,$http,localStorageService,$window) {
 		
-		localStorageService.remove("loginedUser");
-		localStorageService.clearAll();
+		
+		$scope.user = null;
 		$rootScope.loggedUser = null;
+		$rootScope.user = null;		
+		localStorageService.remove("loggedUser");
+		localStorageService.clearAll();
 		
-		//code added to clear login form fields
-		$scope.user.username = '';
-		$scope.user.password = '';
-		
+
+
+	//code added to clear login form fields
+		//$scope.user.username = '';
+		//$scope.user.password = '';
+		//$scope.user = null;
 		
 		//$location.path("login");	
 	
 	$scope.logout = function(){
-		//localStorageService.remove("loginedUser");
+		//alert("logout called");
+	//localStorageService.remove("loginedUser");
 		localStorageService.clearAll();
 		localStorageService.$reset();
 		$rootScope.loggedUser = null;
@@ -375,6 +384,10 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 	$scope.company.yearstart = new Date();
 	$scope.company.booksstart = new Date();
 	$scope.company.creationdate = new Date();
+	$scope.company.createduser = $rootScope.loggedUser.username;
+	$scope.company.createddate = new Date();
+	$scope.company.modifieduser = $rootScope.loggedUser.username;
+	$scope.company.modifieddate = new Date();
 	
 	$scope.createCompany = function(company){
 		if(!$scope.companyform.$valid){
@@ -439,7 +452,11 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 			$scope.submitclick = true;
 			return;
 		}		
-			var dataObj = JSON.stringify(company);
+	
+		company.modifieduser = $rootScope.loggedUser.username;
+		company.modifieddate = new Date();
+	
+		var dataObj = JSON.stringify(company);
 			$http.post(hostname + '/company/create', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'

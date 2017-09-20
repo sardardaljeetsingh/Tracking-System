@@ -84,6 +84,10 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 					previlige.inventoryinfo = true;
 					previlige.transactions = true;
 					previlige.reports = true;
+					previlige.createdUser = $rootScope.loggedUser.username;
+					previlige.createdDate = new Date();
+					previlige.modifiedUser = $rootScope.loggedUser.username;
+					previlige.modifiedDate = new Date();
 					$scope.previliges[count++] = previlige;
 				});
 				
@@ -199,6 +203,9 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 						previlige.inventoryinfo = previlige.inventoryinfo ? true : false;
 						previlige.transactions = previlige.transactions ? true : false;
 						previlige.reports = previlige.reports ? true : false;						
+						previlige.modifiedUser = $rootScope.loggedUser.username;
+						previlige.modifiedDate = new Date();
+					
 					});
 					console.log( $scope.previliges );
 					 UserPrevService.updateUserPrev($scope.previliges, function(response){

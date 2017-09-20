@@ -100,8 +100,17 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 			newgroup.parent = $scope.multigroups[grplevel-2].selGroup.id;
 		}		
 		
+		
+		newgroup.createdUser = $rootScope.loggedUser.username;
+		newgroup.createdDate = new Date();
+		newgroup.modifiedUser = $rootScope.loggedUser.username;
+		newgroup.modifiedDate = new Date();
+		
+		
 		var dataObj = JSON.stringify(newgroup);
 		console.log(dataObj);
+		
+		
 		
 		$http.post(hostname + '/accgroup/create', dataObj, {
 		  headers: {

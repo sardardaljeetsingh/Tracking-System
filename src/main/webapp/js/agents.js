@@ -14,7 +14,12 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 
 		agent.company = {};
 		agent.company.id = $scope.company.id;
+		agent.createdUser = $rootScope.loggedUser.username;
+		agent.createdDate = new Date();
+		agent.modifiedUser = $rootScope.loggedUser.username;
+		agent.modifiedDate = new Date();
 		
+			
 			var dataObj = JSON.stringify(agent);
 			$http.post(hostname+'/agent/create', dataObj, {
 			  headers: {
@@ -71,6 +76,10 @@ app.controller('AgentEditController', function($scope,$rootScope,$location,$http
 			$scope.submitclick = true;
 			return;
 		}		
+
+			agent.modifiedUser = $rootScope.loggedUser.username;
+			agent.modifiedDate = new Date();
+
 			var dataObj = JSON.stringify(agent);
 			$http.post(hostname + '/agent/update', dataObj, {
 			  headers: {
