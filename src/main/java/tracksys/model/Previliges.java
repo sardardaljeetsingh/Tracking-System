@@ -1,15 +1,8 @@
 package tracksys.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -32,6 +25,23 @@ public class Previliges {
 	private String transactions;
 	
 	private String reports;
+	
+	@NotNull
+	@Column(name = "createduser", nullable = false)	
+	private String createdUser;
+	
+	@NotNull
+	@Column(name = "createddate", nullable = false)	
+	private java.util.Date createdDate;
+	
+	@NotNull
+	@Column(name = "modifieduser", nullable = false)	
+	private String modifiedUser;
+	
+	@NotNull
+	@Column(name = "modifieddate", nullable = false)	
+	private  java.util.Date modifiedDate;
+
 	
 	//@OneToOne(cascade=CascadeType.ALL)  
 	@ManyToOne 
@@ -108,5 +118,39 @@ public class Previliges {
 	}
 	
 
+public String getCreatedUser() {
+		return createdUser;
+	}
+
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
+
+	public java.util.Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(java.util.Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getModifiedUser() {
+		return modifiedUser;
+	}
+
+	public void setModifiedUser(String modifiedUser) {
+		this.modifiedUser = modifiedUser;
+	}
+
+	public java.util.Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(java.util.Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}	
+	
+	
+	
 
 }

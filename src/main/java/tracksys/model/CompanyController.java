@@ -44,17 +44,21 @@ public class CompanyController {
 				  previliges.setInventoryinfo("false");
 				  previliges.setReports("false");
 				  previliges.setTransactions("false");
+				  previliges.setCreatedUser(company.getCreatedUser());
+				  previliges.setCreatedDate(new java.util.Date());
+				  previliges.setModifiedUser(company.getCreatedUser());
+				  previliges.setModifiedDate(new java.util.Date());
 				  prevList.add(previliges);
 			  }
 			  userPreviligeReposotory.save(prevList);
 
 			  List<AccGroup> accGroupList = new ArrayList<AccGroup>();
-			  accGroupList.add( new AccGroup("Sundry Creditors", company,1));
-			  accGroupList.add( new AccGroup("Sundry Debtors", company,1));
-			  accGroupList.add( new AccGroup("Purchases", company,1));
-			  accGroupList.add( new AccGroup("Sales", company,1));
-			  accGroupList.add( new AccGroup("Cash", company,1));
-			  accGroupList.add( new AccGroup("Bank", company,1));
+			  accGroupList.add( new AccGroup("Sundry Creditors", company,1,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Sundry Debtors", company,1,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Purchases", company,1,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Sales", company,1,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Cash", company,1,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Bank", company,1,company.getCreatedUser()));
 			  accGroupRepository.save(accGroupList);
 		  }
 
