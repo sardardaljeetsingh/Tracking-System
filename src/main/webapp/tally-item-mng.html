@@ -13,7 +13,7 @@
 
   <body ng-app="invenApp" >
   <div  class="text-center" style="background-color: #26630e; padding:10px; marign:0px; color:#FFFFFF" >
-  <h3 style="font-family: cursive " >Inventory Management System <small></small></h3>
+  <h2 style="font-family: cursive " >S V Enterprises</h3>
   </div>
   <p class="bg-success red-text text-right" style="background-color:#26630e; color:#FFFFFF; marign:10px" ng-if="(loggedUser != null)" > 
   <span class="glyphicon glyphicon-user"></span> Signed in as <strong>{{ loggedUser.username}}</strong> <small>( {{ loggedUser.type}} )</small>
@@ -25,7 +25,7 @@
     <div class="container-fluid" >
 	
 		<div class="col-md-3" style="width: 15%; height: 530px; padding: 1px; background-color: #dff0d8;" 
-		ng-if="(loggedUser != null &&  loggedUser.type =='admin' )" >
+		ng-if="(loggedUser != null &&  loggedUser.type =='Admin' )" >
 			<ul class="nav nav-pills nav-stacked panel-success">
 				<li ng-class="{ active: (curTab == null ||  curTab =='companyTab') }">
 					<a href="#show-company" ng-click="curTab='companyTab';">Company Management {{}}</a>
@@ -37,7 +37,7 @@
 		</div>	
 
        <div class="col-md-9" style=" padding: 1px;" 
-	   ng-style=" loggedUser.type =='admin' && {width: '85%'} || (loggedUser.type =='user' )&& {width: '100%'}" >
+	   ng-style=" loggedUser.type =='Admin' && {width: '85%'} || (loggedUser.type =='User' )&& {width: '100%'}" >
 			<div style="height: 530px;background-color: #FFFFFF;">
 			<div>
 			
@@ -159,28 +159,33 @@
             <div class="panel panel-success" >
                     <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
                         <div class="panel-title">Sign In</div>
-                        <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
+                        <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#" ng-show="false">Forgot password?</a></div>
                     </div>     
 
                     <div style="padding-top:30px" class="panel-body" >
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                             
-                        <form id="loginform" name="loginform" class="form-horizontal" role="form" novalidate>
+                        <form id="loginform" name="loginform" class="form-horizontal" role="form" novalidate >
                                     
+									
                             <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : $invalid}" >
                                         
 										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                         
-										<input id="login-username" type="text" name="user.username" class="form-control" ng-model="user.username" value="" placeholder="username" required>
-                                    
+										
+										<input id="login-username" type="text" name="user.username" class="form-control" ng-model="user.username" value="" placeholder="username" required >
+
+																
+						
 									</div>
 									
 									                    
 								
                             <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : invalidUser }" >
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input id="login-password" type="password" class="form-control" ng-model="user.password" placeholder="password">
+                                        										
+										<input id="login-password" type="password" class="form-control" ng-model="user.password" placeholder="password">
                             </div>
 							
                             <div style="margin-bottom: 25px" class="input-group" >
@@ -246,7 +251,7 @@
 						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Company">
 					  </div>
 					  <button type="button" class="btn btn-default btn-sm">Search</button>
-					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" ng-if="loggedUser.type =='admin'" >
+					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" ng-if="loggedUser.type =='Admin'" >
 						Create Company
 					  </button>
 					</form>
@@ -264,11 +269,11 @@
 			    <td>
 			    <form class="form-inline">
 					<button type="button" class="btn btn-warning btn-xs" ng-click="editCompany(company)"
-					ng-if="loggedUser.type =='admin'">Edit Company</button>
+					ng-if="loggedUser.type =='Admin'">Edit Company</button>
 					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteCompany(company)" 
-					ng-if="loggedUser.type =='admin'">Delete Company</button>
+					ng-if="loggedUser.type =='Admin'">Delete Company</button>
 					<button type="button" style="display:none" class="btn btn-warning btn-xs" ng-click="assignUsers(company)" 
-					ng-if="loggedUser.type =='admin'">Assign Users</button>					
+					ng-if="loggedUser.type =='Admin'">Assign Users</button>					
 					<button type="button" class="btn btn-warning btn-xs" ng-click="performAction(company)"> Perform Actions </button>
 
 					
@@ -747,7 +752,7 @@
 												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
 												ng-init="stockgroup.selGroup.id = itemSel.stockGroup"
 												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'edit'">
-													<option value="">-- choose group if required --</option>
+													<option value="">-- Please select group --</option>
 											</select>	
 										
 										<!--
@@ -830,7 +835,6 @@
 											 <input type="number" min="1" step="1" size="5" class="form-control input-sm" name="item.quandity" style="width : 70px"
 											 id="item.quandity" ng-model="item.quandity"  required ng-change="showSplit=true;items[0].quandity=item.quandity" >
 											 </td>
-											 
 											  <td>
 					<table class="table table-condensed table-bordered" ng-if="item.quandity > 0" >
 					<thead>
@@ -846,7 +850,7 @@
 					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
 					 <button type="button" class="btn btn-warning btn-sm" ng-click="items.push({ 'quandity': 1, 'pices':1})"
 					 ng-if="(grandTotal < item.quandity && items.length == $index+1 && (selItem.quandity*selItem.pices > 0) )">Add</button></td>						 
-					</tr>a
+					</tr>
 					<tr class="">
 					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
 					 <td> <b>{{getTotal()}} </b>
@@ -1115,8 +1119,8 @@
 							  <div class="form-group" ng-if="optStatus != null">
 								<label for="inputPassword3" class="col-sm-5 control-label"></label>
 								<div class="col-sm-5">
-										   <span class="label label-success" ng-if="optStatus == 'Success'" > User account creation/alter done successfully.</span>
-										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to create/alter user account .</span>
+										   <span class="label label-success" ng-if="optStatus == 'Success'" > User account created successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to create user account .</span>
 								</div>
 							  </div>							  
 							  <div class="form-group" style="margin-left:10px;text-align:center;">
@@ -1370,6 +1374,8 @@
 							<select class="form-control input-sm" ng-model="ledger.accGroup.id" name="ledger.accGroup.id" id="ledger.accGroup.id"
 									ng-init="ledger.accGroup.id = ledger.accGroup.id || options[0].value"
 									ng-options="option.id as option.name for option in groups">
+									<option value="">-- choose group --</option>
+
 							</select>								
 						</div>
 					  </div> 
@@ -1415,10 +1421,10 @@
 					  </div>	
 					 
 					 <div class="form-group input-sm">
-						<label for="inputPassword3" class="col-sm-5 control-label">Sale Tax No </label>
+						<label for="inputPassword3" class="col-sm-5 control-label">GST No </label>
 						<div class="col-sm-5">
 						  <input type="number" class="form-control input-sm" id="ledger.saletaxno" name="ledger.saletaxno" 
-						  ng-model="ledger.saletaxno" placeholder="Sale Tax No" >						
+						  ng-model="ledger.saletaxno" placeholder="GST No" >						
 						</div>
 					  </div>							  
 					
