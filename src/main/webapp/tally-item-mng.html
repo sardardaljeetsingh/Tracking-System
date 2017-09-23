@@ -921,13 +921,16 @@
 		  
 		  
 		  <div class="panel-body">
-		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+		  <div class="row" style="padding:1px;margin:10px" >
 					<form class="form-inline">
-					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Stock Item">
-					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Search</button>
-					</form>
+					 
+						<div class="form-group col-sm-5" >
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelItem()">Cancel</button>
+						</div>
+
+					  </form>
 		  
          </div>
 		  <div class="row" >
@@ -980,13 +983,15 @@
 		  
 		  
 		  <div class="panel-body">
-		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+		  <div class="row" style="padding:1px;margin:10px" >
 					<form class="form-inline">
-					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
-					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Search</button>
-					</form>
+					
+						<div class="form-group col-sm-5" >
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelStockGroup()">Cancel</button>
+						</div>
+
 		  
          </div>
 		 
@@ -1180,15 +1185,12 @@
 	          .dual-list .list-group {
             margin-top: 8px;
         }
-
         .list-left li, .list-right li {
             cursor: pointer;
         }
-
         .list-arrows {
             padding-top: 70px;
         }
-
             .list-arrows button {
                 margin-bottom: 20px;
             }
@@ -1291,12 +1293,15 @@
 		  
 		  
 		  <div class="panel-body">
-		  <div class="row" style="width:50% ; padding:1px;margin:10px" >
+		  <div class="row" style="padding:1px;margin:10px" >
+					
 					<form class="form-inline">
-					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Group">
-					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Search</button>
+					 	<div class="form-group col-sm-5"  >
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelAccountGroup()">Cancel</button>
+						</div>
+
 					</form>
 		  
          </div>
@@ -1308,9 +1313,10 @@
 								</div>
 							  </div>		 
 		  <div class="row" >
-		  <!-- Table -->
-          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
-		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent Group Name</th> <th></th> </tr> </thead> 
+		  <!-- Table 
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" > -->
+		  <table class="table table-hover input-sm">
+		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent Group Name</th> <th>Action</th> </tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="group in groups" ng-if="group.id > 1" > 
 				<td>{{$index+1}}</td> 
@@ -1382,7 +1388,7 @@
 
 					 <div class="form-group input-sm">
 						<label for="inputPassword3" class="col-sm-5 control-label">Opening Balance </label>
-						<div class="col-sm-5" ng-class="{'has-error' : submitclick && (ledgerform['ledger.opbal'].$dirty == false || (+ledger.opbal) <=0) }" >
+						<div class="col-sm-5" ng-class="{'has-error' : submitclick && (ledgerform['ledger.opbal'].$dirty == false || (ledger.opbal) <0) }" >
 						  <input type="number" min="1" class="form-control input-sm" id="ledger.opbal" name="ledger.opbal" 
 						  ng-model="ledger.opbal" placeholder="Opening Balance" >						
 						</div>
@@ -1471,10 +1477,14 @@
 		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Ledgers --> List</strong></div>
 		  <div class="panel-body">
 					<form class="form-inline">
-					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Ledger">
-					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Search</button>
+					  
+						<div class="form-group col-sm-5" >
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelLedger()">Cancel</button>
+						</div>
+					
+					
 					</form>
 			
 		  </div>
@@ -2386,11 +2396,9 @@
 	
 	<!--
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	
-
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">	
 	
@@ -2400,7 +2408,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.6.0/angular-local-storage.min.js"></script> 
-
 	
       <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
