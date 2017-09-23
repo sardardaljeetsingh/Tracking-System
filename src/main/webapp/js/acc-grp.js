@@ -195,6 +195,7 @@ app.controller('showAccountGroupsController', function($scope,$rootScope,$locati
 			  },
 			}).success(function(responseData) {
 				  try {
+					  
 					console.log(JSON.stringify(responseData));
 					$scope.message = 'Account Group '+accgroup.name + ' deleted successfully.';
 					$scope.optStatus = 'Success';
@@ -216,6 +217,12 @@ app.controller('showAccountGroupsController', function($scope,$rootScope,$locati
 				$scope.message = ' Failed to delete Account Group' +accgroup.name ;
 			  });			
 		}	
+	}
+	
+	$scope.cancelAccountGroup = function(){
+		$rootScope.currentPage = 'performAction';
+		$location.path("perform-action");
+		
 	}
 		
 });
