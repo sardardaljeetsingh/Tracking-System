@@ -1,4 +1,5 @@
 
+
 app.controller('ledgerController', function($scope,$rootScope,$location,$http) {
 	$rootScope.ledgers = [];
 	$scope.message ='';
@@ -51,6 +52,12 @@ app.controller('ledgerController', function($scope,$rootScope,$location,$http) {
 			  });			
 		}	
 	}
+	
+	$scope.cancelLedger = function(){
+		$rootScope.currentPage = 'performAction';
+		$location.path("perform-action");
+		
+	}
 });	
 
 
@@ -74,6 +81,7 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 			$scope.submitclick = true;
 			return;
 		}
+		
 		var groupId = ledger.accGroup.id;		
 		ledger.accGroup = {};
 		ledger.accGroup.id = groupId;
