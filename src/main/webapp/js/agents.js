@@ -1,5 +1,7 @@
 
 
+
+
 app.controller('AgentCreateController', function($scope,$rootScope,$location,$http,UserPrevService) {
 	$scope.agent ={}; 
 	$scope.optType = "create";
@@ -143,6 +145,12 @@ app.controller('AgentsController', function($scope,$rootScope,$location,$http) {
 		$rootScope.agent = agent ;
 	}
 
+	$scope.cancelAgent = function(){
+		$rootScope.currentPage = 'performAction';
+		$location.path("perform-action");
+		
+	}
+	
 	$scope.deleteAgent = function(agent){
 		console.log( " delete Agent");
 		$scope.message ='';
