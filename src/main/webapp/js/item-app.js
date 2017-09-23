@@ -384,10 +384,11 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 	$scope.company.yearstart = new Date();
 	$scope.company.booksstart = new Date();
 	$scope.company.creationdate = new Date();
-	$scope.company.createduser = $rootScope.loggedUser.username;
-	$scope.company.createddate = new Date();
-	$scope.company.modifieduser = $rootScope.loggedUser.username;
-	$scope.company.modifieddate = new Date();
+	$scope.company.createdUser = $rootScope.loggedUser.username;
+	$scope.company.createdDate = new Date();
+	$scope.company.modifiedUser = $rootScope.loggedUser.username;
+	$scope.company.modifiedDate = new Date();
+	
 	
 	$scope.createCompany = function(company){
 		if(!$scope.companyform.$valid){
@@ -395,7 +396,10 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 			return;
 		}
 
+			
+		
 			var dataObj = JSON.stringify(company);
+			console.log("dataObj ---> " + dataObj);
 			$http.post(hostname + '/company/create', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
@@ -453,8 +457,8 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 			return;
 		}		
 	
-		company.modifieduser = $rootScope.loggedUser.username;
-		company.modifieddate = new Date();
+		company.modifiedUser = $rootScope.loggedUser.username;
+		company.modifiedDate = new Date();
 	
 		var dataObj = JSON.stringify(company);
 			$http.post(hostname + '/company/create', dataObj, {
@@ -1111,7 +1115,11 @@ app.controller('showStockItemController', function($scope,$route,$rootScope,$loc
 	}	
 	
 		
+	$scope.cancelItem = function(){
+		$rootScope.currentPage = 'performAction';
+		$location.path("perform-action");
 		
+	}	
 		
 });
 
@@ -1170,5 +1178,9 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 			  });
 	}		
 		
-
+	$scope.cancelStockGroup = function(){
+		$rootScope.currentPage = 'performAction';
+		$location.path("perform-action");
+		
+	}
 });
