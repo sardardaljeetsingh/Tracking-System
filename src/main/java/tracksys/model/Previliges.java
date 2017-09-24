@@ -49,7 +49,7 @@ public class Previliges {
 	private User user;
 	
 	//@OneToOne(cascade=CascadeType.ALL)  
-	@ManyToOne(cascade=CascadeType.ALL)  
+	@ManyToOne  
 	@JoinColumn(name = "companyid", nullable = false)	
 	private Company company;	
 

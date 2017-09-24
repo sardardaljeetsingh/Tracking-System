@@ -49,6 +49,23 @@ public class TrasactionItem {
 	@Column(name = "purcrate", nullable = false)
 	private int purcrate;	
 
+	@NotNull
+	@Column(name = "createduser", nullable = false)	
+	private String createdUser;
+	
+	@NotNull
+	@Column(name = "createddate", nullable = false)	
+	private java.util.Date createdDate;
+	
+	@NotNull
+	@Column(name = "modifieduser", nullable = false)	
+	private String modifiedUser;
+	
+	@NotNull
+	@Column(name = "modifieddate", nullable = true)	
+	private  java.util.Date modifiedDate;
+
+	
 	public int getId() {
 		return id;
 	}
@@ -105,5 +122,37 @@ public class TrasactionItem {
 		this.transaction = transaction;
 	}
 	
+		public String getCreatedUser() {
+		return createdUser;
+	}
+
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
+
+	public java.util.Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(java.util.Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getModifiedUser() {
+		return modifiedUser;
+	}
+
+	public void setModifiedUser(String modifiedUser) {
+		this.modifiedUser = modifiedUser;
+	}
+
+	public java.util.Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(java.util.Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}	
+
 	
 }

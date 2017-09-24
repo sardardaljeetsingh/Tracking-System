@@ -1,4 +1,6 @@
 package tracksys.model;
+
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.FetchType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,10 +28,31 @@ public class StockGroup {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@ManyToOne(cascade=CascadeType.MERGE)  
+	
+	@NotNull
+	@Column(name = "createduser", nullable = false)	
+	private String createdUser;
+	
+	@NotNull
+	@Column(name = "createddate", nullable = false)	
+	private java.util.Date createdDate;
+	
+	@NotNull
+	@Column(name = "modifieduser", nullable = false)	
+	private String modifiedUser;
+	
+	@NotNull
+	@Column(name = "modifieddate", nullable = true)	
+	private  java.util.Date modifiedDate;
+
+	
+	@ManyToOne  
 	@JoinColumn(name = "companyid", nullable = false)
 	private Company company;	
 
+	
+	
+	
 	public Company getCompany() {
 		return company;
 	}
@@ -74,5 +100,43 @@ public class StockGroup {
 
 	public void setParent(Integer parent) {
 		this.parent = parent;
-	}	  
+	}
+
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="stockGroup",fetch = FetchType.EAGER)  
+	private List<Item> item;
+		
+	public String getCreatedUser() {
+		return createdUser;
+	}
+
+	public void setCreatedUser(String createdUser) {
+		this.createdUser = createdUser;
+	}
+
+	public java.util.Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(java.util.Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getModifiedUser() {
+		return modifiedUser;
+	}
+
+	public void setModifiedUser(String modifiedUser) {
+		this.modifiedUser = modifiedUser;
+	}
+
+	public java.util.Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(java.util.Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}	
+
+	
+	
 }

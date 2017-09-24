@@ -23,6 +23,7 @@ public class LedgerController {
 	private AccGroupRepository accGroupRepository;
 	
 	@RequestMapping(value ="/create",method = RequestMethod.POST)
+	@Transactional
 	public @ResponseBody Ledger  create(@RequestBody Ledger ledger) {
 		ledger.setCurbal(ledger.getOpbal());
 		ledger.setAccGroup(accGroupRepository.findOne(ledger.getAccGroup().getId()));

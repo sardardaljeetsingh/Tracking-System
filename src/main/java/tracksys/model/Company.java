@@ -82,7 +82,7 @@ public class Company {
 	private String modifiedUser;
 	
 	@NotNull
-	@Column(name = "modifieddate", nullable = false)	
+	@Column(name = "modifieddate", nullable = true)	
 	private  java.util.Date modifiedDate;
 
 	
@@ -227,10 +227,10 @@ public class Company {
 		this.booksstart = booksstart;
 	}
 
-	/*@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
 	private List<Previliges> previliges;
 	
-	public List<Previliges> getPreviliges() {
+	/*public List<Previliges> getPreviliges() {
 		return previliges;
 	}
 
@@ -238,10 +238,10 @@ public class Company {
 		this.previliges = previliges;
 	}*/
 	
-	/*@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
 	private List<AccGroup> accGroup;
 	
-	public List<AccGroup> getAccGroup() {
+	/*public List<AccGroup> getAccGroup() {
 		return accGroup;
 	}
 
@@ -249,7 +249,10 @@ public class Company {
 		this.accGroup = accGroup;
 	}*/
 
-public String getCreatedUser() {
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="company",fetch = FetchType.EAGER)  
+	private List<StockGroup> stockGroup;
+
+	public String getCreatedUser() {
 		return createdUser;
 	}
 

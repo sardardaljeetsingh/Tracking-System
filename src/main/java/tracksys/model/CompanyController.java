@@ -29,8 +29,11 @@ public class CompanyController {
 	  public @ResponseBody Company  create(@RequestBody Company company) {
 
 		  boolean isCompanyExists = companyRepository.exists(company.getId());
-		  company =  companyRepository.save(company);
-
+System.out.println("Company Created ----------> " + company.toString());		
+		company =  companyRepository.save(company);
+		  
+        
+		  
 		  if(!isCompanyExists){		//Create Company 
 			  Iterable<User> users = userRepostory.findAll(); 
 			  List<Previliges> prevList = new ArrayList<Previliges>();
@@ -51,7 +54,7 @@ public class CompanyController {
 				  prevList.add(previliges);
 			  }
 			  userPreviligeReposotory.save(prevList);
-
+		
 			  List<AccGroup> accGroupList = new ArrayList<AccGroup>();
 			  accGroupList.add( new AccGroup("Sundry Creditors", company,1,company.getCreatedUser()));
 			  accGroupList.add( new AccGroup("Sundry Debtors", company,1,company.getCreatedUser()));
