@@ -100,6 +100,11 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 			return;
 		}
 
+			user.createdUser = $rootScope.loggedUser.username;
+			user.createdDate = new Date();
+			user.modifiedUser = $rootScope.loggedUser.username;
+			user.modifiedDate = new Date();
+
 			var dataObj = JSON.stringify(user);
 			$http.post(hostname+'/user/create', dataObj, {
 			  headers: {
@@ -189,6 +194,10 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 			$scope.submitclick = true;
 			return;
 		}		
+
+			user.modifiedUser = $rootScope.loggedUser.username;
+			user.modifiedDate = new Date();
+
 			var dataObj = JSON.stringify(user);
 			$http.post(hostname + '/user/create', dataObj, {
 			  headers: {

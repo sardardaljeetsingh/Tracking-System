@@ -729,13 +729,15 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		//nothing at this moment
 			}
 		
+			newgroup.modifiedUser = $rootScope.loggedUser.username;
+			newgroup.modifiedDate = new Date();
+		
 		} else {
 			//for add code
 			newgroup.parent = 1;
 			newgroup.company = {};
 			newgroup.company.id = $scope.company.id;
-		
-		
+			
 			if(grplevel == 0){
 				//$scope.groups.push(newgroup);
 			}else if(grplevel == 1){
@@ -743,7 +745,11 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 			}else{
 				newgroup.parent = $scope.multigroups[grplevel-2].selGroup.id;
 			}
-
+			newgroup.createdUser = $rootScope.loggedUser.username;
+			newgroup.createdDate = new Date();
+			newgroup.modifiedUser = $rootScope.loggedUser.username;
+			newgroup.modifiedDate = new Date();
+			
 		}		
 		newgroup.name = selGroup;
 		
@@ -897,7 +903,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				} 
 			});
 		});
-		alert("defaultGroupId --> " + defaultGroupId + " " + $scope.item.stockGroup);
+		//alert("defaultGroupId --> " + defaultGroupId + " " + $scope.item.stockGroup);
 		return defaultGroupId;	
 	}
 	
@@ -934,10 +940,13 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	
 	
 	$scope.getTotal = function(){
+		$scope.grandTotal = 0;
 		var total = 0;
 		for(var i = 0; i < $scope.items.length; i++){
 			var item = $scope.items[i];
-			total += (item.quandity * item.pices);
+			if(item.quandity >= 0 && item.pices >=0){
+				total += (item.quandity * item.pices);
+			}
 		}
 		$scope.grandTotal = total;
 		return total;
@@ -964,8 +973,20 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		}
 	    //alert(selItem.stockGroup);
 		selItem.itemDtls = $scope.items;
-		selItem.curqundty = selItem.quandity;
-
+		//selItem.curqundty = selItem.quandity;
+		
+		selItem.curqundty = $scope.grandTotal;
+		
+		if ($scope.showPage == 'create')
+		{
+			selItem.quandity = $scope.grandTotal;		
+			selItem.createdUser = $rootScope.loggedUser.username;
+			selItem.createdDate = new Date();
+		} 			
+	
+		selItem.modifiedUser = $rootScope.loggedUser.username;
+		selItem.modifiedDate = new Date();
+			
 		var tempItemTrans = [];
 		var count = 0;
 		angular.forEach(selItem.itemDtls,function(itemTrans,index){
@@ -983,6 +1004,10 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				  itemDtl.curqundty = itemTrans.quandity ;
 				  itemDtl.pices =1;
 				  itemDtl.curpices =1;
+				  itemDtl.createdUser = $rootScope.loggedUser.username;
+				  itemDtl.createdDate = new Date();
+				  itemDtl.modifiedUser = $rootScope.loggedUser.username;
+				  itemDtl.modifiedDate = new Date();
 			  }
 			} else {
 			  itemDtl.id = itemTrans.id;
@@ -991,13 +1016,15 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			  itemDtl.curqundty = itemTrans.quandity ;
 			  itemDtl.pices =1;
 			  itemDtl.curpices =1;
+			  itemDtl.modifiedUser = $rootScope.loggedUser.username;
+			  itemDtl.modifiedDate = new Date();
 			}
 			tempItemTrans.push(itemDtl);
 		  
 		  }
 		  
 		});		
-		console.log("check------> " + selItem.itemDtls.length+ " , " + tempItemTrans.length);
+		//console.log("check------> " + selItem.itemDtls.length+ " , " + tempItemTrans.length);
 		selItem.itemDtls = tempItemTrans;
 		
 		
@@ -1030,6 +1057,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				$scope.submitclick = false;
 				$scope.item = { };
 				$scope.items = [];
+				$scope.items[0] = {'quandity':1 ,'pices':1 };
+				$scope.grandTotal = 0;
 				$scope.itemform.$setPristine();
 			  } catch (err) {
 				console.log(JSON.stringify(err));

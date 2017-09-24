@@ -130,6 +130,12 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 						  itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
 						  itemDtl.quandity = itemTrans.quandity ;
 						  itemDtl.curqundty = itemTrans.quandity ;
+						  
+						  itemDtl.createdUser = $rootScope.loggedUser.username;
+						  itemDtl.createdDate = new Date();
+						  itemDtl.modifiedUser = $rootScope.loggedUser.username;
+						  itemDtl.modifiedDate = new Date();
+											  
 						  itemDtl.pices =1;
 						  itemDtl.curpices =1;
 						  finalItemsDtls.push(itemDtl);
@@ -139,6 +145,15 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			  
 			});
             transItem.item.itemDtls = finalItemsDtls;
+		
+			transItem.createdUser = $rootScope.loggedUser.username;
+			transItem.createdDate = new Date();
+			transItem.modifiedUser = $rootScope.loggedUser.username;
+			transItem.modifiedDate = new Date();
+			
+			transItem.item.modifiedUser = $rootScope.loggedUser.username;
+			transItem.item.modifiedDate = new Date();
+					
 			console.log(transItem.item.itemDtls);
 			delete transItem.item['@id'];	
 			delete transItem.item.stockGroup['@id'];				
@@ -148,7 +163,16 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		delete purchage.ledger.accGroup;
         delete purchage.fromledger['@id'];
 	    delete purchage.fromledger.accGroup;	
-        purchage.transdate	= $filter('date')($scope.purchage.inputTrnsDate,'MM/dd/yyyy');	
+        
+		purchage.transdate	= $filter('date')($scope.purchage.inputTrnsDate,'MM/dd/yyyy');	
+		
+		purchage.createdUser = $rootScope.loggedUser.username;
+		purchage.createdDate = new Date();
+		purchage.modifiedUser = $rootScope.loggedUser.username;
+		purchage.modifiedDate = new Date();
+		
+		
+		
 		console.log(purchage.trasactionItems);
 			var dataObj = JSON.stringify(purchage);
 			console.log(dataObj);
@@ -220,8 +244,13 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
    $scope.selectedPGenres = ['Sundry Creditors','Cash','Bank'];
 
     $scope.filterForPurchases = function(option) {
-		//alert("display " + option.accGroup.name);
-		return ($scope.selectedPGenres.indexOf(option.accGroup.name) !== -1);
+	//	alert("display  --> " + option + " " + option.accGroup );
+	
+		
+		if(option.accGroup == undefined)
+			return false;
+		else
+			return ($scope.selectedPGenres.indexOf(option.accGroup.name) !== -1);
     };
 
    $scope.selectedSRGenres = ['Sundry Debtors','Cash','Bank'];
@@ -419,6 +448,14 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
         delete sale.fromledger['@id'];
 	    delete sale.fromledger.accGroup;	
         sale.transdate	= $filter('date')(sale.inputTrnsDate,'MM/dd/yyyy');	
+		
+		sale.createdUser = $rootScope.loggedUser.username;
+		sale.createdDate = new Date();
+		sale.modifiedUser = $rootScope.loggedUser.username;
+		sale.modifiedDate = new Date();
+	
+		
+		
 		console.log(sale); 
 		
 		
@@ -723,7 +760,13 @@ $scope.trasaction ={};
         transObj.transdate = $filter('date')($scope.trasaction.inputTrnsDate,'MM/dd/yyyy');	
 		console.log(transObj.transdate +"   "+ transObj.inputTrnsDate); 
 		transObj.type = 3;
-		transObj.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);			
+		transObj.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+
+		transObj.createdUser = $rootScope.loggedUser.username;
+		transObj.createdDate = new Date();
+		transObj.modifiedUser = $rootScope.loggedUser.username;
+		transObj.modifiedDate = new Date();
+		
 		console.log(transObj); 
 		
 		
@@ -945,6 +988,12 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 		delete transaction.fromledger.accGroup;	
 
 		transaction.transdate	= $filter('date')($scope.trasaction.transdate,'MM/dd/yyyy');
+		
+		transaction.createdUser = $rootScope.loggedUser.username;
+		transaction.createdDate = new Date();
+		transaction.modifiedUser = $rootScope.loggedUser.username;
+		transaction.modifiedDate = new Date();
+		
 		
 		//payment.voucher = 	payment.voucher.voucher		
 		console.log(JSON.stringify(transaction));

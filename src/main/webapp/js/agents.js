@@ -1,7 +1,3 @@
-
-
-
-
 app.controller('AgentCreateController', function($scope,$rootScope,$location,$http,UserPrevService) {
 	$scope.agent ={}; 
 	$scope.optType = "create";

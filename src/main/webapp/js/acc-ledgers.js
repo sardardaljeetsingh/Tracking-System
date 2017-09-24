@@ -1,5 +1,3 @@
-
-
 app.controller('ledgerController', function($scope,$rootScope,$location,$http) {
 	$rootScope.ledgers = [];
 	$scope.message ='';
@@ -86,6 +84,12 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 		ledger.accGroup = {};
 		ledger.accGroup.id = groupId;
 		ledger.alias = ledger.name;
+		
+		ledger.createdUser = $rootScope.loggedUser.username;
+		ledger.createdDate = new Date();
+		ledger.modifiedUser = $rootScope.loggedUser.username;
+		ledger.modifiedDate = new Date();
+		
 		//ledger.accGroup.id = ledger.groupid;
 			var dataObj = JSON.stringify(ledger);
 			console.log( dataObj );
@@ -156,6 +160,9 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 		    ledger.accGroup = {};
 			ledger.accGroup.id = groupId;
 			
+			ledger.modifiedUser = $rootScope.loggedUser.username;
+			ledger.modifiedDate = new Date();
+			
 			var dataObj = JSON.stringify(ledger);
 			console.log( " editLedger : " + dataObj);
 			$http.post(hostname + '/ledger/create', dataObj, {
@@ -195,5 +202,3 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 	});
 	
 });
-
-	
