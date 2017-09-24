@@ -735,7 +735,7 @@
 				
 				 <form class="form-horizontal input-sm" name="itemform" novalidate >
 					<div class="row">
-					     <div class="col-xs-12 panel panel-success" style="margin:10px;padding:0px" >
+					     <div class="col-xs-12 panel panel-success" style="margin:0px;padding:0px" >
 					      <div class="panel-heading"><strong>Select Stock Groups</strong></div>
 								<div class="row" >
 
@@ -744,7 +744,7 @@
 										<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
 												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
 												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'create'">
-													<option value="">-- choose group if required --</option>
+													<option value="">-- Please select group --</option>
 											</select>	
 										
 										
@@ -752,7 +752,7 @@
 												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
 												ng-init="stockgroup.selGroup.id = itemSel.stockGroup"
 												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'edit'">
-													<option value="">-- Please select group --</option>
+													<option value="">-- choose group if required --</option>
 											</select>	
 										
 										<!--
@@ -780,12 +780,12 @@
 				<div class="row">
 					  
 					  
-					     <div class="col-xs-12 panel panel-warning" style="margin:10px;padding:0px" >
+					     <div class="col-xs-12 panel panel-warning" style="margin:0px;padding:0px" >
 						 <!--ng-show="stockGroups[stockGroups.length-1].selGroup != null || stockGroups.length > 1" --> 
 					      <div class="panel-heading"><strong>Enter Item Details </strong></div>	
 							    <div class="panel-body">
 									<div class="row" >
-											<table class="table table-condensed table-bordered" style="width:98%; margin-left :10px; padding:30px" >
+											<table class="table table-condensed table-bordered" style="width:98%; margin-left :10px; padding:0px" >
 											<thead>
 											<tr  class="input-sm">
 											  <th>#</th>
@@ -803,14 +803,14 @@
 											<tr class="warning">
 											 <th scope="row">1</th>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.name'].$invalid }">
-											 <input type="text" class="form-control input-sm" size="10" ng-model="item.name" name="item.name" id="item.name"
+											 <input type="text" class="form-control input-sm" size="5" ng-model="item.name" name="item.name" id="item.name"
 											  required> </td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.itemHSN'].$invalid }">
-											 <input type="text" class="form-control input-sm" size="10" ng-model="item.itemHSN" name="item.itemHSN" id="item.itemHSN" required> </td>
+											 <input type="text" class="form-control input-sm" size="5" ng-model="item.itemHSN" name="item.itemHSN" id="item.itemHSN" required> </td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.shade'].$invalid }">
-											 <input type="text" class="form-control input-sm" size="5" ng-model="item.shade" name="item.shade" id="item.shade" required></td>
+											 <input type="text" class="form-control input-sm" size="3" ng-model="item.shade" name="item.shade" id="item.shade" required></td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.desc'].$invalid }">
-											 <input type="text" class="form-control input-sm" size="10" ng-model="item.desc" name="item.desc" id="item.desc" required></td>
+											 <input type="text" class="form-control input-sm" size="5" ng-model="item.desc" name="item.desc" id="item.desc" required></td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.uom'].$invalid }" >
 												 <div class="row">
 												 <div class="col-xs-12">
@@ -828,32 +828,49 @@
 											 id="item.purcrate" ng-model="item.purcrate" required size="5" ></td>
 											 
 											 <td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.rate'].$invalid }" >
-											 <input type="number" min="1" step="1" size="3" class="form-control input-sm" name="item.rate" style="width : 70px"
+											 <input type="number" min="1" step="1" size="2" class="form-control input-sm" name="item.rate" style="width : 70px"
 											 id="item.rate" ng-model="item.rate" required size="5"></td>
 																					 
-											 <td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.quandity'].$invalid }" >
-											 <input type="number" min="1" step="1" size="5" class="form-control input-sm" name="item.quandity" style="width : 70px"
-											 id="item.quandity" ng-model="item.quandity"  required ng-change="showSplit=true;items[0].quandity=item.quandity" >
+											 
+											 <td>
+											 <label for="inputPassword3" class="col-sm-3 control-label">{{grandTotal}}</label>
+											 
 											 </td>
-											  <td>
-					<table class="table table-condensed table-bordered" ng-if="item.quandity > 0" >
+											 <!--<td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.quandity'].$invalid }" >
+											 
+											 
+											 <input type="number" min="1" step="1" size="2" class="form-control input-sm" name="item.quandity" style="width : 70px" value="{{grandTotal}}"
+											 id="item.quandity" ng-model="item.quandity" readonly >
+											 </td>-->											 
+					 <td>
+					
+					<table class="table table-condensed table-bordered" ng-if="itemform['item.name'].$invalid == false" >
 					<thead>
 					<tr>
-					  <th class="col-sm-1 input-sm">No of Packets</th>
-					  <th class="col-sm-2 input-sm">Each Packet Quantity</th>
-					  <th class="col-sm-1 input-sm">Total</th>
+					  <th class="col-sm-1 ">Packets</th>
+					  <th class="col-sm-1 ">Quantity</th>
+					  <th class="col-sm-2 ">Total</th>
 					</tr>
 					</thead>
-					<tr class="warning" ng-repeat="selItem in items" ng-class="{'has-error' : grandTotal > (item.quandity) }" > 
-					 <td><input type="number" min="1" step="1" class="form-control input-sm" ng-model="selItem.pices" style="width : 70px"></td>
-					 <td> <input type="number" min="1" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity" style="width : 70px" ></td>	
-					 <td> {{selItem.quandity*selItem.pices}} &nbsp;	&nbsp;	
-					 <button type="button" class="btn btn-warning btn-sm" ng-click="items.push({ 'quandity': 1, 'pices':1})"
-					 ng-if="(grandTotal < item.quandity && items.length == $index+1 && (selItem.quandity*selItem.pices > 0) )">Add</button></td>						 
-					</tr>
+					
+				<!--<tr class="warning" ng-repeat="selItem in items" ng-class="{'has-error' : grandTotal > (item.quandity) }" > -->
+				<tr class="warning" ng-repeat="selItem in items" > 					
+				
+					<td><input type="number" min="1" step="1" class="form-control input-sm" size="3" ng-model="selItem.pices" style="width : 50px"></td>
+					 
+					 <td> <input type="number" min="1" step="1" class="form-control input-sm" size="" ng-model="selItem.quandity" style="width : 70px" ></td>	
+					 
+					<td ng-if="(selItem.quandity >= 0 && selItem.pices >=0)" style="width : 80px"> {{selItem.quandity*selItem.pices}}&nbsp;	
+					
+					<button type="button" class="btn btn-success btn-xs" ng-click="items.push({ 'quandity': 1, 'pices':1})"
+					 ng-if="(items.length == $index+1 && (selItem.quandity*selItem.pices >= 0) )">
+					 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
+					 </button></td>
+				</tr>
+					
 					<tr class="">
 					 <td colspan="2" style="text-align : right" ><b>Grand Total </b></td>
-					 <td> <b>{{getTotal()}} </b>
+					 <td ng-if="(getTotal() >= 0)"> <b>{{getTotal()}} </b>
 					 </td>	
 					</tr>
 					
@@ -863,7 +880,7 @@
 					</td>
 					</tr>					
 					
-					
+					<!--
 					<tr class="warning">
 					<td colspan="3" style="text-align : center" >
 					 <div class="alert alert-danger" role="alert" ng-if="grandTotal > (item.quandity)" >
@@ -872,6 +889,7 @@
 			
 					</td>
 					</tr>
+					-->
 					</table>												  
 											  
 											  </td>
@@ -925,7 +943,7 @@
 					<form class="form-inline">
 					 
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Item Name">
 							<button type="button" class="btn btn-success btn-sm">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelItem()">Cancel</button>
 						</div>
@@ -938,7 +956,7 @@
           <table class="table table-hover input-sm"  style="width:100% ; padding:0px;margin-left:10px" >
 		  <thead> <tr> 
 				  <th>#</th>
-				  <th>Name</th>
+				  <th>Item Name</th>
 				  <th>Item HSN#</th>
 				  <th>Shade</th>
 				  <th>Description</th>
@@ -987,7 +1005,7 @@
 					<form class="form-inline">
 					
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Stock Group Name">
 							<button type="button" class="btn btn-success btn-sm">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelStockGroup()">Cancel</button>
 						</div>
@@ -1004,9 +1022,11 @@
 	  </div>	
 							  
 		  <div class="row" >
-		  <!-- Table -->
-          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >
-		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent Group Name</th> <th></th></tr> </thead> 
+		  <!-- Table 
+          <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" >-->
+		  <table class="table table-hover input-sm">
+
+		  <thead> <tr> <th>Stock Group ID</th> <th>Stock Group Name</th> <th>Parent Group Name</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th></tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="group in groups" ng-if="group.id > 1" > 
 				<td>{{group.id}}</td> 
@@ -1297,7 +1317,7 @@
 					
 					<form class="form-inline">
 					 	<div class="form-group col-sm-5"  >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Account Group Name">
 							<button type="button" class="btn btn-success btn-sm">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelAccountGroup()">Cancel</button>
 						</div>
@@ -1316,7 +1336,7 @@
 		  <!-- Table 
           <table class="table table-bordered input-sm"  style="width:50% ; padding:0px;margin-left:10px" > -->
 		  <table class="table table-hover input-sm">
-		  <thead> <tr> <th>Group ID</th> <th>Group Name</th> <th>Parent Group Name</th> <th>Action</th> </tr> </thead> 
+		  <thead> <tr> <th>Account Group ID</th> <th>Account Group Name</th> <th>Parent Group Name</th> <th>Action</th> </tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="group in groups" ng-if="group.id > 1" > 
 				<td>{{$index+1}}</td> 
@@ -1388,8 +1408,8 @@
 
 					 <div class="form-group input-sm">
 						<label for="inputPassword3" class="col-sm-5 control-label">Opening Balance </label>
-						<div class="col-sm-5" ng-class="{'has-error' : submitclick && (ledgerform['ledger.opbal'].$dirty == false || (ledger.opbal) <0) }" >
-						  <input type="number" min="1" class="form-control input-sm" id="ledger.opbal" name="ledger.opbal" 
+						<div class="col-sm-5" ng-class="{'has-error' : submitclick && ledgerform['ledger.opbal'].$dirty == false}" >
+						  <input type="number" min="0" class="form-control input-sm" id="ledger.opbal" name="ledger.opbal" 
 						  ng-model="ledger.opbal" placeholder="Opening Balance" >						
 						</div>
 					 </div>
@@ -1479,7 +1499,7 @@
 					<form class="form-inline">
 					  
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
+							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Ledger Name">
 							<button type="button" class="btn btn-success btn-sm">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelLedger()">Cancel</button>
 						</div>
