@@ -599,10 +599,12 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		{
 			$rootScope.groups = response.data;
 			//$scope.groups = response.data;
-			console.log(" Groupth Length : " + $scope.groups.length)			
+			console.log(" Groupth Length : " + $scope.groups.length);
+			console.log("Stock groups ---> " + JSON.stringify(response));			
 			angular.forEach($scope.groups, function (group) 
 			{
-				if(group.parent === 1){
+				//if(group.parent === 1){
+				if(group.id > 1 && group.parent === 1){
 				  $scope.singlegroups.push(group);
 				}
 			});	
@@ -739,10 +741,11 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 			newgroup.company.id = $scope.company.id;
 			
 			if(grplevel == 0){
+				//newgroup.parent = 0;
 				//$scope.groups.push(newgroup);
 			}else if(grplevel == 1){
 				newgroup.parent = $scope.singlegroup.selGroup.id;
-			}else{
+			}else if(grplevel > 1) {
 				newgroup.parent = $scope.multigroups[grplevel-2].selGroup.id;
 			}
 			newgroup.createdUser = $rootScope.loggedUser.username;
@@ -754,7 +757,7 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 		newgroup.name = selGroup;
 		
 		var dataObj = JSON.stringify(newgroup);
-		//console.log("group info for edit -----> " + dataObj);
+		console.log("stock group info  -----> " + dataObj);
 		
 		$http.post(hostname + '/stockgroup/create', dataObj, {
 		  headers: {
@@ -876,7 +879,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			angular.forEach($scope.groups, function (group) 
 			{
 				// console.log(" group "  + group.id +"  "+ group.name + " " + group.parent );
-				if(group.parent === 1){
+				if(group.id > 1 && group.parent === 1){
 				  $scope.stockGroups[0].children.push(group);
 				}
 			});
@@ -1161,6 +1164,8 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 	    $http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
 		then(function(response) 
 		{
+			
+			console.log("Stock Groups ---> " + JSON.stringify(response));
 			$rootScope.groups = response.data;
 			//$scope.groups = response.data;
 			console.log(" Groupth Length : " + $scope.groups.length)	;
