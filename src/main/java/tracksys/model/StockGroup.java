@@ -71,11 +71,15 @@ public class StockGroup {
 		this.id = id;
 	}
 
-	public StockGroup(String name, Company company, Integer parent) {
+	public StockGroup(String name, Company company, Integer parent, String user) {
 		super();
 		this.name = name;
 		this.company = company;
 		this.parent = parent;
+		this.createdUser = user;
+		this.createdDate = new java.util.Date();
+		this.modifiedUser = user;
+		this.modifiedDate = new java.util.Date();
 	}
 
 	public int getId() {
