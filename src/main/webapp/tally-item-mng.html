@@ -1052,7 +1052,7 @@
 	  <script type="text/ng-template" id="/inline-users.html">
 		<div class="panel panel-success" >
 		  <!-- Default panel contents -->
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >List of Users </div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Users --> List</strong> </div>
 		  <div class="panel-body">
 					<form class="form-inline">
 					  <div class="form-group">
@@ -1067,7 +1067,7 @@
 		  </div>
 		  <!-- Table -->
           <table class="table table-hover input-sm">
-		  <thead> <tr> <th>#</th> <th>User Name</th> <th>User Type</th> <th></th> </tr> </thead> 
+		  <thead> <tr> <th>#</th> <th>User Name</th> <th>User Type</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th> </tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="user in users"> 
 				<th scope="row">{{$index+1}}</th> 
@@ -1344,7 +1344,7 @@
 				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
 			    <form class="form-inline">
-					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccGrp(group)">Delete Group</button>
+					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccGrp(group)" ng-if="group.id > 6">Delete Group</button>
 				</form>				
 				</td> 				
 			 </tr>  
