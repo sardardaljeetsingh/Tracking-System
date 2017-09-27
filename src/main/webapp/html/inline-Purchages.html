@@ -52,11 +52,17 @@
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">Party Account Name</label>
 								<div class="col-sm-6">
+								
+								
 								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
-										ng-options="option as option.name for option in ledgers | filter:filterForPurchases" required ng-if="returnType == 'TR_P'">
+										ng-options="option as option.name for option in ledgers | filter:filterForPurchases" 
+										ng-change="callGST(purchage)"
+										required ng-if="returnType == 'TR_P'">
 										<option value="">-- Choose Account --</option>
 								</select>	
+								
+								
 								
 								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
@@ -76,6 +82,7 @@
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
+											ng-change="callGST(purchage)"
 											required ng-if="returnType == 'TR_P'">
 											<option value="">-- Choose Account --</option>
 									</select>
@@ -229,18 +236,26 @@
 								{{currency}} &nbsp; {{purchage.rate}}
 								</td>
 							</tr>	
-							<tr class="warning">
+							<tr class="warning" ng-if="showSCGST == true">
 								<td colspan="6" style="text-align : right;" > <b> GST --> SGST </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								2.5%
 								</td>
 							</tr>	
-							<tr class="warning">
+							<tr class="warning" ng-if="showSCGST == true">
 								<td colspan="6" style="text-align : right;" > <b> GST --> CGST </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								2.5%
 								</td>
 							</tr>
+							
+							<tr class="warning" ng-if="showIGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> IGST </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								5%
+								</td>
+							</tr>
+							
 							<tr class="warning">
 								<td colspan="6" style="text-align : right;" > <b> Total Price (with GST) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
