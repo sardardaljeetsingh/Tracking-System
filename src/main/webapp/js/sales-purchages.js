@@ -9,10 +9,74 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	  $rootScope.curTab = 'companyTab';
    });
    
-   $scope.ledgers = [];
+   
+   $scope.selectedPGenres = ['Sundry Creditors','Cash','Bank'];
+
+    $scope.filterForPurchases = function(option) {
+		
+		if(option.accGroup == undefined)
+			return false;
+		else
+			return ($scope.selectedPGenres.indexOf(option.accGroup.name) !== -1);
+    };
+
+   $scope.selectedSRGenres = ['Sundry Debtors','Cash','Bank'];
+
+    $scope.filterForSales = function(option) {
+		if(option.accGroup == undefined)
+			return false;
+		else
+			return ($scope.selectedSRGenres.indexOf(option.accGroup.name) !== -1);
+    };
+   
+   
+   
+	$scope.filterParentPurchase = function(accGroup){
+		alert("accGroup filter --> " + accGroup.name);
+		return ($scope.selectedPGenres.indexOf(accGroup.name) !== -1);
+	}		
+     
+	 $scope.ledgers = [];
      GenericSrvc.getAll('/ledger/findAll',function(response){
       console.log(" Trsaction Response " + JSON.stringify(response));
 	  $scope.ledgers = response;
+	 
+
+	 /*$scope.partyACName = [];
+	 var ldgr = '';
+	 angular.forEach(response, function (ledger) {
+		 ldgr = ledger;
+		  //alert(ledger.accGroup.name + " " + $scope.filterForPurchases(ledger));
+			if($scope.filterForPurchases(ledger)){
+				//alert("namwe " + ledger.name);
+				//if(ledger.name != ''){
+					$scope.partyACName.push(ledger);
+				//}
+			} 
+			if(!$scope.filterForPurchases(ledger)){
+				//check for parent
+				//console.log(" Account Groups " + JSON.stringify($rootScope.accgroups));
+				angular.forEach($rootScope.accgroups, function (accGroup) {
+					 alert("check accGroup --> " + ldgr.parent + " " + accGroup.id );
+				
+						if(ldgr.parent == accGroup.id) {
+								if($scope.filterParentPurchase(accGroup)){
+									alert("check accGroup 1--> " );
+									$scope.partyACName.push(ldgr);
+									return;
+								}
+						}		
+				 
+				 });
+			}
+			
+		});	  
+	    console.log("Array $scope.partyACName ---> " + $scope.partyACName  + " " + $scope.partyACName.length); 
+	  
+	   */
+	  
+	  
+	  
    });  
 
     $scope.agents = [];
@@ -241,29 +305,29 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	}   
    
    
-   $scope.selectedPGenres = ['Sundry Creditors','Cash','Bank'];
-
-    $scope.filterForPurchases = function(option) {
-	//	alert("display  --> " + option + " " + option.accGroup );
-	
-		
-		if(option.accGroup == undefined)
-			return false;
-		else
-			return ($scope.selectedPGenres.indexOf(option.accGroup.name) !== -1);
-    };
-
-   $scope.selectedSRGenres = ['Sundry Debtors','Cash','Bank'];
-
-    $scope.filterForSales = function(option) {
-		return ($scope.selectedSRGenres.indexOf(option.accGroup.name) !== -1);
-    };
+   
 
 	$scope.cancelPurchase = function(){
 		$rootScope.currentPage ='performAction';
 		//console.log("  Cancel Agent");
 		$location.path("perform-action");
 	}	
+	
+	$scope.showSCGST = false;
+	$scope.showIGST = false;
+	
+	$scope.callGST = function(purchaseForm){
+		if(purchaseForm.ledger != null && purchaseForm.fromledger != null){
+			if(purchaseForm.ledger.mailingstate == purchaseForm.fromledger.mailingstate){
+				$scope.showSCGST = true;
+				$scope.showIGST = false;
+			} else {
+				$scope.showSCGST = false;
+				$scope.showIGST = true;
+			}
+		}
+		
+	}
 	
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
