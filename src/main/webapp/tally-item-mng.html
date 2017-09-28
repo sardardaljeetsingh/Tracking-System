@@ -7,13 +7,17 @@
     <meta name="author" content="">
     <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
 
-    <title>Inventory Management System</title>
+    <title ng-if="company.name == null">Inventory Management System</title>
+	<title ng-if="company.name != null">{{ company.name }}</title>
 
   </head>
 
   <body ng-app="invenApp" >
   <div  class="text-center" style="background-color: #26630e; padding:10px; marign:0px; color:#FFFFFF" >
-  <h2 style="font-family: cursive " >S V Enterprises</h3>
+  <h2 style="font-family: cursive " ng-if="company.name == null">Inventory Management System</h2>
+  <h2 style="font-family: cursive " ng-if="company.name != null">{{ company.name }}</h2>
+   <h4 style="font-family: cursive " ng-if="company.name != null">Inventory Management System</h4>
+  
   </div>
   <p class="bg-success red-text text-right" style="background-color:#26630e; color:#FFFFFF; marign:10px" ng-if="(loggedUser != null)" > 
   <span class="glyphicon glyphicon-user"></span> Signed in as <strong>{{ loggedUser.username}}</strong> <small>( {{ loggedUser.type}} )</small>
@@ -1338,10 +1342,11 @@
 		  <table class="table table-hover input-sm">
 		  <thead> <tr> <th>Account Group ID</th> <th>Account Group Name</th> <th>Parent Group Name</th> <th>Action</th> </tr> </thead> 
 		  <tbody> 
-			  <tr ng-repeat="group in groups" ng-if="group.id > 1" > 
+		  <!--Changed on 9/28 -->
+			  <tr ng-repeat="group in groups" > 
 				<td>{{$index+1}}</td> 
 				<td>{{group.name}} </td> 
-				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
+				<td> {{   group.id > 6 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
 			    <form class="form-inline">
 					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccGrp(group)" ng-if="group.id > 6">Delete Group</button>
