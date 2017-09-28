@@ -54,20 +54,20 @@ System.out.println("Company Created ----------> " + company.toString());
 				  prevList.add(previliges);
 			  }
 			  userPreviligeReposotory.save(prevList);
-		
+			  // Change on 9/28	
 			  List<AccGroup> accGroupList = new ArrayList<AccGroup>();
 			  accGroupList.add( new AccGroup("Sundry Creditors", company,1,company.getCreatedUser()));
-			  accGroupList.add( new AccGroup("Sundry Debtors", company,1,company.getCreatedUser()));
-			  accGroupList.add( new AccGroup("Purchases", company,1,company.getCreatedUser()));
-			  accGroupList.add( new AccGroup("Sales", company,1,company.getCreatedUser()));
-			  accGroupList.add( new AccGroup("Cash", company,1,company.getCreatedUser()));
-			  accGroupList.add( new AccGroup("Bank", company,1,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Sundry Debtors", company,2,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Purchases", company,3,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Sales", company,4,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Cash", company,5,company.getCreatedUser()));
+			  accGroupList.add( new AccGroup("Bank", company,6,company.getCreatedUser()));
 			  accGroupRepository.save(accGroupList);
 		  
-		    //create dummy stock group
+		  
+			  //create dummy stock group
 			  StockGroup stockGroup = new StockGroup("DUMMY",company,1,	company.getCreatedUser());
 			  stockGroupRepository.save(stockGroup);
-		  
 		  }
 
 		  return company;
@@ -135,7 +135,7 @@ System.out.println("Company Created ----------> " + company.toString());
 	  
 	  @Autowired
 	  private AccGroupRepository accGroupRepository;
-	
+	  
 	  @Autowired
 	  private StockGroupRepository stockGroupRepository;
 }
