@@ -56,6 +56,7 @@
 							ng-class="{'has-error' : submitclick && salesform['trasaction.fromledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">Party Account Name</label>
 								<div class="col-sm-6">
+									<!--
 									<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
 											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:filterForSales"
@@ -69,7 +70,23 @@
 											required ng-if="returnType == 'TR_PR'">
 											<option value="">-- Choose Account --</option>
 									</select>	
+								-->
+								
+								<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
+											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
+											ng-options="option as option.name for option in partyACNameForSales"
+											ng-change="callGST(trasaction)"
+											required ng-if="returnType == 'TR_S'">
+											<option value="">-- Choose Account --</option>
+									</select>	
 				
+								<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
+											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
+											ng-options="option as option.name for option in partyACNameForPurchase"
+											ng-change="callGST(trasaction)"
+											required ng-if="returnType == 'TR_PR'">
+											<option value="">-- Choose Account --</option>
+									</select>
 
 
 								</div>
@@ -81,7 +98,7 @@
 								<label for="inputPassword3" class="col-sm-4 control-label">Sales Account</label>
 								<div class="col-sm-6">
 									
-									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
+									<!--<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
 											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales'}}  "
 											required ng-if="returnType == 'TR_S'">
@@ -94,7 +111,22 @@
 											required ng-if="returnType == 'TR_PR'">
 											<option value="">-- Choose Account --</option>
 									</select>
+									-->
+									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
+											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
+											ng-options="option as option.name for option in SalesACName"
+											ng-change="callGST(trasaction)"
+											required ng-if="returnType == 'TR_S'">
+											<option value="">-- Choose Account --</option>
+									</select>
 									
+									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
+											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
+											ng-options="option as option.name for option in PurchaseACName"
+											ng-change="callGST(trasaction)"
+											required ng-if="returnType == 'TR_PR'">
+											<option value="">-- Choose Account --</option>
+									</select>
 									
 									</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="trasaction.ledger != null"
@@ -243,16 +275,23 @@
 								{{currency}} &nbsp; {{trasaction.rate}}
 								</td>
 							</tr>	
-							<tr class="warning">
+							<tr class="warning" ng-if="showSCGST == true">
 								<td colspan="6" style="text-align : right;" > <b> GST --> SGST </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								2.5%
 								</td>
 							</tr>	
-							<tr class="warning">
+							<tr class="warning" ng-if="showSCGST == true">
 								<td colspan="6" style="text-align : right;" > <b> GST --> CGST </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								2.5%
+								</td>
+							</tr>
+							
+							<tr class="warning" ng-if="showIGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> IGST </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								5%
 								</td>
 							</tr>
 							<tr class="warning">
