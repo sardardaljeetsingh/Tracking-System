@@ -16,7 +16,8 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 			console.log(" Groupth Length : " + $scope.groups.length)			
 			angular.forEach($scope.groups, function (group) 
 			{
-				if(group.parent === 1){
+				//change on 9/28
+				if(group.parent <= 6){
 				  $scope.singlegroups.push(group);
 				}
 			});	
@@ -196,10 +197,14 @@ app.controller('showAccountGroupsController', function($scope,$rootScope,$locati
 			}).success(function(responseData) {
 				  try {
 					  
-					console.log(JSON.stringify(responseData));
+					console.log("Account group delete ---> " + JSON.stringify(responseData));
 					$scope.message = 'Account Group '+accgroup.name + ' deleted successfully.';
 					$scope.optStatus = 'Success';
 
+					//$rootScope.currentPage = 'showAccountGroups';
+					//$location.path("/view-account-groups");
+					//$route.reload();
+					
 					$http.get(hostname + '/accgroup/find-by-company/'+$scope.company.id).
 					then(function(response) 
 					{
