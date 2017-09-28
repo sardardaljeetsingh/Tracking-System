@@ -9,7 +9,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	  $rootScope.curTab = 'companyTab';
    });
    
-   
+   /*
    $scope.selectedPGenres = ['Sundry Creditors','Cash','Bank'];
 
     $scope.filterForPurchases = function(option) {
@@ -20,7 +20,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			return ($scope.selectedPGenres.indexOf(option.accGroup.name) !== -1);
     };
 
-   $scope.selectedSRGenres = ['Sundry Debtors','Cash','Bank'];
+   /*$scope.selectedSRGenres = ['Sundry Debtors','Cash','Bank'];
 
     $scope.filterForSales = function(option) {
 		if(option.accGroup == undefined)
@@ -34,46 +34,70 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	$scope.filterParentPurchase = function(accGroup){
 		alert("accGroup filter --> " + accGroup.name);
 		return ($scope.selectedPGenres.indexOf(accGroup.name) !== -1);
-	}		
+	}	*/	
      
 	 $scope.ledgers = [];
+	 $scope.partyACNameForPurchase = [];
+	 $scope.partyACNameForSales = [];
+	 $scope.PurchaseACName = [];
+	 $scope.SalesACName = [];
+	 
      GenericSrvc.getAll('/ledger/findAll',function(response){
       console.log(" Trsaction Response " + JSON.stringify(response));
 	  $scope.ledgers = response;
 	 
 
-	 /*$scope.partyACName = [];
-	 var ldgr = '';
+	 
+		
 	 angular.forEach(response, function (ledger) {
-		 ldgr = ledger;
-		  //alert(ledger.accGroup.name + " " + $scope.filterForPurchases(ledger));
-			if($scope.filterForPurchases(ledger)){
-				//alert("namwe " + ledger.name);
-				//if(ledger.name != ''){
-					$scope.partyACName.push(ledger);
-				//}
+		 	if(ledger.accGroup.parent == 5 || ledger.accGroup.parent == 6 ){
+				$scope.partyACNameForSales.push(ledger);
+				$scope.partyACNameForPurchase.push(ledger);
 			} 
-			if(!$scope.filterForPurchases(ledger)){
-				//check for parent
-				//console.log(" Account Groups " + JSON.stringify($rootScope.accgroups));
-				angular.forEach($rootScope.accgroups, function (accGroup) {
-					 alert("check accGroup --> " + ldgr.parent + " " + accGroup.id );
-				
-						if(ldgr.parent == accGroup.id) {
-								if($scope.filterParentPurchase(accGroup)){
-									alert("check accGroup 1--> " );
-									$scope.partyACName.push(ldgr);
-									return;
-								}
-						}		
-				 
-				 });
+			if(ledger.accGroup.parent == 1 ){
+				$scope.partyACNameForPurchase.push(ledger);
 			}
+			if(ledger.accGroup.parent == 2 ){
+				$scope.partyACNameForSales.push(ledger);
+			}
+			if(ledger.accGroup.parent == 3 ){
+				$scope.PurchaseACName.push(ledger);
+			}
+			if(ledger.accGroup.parent == 4 ){
+				$scope.SalesACName.push(ledger);
+			} 
+		});
+		
+		//console.log("Sales and Purchases arrays ---> " + $scope.partyACNameForPurchase.length + " " + $scope.partyACNameForSales.length);
+		
+		/* $scope.PurchaseACName = [];
+		angular.forEach(response, function (ledger) {
+		 	if(ledger.accGroup.parent == 3 ){
+				$scope.PurchaseACName.push(ledger);
+			} 
 			
-		});	  
-	    console.log("Array $scope.partyACName ---> " + $scope.partyACName  + " " + $scope.partyACName.length); 
+		});
+	   // console.log("Array $scope.partyACName ---> " + $scope.partyACName  + " " + $scope.partyACName.length); 
 	  
-	   */
+	  $scope.partyACNameForSales = [];
+	 angular.forEach(response, function (ledger) {
+		 	if(ledger.accGroup.parent == 2 || ledger.accGroup.parent == 5 || ledger.accGroup.parent == 6 ){
+				$scope.partyACNameForSales.push(ledger);
+			} 
+			
+		});	 
+
+	$scope.SalesACName = [];
+		angular.forEach(response, function (ledger) {
+		 	if(ledger.accGroup.parent == 4 ){
+				$scope.SalesACName.push(ledger);
+			} 
+			
+		});*/
+
+		
+	   // console.log("Array $scope.partyACName ---> " + $scope.partyACName  + " " + $scope.partyACName.length); 
+	 
 	  
 	  
 	  
@@ -353,9 +377,40 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
    });
    
    $scope.ledgers = [];
+    $scope.ledgers = [];
+	 $scope.partyACNameForPurchase = [];
+	 $scope.partyACNameForSales = [];
+	 $scope.PurchaseACName = [];
+	 $scope.SalesACName = [];
+	 
      GenericSrvc.getAll('/ledger/findAll',function(response){
       console.log(" Trsaction Response " + JSON.stringify(response));
 	  $scope.ledgers = response;
+   
+   
+		angular.forEach(response, function (ledger) {
+		 	if(ledger.accGroup.parent == 5 || ledger.accGroup.parent == 6 ){
+				$scope.partyACNameForSales.push(ledger);
+				$scope.partyACNameForPurchase.push(ledger);
+			} 
+			if(ledger.accGroup.parent == 1 ){
+				$scope.partyACNameForPurchase.push(ledger);
+			}
+			if(ledger.accGroup.parent == 2 ){
+				$scope.partyACNameForSales.push(ledger);
+			}
+			if(ledger.accGroup.parent == 3 ){
+				$scope.PurchaseACName.push(ledger);
+			}
+			if(ledger.accGroup.parent == 4 ){
+				$scope.SalesACName.push(ledger);
+			} 
+		});
+   
+   
+   
+   
+   
    });   
 
     $scope.agents = [];
@@ -579,7 +634,8 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			  });		
 	}   
    
-    $scope.selectedSGenres = ['Sundry Debtors','Cash','Bank'];
+    /*
+	$scope.selectedSGenres = ['Sundry Debtors','Cash','Bank'];
 
     $scope.filterForSales = function(option) {
 		return ($scope.selectedSGenres.indexOf(option.accGroup.name) !== -1);
@@ -589,7 +645,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 
     $scope.filterForPurchases = function(option) {
 		return ($scope.selectedPRGenres.indexOf(option.accGroup.name) !== -1);
-    };
+    };*/
 
 	
 	$scope.cancelSale = function(){
@@ -597,6 +653,22 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		//console.log("  Cancel Agent");
 		$location.path("perform-action");
 	}	
+	
+	$scope.showSCGST = false;
+	$scope.showIGST = false;
+	
+	$scope.callGST = function(purchaseForm){
+		if(purchaseForm.ledger != null && purchaseForm.fromledger != null){
+			if(purchaseForm.ledger.mailingstate == purchaseForm.fromledger.mailingstate){
+				$scope.showSCGST = true;
+				$scope.showIGST = false;
+			} else {
+				$scope.showSCGST = false;
+				$scope.showIGST = true;
+			}
+		}
+		
+	}
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.salesform.$dirty){
