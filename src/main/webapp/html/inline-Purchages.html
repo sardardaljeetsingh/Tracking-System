@@ -54,23 +54,40 @@
 								<div class="col-sm-6">
 								
 								
-								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+								<!--<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
 										ng-options="option as option.name for option in ledgers | filter:filterForPurchases" 
+										ng-change="callGST(purchage)"
+										required ng-if="returnType == 'TR_P'">
+										<option value="">-- Choose Account --</option>
+								</select>	-->
+								
+								<!--change on 9/28-->
+								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+										ng-options="option as option.name for option in partyACNameForPurchase" 
 										ng-change="callGST(purchage)"
 										required ng-if="returnType == 'TR_P'">
 										<option value="">-- Choose Account --</option>
 								</select>	
 								
 								
-								
-								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+								<!--<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
 										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
 										ng-options="option as option.name for option in ledgers | filter:filterForSales" required ng-if="returnType == 'TR_SR'">
 										<option value="">-- Choose Account --</option>
-								</select>	
+								</select>	 -->
 								
-								
+								<!--change on 9/28-->
+								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+										ng-options="option as option.name for option in partyACNameForSales"
+										ng-change="callGST(purchage)"
+										required ng-if="returnType == 'TR_SR'">
+										<option value="">-- Choose Account --</option>
+								</select>	 
+														
+							
 							</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" ng-if="purchage.fromledger != null"
 											style="text-align : left" >{{purchage.fromledger.curbal}}</label>
@@ -79,6 +96,8 @@
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.ledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">Purchase Account</label>
 								<div class="col-sm-6">
+									
+									<!--
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
@@ -86,13 +105,29 @@
 											required ng-if="returnType == 'TR_P'">
 											<option value="">-- Choose Account --</option>
 									</select>
+									
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales'}}  "
 											required ng-if="returnType == 'TR_SR'">
 											<option value="">-- Choose Account --</option>
 									</select>
+									-->
+									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
+											ng-init="purchage.ledger = purchage.ledger || options[0].value"
+											ng-options="option as option.name for option in PurchaseACName "
+											ng-change="callGST(purchage)"
+											required ng-if="returnType == 'TR_P'">
+											<option value="">-- Choose Account --</option>
+									</select>
 									
+									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
+											ng-init="purchage.ledger = purchage.ledger || options[0].value"
+											ng-options="option as option.name for option in SalesACName"
+											ng-change="callGST(purchage)"
+											required ng-if="returnType == 'TR_SR'">
+											<option value="">-- Choose Account --</option>
+									</select>
 									
 									</div>
 									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="purchage.ledger != null"
