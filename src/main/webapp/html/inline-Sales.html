@@ -112,18 +112,17 @@
 											<option value="">-- Choose Account --</option>
 									</select>
 									-->
+									<!--changes on 9/29-->
 									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
 											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
 											ng-options="option as option.name for option in SalesACName"
-											ng-change="callGST(trasaction)"
 											required ng-if="returnType == 'TR_S'">
 											<option value="">-- Choose Account --</option>
 									</select>
-									
+									<!--changes on 9/29-->
 									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
 											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
 											ng-options="option as option.name for option in PurchaseACName"
-											ng-change="callGST(trasaction)"
 											required ng-if="returnType == 'TR_PR'">
 											<option value="">-- Choose Account --</option>
 									</select>
