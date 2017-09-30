@@ -113,18 +113,17 @@
 											<option value="">-- Choose Account --</option>
 									</select>
 									-->
+									<!--changes on 9/29-->
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in PurchaseACName "
-											ng-change="callGST(purchage)"
 											required ng-if="returnType == 'TR_P'">
 											<option value="">-- Choose Account --</option>
 									</select>
-									
+									<!--changes on 9/29-->
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
 											ng-init="purchage.ledger = purchage.ledger || options[0].value"
 											ng-options="option as option.name for option in SalesACName"
-											ng-change="callGST(purchage)"
 											required ng-if="returnType == 'TR_SR'">
 											<option value="">-- Choose Account --</option>
 									</select>
@@ -153,6 +152,8 @@
 							</thead>
 							<tr class="warning" ng-repeat="curTrasItem in purchage.trasactionItems" > 
 								  <td ng-class="{'has-error' : ( submitclick && !(curTrasItem.item.id >0) ) }" >
+										
+										
 										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item" style="width:150px" 
 												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
 												ng-options="option as option.name for option in items"
