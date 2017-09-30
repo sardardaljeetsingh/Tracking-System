@@ -165,9 +165,29 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 //
 app.run(function($rootScope,$location,$http,localStorageService) {
     $rootScope.countries = [ { id:1, name :"India" } , { id:2, name :"Singapore" }, { id:3, name :"US" },{ id:4, name :"UK" }];
-	$rootScope.states = [ { id:1, name :"Andhra Pradesh" } , { id:2, name :"Telangana" }];
+	//$rootScope.states = [ { id:1, name :"Andhra Pradesh" } , { id:2, name :"Telangana" }];
+	//changes on 9/29
+	$rootScope.states = [ { id:35, name :"Andaman and Nicobar Islands" } , { id:28, name :"Andhra Pradesh" },
+	{ id:12, name :"Arunachal Pradesh" } , { id:18, name :"Assam" },
+	{ id:10, name :"Bihar" } , { id:04, name :"Chandigarh" },
+	{ id:22, name :"Chattisgarh" } , { id:26, name :"Dadra and Nagar Haveli" },
+	{ id:25, name :"Daman and Diu" } , { id:07, name :"Delhi" },
+	{ id:30, name :"Goa" } , { id:24, name :"Gujarat" },
+	{ id:06, name :"Haryana" } , { id:02, name :"Himachal Pradesh" },
+	{ id:01, name :"Jammu and Kashmir" } , { id:20, name :"Jharkhand" },
+	{ id:29, name :"Karnataka" } , { id:32, name :"Kerala" },
+	{ id:31, name :"Lakshadweep" } , { id:23, name :"Madhya Pradesh" },
+	{ id:27, name :"Maharashtra" } , { id:14, name :"Manipur" },
+	{ id:17, name :"Meghalaya" } , { id:15, name :"Mizoram" },
+	{ id:13, name :"Nagaland" } , { id:21, name :"Orissa" },
+	{ id:34, name :"Pondicherry" } , { id:03, name :"Punjab" },
+	{ id:08, name :"Rajasthan" } , { id:11, name :"Sikkim" },
+	{ id:33, name :"Tamil Nadu" } , { id:36, name :"Telangana" }, { id:16, name :"Tripura" },
+	{ id:05, name :"Uttarakhand" } , { id:09, name :"Uttar Pradesh" } , { id:19, name :"West Bengal" }];
 	
-    //Should load Employees from Backend
+	
+	
+	//Should load Employees from Backend
 	//$rootScope.companies = [ {name:'IBM'},{name:'Cohnizant'},{name:'InfoSys'}]; 
 	
 	/*$http.get(hostname+'/company/getAll').
