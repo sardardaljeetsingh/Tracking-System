@@ -120,11 +120,11 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		console.log($scope.stockGroups); 
    }); 
 
+	//changes on 9/29
 	$scope.showGrp = function(group,grpName){
-
-		if(group.parent == 0){
-			return grpName;
-		}
+		if(group.parent == 1){
+			return group.name + " > " + grpName;
+		} 
 		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
 	}
    
@@ -339,10 +339,10 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	
 	$scope.showSCGST = false;
 	$scope.showIGST = false;
-	
+	//changes on 9/29
 	$scope.callGST = function(purchaseForm){
-		if(purchaseForm.ledger != null && purchaseForm.fromledger != null){
-			if(purchaseForm.ledger.mailingstate == purchaseForm.fromledger.mailingstate){
+		if(purchaseForm.fromledger != null){
+			if($scope.company.state == purchaseForm.fromledger.mailingstate){
 				$scope.showSCGST = true;
 				$scope.showIGST = false;
 			} else {
@@ -656,10 +656,10 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	
 	$scope.showSCGST = false;
 	$scope.showIGST = false;
-	
+	//changes on 9/29
 	$scope.callGST = function(purchaseForm){
-		if(purchaseForm.ledger != null && purchaseForm.fromledger != null){
-			if(purchaseForm.ledger.mailingstate == purchaseForm.fromledger.mailingstate){
+		if(purchaseForm.fromledger != null){
+			if($scope.company.state == purchaseForm.fromledger.mailingstate){
 				$scope.showSCGST = true;
 				$scope.showIGST = false;
 			} else {
