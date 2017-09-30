@@ -42,19 +42,31 @@ System.out.println("Company Created ----------> " + company.toString());
 				  previliges = new Previliges();
 				  previliges.setUser(user);
 				  previliges.setCompany(company);
-				  previliges.setConfiguration("false");
-				  previliges.setAccountinfo("false");
-				  previliges.setInventoryinfo("false");
-				  previliges.setReports("false");
-				  previliges.setTransactions("false");
+				
+				//changes on 9/29 - if User type is Admin then provide access	
+				  if(user.getType().equalsIgnoreCase("Admin")) {
+					  previliges.setConfiguration("true");
+					  previliges.setAccountinfo("true");
+					  previliges.setInventoryinfo("true");
+					  previliges.setReports("true");
+					  previliges.setTransactions("true");
+				  } else {
+					  previliges.setConfiguration("false");
+					  previliges.setAccountinfo("false");
+					  previliges.setInventoryinfo("false");
+					  previliges.setReports("false");
+					  previliges.setTransactions("false");
+				  }
 				  previliges.setCreatedUser(company.getCreatedUser());
 				  previliges.setCreatedDate(new java.util.Date());
 				  previliges.setModifiedUser(company.getCreatedUser());
 				  previliges.setModifiedDate(new java.util.Date());
 				  prevList.add(previliges);
+			  
+			  
 			  }
 			  userPreviligeReposotory.save(prevList);
-			  // Change on 9/28	
+			  // Changes on 9/28	
 			  List<AccGroup> accGroupList = new ArrayList<AccGroup>();
 			  accGroupList.add( new AccGroup("Sundry Creditors", company,1,company.getCreatedUser()));
 			  accGroupList.add( new AccGroup("Sundry Debtors", company,2,company.getCreatedUser()));
