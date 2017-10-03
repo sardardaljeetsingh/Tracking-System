@@ -213,8 +213,8 @@
 										<table class="table table-condensed table-bordered"  >
 										<thead>
 										<tr>
-										  <th class="col-sm-1 input-sm">No of Packets</th>
-										  <th class="col-sm-2 input-sm">Each Packet Quantity</th>
+										  <th class="col-sm-1 input-sm">No of Pieces</th>
+										  <th class="col-sm-2 input-sm">Each Piece Quantity</th>
 										  <th class="col-sm-1 input-sm">Total available Quantity </th>
 										  <th class="col-sm-1 input-sm"> Choose Quantity </th>
 										</tr>
@@ -262,41 +262,56 @@
 										 </button>										 
 								  </td>
 							</tr>
+							<!--
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Packets </b> </td>
+								<td colspan="6" style="text-align : right;" > <b> Total Pieces </b> </td>
+								<td colspan="3" style="text-align : left;" >
+								{{trasaction.totalPieces}}
+								</td>
+							</tr>	
+							-->
+							<tr class="warning">
+								<td colspan="6" style="text-align : right;" > <b> Total Quantity </b> </td>
 								<td colspan="3" style="text-align : left;" >
 								{{trasaction.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Price </b>  </td>
+								<td colspan="6" style="text-align : right;" > <b> Taxable Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{trasaction.rate}}
 								</td>
 							</tr>	
-							<tr class="warning" ng-if="showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> SGST </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								2.5%
+								{{currency}} &nbsp; {{(trasaction.rate * 2.5/100)}}
 								</td>
 							</tr>	
-							<tr class="warning" ng-if="showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> CGST </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								2.5%
+								{{currency}} &nbsp; {{(trasaction.rate * 2.5/100)}}
 								</td>
 							</tr>
 							
-							<tr class="warning" ng-if="showIGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> IGST </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true && showIGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								5%
+								{{currency}} &nbsp; {{(trasaction.rate * 5/100)}}
 								</td>
 							</tr>
-							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Price (with GST) </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true">
+								<td colspan="6" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(trasaction.rate + (trasaction.rate * 5/100) )}}
+								</td>
+							</tr>	
+							
+							<tr class="warning" ng-if="GSTapplicable == false">
+								<td colspan="6" style="text-align : right;" > <b> Total Amount </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{trasaction.rate}}
 								</td>
 							</tr>	
 							

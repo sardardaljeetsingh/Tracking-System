@@ -27,15 +27,28 @@
 					  
 					  <form class="form-inline input-sm" name="purchagesform" novalidate >
 					  
-							  <div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.voucher'].$invalid  }" >
+							 
+							 <div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.voucher'].$invalid  }" ng-if="returnType == 'TR_SR'">
 								<label for="inputPassword3" class="col-sm-4 control-label">Voucher</label>
 								<div class="col-sm-5">
 								  <input type="text" class="form-control input-sm" id="purchage.voucher" name="purchage.voucher" ng-model="purchage.voucher"
 								  required  >	
 								</div>
 							  </div>	
+						
+
+
+							 <div class="form-group col-xs-12" ng-class="{'has-error' : submitclick && purchagesform['purchage.voucher'].$invalid  }" ng-if="returnType == 'TR_P'">
+								<label for="inputPassword3" class="col-sm-2 control-label">Voucher</label>
+								<div class="col-sm-10" style="padding-left:8px;" >
+								  <input type="text" class="form-control input-sm" id="purchage.voucher" name="purchage.voucher" ng-model="purchage.voucher"
+								  required  >	
+								</div>
+							  </div>	
 							  
-					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.agent'].$invalid  }">
+					  		
+							<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.agent'].$invalid  }" ng-if="returnType == 'TR_SR'">
+							
 								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
 								<div class="col-sm-6">
 									<select class="form-control input-sm" ng-model="purchage.agent" name="purchage.agent" 
@@ -48,7 +61,8 @@
 									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="purchage.agent != null"
 											style="text-align : left" >{{purchage.agent.commission}} %</label>
 							  </div>								  
-							  
+							
+							
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">Party Account Name</label>
 								<div class="col-sm-6">
@@ -145,7 +159,7 @@
 							  <th class="col-sm-1 input-sm">Shade</th>
 							  <th class="col-sm-1 input-sm">Avaliable Quantity</th> 
 							  <th class="col-sm-1 input-sm">Purchase Rate</th>
-							  <th class="col-sm-1 input-sm">Sale Rate</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">Sale Rate</th>
 							  <th class="col-sm-3 input-sm">Current Quantity</th>
 							  <th class="col-sm-1 input-sm">Action</th>
 							</tr>
@@ -160,9 +174,9 @@
 												ng-change="curTrasItem.rate = curTrasItem.item.rate;
 												curTrasItem.purcrate = curTrasItem.item.purcrate;
 												curTrasItem.curItems = [];
-												curTrasItem.curItems.push({ 'quandity': 1, 'pices':1});
+												curTrasItem.curItems.push({ 'quandity': 0, 'pices':0});
 												curTrasItem.quandity = 0;
-												curTrasItem.showSplit=false;";
+												curTrasItem.showSplit=false;"
 												required>
 												<option value="">-- Choose Item Name --</option>
 										</select>								  
@@ -187,7 +201,7 @@
 									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required>
 								  </td>								  
 								  
-								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" >  
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" ng-show="false">  
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.rate" ng-model="curTrasItem.rate" required>
 								  </td>
@@ -196,7 +210,7 @@
 								  
                                   <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;width: 70px;" id="inputPassword3" 
 								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required 
-								  ng-change="curTrasItem.curItems[0].quandity=curTrasItem.quandity;getTotal(curTrasItem);curTrasItem.showSplit=true;">
+								  ng-change="curTrasItem.curItems[0].pices=1;curTrasItem.curItems[0].quandity=curTrasItem.quandity;getTotal(curTrasItem);curTrasItem.showSplit=true;">
 								  
 						  
 								  <button type="button" ng-click="curTrasItem.showSplit=true;"  
@@ -215,8 +229,8 @@
 										<table class="table table-condensed table-bordered"  >
 										<thead>
 										<tr>
-										  <th class="col-sm-1 input-sm">No of Packets</th>
-										  <th class="col-sm-2 input-sm">Each Packet Quantity</th>
+										  <th class="col-sm-1 input-sm">No of Pieces</th>
+										  <th class="col-sm-2 input-sm">Each Piece Quantity</th>
 										  <th class="col-sm-1 input-sm">Total</th>
 										</tr>
 										</thead>
@@ -261,44 +275,59 @@
 								  </td>
 							</tr>
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Packets </b> </td>
+								<td colspan="6" style="text-align : right;" > <b> Total Pieces </b> </td>
+								<td colspan="3" style="text-align : left;" >
+								{{purchage.totalPieces}}
+								</td>
+							</tr>	
+						
+							<tr class="warning">
+								<td colspan="6" style="text-align : right;" > <b> Total Quantity </b> </td>
 								<td colspan="3" style="text-align : left;" >
 								{{purchage.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Price </b>  </td>
+								<td colspan="6" style="text-align : right;" > <b> Taxable Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{purchage.rate}}
 								</td>
 							</tr>	
-							<tr class="warning" ng-if="showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> SGST </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								2.5%
+								{{currency}} &nbsp; {{(purchage.rate * 2.5/100)}}
 								</td>
 							</tr>	
-							<tr class="warning" ng-if="showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> CGST </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								2.5%
+								{{currency}} &nbsp; {{(purchage.rate * 2.5/100)}}
 								</td>
 							</tr>
 							
-							<tr class="warning" ng-if="showIGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> IGST </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true && showIGST == true">
+								<td colspan="6" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								5%
+								{{currency}} &nbsp; {{(purchage.rate * 5/100)}}
 								</td>
 							</tr>
 							
-							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Price (with GST) </b>  </td>
+							<tr class="warning" ng-if="GSTapplicable == true">
+								<td colspan="6" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(purchage.rate + (purchage.rate * 5/100) )}}
 								</td>
 							</tr>	
-							<tr class="warning">
+							
+							<tr class="warning" ng-if="GSTapplicable == false">
+								<td colspan="6" style="text-align : right;" > <b> Total Amount </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{purchage.rate}}
+								</td>
+							</tr>	
+							
+							<tr class="warning" ng-if="returnType == 'TR_SR'">
 								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
 								<td colspan="3" style="text-align : left;" ng-if="purchage.agent.commission != null">
 								{{currency}} &nbsp; {{ (purchage.rate * purchage.agent.commission) / 100 }}
