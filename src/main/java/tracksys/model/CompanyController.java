@@ -78,8 +78,8 @@ System.out.println("Company Created ----------> " + company.toString());
 		  
 		  
 			  //create dummy stock group
-			  StockGroup stockGroup = new StockGroup("DUMMY",company,1,	company.getCreatedUser());
-			  stockGroupRepository.save(stockGroup);
+			  //StockGroup stockGroup = new StockGroup("DUMMY",company,1,	company.getCreatedUser());
+			  //stockGroupRepository.save(stockGroup);
 		  }
 
 		  return company;

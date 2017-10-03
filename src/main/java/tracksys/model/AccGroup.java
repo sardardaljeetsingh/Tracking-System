@@ -135,7 +135,7 @@ public class AccGroup {
 		this.modifiedDate = modifiedDate;
 	}	
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="accGroup",fetch = FetchType.EAGER)  
+	@OneToMany(cascade=CascadeType.REMOVE, mappedBy="accGroup",fetch = FetchType.LAZY)  
 	private List<Ledger> ledger;
 	
 }

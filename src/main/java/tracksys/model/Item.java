@@ -48,6 +48,16 @@ public class Item {
 		return itemHSN;
 	}
 
+	
+	public int getrateGST() {
+		return rateGST;
+	}
+	
+	
+	public void setRateGST(int rateGST) {
+		this.rateGST = rateGST;
+	}
+	
 	public String getShade() {
 		return shade;
 	}
@@ -90,9 +100,10 @@ public class Item {
 	private String name;
 
 	
-/*	@ManyToOne(cascade=CascadeType.ALL)  
+	/*@ManyToOne(cascade=CascadeType.MERGE)  
 	@JoinColumn(name = "groupid", nullable = false)
-	private StockGroup stockGroup;*/
+	private int stockGroup;
+	*/
 	
 	@NotNull
 	@Column(name = "groupid")
@@ -102,6 +113,10 @@ public class Item {
 	@Size(min = 1, max = 100)
 	@Column(name = "itemHSN", nullable = false)
 	private String itemHSN;	
+
+	@NotNull
+	@Column(name = "GSTRate", nullable = false)
+	private int rateGST;	
 
 	
 	@NotNull
@@ -181,6 +196,7 @@ public class Item {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="item",fetch = FetchType.EAGER)  
 	private List<ItemDetails> itemDtls;
 
+	
 	public int getStockGroup() {
 		return stockGroup;
 	}
@@ -230,15 +246,16 @@ public class Item {
 	}	
 	
 	
+/*
 
-
-/*	public StockGroup getStockGroup() {
+	public StockGroup getStockGroup() {
 		return stockGroup;
 	}
 
 	public void setStockGroup(StockGroup stockGroup) {
 		this.stockGroup = stockGroup;
-	}	*/
+	}	
 	
+	*/
 	
 }

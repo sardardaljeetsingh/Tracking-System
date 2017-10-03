@@ -31,8 +31,15 @@ public class AccGroupController {
 	@RequestMapping(value ="/delete/{grpid}",method = RequestMethod.DELETE)
 	@Transactional
 	public @ResponseBody boolean  delete(@PathVariable("grpid") int grpid) {
-		groupRepository.delete(grpid);
-		return true;
+		boolean accountDelete = false;
+		try{
+			groupRepository.delete(grpid);
+			accountDelete = true;
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return accountDelete;
 	}		
 	  
 	  @RequestMapping(value ="/find-by-company/{companyId}",method = RequestMethod.GET)

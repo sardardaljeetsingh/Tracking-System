@@ -47,18 +47,23 @@ public class Ledger {
 	@JoinColumn(name = "groupid", nullable = false)	
 	private AccGroup accGroup;
 	
+	
 	@NotNull
 	@Column(name = "mailingname", nullable = true)		
 	private String mailingname;
+	
 	@NotNull
 	@Column(name = "mailingaddress", nullable = true)		
 	private String mailingaddress;
+	
 	@NotNull
 	@Column(name = "mailingstate", nullable = true)		
-	private String mailingstate;
+	private int mailingstate;
+	
 	@NotNull
 	@Column(name = "saletaxno", nullable = true)		
 	private Long saletaxno;
+	
 	@NotNull
 	@Column(name = "taxpan", nullable = true)		
 	private Long taxpan;
@@ -120,10 +125,10 @@ public class Ledger {
 	public void setMailingaddress(String mailingaddress) {
 		this.mailingaddress = mailingaddress;
 	}
-	public String getMailingstate() {
+	public int getMailingstate() {
 		return mailingstate;
 	}
-	public void setMailingstate(String mailingstate) {
+	public void setMailingstate(int mailingstate) {
 		this.mailingstate = mailingstate;
 	}
 	public Long getSaletaxno() {
@@ -138,6 +143,7 @@ public class Ledger {
 	public void setTaxpan(Long taxpan) {
 		this.taxpan = taxpan;
 	}
+	
 	public AccGroup getAccGroup() {
 		return accGroup;
 	}
