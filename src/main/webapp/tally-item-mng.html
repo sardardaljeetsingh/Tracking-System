@@ -338,7 +338,7 @@
 								<label for="inputPassword3" class="col-sm-5 control-label">State</label>
 								<div class="col-sm-5">
 									<select class="form-control input-sm" ng-model="company.state" 
-											ng-init="company.state = company.state || options[0].value"
+											ng-init="company.state = company.state"
 											ng-options="option.id as option.name for option in states">
 									</select>									
 								</div>
@@ -797,6 +797,7 @@
 											  <th>#</th>
 											  <th>Name</th>
 											  <th>HSN#</th>
+											  <th>GST%</th>
 											  <th>Shade</th>
 											  <th>Description</th>
 											  <th>UOM</th>
@@ -813,6 +814,19 @@
 											  required> </td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.itemHSN'].$invalid }">
 											 <input type="text" class="form-control input-sm" size="5" ng-model="item.itemHSN" name="item.itemHSN" id="item.itemHSN" required> </td>
+											 
+											 <td ng-class="{'has-error' : submitclick && itemform['item.rateGST'].$invalid }" >
+												 <div class="row">
+												 <div class="col-xs-12">
+												<select class="form-control input-sm" ng-model="item.rateGST" 
+													ng-init="item.rateGST = item.rateGST"
+													ng-options="option.id as option.name for option in gstrates">
+												</select>
+												 </div>
+												  </div>
+											 </td>
+										
+ 										
 											 <td ng-class="{'has-error' : submitclick && itemform['item.shade'].$invalid }">
 											 <input type="text" class="form-control input-sm" size="3" ng-model="item.shade" name="item.shade" id="item.shade" required></td>
 											 <td ng-class="{'has-error' : submitclick && itemform['item.desc'].$invalid }">
@@ -821,10 +835,10 @@
 												 <div class="row">
 												 <div class="col-xs-12">
 												   <select class="form-control input-sm" id="sel1" style="padding-right:0px" ng-model="item.uom" name="item.uom" id="item.uom" required>
-															<option selected value="ltrs">Ltrs</option>
+															<option  value="ltrs">Ltrs</option>
 															<option value="kgs">Kgs</option>
 															<option value="mtr">Mtr</option>
-															<option value="pcs">Pcs</option>
+															<option value="pcs" selected>Pcs</option>
 												   </select>
 												 </div>
 												  </div>
@@ -839,7 +853,7 @@
 																					 
 											 
 											 <td>
-											 <label for="inputPassword3" class="col-sm-3 control-label">{{grandTotal}}</label>
+											 <label for="inputPassword3" class="col-sm-1 control-label">{{grandTotal}}</label>
 											 
 											 </td>
 											 <!--<td class="input-sm" ng-class="{'has-error' : submitclick && itemform['item.quandity'].$invalid }" >
@@ -864,12 +878,12 @@
 				
 					<td><input type="number" min="1" step="1" class="form-control input-sm" size="3" ng-model="selItem.pices" style="width : 50px"></td>
 					 
-					 <td> <input type="number" min="1" step="1" class="form-control input-sm" size="" ng-model="selItem.quandity" style="width : 70px" ></td>	
+					 <td> <input type="number" min="0" step="1" class="form-control input-sm" size="" ng-model="selItem.quandity" style="width : 70px" ></td>	
 					 
 					<td ng-if="(selItem.quandity >= 0 && selItem.pices >=0)" style="width : 80px"> {{selItem.quandity*selItem.pices}}&nbsp;	
 					
 					<button type="button" class="btn btn-success btn-xs" ng-click="items.push({ 'quandity': 1, 'pices':1})"
-					 ng-if="(items.length == $index+1 && (selItem.quandity*selItem.pices >= 0) )">
+					 ng-if="(items.length == $index+1 && (selItem.quandity*selItem.pices >= 0) && showPage == 'create')" >
 					 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
 					 </button></td>
 				</tr>
@@ -902,14 +916,14 @@
 											 
 											 </tr>
 					<tr class="warning">
-					<td colspan="10" style="text-align : center" >
+					<td colspan="11" style="text-align : center" >
 							   <span class="label label-success" ng-if="optStatus == 'Success' && showPage == 'create'"> Stock item added successfully.</span>
 							   <span class="label label-success" ng-if="optStatus == 'Success' && showPage == 'edit'"> Stock item updated successfully.</span>
 							   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to add stock item.</span>				
 					</td>
 					</tr>												 
 					<tr class="warning">
-					<td colspan="10" style="text-align : center" >
+					<td colspan="11" style="text-align : center" >
 						  <button type="button" ng-click="addItem(item);invtBtmHide=true;" class="btn btn-success btn-small" style="margin-bottom: 10px;width: 100px;"
 					   >Save</button>		
 						<button type="button" ng-click="cancelItem('create');" ng-if="showPage == 'create'" style="margin-bottom: 10px;width: 100px;" 
@@ -1348,10 +1362,10 @@
 			  <tr ng-repeat="group in groups" > 
 				<td>{{$index+1}}</td> 
 				<td>{{group.name}} </td> 
-				<td> {{   group.id > 6 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
+				<td> {{   group.parent > 6 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
 			    <form class="form-inline">
-					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccGrp(group)" ng-if="group.id > 6">Delete Group</button>
+					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccGrp(group)" ng-if="$index+1 > 6">Delete Group</button>
 				</form>				
 				</td> 				
 			 </tr>  
@@ -1452,7 +1466,7 @@
 						<label for="inputPassword3" class="col-sm-5 control-label">Mailing State</label>
 						<div class="col-sm-5">
 							<select class="form-control input-sm" ng-model="ledger.mailingstate" 
-									ng-init="ledger.mailingstate = ledger.mailingstate || options[0].value"
+									ng-init="ledger.mailingstate = ledger.mailingstate"
 									ng-options="option.id as option.name for option in states">
 							</select>	
 						</div>
