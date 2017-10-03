@@ -141,6 +141,14 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 					$scope.singlegroup.selGroup = null;
 					$scope.accountgroup.$setPristine();
 					console.log(" success "+ $scope.singleGrpMsg);
+					
+					//$scope.message = 'Agent '+agent.name + ' edit done successfully.';
+					alert($scope.singleGrpMsg);
+					//$location.path("/show-user");
+					//$scope.agentform.$setPristine();
+				    $location.path("/perform-action");
+				
+			  
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 			  }

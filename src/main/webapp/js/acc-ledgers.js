@@ -14,6 +14,8 @@ app.controller('ledgerController', function($scope,$rootScope,$location,$http) {
 		$rootScope.currentPage = 'editLedger';
 		console.log( " Edit ledger");
 		$rootScope.ledger = ledger ;
+		console.log("Edit ledger ---> " + JSON.stringify($rootScope.ledger));
+				
 		$scope.optType = "edit";
 		$location.path("edit-ledger");
 	}
@@ -65,6 +67,9 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 	$scope.optType = "create";
 	$scope.submitclick = false;
 	$rootScope.currentPage = 'createLedgers';
+
+	$scope.ledger.mailingstate = $rootScope.states[31].id;
+
 	console.log(" createLedgers company.id "  + $scope.company.id );
 	$http.get(hostname + '/accgroup/find-by-company/'+$scope.company.id).
 	then(function(response) 
@@ -105,8 +110,17 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 					//$location.path("/view-ledgers");
 					$scope.ledger = {};
 					$scope.submitclick = false;
+					$scope.ledger.mailingstate = $rootScope.states[31].id;
 					$scope.optStatus = 'Success';
 					$scope.ledgerform.$setPristine();
+					
+					alert("Ledger created successfully.");
+					//$location.path("/show-user");
+					//$scope.agentform.$setPristine();
+				    $location.path("/perform-action");
+				
+					
+					
 					} catch (err) {
 					console.log(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -177,6 +191,10 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 					//$location.path("/view-ledgers");
 					$scope.optStatus = 'Success';
 					$scope.ledgerform.$setPristine();
+					alert("Ledger updated successfully.");
+					$location.path("/view-ledgers");
+					
+					
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -189,7 +207,7 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 
 	$scope.cancelLedger = function(){
 		$rootScope.currentPage ='viewLedgers';
-		$location.path("view-ledgers");
+		$location.path("/view-ledgers");
 	}	
 	
 	

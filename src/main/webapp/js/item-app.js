@@ -1,6 +1,6 @@
-var hostname ="http://localhost:8080";
+//var hostname ="http://localhost:8080";
 
-//var hostname ="http://localhost:8080/Inventory-1.0";
+var hostname ="http://localhost:8080/Inventory-1.0";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
 // var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
@@ -185,6 +185,7 @@ app.run(function($rootScope,$location,$http,localStorageService) {
 	{ id:33, name :"Tamil Nadu" } , { id:36, name :"Telangana" }, { id:16, name :"Tripura" },
 	{ id:05, name :"Uttarakhand" } , { id:09, name :"Uttar Pradesh" } , { id:19, name :"West Bengal" }];
 	
+	$rootScope.gstrates = [ { id:0, name :"0%" } , { id:5, name :"5%"},{ id:12, name :"12%" },{ id:18, name :"18%" },{ id:28, name :"28%" }];
 	
 	
 	//Should load Employees from Backend
@@ -408,7 +409,8 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 	$scope.company.createdDate = new Date();
 	$scope.company.modifiedUser = $rootScope.loggedUser.username;
 	$scope.company.modifiedDate = new Date();
-	
+
+	$scope.company.state = $rootScope.states[31].id;
 	
 	$scope.createCompany = function(company){
 		if(!$scope.companyform.$valid){
@@ -432,11 +434,15 @@ app.controller('createCompanyController', function($scope,$rootScope,$location,$
 					//$location.path("/");
 						$scope.company ={}; 
 						$scope.company.country = 1;	
-						$scope.company.state = 1;	
+						$scope.company.state = $rootScope.states[31].id;
 						$scope.company.currencesymbol = "Rs.";
 						$scope.submitclick = false;	
 						$scope.optStatus = 'Success'	;					
 						$scope.companyform.$setPristine();
+						
+						alert("Company created successfully.");
+						$location.path("/show-company");
+						
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';	
@@ -494,6 +500,10 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 					$scope.submitclick = false;
 					$scope.optStatus = 'Success';
 					$scope.companyform.$setPristine();
+					
+					alert("Company details updated successfully.");
+					$location.path("/show-company");
+						
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';	
@@ -822,7 +832,18 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 					$scope.grpHierarchy ="";
 					$scope.submitclick = false;
 					$scope.singlegroup.selGroup = null;
-					$scope.stockgroup.$setPristine();	
+					$scope.stockgroup.$setPristine();
+					
+					alert($scope.singleGrpMsg);
+					var nextView = '';
+					if($rootScope.showPage == 'edit') {
+						nextView = "view-stock-groups";
+					} else {
+						nextView = "perform-action";
+					}
+					$location.path(nextView);
+	
+					
 			  } catch (err) {
 				console.log("Catch error --> " + JSON.stringify(err));
 			  }
@@ -906,7 +927,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			
 		});	
 	
-	
+		
 	$scope.getDefaultStockId = function(){
 		var defaultGroupId;
 		$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
@@ -1021,7 +1042,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		  for(i=0;i<itemTrans.pices;i++){
 			  
 			if($scope.showPage == 'create') {	
-			  if(itemTrans.quandity > 0) {
+			  if(itemTrans.quandity >= 0) {
 				  itemDtl.name = selItem.name +"_" + selItem.shade + "_" + index  + "_" + (i+1) ;
 				  itemDtl.quandity = itemTrans.quandity ;
 				  itemDtl.curqundty = itemTrans.quandity ;
@@ -1039,6 +1060,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			  itemDtl.curqundty = itemTrans.quandity ;
 			  itemDtl.pices =1;
 			  itemDtl.curpices =1;
+			  itemDtl.createdUser = selItem.createdUser;
+			  itemDtl.createdDate = selItem.createdDate;
 			  itemDtl.modifiedUser = $rootScope.loggedUser.username;
 			  itemDtl.modifiedDate = new Date();
 			}
@@ -1083,6 +1106,20 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				$scope.items[0] = {'quandity':1 ,'pices':1 };
 				$scope.grandTotal = 0;
 				$scope.itemform.$setPristine();
+				
+				var itemMSG ='';
+				var nextView = '';
+				if($scope.showPage == 'create') {
+					itemMSG = "Item created successfully.";
+					nextView = "perform-action";
+				} else {
+					itemMSG = "Item updated successfully.";
+					nextView = "view-stock-items";
+				}
+				alert(itemMSG);
+				$location.path(nextView);
+
+				
 			  } catch (err) {
 				console.log(JSON.stringify(err));
 				$scope.optStatus = 'Failed';

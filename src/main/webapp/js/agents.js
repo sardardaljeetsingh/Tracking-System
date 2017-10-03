@@ -26,13 +26,19 @@ app.controller('AgentCreateController', function($scope,$rootScope,$location,$ht
 			}).success(function(responseData) {
 				  try {
 					console.log(JSON.stringify(responseData));
-					$scope.optStatus = 'Success';
-					$scope.message = 'Agent ' +agent.name + ' creation done successfully.';
-					//$location.path("/show-user");
-					$scope.agent ={}; 
-					//$scope.optStatus = null;
+					//$scope.optStatus = 'Success';
 					$scope.submitclick = false;	
+					$scope.message = 'Agent ' +agent.name + ' creation done successfully.';
+					alert($scope.message);
 					$scope.agentform.$setPristine();
+					$location.path("/perform-action");
+				
+					//$scope.agent ={}; 
+					//$scope.optStatus = null;
+					//$scope.submitclick = false;	
+					//$scope.agentform.$setPristine();
+				  
+				  
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -86,10 +92,20 @@ app.controller('AgentEditController', function($scope,$rootScope,$location,$http
 			}).success(function(responseData) {
 				  try {
 					console.log(JSON.stringify(responseData));
-					$scope.optStatus = 'Success';
+					//$scope.optStatus = 'Success';
 					$scope.message = 'Agent '+agent.name + ' edit done successfully.';
+					alert($scope.message);
 					//$location.path("/show-user");
 					$scope.agentform.$setPristine();
+				    $location.path("/view-agents");
+				
+				  //$scope.submitclick = false;	
+					//$scope.message = 'Agent ' +agent.name + ' creation done successfully.';
+					//alert($scope.message);
+					//$scope.agentform.$setPristine();
+					
+				  
+				  
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';

@@ -142,6 +142,10 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 					$scope.submitclick = false;					
 					$scope.optStatus = 'Success';
 					$scope.userform.$setPristine();
+				  
+					alert("User created successfully.");
+					$location.path("/show-user");
+				  
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -153,7 +157,7 @@ app.controller('createUserController', function($scope,$rootScope,$location,$htt
 	}
 	
 	$scope.cancelUser = function(){
-		$location.path("show-user");
+		$location.path("/show-user");
 	}
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
@@ -230,6 +234,12 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 					$scope.optStatus = 'Success';
 					$scope.submitclick = false;
 					$scope.userform.$setPristine();
+				  
+					alert("User details updated successfully.");
+					$location.path("/show-user");
+				  
+				  
+				  
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -241,7 +251,7 @@ app.controller('editUserController', function($scope,$rootScope,$location,$http,
 	}
 	
 	$scope.cancelUser = function(){
-		$location.path("show-user");
+		$location.path("/show-user");
 	}
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {

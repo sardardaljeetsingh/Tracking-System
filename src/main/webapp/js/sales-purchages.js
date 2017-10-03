@@ -3,6 +3,11 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
     $rootScope.items = [];
 	$scope.currency = $scope.company.currencesymbol;
 	
+	$scope.GSTapplicable = false;
+	$scope.showSCGST = false;
+	
+	$scope.showIGST = false;
+	
 	ItemService.getAllItems($scope.company.id,function(response){
       console.log(" ItemService Response " + JSON.stringify(response));
 	  $rootScope.items = response;
@@ -42,14 +47,22 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	 $scope.PurchaseACName = [];
 	 $scope.SalesACName = [];
 	 
-     GenericSrvc.getAll('/ledger/findAll',function(response){
-      console.log(" Trsaction Response " + JSON.stringify(response));
-	  $scope.ledgers = response;
+	
+	
+	console.log(" Fetching Ledgers for Company Id : " + $scope.company.id );
+	$http.get(hostname + '/ledger/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+	
+	 
+     //GenericSrvc.getAll('/ledger/findAll',function(response){
+      console.log(" Ledger Trsaction Response " + JSON.stringify(response.data));
+	  $scope.ledgers = response.data;
 	 
 
 	 
 		
-	 angular.forEach(response, function (ledger) {
+	 angular.forEach(response.data, function (ledger) {
 		 	if(ledger.accGroup.parent == 5 || ledger.accGroup.parent == 6 ){
 				$scope.partyACNameForSales.push(ledger);
 				$scope.partyACNameForPurchase.push(ledger);
@@ -105,7 +118,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 
     $scope.agents = [];
      GenericSrvc.getAll('/agent/findAll',function(response){
-      console.log(" Trsaction Response " + JSON.stringify(response));
+      console.log(" Agents Trsaction Response " + JSON.stringify(response));
 	  $scope.agents = response;
    });    
     
@@ -123,13 +136,14 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	//changes on 9/29
 	$scope.showGrp = function(group,grpName){
 		if(group.parent == 1){
-			return group.name + " > " + grpName;
+			return grpName + " " + group.name;
 		} 
 		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
 	}
    
     $scope.curItems = [];
-   	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
+   	//$scope.curItems[0] = {'quandity':1 ,'pices':1 };
+	$scope.curItems[0] = {'quandity':0,'pices':0 };
 	$scope.purchage = {};
 	
 	//$scope.purchage.type = 1;
@@ -165,12 +179,15 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	
 	$scope.purchaseTotal = function(purchage){
 		var totalTransQuandity = 0;
+		var totalTransPieces = 0;
 		var totalTransPrice = 0;
 		var validQuandity = true;
 		angular.forEach(purchage.trasactionItems,function(curTrasItem,index){
 			var total = 0;
 			angular.forEach(curTrasItem.curItems,function(item,index){
 				total += ( (+item.quandity) * (+item.pices) );
+				totalTransPieces += (+item.pices);
+			
 			});
 			if(total != (+curTrasItem.quandity)){
 			 	validQuandity = false;
@@ -178,9 +195,12 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			totalTransQuandity += (+curTrasItem.quandity);
 			totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.rate);
 		});
-      purchage.quandity = isNaN(totalTransQuandity)? 0: totalTransQuandity;
+	
+	  purchage.totalPieces = isNaN(totalTransPieces)? 0: totalTransPieces;	
+	  purchage.quandity = isNaN(totalTransQuandity)? 0: totalTransQuandity;
 	  purchage.rate = isNaN(totalTransPrice)? 0: totalTransPrice ;
 	  console.log(isNaN(totalTransPrice) +"  "+ totalTransPrice);
+	  console.log("pieces --> " + isNaN(totalTransPieces) +"  "+ totalTransPieces);
 	  purchage.validQuandity = validQuandity;
 	}	
    
@@ -287,7 +307,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 					//$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
 					//code added for using this js for both purchases and sales return
 					
-					
+					/*
 					
 					if($rootScope.returnType == 'TR_P') {
 						$scope.purchage.type = 1;
@@ -315,8 +335,20 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 						 GenericSrvc.getAll('/ledger/findAll',function(response){
 							$scope.ledgers = response;
 						});  
-
-					$scope.purchagesform.$setPristine();
+						
+						*/
+						
+						$scope.GSTapplicable = false;
+						$scope.showSCGST = false;
+						$scope.showIGST = false;
+						$scope.purchagesform.$setPristine();
+					
+						
+					alert("Purchase order created successfully.");
+					//$scope.agentform.$setPristine();
+					$location.path("/perform-action");
+				
+					
 					//$location.path("/show-user");
 				  } catch (err) {
 					alert(JSON.stringify(err));
@@ -337,11 +369,10 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		$location.path("perform-action");
 	}	
 	
-	$scope.showSCGST = false;
-	$scope.showIGST = false;
 	//changes on 9/29
 	$scope.callGST = function(purchaseForm){
-		if(purchaseForm.fromledger != null){
+		if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 1){
+			$scope.GSTapplicable = true;
 			if($scope.company.state == purchaseForm.fromledger.mailingstate){
 				$scope.showSCGST = true;
 				$scope.showIGST = false;
@@ -349,6 +380,10 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 				$scope.showSCGST = false;
 				$scope.showIGST = true;
 			}
+		} else {
+			$scope.GSTapplicable = false;
+			$scope.showSCGST = false;
+			$scope.showIGST = false;
 		}
 		
 	}
@@ -369,6 +404,10 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 
     $rootScope.items = [];
 	$scope.currency = $scope.company.currencesymbol;
+
+	$scope.GSTapplicable = false;
+	$scope.showSCGST = false;
+	$scope.showIGST = false;
 	
 	ItemService.getAllItems($scope.company.id,function(response){
       console.log(" ItemService Response " + JSON.stringify(response));
@@ -430,13 +469,22 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		console.log($scope.stockGroups); 
    }); 
 
+	/*
 	$scope.showGrp = function(group,grpName){
 
 		if(group.parent == 0){
 			return grpName;
 		}
 		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
-	}	
+	}*/
+	//changes on 9/29
+	$scope.showGrp = function(group,grpName){
+		if(group.parent == 1){
+			return grpName + " " + group.name;
+		} 
+		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
+	}
+	
 	
  
      $scope.curItems = [];
@@ -484,6 +532,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	
 	$scope.purchaseTotal = function(trasaction){
 		var totalTransQuandity = 0;
+		var totalTransPieces = 0;
 		var totalTransPrice = 0;
 		var validQuandity = true;
 		angular.forEach(trasaction.trasactionItems,function(curTrasItem,index){
@@ -491,6 +540,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			if(curTrasItem.item!= null && curTrasItem.item.itemDtls != null ){
 				angular.forEach(curTrasItem.item.itemDtls,function(item,index){
 					total += ( (+item.inputqundty) * (+item.pices) );
+					totalTransPieces += (+item.pices);
 				});
 				if(total != (+curTrasItem.quandity)){
 					validQuandity = false;
@@ -499,6 +549,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 				totalTransPrice += (+total) * (+curTrasItem.rate);
 			}
 		});
+	  trasaction.totalPieces = isNaN(totalTransPieces)? 0: totalTransPieces;		
       trasaction.quandity = isNaN(totalTransQuandity)? 0: totalTransQuandity;
 	  trasaction.rate = isNaN(totalTransPrice)? 0: totalTransPrice ;
 	  console.log(isNaN(totalTransPrice) +"  "+ totalTransPrice);
@@ -595,8 +646,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 					$scope.trasaction = {};
 					
+					
 					//$scope.trasaction.type = 2;
 					//$scope.trasaction.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
+					
+					/*
+					
+					
 					if($rootScope.returnType == 'TR_S') {
 						$scope.trasaction.type = 2;
 						$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
@@ -620,10 +676,20 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 					
 					 GenericSrvc.getAll('/ledger/findAll',function(response){
 							$scope.ledgers = response;
-						});  
+						});
+
+					*/
 					
+					$scope.GSTapplicable = false;
+					$scope.showSCGST = false;
+					$scope.showIGST = false;
 					$scope.salesform.setPristine();
-						
+
+					alert("Sales order created successfully.");
+					//$scope.agentform.$setPristine();
+					$location.path("/perform-action");
+				
+					
 				  } catch (err) {
 					alert(JSON.stringify(err));
 					$scope.optStatus = 'Failed';
@@ -654,11 +720,11 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		$location.path("perform-action");
 	}	
 	
-	$scope.showSCGST = false;
-	$scope.showIGST = false;
+	
 	//changes on 9/29
 	$scope.callGST = function(purchaseForm){
-		if(purchaseForm.fromledger != null){
+		if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 2){
+			$scope.GSTapplicable = true;
 			if($scope.company.state == purchaseForm.fromledger.mailingstate){
 				$scope.showSCGST = true;
 				$scope.showIGST = false;
@@ -666,6 +732,10 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 				$scope.showSCGST = false;
 				$scope.showIGST = true;
 			}
+		} else {
+			$scope.GSTapplicable = false;
+			$scope.showSCGST = false;
+			$scope.showIGST = false;
 		}
 		
 	}
