@@ -1,6 +1,6 @@
-//var hostname ="http://localhost:8080";
+var hostname ="http://localhost:8080";
 
-var hostname ="http://localhost:8080/Inventory-1.0";
+//var hostname ="http://localhost:8080/Inventory-1.0";
   //hostname = "http://service-trackingsys.1d35.starter-us-east-1.openshiftapps.com";
 // var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
@@ -590,12 +590,30 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 		//$location.path("/PurchaseReturn");
 		$location.path("/Sales");
 		}
+		
+		
+		
+	$scope.purchaseReport = function(optType){
+		$rootScope.currentPage = 'PurchaseReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = optType;
+		$location.path("/showReport");
+	}
+	
+	$scope.salesReport = function(optType){
+		$rootScope.currentPage = 'SalesReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = optType;
+		$location.path("/showReport");
+	}
+	
 });
 
 
 app.controller('reportsController', function($scope,$rootScope,$location,$http) {
 	$rootScope.currentPage = 'showReport';
-	$scope.transType = $location.search().optType;
+	//$scope.transType = $location.search().optType;
+	$scope.transType = $rootScope.transType;
 	$http.get(hostname + '/reportController/findAllTransType/' + $scope.transType).then(function(response) 
 		{
 			$rootScope.reports = response.data;
@@ -611,6 +629,11 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 		//$rootScope.transactionReport = report;
 		$location.path("/PurchaseReturn");
 	}	
+	
+		$scope.cancelReport = function(){
+			//$rootScope.currentPage ='createStockGroups';
+			$location.path("perform-action");
+		}
 	
 });
 

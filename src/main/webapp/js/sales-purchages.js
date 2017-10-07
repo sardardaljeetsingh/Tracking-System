@@ -62,7 +62,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 
 	 
 		
-	 angular.forEach(response.data, function (ledger) {
+	 angular.forEach($scope.ledgers, function (ledger) {
 		 	if(ledger.accGroup.parent == 5 || ledger.accGroup.parent == 6 ){
 				$scope.partyACNameForSales.push(ledger);
 				$scope.partyACNameForPurchase.push(ledger);
@@ -193,7 +193,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			 	validQuandity = false;
 			}
 			totalTransQuandity += (+curTrasItem.quandity);
-			totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.rate);
+			totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.purcrate);
 		});
 	
 	  purchage.totalPieces = isNaN(totalTransPieces)? 0: totalTransPieces;	
@@ -261,8 +261,14 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			
 			transItem.item.modifiedUser = $rootScope.loggedUser.username;
 			transItem.item.modifiedDate = new Date();
-					
-			console.log(transItem.item.itemDtls);
+				
+			
+			transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
+			transItem.item.itemDtls.createdDate = new Date();
+			transItem.item.itemDtls.modifiedUser = $rootScope.loggedUser.username;
+			transItem.item.itemDtls.modifiedDate = new Date();
+			
+			console.log("transItem.item.itemDtls------> "+ transItem.item.itemDtls);
 			delete transItem.item['@id'];	
 			delete transItem.item.stockGroup['@id'];				
 		});
@@ -371,7 +377,8 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	
 	//changes on 9/29
 	$scope.callGST = function(purchaseForm){
-		if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 1){
+		//if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 1){
+		if(purchaseForm.fromledger != null){
 			$scope.GSTapplicable = true;
 			if($scope.company.state == purchaseForm.fromledger.mailingstate){
 				$scope.showSCGST = true;
@@ -422,12 +429,18 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	 $scope.PurchaseACName = [];
 	 $scope.SalesACName = [];
 	 
-     GenericSrvc.getAll('/ledger/findAll',function(response){
-      console.log(" Trsaction Response " + JSON.stringify(response));
-	  $scope.ledgers = response;
+    console.log(" Fetching Ledgers for Company Id : " + $scope.company.id );
+	$http.get(hostname + '/ledger/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+	
+	 
+     //GenericSrvc.getAll('/ledger/findAll',function(response){
+      console.log(" Ledger Trsaction Response " + JSON.stringify(response.data));
+	  $scope.ledgers = response.data;
    
    
-		angular.forEach(response, function (ledger) {
+		angular.forEach($scope.ledgers, function (ledger) {
 		 	if(ledger.accGroup.parent == 5 || ledger.accGroup.parent == 6 ){
 				$scope.partyACNameForSales.push(ledger);
 				$scope.partyACNameForPurchase.push(ledger);
@@ -608,10 +621,48 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			  
 			});
             transItem.item.itemDtls = finalItemsDtls;
+	
+			//code added on 10/6 for audit purpose
+			transItem.createdUser = $rootScope.loggedUser.username;
+			transItem.createdDate = new Date();
+			transItem.modifiedUser = $rootScope.loggedUser.username;
+			transItem.modifiedDate = new Date();
+			
+			transItem.item.modifiedUser = $rootScope.loggedUser.username;
+			transItem.item.modifiedDate = new Date();
+			
+	
+	
+
 			console.log(transItem.item.itemDtls);
 			delete transItem.item['@id'];	
 			delete transItem.item.stockGroup['@id'];				
-		});
+
+//...................................................................................................
+		    	
+			
+			//transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
+			//transItem.item.itemDtls.createdDate = new Date();
+			//transItem.item.itemDtls.modifiedUser = $rootScope.loggedUser.username;
+			//transItem.item.itemDtls.modifiedDate = new Date();
+			
+		
+	
+
+
+
+
+
+
+//....................................................................................................			
+
+
+
+
+
+
+
+	});
 		
 		delete sale.ledger['@id'];
 		delete sale.ledger.accGroup;
@@ -626,11 +677,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	
 		
 		
-		console.log(sale); 
 		
 		
 			var dataObj = JSON.stringify(sale);
-			//console.log(dataObj);
+console.log("Sales data tobe stored ----> " + dataObj); 
+				
+
+		//console.log(dataObj);
 			
 			$http.post(hostname+'/transactions/create', dataObj, {
 			  headers: {
@@ -638,13 +691,13 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			  },
 			}).success(function(responseData) {
 				  try {
-					console.log(JSON.stringify(responseData));
-					$scope.optStatus = 'Success';
+					console.log("Sales success ----------> " + JSON.stringify(responseData));
+					//$scope.optStatus = 'Success';
 					//$location.path("/show-user");
 					
-					 $scope.curItems = [];
-					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
-					$scope.trasaction = {};
+					 //$scope.curItems = [];
+					//$scope.curItems[0] = {'quandity':1 ,'pices':1 };
+					//$scope.trasaction = {};
 					
 					
 					//$scope.trasaction.type = 2;
@@ -680,10 +733,10 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 
 					*/
 					
-					$scope.GSTapplicable = false;
-					$scope.showSCGST = false;
-					$scope.showIGST = false;
-					$scope.salesform.setPristine();
+					//$scope.GSTapplicable = false;
+					//$scope.showSCGST = false;
+					//$scope.showIGST = false;
+					$scope.salesform.$setPristine();
 
 					alert("Sales order created successfully.");
 					//$scope.agentform.$setPristine();
@@ -691,11 +744,11 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 				
 					
 				  } catch (err) {
-					alert(JSON.stringify(err));
+					alert("Sales Error ----------> " + JSON.stringify(err));
 					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {
-				console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				console.log("Sales Error ----------> " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 				$scope.optStatus = 'Failed';
 			  });		
 	}   
@@ -723,7 +776,8 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 	
 	//changes on 9/29
 	$scope.callGST = function(purchaseForm){
-		if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 2){
+		//if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 2){
+		if(purchaseForm.fromledger != null){	
 			$scope.GSTapplicable = true;
 			if($scope.company.state == purchaseForm.fromledger.mailingstate){
 				$scope.showSCGST = true;
