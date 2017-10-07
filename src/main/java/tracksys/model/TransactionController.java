@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import javax.transaction.Transactional;
 
 @Controller
 @RequestMapping("/transactions")
 public class TransactionController {
 
 	@RequestMapping(value ="/create",method = RequestMethod.POST)
+	@Transactional
 	public @ResponseBody Transaction createTransaction
 	(@RequestBody Transaction transaction) {
 		
@@ -90,12 +92,24 @@ public class TransactionController {
 					tempItemDtl.setItem(item);
 					
 					break;
-				}				
+				}
+				
+				//tempItemDtl.setCreatedUser("admin");
+				//tempItemDtl.setCreatedDate(new java.util.Date());
+				//tempItemDtl.setModifiedUser("admin");
+				//tempItemDtl.setModifiedDate(new java.util.Date());
+				
 				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
 				transactionDetails = new TransactionDetails();
 				transactionDetails.setItemDetails(tempItemDtl);
 				transactionDetails.setQuandity(itemDetail.getCurqundty() * itemDetail.getCurpices());
 				transactionDetails.setTrasactionItem(trasactionItem);
+				
+				transactionDetails.setCreatedUser(tempItemDtl.getCreatedUser());
+				transactionDetails.setCreatedDate(new java.util.Date());
+				transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
+				transactionDetails.setModifiedDate(new java.util.Date());
+				
 				trasactionItem.getTransactionDetails().add(transactionDetails);
 			}
 		}	

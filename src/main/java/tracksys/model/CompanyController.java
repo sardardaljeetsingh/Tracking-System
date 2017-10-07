@@ -29,7 +29,7 @@ public class CompanyController {
 	  public @ResponseBody Company  create(@RequestBody Company company) {
 
 		  boolean isCompanyExists = companyRepository.exists(company.getId());
-System.out.println("Company Created ----------> " + company.toString());		
+		//System.out.println("Company Created ----------> " + company.toString());		
 		company =  companyRepository.save(company);
 		  
         
@@ -78,8 +78,8 @@ System.out.println("Company Created ----------> " + company.toString());
 		  
 		  
 			  //create dummy stock group
-			  //StockGroup stockGroup = new StockGroup("DUMMY",company,1,	company.getCreatedUser());
-			  //stockGroupRepository.save(stockGroup);
+			  StockGroup stockGroup = new StockGroup("DUMMY",company,1,	company.getCreatedUser());
+			  stockGroupRepository.save(stockGroup);
 		  }
 
 		  return company;
