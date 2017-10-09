@@ -65,4 +65,22 @@ public class AgentController {
 		return new ResponseEntity<Iterable<Agent>>(agentList, HttpStatus.OK);
 	}	
 	
+	/**
+	Method for search
+	*/
+	@RequestMapping(value ="/find-by-name-search/{companyId}/{agentName}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Agent>> findByNameSearch(@PathVariable("companyId") int companyId, @PathVariable("agentName") String agentName) {
+		Iterable<Agent> agentList = null;
+		try {
+			Company company = new Company(companyId) ;
+			agentList = agentRepository.findByCompanyAndNameIgnoreCaseContaining(company,agentName);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<Agent>>(agentList, HttpStatus.OK);
+	}	
+	
+	
 }

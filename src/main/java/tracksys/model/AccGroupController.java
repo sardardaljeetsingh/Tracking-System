@@ -68,6 +68,25 @@ public class AccGroupController {
 	}  
 	
 	
+	  
+	/**
+	Method for search
+	*/
+	@RequestMapping(value ="/find-by-name-search/{companyId}/{accountGroupName}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<AccGroup>> findByNameSearch(@PathVariable("companyId") int companyId, @PathVariable("accountGroupName") String accountGroupName) {
+		Iterable<AccGroup> grpLableList = null;
+		try {
+			Company company = new Company(companyId) ;
+			grpLableList = groupRepository.findByCompanyAndNameIgnoreCaseContaining(company,accountGroupName);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<AccGroup>>(grpLableList, HttpStatus.OK);
+	}	
+	
+	
 	
 	  @Autowired
 	  private AccGroupRepository groupRepository;

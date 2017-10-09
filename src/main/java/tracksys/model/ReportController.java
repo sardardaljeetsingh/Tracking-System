@@ -6,6 +6,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +67,21 @@ public class ReportController {
 	  } 	  
 	
 		
+	/**
+	Method for search
+	*/
+	@RequestMapping(value ="/find-by-name-search/{optType}/{voucherNumber}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Report>> findByNameSearch(@PathVariable("optType") int optType, @PathVariable("voucherNumber") String voucherNumber) {
+		Iterable<Report> reportList = null;
+		try {
+			reportList = reportRepository.findByTypeAndVoucherIgnoreCaseContaining(optType,voucherNumber);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<Report>>(reportList, HttpStatus.OK);
+	}	
 		
 		
 		

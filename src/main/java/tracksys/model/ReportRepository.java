@@ -7,4 +7,6 @@ public interface ReportRepository extends CrudRepository<Report, Integer> {
 
 	//Agent findByName(String name);
 	public List<Report> findAllByType(int type);
+	
+	public List<Report> findByTypeAndVoucherIgnoreCaseContaining(int type,String voucher);
 }
