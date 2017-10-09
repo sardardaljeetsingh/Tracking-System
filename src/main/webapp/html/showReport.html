@@ -8,11 +8,11 @@
 		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 2" >Sales Report</div>
 			
 		  <div class="panel-body">
-					<form class="form-inline">
+					<form class="form-inline" name="reportForm">
 					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Voucher Number">
+						<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" placeholder="Voucher Number">
 					  </div>
-					  <button type="button" class="btn btn-success btn-sm">Search</button>
+					  <button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>
 					   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
 						Cancel
 					  </button>
@@ -47,6 +47,9 @@
 				</form>				
 				</td> 
 			 </tr>  
+			 <tr ng-if="searchMessage.length > 0" >
+				<td colspan="8" align="center">{{searchMessage}} </td>
+			 </tr>	
 		  </tbody> 
 		  </table>
 		</div>

@@ -2,10 +2,10 @@
 		  <!-- Default panel contents -->
 		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Agents --> List</strong></div>
 		  <div class="panel-body" >
-					<form class="form-inline">
+					<form class="form-inline" name="agentForm">
 						 <div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Agent">
-							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<input type="text" class="form-control input-sm" id="agentName" name="agentName" placeholder="Search Agent">
+							<button type="button" class="btn btn-success btn-sm" ng-click="searchAgentName()">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelAgent()">Cancel</button>
 						</div>
 					</form>
@@ -34,7 +34,10 @@
 					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAgent(agent)">Delete Agent</button>
 				</form>				
 				</td> 
-			 </tr>  
+			 </tr>
+			 <tr ng-if="searchMessage.length > 0" >
+				<td colspan="6" align="center">{{searchMessage}} </td>
+			 </tr>				 
 		  </tbody> 
 		  </table>
 		</div>
