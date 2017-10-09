@@ -49,12 +49,12 @@ public class Item {
 	}
 
 	
-	public int getrateGST() {
+	public float getrateGST() {
 		return rateGST;
 	}
 	
 	
-	public void setRateGST(int rateGST) {
+	public void setRateGST(float rateGST) {
 		this.rateGST = rateGST;
 	}
 	
@@ -82,11 +82,11 @@ public class Item {
 		this.uom = uom;
 	}
 
-	public int getQuandity() {
+	public float getQuandity() {
 		return quandity;
 	}
 
-	public void setQuandity(int quandity) {
+	public void setQuandity(float quandity) {
 		this.quandity = quandity;
 	}
 
@@ -116,7 +116,7 @@ public class Item {
 
 	@NotNull
 	@Column(name = "GSTRate", nullable = false)
-	private int rateGST;	
+	private float rateGST;	
 
 	
 	@NotNull
@@ -136,7 +136,7 @@ public class Item {
 	
 	@NotNull
 	@Column(name = "initqundty", nullable = false)
-	private int quandity;
+	private float quandity;
 	
 	@NotNull
 	@Column(name = "createduser", nullable = false)	
@@ -157,39 +157,39 @@ public class Item {
 	
 	
 	
-	public int getCurqundty() {
+	public float getCurqundty() {
 		return curqundty;
 	}
 
-	public void setCurqundty(int curqundty) {
+	public void setCurqundty(float curqundty) {
 		this.curqundty = curqundty;
 	}
 
 	@NotNull
 	@Column(name = "curqundty", nullable = false)
-	private int curqundty;	
+	private float curqundty;	
 	
 	@NotNull
 	@Column(name = "rate", nullable = false)
-	private int rate;	
+	private float rate;	
 	
 	@NotNull
 	@Column(name = "purcrate", nullable = false)
-	private int purcrate;		
+	private float purcrate;		
 	
-	public int getPurcrate() {
+	public float getPurcrate() {
 		return purcrate;
 	}
 
-	public void setPurcrate(int purcrate) {
+	public void setPurcrate(float purcrate) {
 		this.purcrate = purcrate;
 	}
 
-	public int getRate() {
+	public float getRate() {
 		return rate;
 	}
 
-	public void setRate(int rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 

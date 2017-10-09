@@ -112,11 +112,30 @@ public class ItemController {
 		return new ResponseEntity<Iterable<Item>>(itemList, HttpStatus.OK);
 	}	
 	
+	/**
+	Method not used and can be deleted 
+	*/
 	@RequestMapping(value ="/item/find-by-name/{itemname}",method = RequestMethod.GET)
 	public ResponseEntity<Iterable<Item>> findAllByName(@PathVariable("itemname") String itemname) {
 		Iterable<Item> itemList = null;
 		try {
 			itemList = itemRepository.findAllByName(itemname);
+		}
+		catch (Exception ex) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<Item>>(itemList, HttpStatus.OK);
+	}	
+	
+	
+	/**
+	Method for search
+	*/
+	@RequestMapping(value ="/item/find-by-name-search/{companyId}/{itemname}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Item>> findByNameSearch(@PathVariable("companyId") int companyId, @PathVariable("itemname") String itemname) {
+		Iterable<Item> itemList = null;
+		try {
+			itemList = itemRepository.findByStockGroup_Company_ItemName(companyId,itemname);
 		}
 		catch (Exception ex) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

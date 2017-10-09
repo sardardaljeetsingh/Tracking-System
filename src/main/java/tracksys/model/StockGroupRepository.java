@@ -11,4 +11,9 @@ public interface StockGroupRepository extends CrudRepository<StockGroup, Integer
 	//public List<Group> findAllByCompanyAndParent(Company company, int parentGrpId);
 	
 	public List<StockGroup> findAllByParent(int parentGrpId);
+	
+	
+	public List<StockGroup> findByCompanyAndNameIgnoreCaseContaining(Company company,String name);
+	
+	
 }

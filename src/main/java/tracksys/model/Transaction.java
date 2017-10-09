@@ -43,11 +43,11 @@ public class Transaction {
 	private Ledger ledger;	
 	
 	@Column(name = "quandity", nullable = false)
-	private int quandity;
+	private float quandity;
 	
 	@NotNull
 	@Column(name = "rate", nullable = false)
-	private int rate;
+	private float rate;
 	
 
 	@NotNull
@@ -99,19 +99,19 @@ public class Transaction {
 		this.type = type;
 	}
 
-	public int getQuandity() {
+	public float getQuandity() {
 		return quandity;
 	}
 
-	public void setQuandity(int quandity) {
+	public void setQuandity(float quandity) {
 		this.quandity = quandity;
 	}
 
-	public int getRate() {
+	public float getRate() {
 		return rate;
 	}
 
-	public void setRate(int rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 

@@ -33,7 +33,7 @@ public class TransactionDetails {
 	private TrasactionItem trasactionItem;
 	
 	@Column(name = "quandity", nullable = false)
-	private int quandity;
+	private float quandity;
 	
 
 	@NotNull
@@ -69,11 +69,11 @@ public class TransactionDetails {
 		this.itemDetails = itemDetails;
 	}
 
-	public int getQuandity() {
+	public float getQuandity() {
 		return quandity;
 	}
 
-	public void setQuandity(int quandity) {
+	public void setQuandity(float quandity) {
 		this.quandity = quandity;
 	}
 

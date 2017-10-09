@@ -23,21 +23,22 @@ public class Ledger {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	public int getOpbal() {
+	public float getOpbal() {
 		return opbal;
 	}
-	public void setOpbal(int opbal) {
+	public void setOpbal(float opbal) {
 		this.opbal = opbal;
 	}
-	public int getCurbal() {
+	public float getCurbal() {
 		return curbal;
 	}
-	public void setCurbal(int curbal) {
+	public void setCurbal(float curbal) {
 		this.curbal = curbal;
 	}
 	@NotNull
 	@Column(name = "name", nullable = false)		
 	private String name;
+	
 	@NotNull
 	@Column(name = "alias", nullable = false)		
 	private String alias;
@@ -70,11 +71,11 @@ public class Ledger {
 	
 	@NotNull
 	@Column(name = "opbal", nullable = false)		
-	private int opbal;
+	private float opbal;
 	
 	@NotNull
 	@Column(name = "curbal", nullable = false)		
-	private int curbal;	
+	private float curbal;	
 	
 	
 	@NotNull

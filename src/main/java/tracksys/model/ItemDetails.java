@@ -35,16 +35,17 @@ public class ItemDetails {
 	private Item item;
 	
 	@Column(name = "quandity", nullable = false)
-	private int quandity;
+	private float quandity;
 	
 	@NotNull
 	@Column(name = "curqundty", nullable = false)
-	private int curqundty;		
+	private float curqundty;		
 	
 	@Column(name = "pices", nullable = false)
-	private int pices;
+	private float pices;
+	
 	@Column(name = "curpices", nullable = false)
-	private int curpices;	
+	private float curpices;	
 
 	@NotNull
 	@Column(name = "createduser", nullable = false)	
@@ -67,7 +68,7 @@ public class ItemDetails {
 	
 	@JsonInclude()
 	@Transient
-	private int inputqundty;	
+	private float inputqundty;	
 
 	public int getId() {
 		return id;
@@ -93,43 +94,43 @@ public class ItemDetails {
 		this.item = item;
 	}
 
-	public int getQuandity() {
+	public float getQuandity() {
 		return quandity;
 	}
 
-	public void setQuandity(int quandity) {
+	public void setQuandity(float quandity) {
 		this.quandity = quandity;
 	}
 
-	public int getPices() {
+	public float getPices() {
 		return pices;
 	}
 
-	public void setPices(int pices) {
+	public void setPices(float pices) {
 		this.pices = pices;
 	}
 
-	public int getCurqundty() {
+	public float getCurqundty() {
 		return curqundty;
 	}
 
-	public void setCurqundty(int curqundty) {
+	public void setCurqundty(float curqundty) {
 		this.curqundty = curqundty;
 	}
 
-	public int getCurpices() {
+	public float getCurpices() {
 		return curpices;
 	}
 
-	public void setCurpices(int curpices) {
+	public void setCurpices(float curpices) {
 		this.curpices = curpices;
 	}
 
-	public int getInputqundty() {
+	public float getInputqundty() {
 		return inputqundty;
 	}
 
-	public void setInputqundty(int inputqundty) {
+	public void setInputqundty(float inputqundty) {
 		this.inputqundty = inputqundty;
 	}
 

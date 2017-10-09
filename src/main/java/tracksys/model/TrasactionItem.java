@@ -39,15 +39,15 @@ public class TrasactionItem {
 	private Item item;	
 	
 	@Column(name = "quandity", nullable = false)
-	private int quandity;
+	private float quandity;
 	
 	@NotNull
 	@Column(name = "rate", nullable = false)
-	private int rate;	
+	private float rate;	
 	
 	@NotNull
 	@Column(name = "purcrate", nullable = false)
-	private int purcrate;	
+	private float purcrate;	
 
 	@NotNull
 	@Column(name = "createduser", nullable = false)	
@@ -82,11 +82,11 @@ public class TrasactionItem {
 		this.item = item;
 	}
 
-	public int getQuandity() {
+	public float getQuandity() {
 		return quandity;
 	}
 
-	public void setQuandity(int quandity) {
+	public void setQuandity(float quandity) {
 		this.quandity = quandity;
 	}
 	
@@ -98,19 +98,19 @@ public class TrasactionItem {
 		this.transactionDetails = transactionDetails;
 	}
 
-	public int getRate() {
+	public float getRate() {
 		return rate;
 	}
 
-	public void setRate(int rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 
-	public int getPurcrate() {
+	public float getPurcrate() {
 		return purcrate;
 	}
 
-	public void setPurcrate(int purcrate) {
+	public void setPurcrate(float purcrate) {
 		this.purcrate = purcrate;
 	}
 

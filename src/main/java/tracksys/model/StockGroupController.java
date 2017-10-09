@@ -51,6 +51,30 @@ public class StockGroupController {
 		return new ResponseEntity<Iterable<StockGroup>>(grpLableList, HttpStatus.OK);
 	}
 	  
+	/**
+	Method for search
+	*/
+	@RequestMapping(value ="/find-by-name-search/{companyId}/{stockGroupName}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<StockGroup>> findByNameSearch(@PathVariable("companyId") int companyId, @PathVariable("stockGroupName") String stockGroupName) {
+		Iterable<StockGroup> grpLableList = null;
+		try {
+			Company company = new Company(companyId) ;
+			grpLableList = groupRepository.findByCompanyAndNameIgnoreCaseContaining(company,stockGroupName);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<StockGroup>>(grpLableList, HttpStatus.OK);
+	}	
+	
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  @RequestMapping(value ="/find-by-parent/{parentGrpId}",method = RequestMethod.GET)
 	  public ResponseEntity<Iterable<StockGroup>> findAllByParent(@PathVariable("parentGrpId") int parentGrpId) {
 		  Iterable<StockGroup> grpLableList = null;

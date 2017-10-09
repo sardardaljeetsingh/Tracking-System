@@ -10,6 +10,15 @@ public interface ItemRepository extends CrudRepository<Item, Integer> {
 	public List<Item> findAllByStockGroup(StockGroup stockGroup);
 	public List<Item> findAllByName(String name);
 	
+	//public List<Item> findByNameIgnoreCaseContaining(String name);
+	
+	
+	
 	@Query(value = "select itm.* from item_dtl itm JOIN stock_group_dtl grp on itm.groupid = grp.id JOIN company com on com.id = grp.companyid  where grp.companyid = ?1", nativeQuery = true)
 	public List<Item> findByStockGroup_Company(int companyid);
+	
+	
+	@Query(value = "select itm.* from item_dtl itm JOIN stock_group_dtl grp on itm.groupid = grp.id JOIN company com on com.id = grp.companyid  where grp.companyid = ?1 and itm.name like %?2%", nativeQuery = true)
+	public List<Item> findByStockGroup_Company_ItemName(int companyid, String name);
+	
 }

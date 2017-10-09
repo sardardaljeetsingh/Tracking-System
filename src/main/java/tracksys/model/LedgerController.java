@@ -60,4 +60,23 @@ public class LedgerController {
 		return new ResponseEntity<Iterable<Ledger>>(ledgerList, HttpStatus.OK);
 	}	
 	
+	
+	/**
+	Method for search
+	*/
+	@RequestMapping(value ="/find-by-name-search/{companyId}/{ledgerName}",method = RequestMethod.GET)
+	public ResponseEntity<Iterable<Ledger>> findByNameSearch(@PathVariable("companyId") int companyId, @PathVariable("ledgerName") String ledgerName) {
+		Iterable<Ledger> ledgerList = null;
+		try {
+			Company company = new Company(companyId) ;
+			ledgerList = ledgerRepository.findByAccGroup_CompanyAndNameIgnoreCaseContaining(company,ledgerName);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Iterable<Ledger>>(ledgerList, HttpStatus.OK);
+	}	
+	
+	
 }
