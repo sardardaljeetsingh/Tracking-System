@@ -53,6 +53,38 @@ app.controller('ledgerController', function($scope,$rootScope,$location,$http) {
 		}	
 	}
 	
+		$scope.searchLedger = function(){
+		if(document.ledgerForm.ledgerName.value == ''){
+			alert("Please enter Ledger name to search");
+			return;
+		}
+		var urlForm = hostname + '/ledger/find-by-name-search/' + $scope.company.id + '/' + document.ledgerForm.ledgerName.value;
+		$scope.searchMessage = '';
+		//alert("Item selected ---> " + urlForm);
+		
+		
+		$http.get(urlForm).
+		then(function(response) 
+		{
+			$rootScope.ledgers = response.data;
+			console.log(" Ledger search : " + JSON.stringify($rootScope.ledgers));
+            
+			if($rootScope.ledgers.length == 0){
+				$scope.searchMessage = "No Ledgers found";
+			}
+			//console.log(" items Length : " + $scope.items.length);
+        	//console.log(" items : " + JSON.stringify($scope.items));
+            
+			//$rootScope.currentPage = 'showStockItems';			
+		});			
+		
+	}
+	
+
+	
+	
+	
+	
 	$scope.cancelLedger = function(){
 		$rootScope.currentPage = 'performAction';
 		$location.path("perform-action");
@@ -97,7 +129,7 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 		
 		//ledger.accGroup.id = ledger.groupid;
 			var dataObj = JSON.stringify(ledger);
-			console.log( dataObj );
+			console.log("Ledger create ----> " +  dataObj );
 			$http.post(hostname+'/ledger/create', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
@@ -114,15 +146,15 @@ app.controller('createLedgerController', function($scope,$rootScope,$location,$h
 					$scope.optStatus = 'Success';
 					$scope.ledgerform.$setPristine();
 					
-					alert("Ledger created successfully.");
+					//alert("Ledger created successfully.");
 					//$location.path("/show-user");
 					//$scope.agentform.$setPristine();
-				    $location.path("/perform-action");
+				    //$location.path("/perform-action");
 				
 					
 					
 					} catch (err) {
-					console.log(JSON.stringify(err));
+					console.log("Ledger create error ---> " + JSON.stringify(err));
 					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {
@@ -191,12 +223,12 @@ app.controller('editLedgerController', function($scope,$rootScope,$location,$htt
 					//$location.path("/view-ledgers");
 					$scope.optStatus = 'Success';
 					$scope.ledgerform.$setPristine();
-					alert("Ledger updated successfully.");
-					$location.path("/view-ledgers");
+					//alert("Ledger updated successfully.");
+					//$location.path("/view-ledgers");
 					
 					
 				  } catch (err) {
-					alert(JSON.stringify(err));
+					console.log("Ledger edit error ---> " + JSON.stringify(err));
 					$scope.optStatus = 'Failed';
 				  }
 			 }).error(function(data, status, headers, config) {

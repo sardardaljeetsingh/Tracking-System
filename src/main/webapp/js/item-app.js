@@ -505,7 +505,7 @@ app.controller('editCompanyController', function($scope,$rootScope,$location,$ht
 					$location.path("/show-company");
 						
 				  } catch (err) {
-					alert(JSON.stringify(err));
+					console.log("Company Edit error ---> " + JSON.stringify(err));
 					$scope.optStatus = 'Failed';	
 				  }
 			 }).error(function(data, status, headers, config) {
@@ -857,18 +857,18 @@ app.controller('stockGroupController', function($scope,$rootScope,$location,$htt
 					$scope.singlegroup.selGroup = null;
 					$scope.stockgroup.$setPristine();
 					
-					alert($scope.singleGrpMsg);
+					/*alert($scope.singleGrpMsg);
 					var nextView = '';
 					if($rootScope.showPage == 'edit') {
 						nextView = "view-stock-groups";
 					} else {
 						nextView = "perform-action";
 					}
-					$location.path(nextView);
+					$location.path(nextView);*/
 	
 					
 			  } catch (err) {
-				console.log("Catch error --> " + JSON.stringify(err));
+				console.log("Stock group create error --> " + JSON.stringify(err));
 			  }
 		 }).error(function(data, status, headers, config) {
 			console.log("Function Error ---> " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
@@ -943,7 +943,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			angular.forEach($scope.groups, function (group) 
 			{
 				// console.log(" group "  + group.id +"  "+ group.name + " " + group.parent );
-				if(group.id > 1 && group.parent === 1){
+				if(group.id > 1 && group.parent === 1 && group.name != 'DUMMY'){
 				  $scope.stockGroups[0].children.push(group);
 				}
 			});
@@ -951,28 +951,6 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		});	
 	
 		
-	$scope.getDefaultStockId = function(){
-		var defaultGroupId;
-		$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
-		then(function(response) 
-		{
-			$scope.groups = response.data;
-			angular.forEach($scope.groups, function (group) 
-			{
-				//alert(" group.id " + group.id + " " + group.parent);
-				if(group.id == $scope.item.stockGroup) {
-				
-					if (group.parent > 1){
-						defaultGroupId = group.parent;
-					} else {
-						defaultGroupId	= $scope.item.stockGroup;
-					}
-				} 
-			});
-		});
-		//alert("defaultGroupId --> " + defaultGroupId + " " + $scope.item.stockGroup);
-		return defaultGroupId;	
-	}
 	
 	$scope.setChildrenData = function(selGroup,grplevel){
 	  // alert(selGroup.id + " " + grplevel);
@@ -1004,6 +982,37 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 			}
 	}
 	
+	$scope.getDefaultStockId = function(){
+		var defaultGroupId = 1;
+		var selGroup = [];
+		$http.get(hostname + '/stockgroup/find-by-company/'+$scope.company.id).
+		then(function(response) 
+		{
+			$scope.groups = response.data;
+			angular.forEach($scope.groups, function (group) 
+			{
+				if(group.id == $scope.item.stockGroup) {
+					if (group.parent > 1){
+						defaultGroupId = group.parent;
+					} else {
+						defaultGroupId	= $scope.item.stockGroup;
+					}
+				}
+				
+				if(group.id == 2){
+					selGroup = group;
+				}
+				
+			});
+			$scope.setChildrenData(selGroup,0);
+		
+		//alert("defaultGroupId --> " + defaultGroupId + " " + $scope.item.stockGroup);
+		
+		});
+		
+		return defaultGroupId;	
+	}
+
 	
 	
 	$scope.getTotal = function(){
@@ -1021,7 +1030,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	
 	$scope.addItem = function(selItem){
 		console.log("add item");
-		if(!$scope.itemform.$valid || $scope.stockGroups[0].selGroup == null || $scope.grandTotal > ($scope.item.quandity)){
+		//if(!$scope.itemform.$valid || $scope.stockGroups[0].selGroup == null || $scope.grandTotal > ($scope.item.quandity)){
+		if(!$scope.itemform.$valid || $scope.stockGroups[0].selGroup == null){
 			$scope.submitclick = true;
 			console.log("invalid item form ");
 			return;
@@ -1130,7 +1140,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				$scope.grandTotal = 0;
 				$scope.itemform.$setPristine();
 				
-				var itemMSG ='';
+				/*var itemMSG ='';
 				var nextView = '';
 				if($scope.showPage == 'create') {
 					itemMSG = "Item created successfully.";
@@ -1140,11 +1150,11 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 					nextView = "view-stock-items";
 				}
 				alert(itemMSG);
-				$location.path(nextView);
+				$location.path(nextView);*/
 
 				
 			  } catch (err) {
-				console.log(JSON.stringify(err));
+				console.log("Stock Item create error ---> " + JSON.stringify(err));
 				$scope.optStatus = 'Failed';
 			  }
 		 }).error(function(data, status, headers, config) {
@@ -1226,6 +1236,31 @@ app.controller('showStockItemController', function($scope,$route,$rootScope,$loc
 		
 	}	
 	
+	$scope.searchItem = function(){
+		if(document.itemForm.itemName.value == ''){
+			alert("Please enter Item name to search");
+			return;
+		}
+		var urlForm = hostname + '/item/find-by-name-search/' + $scope.company.id + '/' + document.itemForm.itemName.value;
+		$scope.items = {}; 
+		$scope.searchMessage = '';
+		//alert("Item selected ---> " + urlForm);
+		
+		
+		$http.get(urlForm).
+		then(function(response) 
+		{
+			$scope.items = response.data;
+			if($scope.items.length == 0){
+				$scope.searchMessage = "No items found";
+			}
+			//console.log(" items Length : " + $scope.items.length);
+        	//console.log(" items : " + JSON.stringify($scope.items));
+            
+			//$rootScope.currentPage = 'showStockItems';			
+		});			
+		
+	}
 		
 	$scope.cancelItem = function(){
 		$rootScope.currentPage = 'performAction';
@@ -1291,7 +1326,36 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 				$scope.message = ' Failed to delete group' +group.name ;
 			  });
 	}		
+	
+	$scope.searchStockGroup = function(){
+		if(document.stockGroupForm.stockGroupName.value == ''){
+			alert("Please enter Stock Group name to search");
+			return;
+		}
+		var urlForm = hostname + '/stockgroup/find-by-name-search/' + $scope.company.id + '/' + document.stockGroupForm.stockGroupName.value;
+		$scope.groups = null; 
+		$scope.searchMessage = '';
+		//alert("Item selected ---> " + urlForm);
 		
+		
+		$http.get(urlForm).
+		then(function(response) 
+		{
+			$scope.groups = response.data;
+			console.log(" Group search : " + JSON.stringify($scope.groups));
+            
+			if($scope.groups.length == 0){
+				$scope.searchMessage = "No Stock Group found";
+			}
+			//console.log(" items Length : " + $scope.items.length);
+        	//console.log(" items : " + JSON.stringify($scope.items));
+            
+			//$rootScope.currentPage = 'showStockItems';			
+		});			
+		
+	}
+	
+	
 	$scope.cancelStockGroup = function(){
 		$rootScope.currentPage = 'performAction';
 		$location.path("perform-action");

@@ -14,11 +14,14 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 			$scope.groups = response.data;
 			//$scope.groups = response.data;
 			console.log(" Groupth Length : " + $scope.groups.length)			
+			var count = 1;
 			angular.forEach($scope.groups, function (group) 
 			{
 				//change on 9/28
-				if(group.parent <= 6){
+				//if(group.parent <= 6){
+				if(count <= 6){
 				  $scope.singlegroups.push(group);
+				  count++;	
 				}
 			});	
 		});	
@@ -32,7 +35,7 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 		    var selGrpId = (selGroup != null && selGroup.id != null ) ? selGroup.id : -1;
 			var children = [];
 			angular.forEach($scope.groups, function (group) {
-				 if(group.parent == selGrpId){
+				 if(group.parent == selGrpId && group.name != selGroup.name){
 					children.push(group);
 					//$scope.multigroups[grplevel].children.push(group);
 				 }
@@ -143,21 +146,21 @@ app.controller('accGroupController', function($scope,$rootScope,$location,$http)
 					console.log(" success "+ $scope.singleGrpMsg);
 					
 					//$scope.message = 'Agent '+agent.name + ' edit done successfully.';
-					alert($scope.singleGrpMsg);
+					//alert($scope.singleGrpMsg);
 					//$location.path("/show-user");
-					//$scope.agentform.$setPristine();
-				    $location.path("/perform-action");
+					$scope.agentform.$setPristine();
+				    //$location.path("/perform-action");
 				
 			  
 			  } catch (err) {
-				console.log(JSON.stringify(err));
+				console.log("Account group create error ---> " + JSON.stringify(err));
 			  }
 		 }).error(function(data, status, headers, config) {
 			console.log(JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
 		  });		
 	
 
-		console.log(" AccountGRP " + newgroup);
+		//console.log(" AccountGRP " + newgroup);
 	}
 
 		$scope.cancelGroup = function(){
