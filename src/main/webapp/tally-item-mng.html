@@ -1067,7 +1067,7 @@
 			  <tr ng-repeat="group in groups" ng-if="group.name != 'DUMMY'" > 
 				<td>{{$index+1}}</td> 
 				<td>{{group.name}} </td> 
-				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
+				<td> {{   group.parent > 1 ? ((groupResult | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
 			    <form class="form-inline">
 					<button type="button" class="btn btn-warning btn-xs" ng-click="editGroup(group)">Edit Group</button>
@@ -1355,10 +1355,10 @@
 		  <div class="panel-body">
 		  <div class="row" style="padding:1px;margin:10px" >
 					
-					<form class="form-inline">
+					<form class="form-inline" name="accountGroupForm">
 					 	<div class="form-group col-sm-5"  >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Account Group Name">
-							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<input type="text" class="form-control input-sm" id="accountGroupName" name="accountGroupName" placeholder="Search Account Group Name">
+							<button type="button" class="btn btn-success btn-sm" ng-click="searchAccountGroup()">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelAccountGroup()">Cancel</button>
 						</div>
 
@@ -1388,7 +1388,11 @@
 					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAccGrp(group)" ng-if="$index+1 > 6">Delete Group</button>
 				</form>				
 				</td> 				
-			 </tr>  
+			 </tr>
+			<tr ng-if="searchMessage.length > 0" >
+				<td colspan="5" align="center">{{searchMessage}} </td>
+			 </tr>	
+			 
 		  </tbody> 
 		  </table>
 		 </div> 
