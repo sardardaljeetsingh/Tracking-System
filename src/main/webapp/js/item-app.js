@@ -635,6 +635,37 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 			$location.path("perform-action");
 		}
 	
+	$scope.searchVoucherNumber = function(){
+		if(document.reportForm.voucherNumber.value == ''){
+			alert("Please enter Voucher Number to search");
+			return;
+		}
+		var urlForm = hostname + '/reportController/find-by-name-search/' + $scope.transType + '/' + document.reportForm.voucherNumber.value;
+		console.log("Report URL ---> " + urlForm);
+		$scope.groups = null; 
+		$scope.searchMessage = '';
+		//alert("Item selected ---> " + urlForm);
+		
+		
+		$http.get(urlForm).
+		then(function(response) 
+		{
+			$rootScope.reports = response.data;
+			console.log(" Report search result --> " + JSON.stringify($rootScope.reports));
+            
+			if($rootScope.reports.length == 0){
+				$scope.searchMessage = "No Voucher number found";
+			}
+			//console.log(" items Length : " + $scope.items.length);
+        	//console.log(" items : " + JSON.stringify($scope.items));
+            
+			//$rootScope.currentPage = 'showStockItems';			
+		});			
+		
+	}
+	
+	
+	
 });
 
 app.controller('stockGroupController', function($scope,$rootScope,$location,$http) {
@@ -1282,6 +1313,7 @@ app.controller('showStockGroupsController', function($scope,$rootScope,$location
 			
 			console.log("Stock Groups ---> " + JSON.stringify(response));
 			$rootScope.groups = response.data;
+			$rootScope.groupResult = response.data;
 			//$scope.groups = response.data;
 			console.log(" Groupth Length : " + $scope.groups.length)	;
             $rootScope.currentPage = 'showStockGroups';			

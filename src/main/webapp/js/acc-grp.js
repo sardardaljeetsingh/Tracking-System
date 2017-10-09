@@ -235,6 +235,37 @@ app.controller('showAccountGroupsController', function($scope,$rootScope,$locati
 		}	
 	}
 	
+	$scope.searchAccountGroup = function(){
+		if(document.accountGroupForm.accountGroupName.value == ''){
+			alert("Please enter Account Group name to search");
+			return;
+		}
+		var urlForm = hostname + '/accgroup/find-by-name-search/' + $scope.company.id + '/' + accountGroupForm.accountGroupName.value;
+		$scope.groups = null; 
+		$scope.searchMessage = '';
+		//alert("Item selected ---> " + urlForm);
+		
+		
+		$http.get(urlForm).
+		then(function(response) 
+		{
+			$scope.groups = response.data;
+			console.log(" Account Group search : " + JSON.stringify($scope.groups));
+            
+			if($scope.groups.length == 0){
+				$scope.searchMessage = "No Account Group found";
+			}
+			//console.log(" items Length : " + $scope.items.length);
+        	//console.log(" items : " + JSON.stringify($scope.items));
+            
+			//$rootScope.currentPage = 'showStockItems';			
+		});			
+		
+	}
+	
+	
+	
+	
 	$scope.cancelAccountGroup = function(){
 		$rootScope.currentPage = 'performAction';
 		$location.path("perform-action");

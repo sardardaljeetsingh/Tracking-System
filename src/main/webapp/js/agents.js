@@ -145,6 +145,39 @@ app.controller('AgentsController', function($scope,$rootScope,$location,$http) {
 				//$rootScope.curTab = 'userTab';
 	});	
 	
+	
+	$scope.searchAgentName = function(){
+		if(document.agentForm.agentName.value == ''){
+			alert("Please enter Agent name to search");
+			return;
+		}
+		var urlForm = hostname + '/agent/find-by-name-search/' + $scope.company.id + '/' + document.agentForm.agentName.value;
+		console.log("Agent URL ---> " + urlForm);
+		$scope.agents = null; 
+		$scope.searchMessage = '';
+		//alert("Item selected ---> " + urlForm);
+		
+		
+		$http.get(urlForm).
+		then(function(response) 
+		{
+			$scope.agents = response.data;
+			console.log(" Agent search result --> " + JSON.stringify($scope.agents));
+            
+			if($scope.agents.length == 0){
+				$scope.searchMessage = "No Agent found";
+			}
+			//console.log(" items Length : " + $scope.items.length);
+        	//console.log(" items : " + JSON.stringify($scope.items));
+            
+			//$rootScope.currentPage = 'showStockItems';			
+		});			
+		
+	}
+	
+	
+	
+	
 	$scope.agent ={}; 
 	$scope.message ='';
 	$scope.optStatus = null;
