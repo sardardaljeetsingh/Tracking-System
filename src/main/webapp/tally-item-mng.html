@@ -767,9 +767,9 @@
 										
 										<select style="width: 100%;" class="form-control input-sm" id="sel1" ng-model="stockgroup.selGroup" 
 												ng-change="setChildrenData(stockgroup.selGroup,$index)" 
-												ng-init="stockgroup.selGroup.id = itemSel.stockGroup"
+												ng-init="stockgroup.selGroup.id = item.stockGroup"
 												ng-options="group.name for group in stockgroup.children track by group.id" ng-if="showPage == 'edit'">
-													<option value="">-- choose group if required --</option>
+													<option value="">-- Please select group --</option>
 											</select>	
 										
 										<!--
@@ -878,8 +878,8 @@
 					<table class="table table-condensed table-bordered" ng-if="itemform['item.name'].$invalid == false" >
 					<thead>
 					<tr>
-					  <th class="col-sm-1 ">Packets</th>
-					  <th class="col-sm-1 ">Quantity</th>
+					  <th class="col-sm-1 ">No.of Pieces</th>
+					  <th class="col-sm-1 ">Each Piece Quantity</th>
 					  <th class="col-sm-2 ">Total</th>
 					</tr>
 					</thead>
@@ -971,11 +971,11 @@
 		  
 		  <div class="panel-body">
 		  <div class="row" style="padding:1px;margin:10px" >
-					<form class="form-inline">
+					<form class="form-inline" name="itemForm">
 					 
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Item Name">
-							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<input type="text" class="form-control input-sm" id="itemName" name="itemName" placeholder="Search Item Name">
+							<button type="button" class="btn btn-success btn-sm" ng-click="searchItem()">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelItem()">Cancel</button>
 						</div>
 
@@ -999,7 +999,7 @@
 		  </thead> 
 		  <tbody> 
 			  <tr ng-repeat="item in items" > 
-				<td>{{item.id}}</td> 
+				<td>{{$index+1}}</td> 
 				<td>{{item.name}} </td> 
 				<td>{{item.itemHSN}} </td>
 				<td>{{item.shade}} </td> 
@@ -1014,8 +1014,13 @@
 					</form>				
 				</td>
 			 </tr>  
+			 <tr ng-if="searchMessage.length > 0" >
+				<td colspan="8" align="center">{{searchMessage}} </td>
+			 </tr>	
 		  </tbody> 
 		  </table>
+		 
+		
 		 </div> 
 		  </div>
 		  
@@ -1033,11 +1038,11 @@
 		  
 		  <div class="panel-body">
 		  <div class="row" style="padding:1px;margin:10px" >
-					<form class="form-inline">
+					<form class="form-inline" name="stockGroupForm">
 					
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Stock Group Name">
-							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<input type="text" class="form-control input-sm" id="stockGroupName" name="stockGroupName" placeholder="Search Stock Group Name">
+							<button type="button" class="btn btn-success btn-sm" ng-click="searchStockGroup()">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelStockGroup()">Cancel</button>
 						</div>
 
@@ -1060,7 +1065,7 @@
 		  <thead> <tr> <th>#</th> <th>Stock Group Name</th> <th>Parent Group Name</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th></tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="group in groups" ng-if="group.name != 'DUMMY'" > 
-				<td>{{$index}}</td> 
+				<td>{{$index+1}}</td> 
 				<td>{{group.name}} </td> 
 				<td> {{   group.parent > 1 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
@@ -1070,6 +1075,10 @@
 				</form>				
 				</td> 				
 			 </tr>  
+			 	 <tr ng-if="searchMessage.length > 0" >
+				<td colspan="4" align="center">{{searchMessage}} </td>
+			 </tr>	
+		
 		  </tbody> 
 		  </table>
 		 </div> 
@@ -1542,11 +1551,11 @@
 		  <!-- Default panel contents -->
 		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Ledgers --> List</strong></div>
 		  <div class="panel-body">
-					<form class="form-inline">
+					<form class="form-inline" name="ledgerForm">
 					  
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Ledger Name">
-							<button type="button" class="btn btn-success btn-sm">Search</button>
+							<input type="text" class="form-control input-sm" id="ledgerName" name="ledgerName" placeholder="Search Ledger Name">
+							<button type="button" class="btn btn-success btn-sm" ng-click="searchLedger()">Search</button>
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelLedger()">Cancel</button>
 						</div>
 					
@@ -1577,6 +1586,13 @@
 				</form>				
 				</td> 
 			 </tr>  
+	
+			<tr ng-if="searchMessage.length > 0" >
+				<td colspan="5" align="center">{{searchMessage}} </td>
+			 </tr>	
+	
+			 
+			 
 		  </tbody> 
 		  </table>
 		</div>
