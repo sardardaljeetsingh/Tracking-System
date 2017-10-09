@@ -37,7 +37,7 @@ public class Agent {
 	
 	@NotNull
 	@Column(name = "commission", nullable = false)	
-	private int commission;
+	private float commission;
 	
 	@NotNull
 	@Column(name = "createduser", nullable = false)	
@@ -100,11 +100,11 @@ public class Agent {
 		this.email = email;
 	}
 
-	public int getCommission() {
+	public float getCommission() {
 		return commission;
 	}
 
-	public void setCommission(int commission) {
+	public void setCommission(float commission) {
 		this.commission = commission;
 	}
 

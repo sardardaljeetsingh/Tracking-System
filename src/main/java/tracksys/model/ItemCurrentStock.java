@@ -29,7 +29,7 @@ public class ItemCurrentStock {
 	
 	@NotNull
 	@Column(name = "quandity", nullable = false)
-	private int quandity;
+	private float quandity;
 
 	public int getId() {
 		return id;
@@ -47,11 +47,11 @@ public class ItemCurrentStock {
 		this.item = item;
 	}
 
-	public int getQuandity() {
+	public float getQuandity() {
 		return quandity;
 	}
 
-	public void setQuandity(int quandity) {
+	public void setQuandity(float quandity) {
 		this.quandity = quandity;
 	}
 	
