@@ -167,7 +167,7 @@
 							<tr class="warning" ng-repeat="curTrasItem in purchage.trasactionItems" > 
 								  <td ng-class="{'has-error' : ( submitclick && !(curTrasItem.item.id >0) ) }" >
 										
-										
+										<!--
 										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item" style="width:150px" 
 												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
 												ng-options="option as option.name + ' : Shade -> ' + option.shade for option in items"
@@ -179,26 +179,61 @@
 												curTrasItem.showSplit=false;"
 												required>
 												<option value="">-- Choose Item Name --</option>
-										</select>								  
+										</select>
+										-->
+										
+										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name for option in items | filter:$viewValue | limitTo:8"  
+										ng-blur="curTrasItem.itemHSN = curTrasItem.item.itemHSN;
+												curTrasItem.shade = curTrasItem.item.shade;
+												curTrasItem.curqundty = curTrasItem.item.curqundty;
+												curTrasItem.rate = curTrasItem.item.rate;
+												curTrasItem.purcrate = curTrasItem.item.purcrate;
+												curTrasItem.stockGroup = showGrp(stockGroups[curTrasItem.item.stockGroup],'');
+												curTrasItem.curItems = [];
+												curTrasItem.curItems.push({ 'quandity': 0, 'pices':0});
+												curTrasItem.quandity = 0;
+												curTrasItem.showSplit=false;" 
+												class="form-control input-sm" style="width:150px" required>
+										
+									
 								  </td>
 						          
 								  <td>  
+								  <!--
 								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
 								  {{curTrasItem.item.itemHSN}} 
 								  </label>
+								  -->
+								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								  {{ curTrasItem.itemHSN }}
+								  </label>
+								  
+								  
 								  </td>
 								  
 								   <td> 
+										
+										<!--
 								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
 								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}}
 									  </label>
+										-->
+									<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								      {{curTrasItem.stockGroup}}
+									  </label>
+										
+								  
 								  </td>
-								  <td>  {{curTrasItem.item.shade}} </td>
-								  <td>  {{curTrasItem.item.curqundty}} </td>
+								  
+								  <td>  {{curTrasItem.shade}} </td>
+								  
+								  <td>  {{curTrasItem.curqundty}} </td>
 								  
 								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" >  
-								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
+								      
+									  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required>
+								  
 								  </td>								  
 								  
 								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" ng-show="false">  
