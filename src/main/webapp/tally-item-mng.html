@@ -262,9 +262,9 @@
 		  <div class="panel-body">
 					<form class="form-inline">
 					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search Company">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" ng-model="query" placeholder="Type Company Name">
 					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Search</button>
+					  <!--<button type="button" class="btn btn-default btn-sm">Search</button>-->
 					  <button type="button" class="btn btn-success btn-sm" ng-click="createCompany()" ng-if="loggedUser.type =='Admin'" >
 						Create Company
 					  </button>
@@ -275,7 +275,7 @@
           <table class="table table-hover input-sm">
 		  <thead> <tr> <th>#</th> <th>Company Name</th> <th>Creation Date</th> <th>Last Entry Date</th> <th></th> </tr> </thead> 
 		  <tbody> 
-			  <tr ng-repeat="company in companies"> 
+			  <tr ng-repeat="company in companies | filter : {name : query}"> 
 				<th scope="row">{{$index+1}}</th> 
 				<td>{{company.name}}</td> 
 				<td>{{company.creationdate | date:'dd/MM/yyyy'}}</td> 
@@ -974,8 +974,8 @@
 					<form class="form-inline" name="itemForm">
 					 
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="itemName" name="itemName" placeholder="Search Item Name">
-							<button type="button" class="btn btn-success btn-sm" ng-click="searchItem()">Search</button>
+							<input type="text" class="form-control input-sm" id="itemName" name="itemName" ng-model="query" placeholder="Type Item Name">
+							<!--<button type="button" class="btn btn-success btn-sm" ng-click="searchItem()">Search</button>-->
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelItem()">Cancel</button>
 						</div>
 
@@ -998,7 +998,7 @@
 				</tr> 
 		  </thead> 
 		  <tbody> 
-			  <tr ng-repeat="item in items" > 
+			  <tr ng-repeat="item in items | filter :{name:query}" > 
 				<td>{{$index+1}}</td> 
 				<td>{{item.name}} </td> 
 				<td>{{item.itemHSN}} </td>
@@ -1041,8 +1041,8 @@
 					<form class="form-inline" name="stockGroupForm">
 					
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="stockGroupName" name="stockGroupName" placeholder="Search Stock Group Name">
-							<button type="button" class="btn btn-success btn-sm" ng-click="searchStockGroup()">Search</button>
+							<input type="text" class="form-control input-sm" id="stockGroupName" name="stockGroupName" ng-model = "query" placeholder="Type Stock Group Name">
+							<!--<button type="button" class="btn btn-success btn-sm" ng-click="searchStockGroup()">Search</button>-->
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelStockGroup()">Cancel</button>
 						</div>
 
@@ -1064,7 +1064,7 @@
 
 		  <thead> <tr> <th>#</th> <th>Stock Group Name</th> <th>Parent Group Name</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th></tr> </thead> 
 		  <tbody> 
-			  <tr ng-repeat="group in groups" ng-if="group.name != 'DUMMY'" > 
+			  <tr ng-repeat="group in groups | filter:{name : query}" ng-if="group.name != 'DUMMY'" > 
 				<td>{{$index+1}}</td> 
 				<td>{{group.name}} </td> 
 				<td> {{   group.parent > 1 ? ((groupResult | filter : {id: group.parent})[0].name) : ''    }} </td> 
@@ -1096,9 +1096,9 @@
 		  <div class="panel-body">
 					<form class="form-inline">
 					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="exampleInputName2" placeholder="Search User">
+						<input type="text" class="form-control input-sm" id="exampleInputName2" ng-model="query" placeholder="Type User Name">
 					  </div>
-					  <button type="button" class="btn btn-default btn-sm">Search</button>
+					  <button type="button" class="btn btn-warning btn-sm" ng-click="cancelUser();">Cancel</button>
 					  <button type="button" class="btn btn-success btn-sm" ng-click="createUser();currentPage = 'createUser'" >
 						Create User
 					  </button>
@@ -1109,7 +1109,7 @@
           <table class="table table-hover input-sm">
 		  <thead> <tr> <th>#</th> <th>User Name</th> <th>User Type</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th> </tr> </thead> 
 		  <tbody> 
-			  <tr ng-repeat="user in users"> 
+			  <tr ng-repeat="user in users | filter : {username : query}"> 
 				<th scope="row">{{$index+1}}</th> 
 				<td>{{user.username}}</td> 
 				<td>{{user.type}}</td> 
@@ -1357,8 +1357,8 @@
 					
 					<form class="form-inline" name="accountGroupForm">
 					 	<div class="form-group col-sm-5"  >
-							<input type="text" class="form-control input-sm" id="accountGroupName" name="accountGroupName" placeholder="Search Account Group Name">
-							<button type="button" class="btn btn-success btn-sm" ng-click="searchAccountGroup()">Search</button>
+							<input type="text" class="form-control input-sm" id="accountGroupName" name="accountGroupName" placeholder="Type Account Group Name" ng-model="query" >
+							<!--<button type="button" class="btn btn-success btn-sm" ng-click="searchAccountGroup()">Search</button>-->
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelAccountGroup()">Cancel</button>
 						</div>
 
@@ -1379,7 +1379,7 @@
 		  <thead> <tr> <th>#</th> <th>Account Group Name</th> <th>Parent Group Name</th> <th>Action</th> </tr> </thead> 
 		  <tbody> 
 		  <!--Changed on 9/28 -->
-			  <tr ng-repeat="group in groups" > 
+			  <tr ng-repeat="group in groups | filter:{name : query}" > 
 				<td>{{$index+1}}</td> 
 				<td>{{group.name}} </td> 
 				<td> {{   $index+1 > 6 ? ((groups | filter : {id: group.parent})[0].name) : ''    }} </td> 
@@ -1558,8 +1558,8 @@
 					<form class="form-inline" name="ledgerForm">
 					  
 						<div class="form-group col-sm-5" >
-							<input type="text" class="form-control input-sm" id="ledgerName" name="ledgerName" placeholder="Search Ledger Name">
-							<button type="button" class="btn btn-success btn-sm" ng-click="searchLedger()">Search</button>
+							<input type="text" class="form-control input-sm" id="ledgerName" name="ledgerName" placeholder="Type Ledger Name" ng-model="query">
+							<!--<button type="button" class="btn btn-success btn-sm" ng-click="searchLedger()">Search</button>-->
 							<button type="button" class="btn btn-warning btn-sm" ng-click="cancelLedger()">Cancel</button>
 						</div>
 					
@@ -1578,7 +1578,7 @@
           <table class="table table-hover input-sm">
 		  <thead> <tr> <th>#</th> <th>Ledger Name</th> <th>Group</th> <th>Current Balance</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th></tr> </thead> 
 		  <tbody> 
-			  <tr ng-repeat="ledger in ledgers"> 
+			  <tr ng-repeat="ledger in ledgers | filter:{name : query}"> 
 				<th scope="row">{{$index+1}}</th> 
 				<td>{{ledger.name}}</td> 
 				<td>{{ledger.accGroup.name}}</td> 	
@@ -2518,7 +2518,7 @@
 	<script src="js/angular-messages.min.js"></script> 
 	<script src="js/angular-material.min.js"></script> 
 	
-	
+		
 		<script src="js/item-app.js"></script> 
 		<script src="js/services.js"></script> 
         <script src="js/user-mng.js"></script> 
