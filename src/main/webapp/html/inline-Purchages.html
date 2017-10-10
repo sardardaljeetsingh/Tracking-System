@@ -170,7 +170,7 @@
 										
 										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item" style="width:150px" 
 												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
-												ng-options="option as option.name for option in items"
+												ng-options="option as option.name + ' : Shade -> ' + option.shade for option in items"
 												ng-change="curTrasItem.rate = curTrasItem.item.rate;
 												curTrasItem.purcrate = curTrasItem.item.purcrate;
 												curTrasItem.curItems = [];
