@@ -55,10 +55,21 @@ app.controller('usersController', function($scope,$rootScope,$location,$http) {
 		$rootScope.user = user;
 		$location.path("perform-action");
 	}
+	//code added on 10/10
+	$scope.cancelUser = function(){
+		$rootScope.currentPage = 'companyList';
+		$location.path("show-company");
+	}
+	
 	$rootScope.curTab = 'userTab';
 	console.log("   User Tab ");
 	$rootScope.currentPage = "userList";
 	console.log("   currentPage :  " + $rootScope.currentPage);
+
+		
+	
+	
+	
 });
 
 app.controller('createUserController', function($scope,$rootScope,$location,$http,UserPrevService) {
