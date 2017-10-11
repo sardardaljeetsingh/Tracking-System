@@ -50,7 +50,7 @@
 							<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.agent'].$invalid  }" ng-if="returnType == 'TR_SR'">
 							
 								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
-								<div class="col-sm-6">
+								<div class="col-sm-5">
 									<select class="form-control input-sm" ng-model="purchage.agent" name="purchage.agent" 
 											ng-init="purchage.agent = purchage.agent || options[0].value"
 											ng-options="option as option.name for option in agents "
@@ -58,14 +58,14 @@
 											<option value="">-- Choose Agent --</option>
 									</select>	
 								</div>
-									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="purchage.agent != null"
-											style="text-align : left" >{{purchage.agent.commission}} %</label>
+									<label for="inputPassword3" class="col-sm-3 control-label" ng-if="purchage.agent != null"
+											style="text-align : left;padding-top: 4px;" >{{purchage.agent.commission}} %</label>
 							  </div>								  
 							
 							
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-4 control-label">Party Account Name</label>
-								<div class="col-sm-6">
+								<label for="inputPassword3" class="col-sm-4 control-label">Party Account</label>
+								<div class="col-sm-5">
 								
 								
 								<!--<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
@@ -103,13 +103,13 @@
 														
 							
 							</div>
-									<label for="inputPassword3" class="col-sm-1 control-label" ng-if="purchage.fromledger != null"
-											style="text-align : left" >{{purchage.fromledger.curbal}}</label>
+									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="purchage.fromledger != null"
+											style="display: inline-block;padding-top: 4px;"  >{{currency}}{{purchage.fromledger.curbal}}</label>
 							  </div>	
 							  
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.ledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">Purchase Account</label>
-								<div class="col-sm-6">
+								<div class="col-sm-5">
 									
 									<!--
 									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
@@ -143,8 +143,8 @@
 									</select>
 									
 									</div>
-									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="purchage.ledger != null"
-								 >{{purchage.ledger.curbal}}</label>									
+									<label for="inputPassword3" class="col-sm-2 control-label" style="display: inline-block;padding-top: 4px;"  ng-if="purchage.ledger != null"
+								 >{{currency}}{{purchage.ledger.curbal}}</label>									
 								
 							  </div>	
 							  
@@ -153,13 +153,14 @@
 						<table class="table table-condensed table-bordered"  >
 							<thead>
 							<tr>
-							  <th class="col-sm-2 input-sm">Item Name</th>
-							  <th class="col-sm-1 input-sm">HSN#</th>
+							  <th class="col-sm-2 input-sm">Item Name : Shade</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">HSN#</th>
 							  <th class="col-sm-2 input-sm">Stock Group</th>
-							  <th class="col-sm-1 input-sm">Shade</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">Shade</th>
+							  <th class="col-sm-2 input-sm">Description</th> 
 							  <th class="col-sm-1 input-sm">Avaliable Quantity</th> 
 							  <th class="col-sm-1 input-sm">Purchase Rate</th>
-							  <th class="col-sm-1 input-sm" ng-show="false">Sale Rate</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">Sales Rate</th>
 							  <th class="col-sm-3 input-sm">Current Quantity</th>
 							  <th class="col-sm-1 input-sm">Action</th>
 							</tr>
@@ -182,52 +183,68 @@
 										</select>
 										-->
 										
-										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name for option in items | filter:$viewValue | limitTo:8"  
-										ng-blur="curTrasItem.itemHSN = curTrasItem.item.itemHSN;
-												curTrasItem.shade = curTrasItem.item.shade;
-												curTrasItem.curqundty = curTrasItem.item.curqundty;
-												curTrasItem.rate = curTrasItem.item.rate;
+										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name + ' : Shade -> ' + option.shade for option in items | filter:$viewValue | limitTo:8"  
+										ng-blur="curTrasItem.rate = curTrasItem.item.rate;
 												curTrasItem.purcrate = curTrasItem.item.purcrate;
-												curTrasItem.stockGroup = showGrp(stockGroups[curTrasItem.item.stockGroup],'');
 												curTrasItem.curItems = [];
 												curTrasItem.curItems.push({ 'quandity': 0, 'pices':0});
 												curTrasItem.quandity = 0;
-												curTrasItem.showSplit=false;" 
-												class="form-control input-sm" style="width:150px" required>
+												curTrasItem.showSplit=false;" class="form-control input-sm" style="width:150px" required>
 										
 									
-								  </td>
+									</td>
 						          
-								  <td>  
-								  <!--
-								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
+								  <td ng-show="false">  
+								  
+								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
 								  {{curTrasItem.item.itemHSN}} 
 								  </label>
-								  -->
-								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
-								  {{ curTrasItem.itemHSN }}
-								  </label>
 								  
+								  
+								  <!--<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								  {{ itemHSN }}
+								  </label>
+								  -->
 								  
 								  </td>
 								  
 								   <td> 
 										
-										<!--
-								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
+										
+								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
 								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}}
 									  </label>
-										-->
-									<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
-								      {{curTrasItem.stockGroup}}
-									  </label>
 										
+									<!--	
+									<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								      {{stockGroup}}
+									  </label>
+									-->	
 								  
 								  </td>
 								  
-								  <td>  {{curTrasItem.shade}} </td>
+								  <td ng-show="false">  {{curTrasItem.item.shade}} </td>
 								  
-								  <td>  {{curTrasItem.curqundty}} </td>
+								  <td > 
+									
+									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								      {{curTrasItem.item.desc}} 
+									  </label>
+								  
+								  
+								  
+								  </td>
+								  
+								  <td >  
+								  
+								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								      {{curTrasItem.item.curqundty}} 
+									  </label>
+								  
+								  
+								  
+								  
+								  </td>
 								  
 								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" >  
 								      
@@ -310,60 +327,60 @@
 								  </td>
 							</tr>
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Pieces </b> </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Pieces </b> </td>
 								<td colspan="3" style="text-align : left;" >
 								{{purchage.totalPieces}}
 								</td>
 							</tr>	
 						
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Quantity </b> </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Quantity </b> </td>
 								<td colspan="3" style="text-align : left;" >
 								{{purchage.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Taxable Amount </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Taxable Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{purchage.rate}}
 								</td>
 							</tr>	
 							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(purchage.rate * 2.5/100)}}
 								</td>
 							</tr>	
 							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(purchage.rate * 2.5/100)}}
 								</td>
 							</tr>
 							
 							<tr class="warning" ng-if="GSTapplicable == true && showIGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(purchage.rate * 5/100)}}
 								</td>
 							</tr>
 							
 							<tr class="warning" ng-if="GSTapplicable == true">
-								<td colspan="6" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(purchage.rate + (purchage.rate * 5/100) )}}
 								</td>
 							</tr>	
 							
 							<tr class="warning" ng-if="GSTapplicable == false">
-								<td colspan="6" style="text-align : right;" > <b> Total Amount </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{purchage.rate}}
 								</td>
 							</tr>	
 							
 							<tr class="warning" ng-if="returnType == 'TR_SR'">
-								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
 								<td colspan="3" style="text-align : left;" ng-if="purchage.agent.commission != null">
 								{{currency}} &nbsp; {{ (purchage.rate * purchage.agent.commission) / 100 }}
 								</td>
@@ -386,13 +403,14 @@
 							-->
 							<td colspan="1" style="text-align : right;" >
 							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }" >
+							  
 								<label for="inputPassword3" class="col-sm-5 control-label" style="padding:0px;margin-right:0px;">Narration</label>
-								</div>
+							  </div>
 							</td>	
 								<td colspan="8" style="text-align : left;" >
 								<div class="col-sm-12" style="padding:0px;">
 								  <textarea rows="2" class="form-control" style="min-width: 100%" id="inputPassword3" name="purchage.desc" ng-model="purchage.desc"
-								  placeholder="Narration" required></textarea>
+								  placeholder="Narration" required ></textarea>
 								</div>
 							  </td>
 							
