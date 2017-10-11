@@ -219,7 +219,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
    //purchage.trasactionItems.push({})
    
 	$scope.purchanges = function(purchage){
-		console.log($scope.purchagesform.$valid +"   "+ purchage.validQuandity);
+		
 		if(!($scope.purchagesform.$valid && purchage.validQuandity)){
 			$scope.submitclick = true;
 			return;
@@ -285,11 +285,14 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		purchage.modifiedUser = $rootScope.loggedUser.username;
 		purchage.modifiedDate = new Date();
 		
+		if(purchage.desc == null){
+			alert("null");
+			purchage.desc = '';
+		}
 		
-		
-		console.log(purchage.trasactionItems);
+		//console.log(purchage.trasactionItems);
 			var dataObj = JSON.stringify(purchage);
-			console.log(dataObj);
+			console.log("Purchase details tobe stored --> " + dataObj);
 			
 			//return;
 			$http.post(hostname+'/transactions/create', dataObj, {
@@ -395,6 +398,27 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		
 	}
 	
+	
+	//method added to autofill fields based on item selection
+
+	
+	$scope.fillData = function(currentItem){
+		
+	if(currentItem != null && currentItem != undefined) {
+		//$scope.itemHSN = currentItem.itemHSN;
+		//$scope.shade = currentItem.shade;
+		//$scope.description = currentItem.desc;
+		//$scope.curqundty = currentItem.curqundty;
+		//currentItem.stockGroup = $scope.showGrp($scope.stockGroups[currentItem.stockGroup],'');
+	} else {
+		//$scope.itemHSN = '';
+		//$scope.shade = '';
+		//$scope.curqundty = '';
+		//$scope.stockGroup = '';
+	
+	}
+	
+}
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.purchagesform.$dirty){
@@ -794,6 +818,24 @@ console.log("Sales data tobe stored ----> " + dataObj);
 		
 	}
 	
+	/*
+	$scope.fillData = function(currentItem){
+		
+		if(currentItem != null && currentItem != undefined) {
+			$scope.itemHSN = currentItem.itemHSN;
+			$scope.shade = currentItem.shade;
+			$scope.curqundty = currentItem.curqundty;
+			$scope.stockGroup = $scope.showGrp($scope.stockGroups[currentItem.stockGroup],'');
+		} else {
+			$scope.itemHSN = '';
+			$scope.shade = '';
+			$scope.curqundty = '';
+			$scope.stockGroup = '';
+		
+		}
+		
+	}*/
+
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.salesform.$dirty){
 			if(confirm("Please save the changes before moving to another page")){
