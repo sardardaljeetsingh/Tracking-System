@@ -25,8 +25,8 @@
 			  
 					<div class="row" >
 					  <!--<div class="col-xs-10 panel panel-info" style="margin:10px;" >	  -->
-					  <div class="col-xs-11 panel panel-info" style="margin:10px;" >	  
-					  
+					<div class="col-xs-12 panel panel-info" style="margin-left:0px;margin-right:0px;padding-top:20px;padding-left:0px;padding-right:0px;" >					 
+					 
 					  <form class="form-inline input-sm" name="salesform" novalidate >
 					  
 					  
@@ -38,9 +38,9 @@
 								</div>
 							  </div>	
 							  
-					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.agent'].$invalid  }">
+					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.agent'].$invalid  }" >
 								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
-								<div class="col-sm-6">
+								<div class="col-sm-5" >
 									<select class="form-control input-sm" ng-model="trasaction.agent" name="trasaction.agent" 
 											ng-init="trasaction.agent = trasaction.agent || options[0].value"
 											ng-options="option as option.name for option in agents "
@@ -48,14 +48,14 @@
 											<option value="">-- Choose Agent --</option>
 									</select>	
 								</div>
-									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="trasaction.agent != null"
-											style="text-align : left" >{{trasaction.agent.commission}} %</label>
+									<label for="inputPassword3" class="col-sm-3 control-label" ng-if="trasaction.agent != null"
+											style="display: inline-block;padding-top: 4px;" >{{trasaction.agent.commission}}%</label>
 							  </div>								  
 							  
-					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" 
-							ng-class="{'has-error' : submitclick && salesform['trasaction.fromledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-4 control-label">Party Account Name</label>
-								<div class="col-sm-6">
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px;;margin-right:0px;" 
+							ng-class="{'has-error' : submitclick && salesform['trasaction.fromledger'].$invalid  }" >
+								<label for="inputPassword3" class="col-sm-4 control-label">Party Account</label>
+								<div class="col-sm-5" >
 									<!--
 									<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
 											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
@@ -90,13 +90,13 @@
 
 
 								</div>
-									<label for="inputPassword3" class="col-sm-1 control-label" ng-if="trasaction.fromledger != null"
-											style="text-align : left" >{{trasaction.fromledger.curbal}}</label>
+									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="trasaction.fromledger != null"
+											style="display: inline-block;padding-top: 4px;" >{{currency}}{{trasaction.fromledger.curbal}}</label>
 							  </div>	
 							  
-					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && salesform['trasaction.ledger'].$invalid  }">
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px;margin-right:0px;" ng-class="{'has-error' : submitclick && salesform['trasaction.ledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label">Sales Account</label>
-								<div class="col-sm-6">
+								<div class="col-sm-5">
 									
 									<!--<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
 											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
@@ -128,8 +128,8 @@
 									</select>
 									
 									</div>
-									<label for="inputPassword3" class="col-sm-1 control-label" style="text-align : left" ng-if="trasaction.ledger != null"
-								 >{{trasaction.ledger.curbal}}</label>									
+									<label for="inputPassword3" class="col-sm-2 control-label" style="display: inline-block;padding-top: 4px;" ng-if="trasaction.ledger != null"
+								 >{{currency}}{{trasaction.ledger.curbal}}</label>									
 								
 							  </div>	
 					  
@@ -140,18 +140,21 @@
 							<thead>
 							<tr>
 							  <th class="col-sm-2 input-sm">Item Name</th>
-							  <th class="col-sm-2 input-sm">HSN#</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">HSN#</th>
 							  <th class="col-sm-2 input-sm">Stock Group</th>
-							  <th class="col-sm-1 input-sm">Shade</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">Shade</th>
+							  <th class="col-sm-2 input-sm">Description</th>	
 							  <th class="col-sm-1 input-sm">Avaliable Quantity</th>
 							   <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_PR'">Purchase Rate</th>
-							  <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_S'">Sale Rate</th>
+							  <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_S'">Sales Rate</th>
 							  <th class="col-sm-3 input-sm">Current Quantity</th>
-							  <th class="col-sm-1 input-sm"></th>
+							  <th class="col-sm-2 input-sm">Action</th>
 							</tr>
 							</thead>
 							<tr class="warning" ng-repeat="curTrasItem in trasaction.trasactionItems" > 
 								  <td ng-class="{'has-error' : ( submitclick && !(curTrasItem.item.id >0) ) }" >
+										
+										<!--
 										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item"  style="width:150px" 
 												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
 												ng-options="option as option.name for option in items"
@@ -163,22 +166,65 @@
 												curTrasItem.curItems.push({ 'quandity': 1, 'pices':1})"
 												required>
 												<option value="">-- Choose Item Name --</option>
-										</select>								  
+										</select>		
+										-->
+
+										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name + ' : Shade -> ' + option.shade for option in items | filter:$viewValue | limitTo:8"  
+										ng-blur="curTrasItem.rate = curTrasItem.item.rate;
+												curTrasItem.purcrate = curTrasItem.item.purcrate;
+												curTrasItem.curItems = [];
+												curTrasItem.curItems.push({ 'quandity': 0, 'pices':0});
+												curTrasItem.quandity = 0;
+												curTrasItem.showSplit=false;" class="form-control input-sm" style="width:150px" required>
+										
 								  </td>
 								 
-								 <td>  
-								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
+								 <td ng-show="false">  
+								  
+								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
 								  {{curTrasItem.item.itemHSN}} 
 								  </label>
+								 
+								  
 								  </td>
 								 
 						          <td> 
-								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
+										
+										
+								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
 								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}}
 									  </label>
+										
+									<!--	
+									<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								      {{stockGroup}}
+									  </label>
+									-->	
+								  
 								  </td>
-								  <td>  {{curTrasItem.item.shade}} </td>
-								  <td>  {{curTrasItem.item.curqundty}} </td>
+								 
+
+								  <td ng-show="false">  {{curTrasItem.item.shade}} </td>
+								
+								<td > 
+									
+									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								      {{curTrasItem.item.desc}} 
+									  </label>
+								  
+								  
+								  
+								  </td>
+
+								 <td >  
+								  
+								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								      {{curTrasItem.item.curqundty}} 
+									  </label>
+								  
+								  
+								  </td>
+								  
 								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" ng-if="false" >  
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required readonly>
@@ -271,45 +317,45 @@
 							</tr>	
 							-->
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Total Quantity </b> </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Quantity </b> </td>
 								<td colspan="3" style="text-align : left;" >
 								{{trasaction.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Taxable Amount </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Taxable Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{trasaction.rate}}
 								</td>
 							</tr>	
 							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(trasaction.rate * 2.5/100)}}
 								</td>
 							</tr>	
 							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(trasaction.rate * 2.5/100)}}
 								</td>
 							</tr>
 							
 							<tr class="warning" ng-if="GSTapplicable == true && showIGST == true">
-								<td colspan="6" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(trasaction.rate * 5/100)}}
 								</td>
 							</tr>
 							<tr class="warning" ng-if="GSTapplicable == true">
-								<td colspan="6" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{(trasaction.rate + (trasaction.rate * 5/100) )}}
 								</td>
 							</tr>	
 							
 							<tr class="warning" ng-if="GSTapplicable == false">
-								<td colspan="6" style="text-align : right;" > <b> Total Amount </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Total Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
 								{{currency}} &nbsp; {{trasaction.rate}}
 								</td>
@@ -317,7 +363,7 @@
 							
 							
 							<tr class="warning">
-								<td colspan="6" style="text-align : right;" > <b> Agent Commission </b>  </td>
+								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
 								<td colspan="3" style="text-align : left;" ng-if="trasaction.agent.commission != null">
 								{{currency}} &nbsp; {{ (trasaction.rate * trasaction.agent.commission) / 100 }}
 								</td>
