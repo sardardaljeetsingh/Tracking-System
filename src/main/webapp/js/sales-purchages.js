@@ -177,6 +177,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		return total;
 	}
 	
+		
 	$scope.purchaseTotal = function(purchage){
 		var totalTransQuandity = 0;
 		var totalTransPieces = 0;
@@ -193,7 +194,13 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 			 	validQuandity = false;
 			}
 			totalTransQuandity += (+curTrasItem.quandity);
-			totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.purcrate);
+			
+			if($rootScope.returnType == 'TR_P'){
+				totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.purcrate);
+			} else {
+				totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.rate);
+			}
+		
 		});
 	
 	  purchage.totalPieces = isNaN(totalTransPieces)? 0: totalTransPieces;	
@@ -353,7 +360,11 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 						$scope.purchagesform.$setPristine();
 					
 						
-					alert("Purchase order created successfully.");
+					if($scope.returnType == 'TR_P') {
+						alert("Purchase order created successfully.");
+					} else {
+						alert("Sales return order created successfully.");
+					}
 					//$scope.agentform.$setPristine();
 					$location.path("/perform-action");
 				
@@ -401,10 +412,10 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	
 	//method added to autofill fields based on item selection
 
-	
-	$scope.fillData = function(currentItem){
-		
-	if(currentItem != null && currentItem != undefined) {
+	//$scope.setGroup = false;
+	//$scope.fillData = function(value){
+	//	$scope.setGroup = value;
+	/*if(currentItem != null && currentItem != undefined) {
 		//$scope.itemHSN = currentItem.itemHSN;
 		//$scope.shade = currentItem.shade;
 		//$scope.description = currentItem.desc;
@@ -416,9 +427,9 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		//$scope.curqundty = '';
 		//$scope.stockGroup = '';
 	
-	}
+	}*/
 	
-}
+//}
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.purchagesform.$dirty){
@@ -583,7 +594,11 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 					validQuandity = false;
 				}
 				totalTransQuandity += (+total);
-				totalTransPrice += (+total) * (+curTrasItem.rate);
+				if($rootScope.returnType == 'TR_S'){
+					totalTransPrice += (+total) * (+curTrasItem.rate);
+				} else {
+					totalTransPrice += (+total) * (+curTrasItem.purcrate);
+				}
 			}
 		});
 	  trasaction.totalPieces = isNaN(totalTransPieces)? 0: totalTransPieces;		
@@ -762,7 +777,14 @@ console.log("Sales data tobe stored ----> " + dataObj);
 					//$scope.showIGST = false;
 					$scope.salesform.$setPristine();
 
-					alert("Sales order created successfully.");
+					
+					
+					if($scope.returnType == 'TR_S') {
+						alert("Sales order created successfully.");
+					} else {
+						alert("Purchase return order created successfully.");
+					}
+					
 					//$scope.agentform.$setPristine();
 					$location.path("/perform-action");
 				

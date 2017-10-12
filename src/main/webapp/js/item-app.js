@@ -5,7 +5,8 @@ var hostname ="http://localhost:8080";
 // var hostname = "http://service-itemmngtally.7e14.starter-us-west-2.openshiftapps.com"
 
 
-var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
+//var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages']);
+var app = angular.module("invenApp", ["ngRoute","LocalStorageModule",'ngMaterial', 'ngMessages', 'ngAnimate', 'ngSanitize', 'ui.bootstrap']);
 app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider', function ($routeProvider, $locationProvider,localStorageServiceProvider) {
     $routeProvider
 	/*.when('/',
@@ -600,12 +601,27 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 		$location.path("/showReport");
 	}
 	
+	$scope.purchaseReturnReport = function(optType){
+		$rootScope.currentPage = 'PurchaseReturnReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = optType;
+		$location.path("/showReport");
+	}
+	
 	$scope.salesReport = function(optType){
 		$rootScope.currentPage = 'SalesReport';
 		//this variable will identify the type of return transaction
 		$rootScope.transType = optType;
 		$location.path("/showReport");
 	}
+	
+	$scope.salesReturnReport = function(optType){
+		$rootScope.currentPage = 'SalesReturnReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = optType;
+		$location.path("/showReport");
+	}
+	
 	
 });
 
@@ -1083,11 +1099,17 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		selItem.itemDtls = $scope.items;
 		//selItem.curqundty = selItem.quandity;
 		
-		selItem.curqundty = $scope.grandTotal;
+		//selItem.curqundty = $scope.grandTotal;
 		
+		selItem.quandity = $scope.grandTotal;
+		selItem.curqundty = $scope.grandTotal;
+			
 		if ($scope.showPage == 'create')
 		{
-			selItem.quandity = $scope.grandTotal;		
+			//selItem.quandity = $scope.grandTotal;
+			
+			//selItem.curqundty = $scope.grandTotal;			
+			
 			selItem.createdUser = $rootScope.loggedUser.username;
 			selItem.createdDate = new Date();
 		} 			
