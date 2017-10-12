@@ -31,13 +31,15 @@ public class TransactionController {
 	private void updateLedgers(Transaction transaction){
 		Ledger fromLedger = ledgerRepository.findOne(transaction.getFromledger().getId());
 		Ledger toLedger = ledgerRepository.findOne(transaction.getLedger().getId());
-		if(transaction.getType() == 1 || transaction.getType() == 2){
-			fromLedger.setCurbal(fromLedger.getCurbal() - (transaction.getRate()));
-			toLedger.setCurbal(toLedger.getCurbal() + (transaction.getRate()));				
-		}else{
+		
+		//changed to add the amounts on 10/12 and applied to all transactions. Earlier it was subtract and applicable for only sales and purchases.
+		//if(transaction.getType() == 1 || transaction.getType() == 2){
 			fromLedger.setCurbal(fromLedger.getCurbal() + (transaction.getRate()));
-			toLedger.setCurbal(toLedger.getCurbal() - (transaction.getRate()));			
-		}
+			toLedger.setCurbal(toLedger.getCurbal() + (transaction.getRate()));				
+		//}else{
+		//	fromLedger.setCurbal(fromLedger.getCurbal() + (transaction.getRate()));
+		//	toLedger.setCurbal(toLedger.getCurbal() + (transaction.getRate()));			
+		//}
 		transaction.setLedger(toLedger);
 		transaction.setFromledger(fromLedger);
 	}
