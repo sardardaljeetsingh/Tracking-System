@@ -30,7 +30,7 @@
 					  <form class="form-inline input-sm" name="salesform" novalidate >
 					  
 					  
-							  <div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.voucher'].$invalid  }" >
+							  <div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.voucher'].$invalid  }" ng-if="returnType == 'TR_S'" >
 								<label for="inputPassword3" class="col-sm-4 control-label">Voucher</label>
 								<div class="col-sm-5">
 								  <input type="text" class="form-control input-sm" id="trasaction.voucher" name="trasaction.voucher" ng-model="trasaction.voucher"
@@ -38,7 +38,15 @@
 								</div>
 							  </div>	
 							  
-					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.agent'].$invalid  }" >
+							  <div class="form-group col-xs-12" ng-class="{'has-error' : submitclick && salesform['trasaction.voucher'].$invalid  }" ng-if="returnType == 'TR_PR'" >
+								<label for="inputPassword3" class="col-sm-2 control-label">Voucher</label>
+								<div class="col-sm-10" style="padding-left:8px;">
+								  <input type="text" class="form-control input-sm" id="trasaction.voucher" name="trasaction.voucher" ng-model="trasaction.voucher"
+								  required  >	
+								</div>
+							  </div>	
+							  
+					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['trasaction.agent'].$invalid  }" ng-if="returnType == 'TR_S'">
 								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
 								<div class="col-sm-5" >
 									<select class="form-control input-sm" ng-model="trasaction.agent" name="trasaction.agent" 
@@ -95,7 +103,8 @@
 							  </div>	
 							  
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px;margin-right:0px;" ng-class="{'has-error' : submitclick && salesform['trasaction.ledger'].$invalid  }">
-								<label for="inputPassword3" class="col-sm-4 control-label">Sales Account</label>
+								<label for="inputPassword3" class="col-sm-4 control-label" ng-if="returnType == 'TR_S'">Sales Account</label>
+								<label for="inputPassword3" class="col-sm-4 control-label" ng-if="returnType == 'TR_PR'">Purchase Account</label>
 								<div class="col-sm-5">
 									
 									<!--<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
@@ -169,7 +178,7 @@
 										</select>		
 										-->
 
-										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name + ' : Shade -> ' + option.shade for option in items | filter:$viewValue | limitTo:8"  
+										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name + ' : ' + option.shade for option in items | filter:$viewValue | limitTo:8"  
 										ng-blur="curTrasItem.rate = curTrasItem.item.rate;
 												curTrasItem.purcrate = curTrasItem.item.purcrate;
 												curTrasItem.curItems = [];
@@ -181,7 +190,7 @@
 								 
 								 <td ng-show="false">  
 								  
-								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
 								  {{curTrasItem.item.itemHSN}} 
 								  </label>
 								 
@@ -191,7 +200,7 @@
 						          <td> 
 										
 										
-								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
 								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}}
 									  </label>
 										
@@ -208,7 +217,7 @@
 								
 								<td > 
 									
-									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
 								      {{curTrasItem.item.desc}} 
 									  </label>
 								  
@@ -218,21 +227,22 @@
 
 								 <td >  
 								  
-								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null && curTrasItem.item != undefined" >
+								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
 								      {{curTrasItem.item.curqundty}} 
 									  </label>
 								  
 								  
 								  </td>
 								  
-								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" ng-if="false" >  
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" ng-if="returnType == 'TR_PR'" >  
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
-									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required readonly>
+									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required >
 								  </td>								  
-								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" >  
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" ng-if="returnType == 'TR_S'">  
 								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
 									  name="curTrasItem.rate" ng-model="curTrasItem.rate" required>
 								  </td>
+								  
 								  <td ng-class="{'has-error' : ( curTrasItem.quandity > curTrasItem.item.curqundty || curTrasItem.grandTotal != curTrasItem.quandity ) }" > 
 								  
                                   <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;width: 70px;" id="inputPassword3" 
@@ -282,7 +292,8 @@
 										</tr>
 										<tr class="warning">
 											<td colspan="3" style="text-align : right" ><b>Total Price</b></td>
-											<td style="text-align : left" ><b>{{curTrasItem.grandTotal*curTrasItem.rate}}</b></td>
+											<td style="text-align : left" ng-if="returnType == 'TR_S'"><b>{{curTrasItem.grandTotal*curTrasItem.rate}}</b></td>
+											<td style="text-align : left" ng-if="returnType == 'TR_PR'"><b>{{curTrasItem.grandTotal*curTrasItem.purcrate}}</b></td>
 										</tr>						
 										<tr class="warning">
 										<td colspan="3" style="text-align : center" >
@@ -362,7 +373,7 @@
 							</tr>	
 							
 							
-							<tr class="warning">
+							<tr class="warning" ng-if="returnType == 'TR_S'" >
 								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
 								<td colspan="3" style="text-align : left;" ng-if="trasaction.agent.commission != null">
 								{{currency}} &nbsp; {{ (trasaction.rate * trasaction.agent.commission) / 100 }}
@@ -371,6 +382,7 @@
 								{{currency}} &nbsp; 0
 								</td>
 							</tr>
+							
 							<tr class="">
 							
 							<!--
