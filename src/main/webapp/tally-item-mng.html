@@ -78,7 +78,8 @@
 							|| currentPage == 'Purchages' || currentPage == 'Sales' 
 							|| currentPage == 'createAgent' || currentPage == 'showAgents' || currentPage == 'editAgent'
 							|| currentPage == 'SaleReturn' || currentPage == 'PurchaseReturn' 
-							|| currentPage == 'PurchaseReport' || currentPage == 'SalesReport' || currentPage == 'showReport')" 
+							|| currentPage == 'PurchaseReport' || currentPage == 'SalesReport' 
+							|| currentPage == 'PurchaseReturnReport' || currentPage == 'SalesReturnReport' || currentPage == 'showReport')" 
 								ng-class="{'active': currentPage == 'performAction'}" >
 								<a style="color:#FFFFFF" href="#perform-action" ng-class="{'active': currentPage == 'performAction'}" > Company : <b>{{ company.name}} </b> </a>
 							</li>	
@@ -91,6 +92,13 @@
 							<li ng-if="(currentPage == 'SalesReport' )" ng-class="{'active': currentPage == 'SalesReport'}" style="color:#ccc" >
 								Sales Report
 							</li>
+							<li ng-if="(currentPage == 'PurchaseReturnReport' )" ng-class="{'active': currentPage == 'PurchaseReturnReport'}" style="color:#ccc" >
+								Purchase Return Report
+							</li>
+							<li ng-if="(currentPage == 'SalesReturnReport' )" ng-class="{'active': currentPage == 'SalesReturnReport'}" style="color:#ccc" >
+								Sales Return Report
+							</li>
+							
 							<li ng-if="(currentPage == 'createStockGroups' )" ng-class="{'active': currentPage == 'createStockGroups'}" style="color:#ccc" >
 								Create Stock Groups
 							</li>
@@ -337,6 +345,8 @@
 							  </div>							  
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label">Country</label>
+								
+								
 								<div class="col-sm-5">
 									<select class="form-control input-sm" ng-model="company.country" 
 											ng-init="company.country = company.country || options[0].value"
@@ -344,6 +354,7 @@
 									</select>								
 								</div>
 							  </div>
+							  
 							  <div class="form-group">
 								<label for="inputPassword3" class="col-sm-5 control-label">State</label>
 								<div class="col-sm-5">
@@ -623,10 +634,11 @@
 						<button type="button" class="btn btn-success" ng-click="salesReport(2)" >Sales Report</button> 
 					  </div>
 					  <div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" ng-click="PurchaseReturn()" >Purchase Return</button>
+						<button type="button" class="btn btn-success" ng-click="purchaseReturnReport(3)" >Purchase Return</button>
 					  </div>
 					  <div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" ng-click="SaleReturn()" >Sales Return</button>
+						<!--<button type="button" class="btn btn-success" ng-click="SaleReturn()" >Sales Return</button>-->
+						<button type="button" class="btn btn-success" ng-click="salesReturnReport(4)" >Sales Return</button>
 					  </div>					  
 					</div>			  
 
@@ -2526,5 +2538,18 @@
 		<script src="js/acc-ledgers.js"></script> 
 		<script src="js/sales-purchages.js"></script> 
 		<script src="js/agents.js"></script> 
+		
+		
+		<!-- testing --->
+		
+		 <script src="js/angular.js"></script>
+   
+    <script src="js/angular-sanitize.js"></script>
+    <script src="js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="js/example.js"></script>
+  
+
+		
+		
 </body>
 </html>
