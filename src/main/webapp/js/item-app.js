@@ -225,6 +225,7 @@ app.run(function($rootScope,$location,$http,localStorageService) {
 
 app.controller('loginController', function($scope,$rootScope,$location,$http,localStorageService,$window) {
 		console.log("localStorageService : " + localStorageService.isSupported);
+		 
 		
 		//code added to clear the authentication fields
 			
@@ -241,8 +242,32 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 	$scope.login = function(user){
 		
 		$rootScope.transDate = $scope.transDate ;
-		$rootScope.transDay =  $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) 
+		
+		try {
+			
+			var date = $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) +"/"+ $scope.transDate.getFullYear();
+			var pattern = /[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}/i;
+		
+			if(!pattern.test(date)) {
+				$scope.invalidDate = true;
+			} else {
+				$scope.invalidDate = false;
+			}
+		} catch (err) {
+		
+			console.log("Date parse error --> " + JSON.stringify(err));
+			$scope.invalidDate = true;
+			return;
+		  }	
+		  
+		  $rootScope.loginDate = $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) 
+				+"/"+ $scope.transDate.getFullYear();
+		  
+		 		  
+		  $rootScope.transDay =  $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) 
 				+"/"+ $scope.transDate.getFullYear() +"("+ $rootScope.days[$scope.transDate.getDay()] +")";
+	
+		
 			var dataObj = JSON.stringify(user);
 			//$scope.invalidUser = true;
 			$http.post(hostname + '/user/login', dataObj, {
@@ -274,6 +299,42 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 		//window.location.href = "#/show-company";
 		//$window.location.hash = '#/' + "show-company";
 	}
+	
+	//added below methods for datepicker
+	
+	 // Disable weekend selection
+	  function disabled(data) {
+			var date = data.date,
+			mode = data.mode;
+			return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+	  }
+		
+	 $scope.dateOptions = {
+		
+		dateDisabled: disabled,
+		formatYear: 'yy',
+		maxDate: new Date(new Date().getFullYear()+1, 2, 31),
+		minDate: new Date(new Date().getFullYear(),3,1),
+		startingDay: 1
+	};
+	
+	 $scope.format = 'dd/MM/yyyy';
+	 
+	 $scope.open1 = function() {
+		$scope.popup1.opened = true;
+	};
+
+	$scope.open2 = function() {
+		$scope.popup2.opened = true;
+	};
+	
+	$scope.popup1 = {
+		opened: false
+	};
+
+	$scope.popup2 = {
+		opened: false
+	};
 	
 	$scope.logout = function(){
 		localStorageService.remove("loginedUser");
@@ -350,6 +411,21 @@ app.controller('companiesController', function($scope,$rootScope,$location,$http
 	}	
 	
 	$scope.performAction = function(company){
+		//alert("COmpaby --> " + company + " " + company.yearstart);
+		
+		var cmpyearStart1 = new Date(company.yearstart);	
+		var cmpBookStart1 = new Date(company.booksstart);
+		var lgnDate = new Date($rootScope.transDate);		
+		
+		var cmpyearStart = cmpyearStart1.getDate() +"/"+ (cmpyearStart1.getMonth()+1) +"/"+ cmpyearStart1.getFullYear();
+		var cmpBookStart = cmpBookStart1.getDate() +"/"+ (cmpBookStart1.getMonth()+1) +"/"+ cmpBookStart1.getFullYear();
+		var lgDate = lgnDate.getDate() +"/"+ (lgnDate.getMonth()+1) +"/"+ lgnDate.getFullYear();
+		
+		if (!(cmpBookStart1 <= lgnDate)) {
+			alert("Login date of " + lgDate + " cannot be prior to Company book start date of " + cmpBookStart);
+			return;
+		}
+		
 		$rootScope.currentPage = 'performAction';
 		$rootScope.company = company;
 		$rootScope.minDate = new Date(company.creationdate);	

@@ -292,10 +292,7 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		purchage.modifiedUser = $rootScope.loggedUser.username;
 		purchage.modifiedDate = new Date();
 		
-		if(purchage.desc == null){
-			alert("null");
-			purchage.desc = '';
-		}
+		
 		
 		//console.log(purchage.trasactionItems);
 			var dataObj = JSON.stringify(purchage);
@@ -430,6 +427,82 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 	}*/
 	
 //}
+	
+	
+	
+	//added below methods for datepicker
+	
+	 // Disable weekend selection
+	  function disabled(data) {
+			var date = data.date,
+			mode = data.mode;
+			return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+	  }
+		
+	 $scope.dateOptions = {
+		dateDisabled: disabled,
+		formatYear: 'yy',
+		maxDate: new Date(new Date().getFullYear()+1, 2, 31),
+		minDate: new Date(new Date().getFullYear(),3,1),
+		startingDay: 1
+	};
+	
+	 $scope.format = 'dd/MM/yyyy';
+	 
+	 $scope.open1 = function() {
+		$scope.popup1.opened = true;
+	};
+
+	$scope.open2 = function() {
+		$scope.popup2.opened = true;
+	};
+	
+	$scope.popup1 = {
+		opened: false
+	};
+
+	$scope.popup2 = {
+		opened: false
+	};
+	
+	$scope.invalidDate = false;
+	$scope.checkDate = function(dateSel) {
+		
+		try {
+			
+			var lgnDate = new Date(dateSel);		
+		
+			var lgDate = lgnDate.getDate() +"/"+ (lgnDate.getMonth()+1) +"/"+ lgnDate.getFullYear();
+	
+			var pattern = /[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}/i;
+		
+			/*if(!pattern.test(lgDate)) {
+				alert("Invalid date format ");
+				dateSel = '';
+				return;
+			} */
+		} catch (err) {
+			alert("Error --> Invalid date format ");
+			$scope.invalidDate = true;
+			console.log("Date parse error --> " + JSON.stringify(err));
+			return;
+		  }	
+		
+		var cmpyearStart1 = new Date($scope.company.yearstart);
+		var cmpBookStart1 = new Date($scope.company.booksstart);
+			
+		var cmpyearStart = cmpyearStart1.getDate() +"/"+ (cmpyearStart1.getMonth()+1) +"/"+ cmpyearStart1.getFullYear();
+		var cmpBookStart = cmpBookStart1.getDate() +"/"+ (cmpBookStart1.getMonth()+1) +"/"+ cmpBookStart1.getFullYear();
+			
+		if (!(cmpBookStart1 <= lgnDate)) {
+			alert("Selected date of " + lgDate + " cannot be prior to Company book start date of " + cmpBookStart);
+			$scope.invalidDate = true;
+			return;
+		}
+	
+	}
+	
+	
 	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.purchagesform.$dirty){
@@ -719,7 +792,7 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 		
 		
 			var dataObj = JSON.stringify(sale);
-console.log("Sales data tobe stored ----> " + dataObj); 
+			console.log("Sales data tobe stored ----> " + dataObj); 
 				
 
 		//console.log(dataObj);
@@ -858,6 +931,80 @@ console.log("Sales data tobe stored ----> " + dataObj);
 		
 	}*/
 
+	
+	//added below methods for datepicker
+	
+	 // Disable weekend selection
+	  function disabled(data) {
+			var date = data.date,
+			mode = data.mode;
+			return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+	  }
+		
+	 $scope.dateOptions = {
+		dateDisabled: disabled,
+		formatYear: 'yy',
+		maxDate: new Date(new Date().getFullYear()+1, 2, 31),
+		minDate: new Date(new Date().getFullYear(),3,1),
+		startingDay: 1
+	};
+	
+	 $scope.format = 'dd/MM/yyyy';
+	 
+	 $scope.open1 = function() {
+		$scope.popup1.opened = true;
+	};
+
+	$scope.open2 = function() {
+		$scope.popup2.opened = true;
+	};
+	
+	$scope.popup1 = {
+		opened: false
+	};
+
+	$scope.popup2 = {
+		opened: false
+	};
+	
+	$scope.invalidDate = false;
+	$scope.checkDate = function(dateSel) {
+		
+		try {
+			
+			var lgnDate = new Date(dateSel);		
+		
+			var lgDate = lgnDate.getDate() +"/"+ (lgnDate.getMonth()+1) +"/"+ lgnDate.getFullYear();
+	
+			var pattern = /[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}/i;
+		
+			/*if(!pattern.test(lgDate)) {
+				alert("Invalid date format ");
+				dateSel = '';
+				return;
+			} */
+		} catch (err) {
+			alert("Error --> Invalid date format ");
+			$scope.invalidDate = true;
+			console.log("Date parse error --> " + JSON.stringify(err));
+			return;
+		  }	
+		
+		var cmpyearStart1 = new Date($scope.company.yearstart);
+		var cmpBookStart1 = new Date($scope.company.booksstart);
+			
+		var cmpyearStart = cmpyearStart1.getDate() +"/"+ (cmpyearStart1.getMonth()+1) +"/"+ cmpyearStart1.getFullYear();
+		var cmpBookStart = cmpBookStart1.getDate() +"/"+ (cmpBookStart1.getMonth()+1) +"/"+ cmpBookStart1.getFullYear();
+			
+		if (!(cmpBookStart1 <= lgnDate)) {
+			alert("Selected date of " + lgDate + " cannot be prior to Company book start date of " + cmpBookStart);
+			$scope.invalidDate = true;
+			return;
+		}
+	
+	}
+	
+	
 	$scope.$on('$locationChangeStart',function(event,next,current) {
 		if($scope.salesform.$dirty){
 			if(confirm("Please save the changes before moving to another page")){
