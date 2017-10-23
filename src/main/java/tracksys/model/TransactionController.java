@@ -28,6 +28,198 @@ public class TransactionController {
 		return transactionRepository.save(transaction);
 	}
 	
+	@RequestMapping(value ="/update",method = RequestMethod.POST)
+	@Transactional
+	public @ResponseBody Transaction editTransaction
+	(@RequestBody Transaction transaction) {
+		
+		Transaction extTransaction = transactionRepository.findOne(transaction.getId());
+		
+		//delete existing transaction
+		//boolean deleteTrans = transactionRepository.delete(transaction.getId());
+		
+		//boolean success = false;
+		//if(deleteTrans) {
+			editLedgers(transaction, extTransaction);
+			editTransactionItems(transaction, extTransaction);
+			return transactionRepository.save(transaction);
+		//}
+           //return success;
+	}
+	
+	private void editLedgers(Transaction transaction, Transaction extTransaction){
+		
+		//Deduct amount from existing transactions
+		//Transaction extTransaction = transactionRepository.findOne(transaction.getId());
+		
+		System.out.println("Ledger Details ----> " + extTransaction.getFromledger().getId() + " , " + extTransaction.getLedger().getId());
+		
+		Ledger extFromLedger = ledgerRepository.findOne(extTransaction.getFromledger().getId());
+		Ledger extToLedger = ledgerRepository.findOne(extTransaction.getLedger().getId());
+		
+		extFromLedger.setCurbal(extFromLedger.getCurbal() - (extTransaction.getRate()));
+		extToLedger.setCurbal(extToLedger.getCurbal() - (extTransaction.getRate()));				
+
+		Ledger fromLedger = null;
+		Ledger toLedger = null;
+		
+		if(extFromLedger.getId() != transaction.getFromledger().getId()) {
+			fromLedger = ledgerRepository.findOne(transaction.getFromledger().getId());
+		} else {
+			fromLedger = extFromLedger;
+		}
+		
+		if(extToLedger.getId() != transaction.getLedger().getId()) {
+			toLedger = ledgerRepository.findOne(transaction.getFromledger().getId());
+		} else {
+			toLedger = extToLedger;
+		}
+		
+		System.out.println("Update Ledgers ----------> " + fromLedger + " , " + toLedger);	
+		
+		fromLedger.setCurbal(fromLedger.getCurbal() + (transaction.getRate()));
+		toLedger.setCurbal(toLedger.getCurbal() + (transaction.getRate()));				
+
+		transaction.setLedger(toLedger);
+		transaction.setFromledger(fromLedger);
+		
+		System.out.println("Ledgers Done ++++++++++++++++++++++++");
+	}
+	
+	private void editTransactionItems(Transaction transaction, Transaction extTransaction){
+		
+		System.out.println("editTransactionItems start ++++++++++++++++++++++++");
+		
+		//Update the exisitng items with deducting the quantity
+		List<TrasactionItem> trasactionItemList = null;
+		Item item = null;
+		
+		trasactionItemList = extTransaction.getTrasactionItems();
+		System.out.println("Existing items to be updated ----> " + trasactionItemList.size());
+		
+		for(TrasactionItem trasactionItem : trasactionItemList){
+			item = itemRepository.findOne(trasactionItem.getItem().getId());
+			
+			System.out.println("Revert quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty() + " OldQty : " + trasactionItem.getQuandity() );
+			
+			item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
+			
+			System.out.println("Reverted quantity for Item ------> " + trasactionItem.getItem().getName() + " CQty : " + item.getCurqundty());
+			
+			item = itemRepository.save(item);
+					
+		}	
+		System.out.println("Update existing item quantity done ----------> " );
+		//Add new quantity	
+		trasactionItemList = transaction.getTrasactionItems();
+		
+		for(TrasactionItem trasactionItem : trasactionItemList){
+			item = itemRepository.findOne(trasactionItem.getItem().getId());
+			
+			System.out.println("Adding quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty() + " OldQty : " + trasactionItem.getQuandity() );
+			
+			
+				item.setCurqundty(item.getCurqundty() + trasactionItem.getQuandity());
+		
+				System.out.println("Updated quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty());
+		
+				item = itemRepository.save(item);
+				
+				updateTransactionItemDtlsForEdit(transaction.getType(), trasactionItem, item);
+				trasactionItem.setTransaction(transaction);
+		}
+		
+			System.out.println("editTransactionItems Done ++++++++++++++++++++++++");
+		
+	
+	}
+	
+	
+	private void updateTransactionItemDtlsForEdit(int transType, TrasactionItem trasactionItem,Item item){
+		
+		List<ItemDetails> itemDtls = trasactionItem.getItem().getItemDtls();
+		List<TransactionDetails> transactionDetailsLst =  trasactionItem.getTransactionDetails();
+		
+		
+		ItemDetails tempItemDtl = null;
+		
+		TransactionDetails transactionDetails = null;
+		
+		if(itemDtls != null){
+			for(ItemDetails itemDetail : itemDtls){
+				switch(transType){
+				case 1:  
+					//tempItemDtl = itemDetail;
+					System.out.println("Item detail id ----------> " + itemDetail.getId()); 
+					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
+					
+					if(tempItemDtl == null) {
+						System.out.println("Item details not found for ID : -----------> " + itemDetail.getId());
+						tempItemDtl = itemDetail;
+						tempItemDtl.setCreatedUser("admin");
+						tempItemDtl.setCreatedDate(new java.util.Date());
+						tempItemDtl.setModifiedUser("admin");
+						tempItemDtl.setModifiedDate(new java.util.Date());
+					
+					}
+					
+					tempItemDtl.setCurqundty(itemDetail.getQuandity());
+					tempItemDtl.setCurpices(itemDetail.getPices());
+					tempItemDtl.setItem(item);
+					break;
+				
+				case 2:  
+					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
+					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
+					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
+					break;
+				case 3:  
+					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
+					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
+					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
+					break;					
+				case 4:  
+					//tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
+					//tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() + itemDetail.getCurqundty());
+					//tempItemDtl.setCurpices(tempItemDtl.getCurpices() + itemDetail.getCurpices());
+					tempItemDtl = itemDetail;
+					tempItemDtl.setCurqundty(itemDetail.getQuandity());
+					tempItemDtl.setCurpices(itemDetail.getPices());
+					tempItemDtl.setItem(item);
+					
+					break;
+				}
+				
+				
+				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
+
+				
+								
+				//transactionDetails = new TransactionDetails();
+				transactionDetails = transactionDetailsLst.get(transactionDetailsLst.indexOf(tempItemDtl));
+				System.out.println("Transaction details null -------> " + (transactionDetails == null));
+				transactionDetails.setItemDetails(tempItemDtl);
+				transactionDetails.setQuandity(itemDetail.getCurqundty() * itemDetail.getCurpices());
+				transactionDetails.setTrasactionItem(trasactionItem);
+				
+				//transactionDetails.setCreatedUser(tempItemDtl.getCreatedUser());
+				//transactionDetails.setCreatedDate(new java.util.Date());
+				transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
+				transactionDetails.setModifiedDate(new java.util.Date());
+				
+				//trasactionItem.getTransactionDetails().add(transactionDetails);*/
+				//trasactionItem.setTransactionDetails(transactionDetailsLst);
+				
+			}
+		}	
+		
+		trasactionItem.setItem(item);
+		
+	}
+	
+	
+	
+	
 	private void updateLedgers(Transaction transaction){
 		Ledger fromLedger = ledgerRepository.findOne(transaction.getFromledger().getId());
 		Ledger toLedger = ledgerRepository.findOne(transaction.getLedger().getId());
@@ -140,6 +332,9 @@ public class TransactionController {
 	
 	@Autowired
 	private ItemDtlsRepo itemDtlsRepo;
+	
+	@Autowired
+	private TransactionDetailsRepo transactionDetailsRepo;
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
