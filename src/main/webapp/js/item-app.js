@@ -114,7 +114,13 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 		    controller: 'PurchagesController',
 		    templateUrl :'html/inline-Purchages.html',
 		  })
-      .when('/showReport'	,
+		  
+	.when('/editPurchase'	,
+	      { 
+		    controller: 'EditTransactionController',
+		    templateUrl :'html/inline-editPurchase.html',
+		  })	  
+	.when('/showReport'	,
 	      { 
 		    controller: 'reportsController',
 		    templateUrl :'html/showReport.html',
@@ -706,8 +712,11 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 	$rootScope.currentPage = 'showReport';
 	//$scope.transType = $location.search().optType;
 	$scope.transType = $rootScope.transType;
-	$http.get(hostname + '/reportController/findAllTransType/' + $scope.transType).then(function(response) 
+	
+	$http.get(hostname + '/transactions/findAll-by-type/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
+	//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
 		{
+			//$rootScope.reports = response.data;
 			$rootScope.reports = response.data;
 		});	
 		
@@ -718,8 +727,10 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 		//$rootScope.voucher = report.voucher;
 		//$rootScope.trasaction = {};
 		$rootScope.editTransaction = report;
-		//$rootScope.transactionReport = report;
-		$location.path("/PurchaseReturn");
+		//$rootScope.transType = 'edit';
+		//$location.path("/PurchaseReturn");
+		$location.path("/editPurchase");
+		//$location.path("/Purchages");
 	}	
 	
 		$scope.cancelReport = function(){
