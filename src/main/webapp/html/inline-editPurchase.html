@@ -1,0 +1,517 @@
+		<div class="container-fluid">
+			<div class="panel panel-success" > 
+			  
+			  	<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_P'"><strong>Purchase --> Edit</strong></div>
+			
+			<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="returnType == 'TR_SR'"><strong>Sales Return --> Create </strong></div>
+	
+			  
+			  
+			  <div class="panel-body" style="padding-top : 3px" >
+			  <div class="row" >
+			  
+			  <div class="form-group pull-right" style="margin-bottom: 0px; margin-top: 0px;"  >
+					
+					<!--<div class="col-sm-7" style="text-align : left;" >
+					 <md-datepicker ng-model="purchage.inputTrnsDate" md-placeholder="Enter date"
+						  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
+					</div>
+					-->
+					<div class="col-md-2" style="margin-left:880px;padding-right:0px;" ng-class="{'has-error' : invalidDate }">
+							<p class="input-group">
+							  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="purchage.inputTrnsDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" placeholder="dd/MM/yyyy" ng-blur="checkDate(purchage.inputTrnsDate);"/>
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+							  </span>
+							</p>
+					  </div>
+					   
+					  <!-- <div class="input-group" ng-if="invalidDate">
+								<p class="text-danger"> <Strong> Invalid Date Format! <Strong> </p>
+                        </div>
+						-->
+ 			 </div>			  
+			 
+			 <div class="col-sm-7" style="margin-top: 0px;text-align : left;"  >
+						<span class="label label-danger" > *All fields are mandatory </span>	
+				  </div>
+
+			 </div>
+					<div class="row" >
+					  <!--<div class="col-xs-10 panel panel-info" style="margin:10px;padding-top:20px" >	  -->
+					  <div class="col-xs-12 panel panel-info" style="margin-left:0px;margin-right:0px;padding-top:20px;padding-left:0px;padding-right:0px;" >	  
+					  
+					  <form class="form-inline input-sm" name="purchagesform" novalidate >
+					  
+							 
+							 <div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.voucher'].$invalid  }" ng-if="returnType == 'TR_SR'">
+								<label for="inputPassword3" class="col-sm-4 control-label">Voucher</label>
+								<div class="col-sm-5">
+								  <input type="text" class="form-control input-sm" id="purchage.voucher" name="purchage.voucher" ng-model="purchage.voucher"
+								  required  >	
+								</div>
+							  </div>	
+						
+
+
+							 <div class="form-group col-xs-12" ng-class="{'has-error' : submitclick && purchagesform['purchage.voucher'].$invalid  }" ng-if="returnType == 'TR_P'">
+								<label for="inputPassword3" class="col-sm-2 control-label">Voucher</label>
+								
+								
+								<!--<div class="col-sm-10" style="padding-left:8px;" >
+								  <input type="text" class="form-control input-sm" id="purchage.voucher" name="purchage.voucher" ng-model="purchage.voucher"
+								  required  >	
+								</div> -->
+							  
+							  
+							  <div class="col-sm-10" style="padding-left:8px;" >
+							  	<input type="text" ng-model="purchage.voucher"  uib-typeahead="option as option.voucher for option in purchages | filter:$viewValue | limitTo:8"  
+										ng-blur="selectTransaction(purchage.voucher);"
+										class="form-control input-sm" style="width:150px" placeholder="Type Voucher #" required />
+							  </div>
+							  
+							  <!--
+							  <select class="form-control input-sm" ng-model="trasaction.voucher" name="trasaction.voucher" 
+											ng-init="trasaction.voucher = trasaction.voucher || options[0].value"
+											ng-options="option as option.voucher for option in transactions"
+											ng-change="selectItem(trasaction.voucher)"
+											required >
+											<option value="">-- Choose Vocher --</option>
+									</select>	
+							  -->
+							  
+							  
+							  
+							  
+							  
+							  </div>	
+							  
+					  		
+							<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && purchagesform['purchage.agent'].$invalid  }" ng-if="returnType == 'TR_SR'">
+							
+								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
+								<div class="col-sm-5">
+									<select class="form-control input-sm" ng-model="purchage.agent" name="purchage.agent" 
+											ng-init="purchage.agent = purchage.agent || options[0].value"
+											ng-options="option as option.name for option in agents "
+											required >
+											<option value="">-- Choose Agent --</option>
+									</select>	
+								</div>
+									<label for="inputPassword3" class="col-sm-3 control-label" ng-if="purchage.agent != null"
+											style="text-align : left;padding-top: 4px;" >{{purchage.agent.commission}} %</label>
+							  </div>								  
+							
+							
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.fromledger'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-4 control-label">Party Account</label>
+								<div class="col-sm-5">
+								
+								
+								<!--<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+										ng-options="option as option.name for option in ledgers | filter:filterForPurchases" 
+										ng-change="callGST(purchage)"
+										required ng-if="returnType == 'TR_P'">
+										<option value="">-- Choose Account --</option>
+								</select>	-->
+								
+								<!--change on 9/28-->
+								<select class="form-control input-sm" ng-model="purchage.voucher.fromledger" name="purchage.voucher.fromledger" 
+										ng-init="purchage.voucher.fromledger = purchage.voucher.fromledger || options[0].value"
+										ng-options="option as option.name for option in partyACNameForPurchase track by option.id" 
+										ng-change="callGST(purchage)"
+										required ng-if="returnType == 'TR_P'">
+										<option value="">-- Choose Account --</option>
+								</select>	
+								
+								
+								<!--<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger = purchage.fromledger || options[0].value"
+										ng-options="option as option.name for option in ledgers | filter:filterForSales" required ng-if="returnType == 'TR_SR'">
+										<option value="">-- Choose Account --</option>
+								</select>	 -->
+								
+								<!--change on 9/28-->
+								<select class="form-control input-sm" ng-model="purchage.fromledger" name="purchage.fromledger" 
+										ng-init="purchage.fromledger  = partyACNameForSales.ledger || options[0].value"
+										ng-options="option as option.name for option in partyACNameForSales"
+										ng-change="callGST(purchage)"
+										required ng-if="returnType == 'TR_SR'">
+										<option value="">-- Choose Account --</option>
+								</select>	 
+														
+							
+							</div>
+									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="purchage.voucher.fromledger != null"
+											style="display: inline-block;padding-top: 4px;"  >{{currency}}{{purchage.voucher.fromledger.curbal}}</label>
+							  </div>	
+							  
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px" ng-class="{'has-error' : submitclick && purchagesform['purchage.ledger'].$invalid  }">
+								<label for="inputPassword3" class="col-sm-4 control-label" ng-if="returnType == 'TR_P'">Purchase Account</label>
+								<label for="inputPassword3" class="col-sm-4 control-label" ng-if="returnType == 'TR_SR'">Sales Account</label>
+								
+								<div class="col-sm-5">
+									
+									<!--
+									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
+											ng-init="purchage.ledger = purchage.ledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
+											ng-change="callGST(purchage)"
+											required ng-if="returnType == 'TR_P'">
+											<option value="">-- Choose Account --</option>
+									</select>
+									
+									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
+											ng-init="purchage.ledger = purchage.ledger || options[0].value"
+											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales'}}  "
+											required ng-if="returnType == 'TR_SR'">
+											<option value="">-- Choose Account --</option>
+									</select>
+									-->
+									<!--changes on 9/29-->
+									<select class="form-control input-sm" ng-model="purchage.voucher.ledger" name="purchage.voucher.ledger" 
+											ng-init="purchage.voucher.ledger = purchage.voucher.ledger || options[0].value"
+											ng-options="option as option.name for option in PurchaseACName track by option.id"
+											required ng-if="returnType == 'TR_P'">
+											<option value="">-- Choose Account --</option>
+									</select>
+									<!--changes on 9/29-->
+									<select class="form-control input-sm" ng-model="purchage.ledger" name="purchage.ledger" 
+											ng-init="purchage.ledger = purchage.ledger || options[0].value"
+											ng-options="option as option.name for option in SalesACName"
+											required ng-if="returnType == 'TR_SR'">
+											<option value="">-- Choose Account --</option>
+									</select>
+									
+									</div>
+									<label for="inputPassword3" class="col-sm-2 control-label" style="display: inline-block;padding-top: 4px;"  ng-if="purchage.voucher.ledger != null"
+								 >{{currency}}{{purchage.voucher.ledger.curbal}}</label>									
+								
+							  </div>	
+							  
+					<div class="panel panel-warning col-sm-12" style="padding:0px;margin:0px;" >
+					  <div class="panel-heading small" >Select Items</div>
+						<table class="table table-condensed table-bordered"  >
+							<thead>
+							<tr>
+							  <th class="col-sm-2 input-sm">Item Name : Shade</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">HSN#</th>
+							  <th class="col-sm-2 input-sm">Stock Group</th>
+							  <th class="col-sm-1 input-sm" ng-show="false">Shade</th>
+							  <th class="col-sm-2 input-sm">Description</th> 
+							  <th class="col-sm-1 input-sm">Avaliable Quantity</th> 
+							  <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_P'">Purchase Rate</th>
+							  <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_SR'">Sales Rate</th>
+							  <!--<th class="col-sm-1 input-sm" ng-show="false">Sales Rate</th>-->
+							  <th class="col-sm-3 input-sm">Current Quantity</th>
+							  <th class="col-sm-1 input-sm">Action</th>
+							</tr>
+							</thead>
+							<tr class="warning" ng-repeat="curTrasItem in purchage.voucher.trasactionItems" > 
+								  <td ng-class="{'has-error' : ( submitclick && !(curTrasItem.item.id >0) ) }" >
+										
+										<!--
+										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item" style="width:150px" 
+												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
+												ng-options="option as option.name + ' : Shade -> ' + option.shade for option in items"
+												ng-change="curTrasItem.rate = curTrasItem.item.rate;
+												curTrasItem.purcrate = curTrasItem.item.purcrate;
+												curTrasItem.curItems = [];
+												curTrasItem.curItems.push({ 'quandity': 0, 'pices':0});
+												curTrasItem.quandity = 0;
+												curTrasItem.showSplit=false;"
+												required>
+												<option value="">-- Choose Item Name --</option>
+										</select>
+										-->
+										
+										
+										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name + ' : ' + option.shade for option in items | filter:$viewValue | limitTo:8"  
+										ng-blur="curTrasItem.rate = curTrasItem.item.rate;
+												curTrasItem.purcrate = curTrasItem.item.purcrate;
+												curTrasItem.showSplit=false;"
+										class="form-control input-sm" style="width:150px" required>
+										
+										
+									<!--<input type="text" ng-model="curTrasItem.item" class="form-control input-sm" value = {{ curTrasItem.item.name }} + " : " + {{ curTrasItem.item.shade }} required /> -->
+										
+										
+									</td>
+						          
+								  <td ng-show="false">  
+								  
+								  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
+								  {{curTrasItem.item.itemHSN}} 
+								  </label>
+								  
+								  
+								  <!--<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								  {{ itemHSN }}
+								  </label>
+								  -->
+								  
+								  </td>
+								  
+								   <td> 
+										
+										
+								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" " >
+								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}} 
+									  <!--{{ curTrasItem.item.name }} + " : " + {{ curTrasItem.item.shade }}-->
+									  </label>
+										
+									<!--	
+									<label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								      {{stockGroup}}
+									  </label>
+									-->	
+								  
+								  </td>
+								  
+								  <td ng-show="false">  {{curTrasItem.item.shade}} </td>
+								  
+								  <td > 
+									
+									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
+								      {{curTrasItem.item.desc}} 
+									  </label>
+								  
+								  
+								  
+								  </td>
+								  
+								  <td >  
+								  
+								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								      {{curTrasItem.item.curqundty}} 
+									  </label>
+								  
+								  
+								  
+								  
+								  </td>
+								  
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.purcrate) == 0) }" ng-if="returnType == 'TR_P'">  
+								      
+									  <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
+									  name="curTrasItem.purcrate" ng-model="curTrasItem.purcrate" required>
+								  
+								  </td>								  
+								  
+								  
+								  
+								  <td ng-class="{'has-error' : ( submitclick && (+curTrasItem.rate) == 0) }" ng-if="returnType == 'TR_SR'">  
+								      <input type="number" min="1" step="1" class="form-control input-sm" id="inputPassword3" style="width: 70px;"
+									  name="curTrasItem.rate" ng-model="curTrasItem.rate" required>
+								  </td>
+								  
+								  <td ng-class="{'has-error' : ( curTrasItem.grandTotal != curTrasItem.quandity ) }" > 
+								  
+								  <!--
+                                  <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;width: 70px;" id="inputPassword3" 
+								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required 
+								  ng-change="curTrasItem.curItems[0].pices=1;curTrasItem.curItems[0].quandity=curTrasItem.quandity;getTotal(curTrasItem);curTrasItem.showSplit=true;">
+								  -->
+						  
+								<input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;width: 70px;" id="inputPassword3" 
+								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required 
+								  ng-change="getEditTotal(curTrasItem);purchaseTotal(purchage.voucher);curTrasItem.showSplit=true;">
+								  
+								  <button type="button" ng-click="curTrasItem.showSplit=true;"   
+								   class="btn btn-warning btn-xs" ng-if="curTrasItem.quandity > 0 
+								   && curTrasItem.showSplit !=true " >Show Split</button>
+								   <button type="button" ng-click="curTrasItem.showSplit=false;"   
+												class="btn btn-warning btn-xs" ng-if="curTrasItem.showSplit==true" >Hide Split</button>
+								  
+										<!--<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:10px"  
+										ng-if="curTrasItem.showSplit==true && curTrasItem.quandity > 0 "> -->
+										<div class="panel panel-warning col-sm-12" style="padding:0px;margin-left:0px"  
+										ng-if="curTrasItem.showSplit==true && curTrasItem.quandity > 0 ">
+
+										  <div class="panel-heading small">Split Items </div>
+										  
+										<table class="table table-condensed table-bordered"  >
+										<thead>
+										<tr>
+										  <th class="col-sm-1 input-sm">No of Pieces</th>
+										  <th class="col-sm-2 input-sm">Each Piece Quantity</th>
+										  <th class="col-sm-1 input-sm">Total</th>
+										</tr>
+										</thead>
+										<tr class="warning" ng-repeat="selItem in curTrasItem.transactionDetails" >
+										
+										 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.itemDetails.pices" style="width: 70px;"></td>
+										 
+										 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.itemDetails.quandity" style="width: 70px;"></td>	
+										 
+										 <td> {{(+selItem.itemDetails.quandity) * (+selItem.itemDetails.pices) }} &nbsp;	&nbsp;	
+										 
+										 <button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.selItem.push({ 'quandity': 1, 'pices':1})"
+										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && curTrasItem.selItem.length == $index+1 && ( (+selItem.itemDetails.quandity)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 
+										</tr>
+										<tr class="">
+										 <td colspan="2" style="text-align : right" ><b>Total Packets </b></td>
+										 <td> <b>{{getEditTotal(curTrasItem);}}</b>
+										 </td>	
+										</tr>
+										<tr class="warning" >
+											<td colspan="2" style="text-align : right" ><b>Total Price</b></td>
+											
+											<td style="text-align : left" ng-if="returnType == 'TR_P'"><b>{{curTrasItem.grandTotal*curTrasItem.purcrate}}</b>
+											</td>
+											
+											<td style="text-align : left" ng-if="returnType == 'TR_SR'"><b>{{curTrasItem.grandTotal*curTrasItem.rate}}</b>
+											</td>
+										
+										</tr>	
+										<tr class="warning">
+										<td colspan="3" style="text-align : center" >
+										 <div class="alert alert-danger" role="alert" ng-if="curTrasItem.grandTotal > (curTrasItem.quandity)" >
+											ERROR : Split grand total <b> {{curTrasItem.grandTotal}} </b> should not exeeds total quantity <b>{{curTrasItem.quandity}}</b>
+										 </div>
+										</td>
+										</tr>
+										</table>	
+									
+										</div>									  
+								  
+								  
+								  </td>
+								  <td> 
+								     <button type="button" class="btn btn-success btn-xs" 
+									     ng-click="addItem(purchage.voucher);" ng-if="purchage.voucher.trasactionItems.length == $index+1" >
+										 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
+										 </button>
+								     <button type="button" class="btn btn-danger btn-xs" 
+									     ng-click="removeItem($index,purchage);purchaseTotal(purchage.voucher);" >
+										 <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" ></span>
+										 </button>										 
+								  </td>
+							</tr>
+							<tr class="warning">
+								<td colspan="5" style="text-align : right;" > <b> Total Pieces </b> </td>
+								<td colspan="3" style="text-align : left;" >
+								{{purchage.voucher.totalPieces}}
+								</td>
+							</tr>	
+						
+							<tr class="warning">
+								<td colspan="5" style="text-align : right;" > <b> Total Quantity </b> </td>
+								<td colspan="3" style="text-align : left;" >
+								{{purchage.voucher.quandity}}
+								</td>
+							</tr>	
+							<tr class="warning">
+								<td colspan="5" style="text-align : right;" > <b> Taxable Amount </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{purchage.voucher.rate}}
+								</td>
+							</tr>	
+							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
+								<td colspan="5" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{(purchage.voucher.rate * 2.5/100)}}
+								</td>
+							</tr>	
+							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
+								<td colspan="5" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{(purchage.voucher.rate * 2.5/100)}}
+								</td>
+							</tr>
+							
+							<tr class="warning" ng-if="GSTapplicable == true && showIGST == true">
+								<td colspan="5" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{(purchage.voucher.rate * 5/100)}}
+								</td>
+							</tr>
+							
+							<tr class="warning" ng-if="GSTapplicable == true">
+								<td colspan="5" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{(purchage.voucher.rate + (purchage.voucher.rate * 5/100) )}}
+								</td>
+							</tr>	
+							
+							<tr class="warning" ng-if="GSTapplicable == false">
+								<td colspan="5" style="text-align : right;" > <b> Total Amount </b>  </td>
+								<td colspan="3" style="text-align : left;" >
+								{{currency}} &nbsp; {{purchage.voucher.rate}}
+								</td>
+							</tr>	
+							
+							<tr class="warning" ng-if="returnType == 'TR_SR'">
+								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
+								<td colspan="3" style="text-align : left;" ng-if="purchage.agent.commission != null">
+								{{currency}} &nbsp; {{ (purchage.voucher.rate * purchage.voucher.agent.commission) / 100 }}
+								</td>
+								<td colspan="3" style="text-align : left;" ng-if="purchage.voucher.agent.commission == null">
+								{{currency}} &nbsp; 0
+								</td>
+							</tr>	
+							<tr class="">
+								
+							<!--
+							<td colspan="9" style="text-align : center;" >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }">
+								<label for="inputPassword3" class="col-sm-5 control-label">Narration</label>
+								<div class="col-sm-5">
+								  <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="purchage.desc" ng-model="purchage.desc"
+								  placeholder="Narration" required></textarea>
+								</div>
+							  </div>
+								</td>
+							-->
+							<td colspan="1" style="text-align : right;" >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['purchage.desc'].$invalid }" >
+							  
+								<label for="inputPassword3" class="col-sm-5 control-label" style="padding:0px;margin-right:0px;">Narration</label>
+							  </div>
+							</td>	
+								<td colspan="8" style="text-align : left;" >
+								<div class="col-sm-12" style="padding:0px;">
+								  <textarea rows="2" class="form-control" style="min-width: 100%" id="inputPassword3" name="purchage.desc" ng-model="purchage.voucher.desc"
+								  placeholder="Narration" required ></textarea>
+								</div>
+							  </td>
+							
+							</tr>
+							  
+							<tr class="">
+								<td colspan="10" style="text-align : center;" >
+								<!--{{purchaseTotal(purchage)}}-->
+			                        
+									
+									<button type="button" ng-click="purchanges(purchage.voucher);" style="margin-bottom: 10px;width: 100px;"
+								    class="btn btn-success">Save</button>	
+								    <label for="inputPassword3" class="col-sm-2 control-label"></label>
+								
+								   <button type="button" ng-click="cancelPurchase();" style="margin-bottom: 10px;width: 100px;" 
+								   class="btn btn-warning btn-small">Cancel</button>	
+								
+								</td>
+							</tr>							
+							<tr class="warning">
+								 <td colspan="7" style="text-align : center; font-size: 150%;" ng-if="returnType == 'TR_P'">
+										 
+										 <span class="label label-success" ng-if="optStatus == 'Success'" > Purchase done successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store transaction details.</span>				
+								</td>
+								<td colspan="7" style="text-align : center; font-size: 150%;" ng-if="returnType == 'TR_SR'">
+										 
+										 <span class="label label-success" ng-if="optStatus == 'Success'" > Sale Return done successfully.</span>
+										   <span class="label label-danger" ng-if="optStatus == 'Failed'" > Failed to store transaction details.</span>				
+								</td>
+							</tr>	
+						</table>					
+					</div>		  
+							  
+					  
+					  </form>
+	                  </div>
+			        </div>		
+			  </div>
+			</div>
+		</div>  
