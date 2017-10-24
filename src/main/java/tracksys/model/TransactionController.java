@@ -35,16 +35,15 @@ public class TransactionController {
 		
 		Transaction extTransaction = transactionRepository.findOne(transaction.getId());
 		
-		//delete existing transaction
-		//boolean deleteTrans = transactionRepository.delete(transaction.getId());
-		
-		//boolean success = false;
-		//if(deleteTrans) {
+		//if(transactionRepository.delete(transaction.getId())){
 			editLedgers(transaction, extTransaction);
+			
+			
+			
+			
 			editTransactionItems(transaction, extTransaction);
 			return transactionRepository.save(transaction);
 		//}
-           //return success;
 	}
 	
 	private void editLedgers(Transaction transaction, Transaction extTransaction){
@@ -126,6 +125,7 @@ public class TransactionController {
 				item = itemRepository.save(item);
 				
 				updateTransactionItemDtlsForEdit(transaction.getType(), trasactionItem, item);
+				
 				trasactionItem.setTransaction(transaction);
 		}
 		
@@ -137,13 +137,12 @@ public class TransactionController {
 	
 	private void updateTransactionItemDtlsForEdit(int transType, TrasactionItem trasactionItem,Item item){
 		
+		
 		List<ItemDetails> itemDtls = trasactionItem.getItem().getItemDtls();
+		
 		List<TransactionDetails> transactionDetailsLst =  trasactionItem.getTransactionDetails();
 		
-		
 		ItemDetails tempItemDtl = null;
-		
-		TransactionDetails transactionDetails = null;
 		
 		if(itemDtls != null){
 			for(ItemDetails itemDetail : itemDtls){
@@ -158,61 +157,59 @@ public class TransactionController {
 						tempItemDtl = itemDetail;
 						tempItemDtl.setCreatedUser("admin");
 						tempItemDtl.setCreatedDate(new java.util.Date());
-						tempItemDtl.setModifiedUser("admin");
-						tempItemDtl.setModifiedDate(new java.util.Date());
-					
 					}
 					
 					tempItemDtl.setCurqundty(itemDetail.getQuandity());
 					tempItemDtl.setCurpices(itemDetail.getPices());
+					tempItemDtl.setModifiedUser("admin");
+					tempItemDtl.setModifiedDate(new java.util.Date());
 					tempItemDtl.setItem(item);
 					break;
 				
-				case 2:  
-					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
-					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
-					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
-					break;
-				case 3:  
-					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
-					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
-					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
-					break;					
-				case 4:  
-					//tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
-					//tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() + itemDetail.getCurqundty());
-					//tempItemDtl.setCurpices(tempItemDtl.getCurpices() + itemDetail.getCurpices());
-					tempItemDtl = itemDetail;
-					tempItemDtl.setCurqundty(itemDetail.getQuandity());
-					tempItemDtl.setCurpices(itemDetail.getPices());
-					tempItemDtl.setItem(item);
+				
+				}
+				
+				tempItemDtl.setModifiedUser(tempItemDtl.getCreatedUser());
+				tempItemDtl.setModifiedDate(new java.util.Date());
+				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
+				
+				
 					
-					break;
+				
+				//transactionDetails = new TransactionDetails();
+				
+				//transactionDetails = transactionDetailsLst.get(transactionDetailsLst.indexOf());
+				
+				for(TransactionDetails transactionDetails : transactionDetailsLst){
+					
+					if(transactionDetails.getItemDetails().getId() == tempItemDtl.getId()){
+						System.out.println("Transaction details ----> " + transactionDetails.getItemDetails().getId());
+						transactionDetails.setItemDetails(tempItemDtl);
+						transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
+						transactionDetails.setTrasactionItem(trasactionItem);
+						transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
+						transactionDetails.setModifiedDate(new java.util.Date());
+						
+					} else {
+						System.out.println("New Transaction details ----> " );
+						transactionDetails = new TransactionDetails();
+						transactionDetails.setCreatedUser(tempItemDtl.getCreatedUser());
+						transactionDetails.setCreatedDate(tempItemDtl.getCreatedDate());
+						transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
+						transactionDetails.setModifiedDate(new java.util.Date());
+						transactionDetails.setItemDetails(tempItemDtl);
+						transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
+						transactionDetails.setTrasactionItem(trasactionItem);
+						
+					} 
 				}
 				
 				
-				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
-
-				
-								
-				//transactionDetails = new TransactionDetails();
-				transactionDetails = transactionDetailsLst.get(transactionDetailsLst.indexOf(tempItemDtl));
-				System.out.println("Transaction details null -------> " + (transactionDetails == null));
-				transactionDetails.setItemDetails(tempItemDtl);
-				transactionDetails.setQuandity(itemDetail.getCurqundty() * itemDetail.getCurpices());
-				transactionDetails.setTrasactionItem(trasactionItem);
-				
-				//transactionDetails.setCreatedUser(tempItemDtl.getCreatedUser());
-				//transactionDetails.setCreatedDate(new java.util.Date());
-				transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
-				transactionDetails.setModifiedDate(new java.util.Date());
-				
-				//trasactionItem.getTransactionDetails().add(transactionDetails);*/
-				//trasactionItem.setTransactionDetails(transactionDetailsLst);
 				
 			}
 		}	
 		
+			
 		trasactionItem.setItem(item);
 		
 	}
