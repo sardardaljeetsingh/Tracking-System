@@ -1426,6 +1426,7 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 app.controller('EditTransactionController', function($scope,$rootScope,$location,$http,ItemService,AccGroupService,GenericSrvc,StockGrpSrvc,$filter) {
 	
 	$scope.purchage = {};
+	
      $scope.purchage.inputTrnsDate = new Date(
 		 $rootScope.transDate.getFullYear(),
 		 $rootScope.transDate.getMonth(),
@@ -1614,7 +1615,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
     //$scope.transactions = [];
 	$scope.purchages = [];
      GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/1',function(response){
-      //console.log(" Trsaction Response " + JSON.stringify(response));
+      console.log(" Trsaction Response from DB ----> " + JSON.stringify(response));
 	  $scope.purchages = response;
 	  
 	  
@@ -1658,7 +1659,6 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
  
 	$scope.selectTransaction =  function(purchage) {
 	
-		//alert("Purchase " + purchage);
 		angular.forEach(purchage.trasactionItems, function (transItem) {
 			transItem.showSplit=true;
 		});
@@ -1667,7 +1667,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
       $scope.callGST(purchage);
 	
 	
-	 console.log(" Edit Trsaction Response ---> " + JSON.stringify(purchage));
+	 //console.log(" Edit Trsaction Response ---> " + JSON.stringify(purchage));
 	}
   
   //Edit flow -- setting form data ends here
@@ -1715,12 +1715,12 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 						  //console.log("adding quandity ---------> " + itemTrans.itemDetails.quandity);
 						  var itemDtl = {};
 						  
-						  if(itemTrans.itemDetails.id != null && itemTrans.itemDetails.id != ''){
+						  /*if(itemTrans.itemDetails.id != null && itemTrans.itemDetails.id != ''){
 							itemDtl.id = itemTrans.itemDetails.id;
 						  } else {
 							itemDtl.createdUser = $rootScope.loggedUser.username;
 							itemDtl.createdDate = new Date();
-						 }
+						 }*/
 						  
 						//  alert("Id " + itemDtl.id + " . ");
 						  
@@ -1728,7 +1728,8 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 						  itemDtl.quandity = itemTrans.itemDetails.quandity ;
 						  itemDtl.curqundty = itemTrans.itemDetails.quandity ;
 						  
-						  
+						  itemDtl.createdUser = $rootScope.loggedUser.username;
+						  itemDtl.createdDate = new Date();
 						  itemDtl.modifiedUser = $rootScope.loggedUser.username;
 						  itemDtl.modifiedDate = new Date();
 											  
@@ -1741,9 +1742,10 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 			  
 			});
             transItem.item.itemDtls = finalItemsDtls;
-		
-			//transItem.createdUser = $rootScope.loggedUser.username;
-			//transItem.createdDate = new Date();
+			
+					
+			transItem.createdUser = $rootScope.loggedUser.username;
+			transItem.createdDate = new Date();
 			transItem.modifiedUser = $rootScope.loggedUser.username;
 			transItem.modifiedDate = new Date();
 			
@@ -1751,12 +1753,14 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 			transItem.item.modifiedDate = new Date();
 				
 			
-			//transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
-			//transItem.item.itemDtls.createdDate = new Date();
+			transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
+			transItem.item.itemDtls.createdDate = new Date();
 			transItem.item.itemDtls.modifiedUser = $rootScope.loggedUser.username;
 			transItem.item.itemDtls.modifiedDate = new Date();
 			
 			//console.log("transItem.item.itemDtls------> "+ transItem.item.itemDtls);
+			//delete transItem['@id'];
+			//delete transItem['id'];
 			delete transItem.item['@id'];	
 			delete transItem.item.stockGroup['@id'];				
 		});
@@ -1765,11 +1769,12 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 		delete purchage.ledger.accGroup;
        delete purchage.fromledger['@id'];
 	    delete purchage.fromledger.accGroup;	
+		//delete purchage['@id'];
         
 		purchage.transdate	= $filter('date')($scope.purchage.inputTrnsDate,'MM/dd/yyyy');	
 		
-		//purchage.createdUser = $rootScope.loggedUser.username;
-		//purchage.createdDate = new Date();
+		purchage.createdUser = $rootScope.loggedUser.username;
+		purchage.createdDate = new Date();
 		purchage.modifiedUser = $rootScope.loggedUser.username;
 		purchage.modifiedDate = new Date();
 		
