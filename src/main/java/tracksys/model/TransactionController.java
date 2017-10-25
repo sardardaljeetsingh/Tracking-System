@@ -35,6 +35,9 @@ public class TransactionController {
 		
 		Transaction extTransaction = transactionRepository.findOne(transaction.getId());
 		
+		
+		
+		
 		//if(transactionRepository.delete(transaction.getId())){
 			editLedgers(transaction, extTransaction);
 			
@@ -42,6 +45,9 @@ public class TransactionController {
 			
 			
 			editTransactionItems(transaction, extTransaction);
+			
+			transactionRepository.delete(transaction.getId());
+			
 			return transactionRepository.save(transaction);
 		//}
 	}
@@ -96,19 +102,26 @@ public class TransactionController {
 		trasactionItemList = extTransaction.getTrasactionItems();
 		System.out.println("Existing items to be updated ----> " + trasactionItemList.size());
 		
+		List<String> itemList = new ArrayList<String>(); 
+		
 		for(TrasactionItem trasactionItem : trasactionItemList){
 			item = itemRepository.findOne(trasactionItem.getItem().getId());
 			
-			System.out.println("Revert quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty() + " OldQty : " + trasactionItem.getQuandity() );
-			
-			item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
-			
-			System.out.println("Reverted quantity for Item ------> " + trasactionItem.getItem().getName() + " CQty : " + item.getCurqundty());
-			
-			item = itemRepository.save(item);
-					
+			if(!itemList.contains(item.getName())) {
+				
+				itemList.add(item.getName());
+				
+				System.out.println("Revert quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty() + " OldQty : " + trasactionItem.getQuandity() );
+				
+				item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
+				
+				System.out.println("Reverted quantity for Item ------> " + trasactionItem.getItem().getName() + " CQty : " + item.getCurqundty());
+				
+				item = itemRepository.save(item);
+			}				
 		}	
 		System.out.println("Update existing item quantity done ----------> " );
+		
 		//Add new quantity	
 		trasactionItemList = transaction.getTrasactionItems();
 		
@@ -124,7 +137,8 @@ public class TransactionController {
 		
 				item = itemRepository.save(item);
 				
-				updateTransactionItemDtlsForEdit(transaction.getType(), trasactionItem, item);
+				//updateTransactionItemDtlsForEdit(transaction.getType(), trasactionItem, item);
+				updateTransactionItemDtls(transaction.getType(), trasactionItem, item);
 				
 				trasactionItem.setTransaction(transaction);
 		}
