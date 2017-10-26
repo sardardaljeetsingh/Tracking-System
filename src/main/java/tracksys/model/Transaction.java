@@ -42,6 +42,10 @@ public class Transaction {
 	@JoinColumn(name = "ledgerid", nullable = false)
 	private Ledger ledger;	
 	
+	@ManyToOne
+	@JoinColumn(name = "agentid")
+	private Agent agent;	
+	
 	@Column(name = "quandity", nullable = false)
 	private float quandity;
 	
@@ -145,6 +149,14 @@ public class Transaction {
 
 	public void setFromledger(Ledger fromledger) {
 		this.fromledger = fromledger;
+	}
+
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+
+	public Agent getAgent() {
+		return agent;
 	}
 
 	public String getTransdate() {

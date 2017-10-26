@@ -113,8 +113,12 @@ public class TransactionController {
 				
 				System.out.println("Revert quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty() + " OldQty : " + trasactionItem.getQuandity() );
 				
-				item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
-				
+				if(extTransaction.getType() == 1 || extTransaction.getType() == 4) {
+					//For Purchase and Sales Return , deduct quantity
+					item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
+				} else {
+					item.setCurqundty(item.getCurqundty() + trasactionItem.getQuandity());
+				}
 				System.out.println("Reverted quantity for Item ------> " + trasactionItem.getItem().getName() + " CQty : " + item.getCurqundty());
 				
 				item = itemRepository.save(item);
@@ -128,11 +132,12 @@ public class TransactionController {
 		for(TrasactionItem trasactionItem : trasactionItemList){
 			item = itemRepository.findOne(trasactionItem.getItem().getId());
 			
-			System.out.println("Adding quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty() + " OldQty : " + trasactionItem.getQuandity() );
-			
-			
-				item.setCurqundty(item.getCurqundty() + trasactionItem.getQuandity());
-		
+				if(transaction.getType() == 1 || transaction.getType() == 4) {
+					item.setCurqundty(item.getCurqundty() + trasactionItem.getQuandity());
+				} else {
+					item.setCurqundty(item.getCurqundty() - trasactionItem.getQuandity());
+				}
+				
 				System.out.println("Updated quantity for Item ------> " + item.getName() + " CQty : " + item.getCurqundty());
 		
 				item = itemRepository.save(item);
@@ -281,11 +286,14 @@ public class TransactionController {
 					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
 					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
 					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
+					
 					break;
 				case 3:  
 					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
 					tempItemDtl.setCurqundty(tempItemDtl.getCurqundty() - itemDetail.getCurqundty());
 					tempItemDtl.setCurpices(tempItemDtl.getCurpices()- itemDetail.getCurpices());
+					
+			
 					break;					
 				case 4:  
 					//tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
@@ -334,8 +342,14 @@ public class TransactionController {
 	}	
 	
 	@RequestMapping(value ="/find-by-id/{transId}",method = RequestMethod.GET)
-	public  @ResponseBody Transaction getById(@PathVariable("companyId") int transId) {
-		return transactionRepository.findOne(transId);
+	public  @ResponseBody Transaction getById(@PathVariable("transId") int transId) {
+		System.out.println("Find Id called ---------> " + 	transId);
+		try {
+			return transactionRepository.findOne(transId);
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+		return null;
 	}	
 	
 	@Autowired
