@@ -1434,8 +1434,13 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 	  );
 	
   
+   if($rootScope.transType == 1) {
+      $scope.returnType = 'TR_P';
+   } else {
+		$scope.returnType = 'TR_SR';
+   }
+    
    
-   $scope.returnType = 'TR_P';
 	 
    $rootScope.items = [];
 	$scope.currency = $scope.company.currencesymbol;
@@ -1533,6 +1538,8 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 		var validQuandity = true;
 		
 		if(purchage != null && purchage != undefined) {
+			
+			
 		angular.forEach(purchage.trasactionItems,function(curTrasItem,index){
 			var total = 0;
 			
@@ -1614,7 +1621,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
    
     //$scope.transactions = [];
 	$scope.purchages = [];
-     GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/1',function(response){
+     GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
       console.log(" Trsaction Response from DB ----> " + JSON.stringify(response));
 	  $scope.purchages = response;
 	  
@@ -1654,6 +1661,10 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 	    });
 		//  console.log(" Trsaction Response AF---> " + JSON.stringify(response));
 	  
+	  
+	  
+	  
+	  
    }); 
    
  
@@ -1688,13 +1699,17 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
    //purchage.trasactionItems.push({})
    
 	$scope.purchanges = function(purchage){
-		//alert("purchage.validQuandity  -> " + purchage.validQuandity + " Form " + $scope.purchagesform.$valid);
+		//alert("purchage.validQuandity  1 -> " + purchage.validQuandity + " Form " + $scope.purchagesform.$valid);
 		
-		/*if(!($scope.purchagesform.$valid && purchage.validQuandity)){
+		$scope.purchaseTotal(purchage);	
+		
+		if(!($scope.purchagesform.$valid && purchage.validQuandity)){
 			$scope.submitclick = true;
 			return;
-		} */
+		} 
 		
+		//alert("purchage.validQuandity  2-> " + purchage.validQuandity + " Form " + $scope.purchagesform.$valid);
+	
 			
 		angular.forEach(purchage.trasactionItems,function(transItem,index1){
 			//transItem.transactionDetails = [];
@@ -1852,7 +1867,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 					if($scope.returnType == 'TR_P') {
 						alert("Purchase order updated successfully.");
 					} else {
-						alert("Sales return order created successfully.");
+						alert("Sales return order updated successfully.");
 					}
 					//$scope.agentform.$setPristine();
 					$location.path("/perform-action");

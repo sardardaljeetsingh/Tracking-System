@@ -726,9 +726,12 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 		//$rootScope.optType = 'editPurchase';
 		//$rootScope.voucher = report.voucher;
 		//$rootScope.trasaction = {};
-		$rootScope.editTransaction = report;
+		//$rootScope.editTransaction = report;
+		
 		//$rootScope.transType = 'edit';
 		//$location.path("/PurchaseReturn");
+		
+		$rootScope.transId = report.id;
 		$location.path("/editPurchase");
 		//$location.path("/Purchages");
 	}	
