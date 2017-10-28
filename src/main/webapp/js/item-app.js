@@ -119,7 +119,12 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	      { 
 		    controller: 'EditTransactionController',
 		    templateUrl :'html/inline-editPurchase.html',
-		  })	  
+		  })
+	.when('/editSales'	,
+	      { 
+		    controller: 'EditSalesTransactionController',
+		    templateUrl :'html/inline-editSales.html',
+		  })			  
 	.when('/showReport'	,
 	      { 
 		    controller: 'reportsController',
@@ -732,7 +737,16 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 		//$location.path("/PurchaseReturn");
 		
 		$rootScope.transId = report.id;
-		$location.path("/editPurchase");
+		
+		var targetLoc = '';
+		if($rootScope.transType == 1 || $rootScope.transType == 4) {
+			targetLoc = "/editPurchase";
+		} else {
+			targetLoc = "/editSales";
+		}
+			
+		
+		$location.path(targetLoc);
 		//$location.path("/Purchages");
 	}	
 	
