@@ -41,12 +41,9 @@ public class TransactionController {
 		//if(transactionRepository.delete(transaction.getId())){
 			editLedgers(transaction, extTransaction);
 			
-			
-			
-			
 			editTransactionItems(transaction, extTransaction);
 			
-			transactionRepository.delete(transaction.getId());
+			//transactionRepository.delete(extTransaction.getId());
 			
 			return transactionRepository.save(transaction);
 		//}
@@ -142,12 +139,13 @@ public class TransactionController {
 		
 				item = itemRepository.save(item);
 				
-				//updateTransactionItemDtlsForEdit(transaction.getType(), trasactionItem, item);
-				updateTransactionItemDtls(transaction.getType(), trasactionItem, item);
+				updateTransactionItemDtlsForEdit(transaction.getType(), trasactionItem, item);
+				//updateTransactionItemDtls(transaction.getType(), trasactionItem, item);
 				
 				trasactionItem.setTransaction(transaction);
 		}
 		
+		 
 			System.out.println("editTransactionItems Done ++++++++++++++++++++++++");
 		
 	
@@ -156,17 +154,23 @@ public class TransactionController {
 	
 	private void updateTransactionItemDtlsForEdit(int transType, TrasactionItem trasactionItem,Item item){
 		
-		
 		List<ItemDetails> itemDtls = trasactionItem.getItem().getItemDtls();
 		
-		List<TransactionDetails> transactionDetailsLst =  trasactionItem.getTransactionDetails();
+		List<TransactionDetails> transDtls = new ArrayList<TransactionDetails>();
+		
+		//trasactionItem.setTransactionDetails(new ArrayList<TransactionDetails>());
+		
+		//List<TransactionDetails> transactionDetailsLst =  trasactionItem.getTransactionDetails();
 		
 		ItemDetails tempItemDtl = null;
+		
 		
 		if(itemDtls != null){
 			for(ItemDetails itemDetail : itemDtls){
 				switch(transType){
-				case 1:  
+				case 1:
+				case 4:
+						
 					//tempItemDtl = itemDetail;
 					System.out.println("Item detail id ----------> " + itemDetail.getId()); 
 					tempItemDtl = itemDtlsRepo.findOne(itemDetail.getId());
@@ -174,61 +178,55 @@ public class TransactionController {
 					if(tempItemDtl == null) {
 						System.out.println("Item details not found for ID : -----------> " + itemDetail.getId());
 						tempItemDtl = itemDetail;
-						tempItemDtl.setCreatedUser("admin");
-						tempItemDtl.setCreatedDate(new java.util.Date());
-					}
+					} else {
 					
-					tempItemDtl.setCurqundty(itemDetail.getQuandity());
+					tempItemDtl.setCurqundty(itemDetail.getCurqundty());
 					tempItemDtl.setCurpices(itemDetail.getPices());
-					tempItemDtl.setModifiedUser("admin");
-					tempItemDtl.setModifiedDate(new java.util.Date());
+					tempItemDtl.setModifiedUser(itemDetail.getModifiedUser());
+					tempItemDtl.setModifiedDate(itemDetail.getModifiedDate());
+					
+					}
 					tempItemDtl.setItem(item);
 					break;
-				
-				
 				}
 				
-				tempItemDtl.setModifiedUser(tempItemDtl.getCreatedUser());
-				tempItemDtl.setModifiedDate(new java.util.Date());
 				tempItemDtl = itemDtlsRepo.save(tempItemDtl);
 				
+				TransactionDetails transactionDetails = null;
+	
+				transactionDetails = transactionDetailsRepo.findOne(tempItemDtl.getId());		
 				
+	System.out.println("Transaction Details found ---------> " + tempItemDtl.getId() + " ---> "+ (transactionDetails == null));
+				
+				
+				if(transactionDetails != null) {
+					System.out.println("Existing Transaction details ---------> " + transactionDetails.getId());
+					transactionDetails.setItemDetails(tempItemDtl);
+					transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
+					transactionDetails.setTrasactionItem(trasactionItem);
+					transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
+					transactionDetails.setModifiedDate(new java.util.Date());
+				} else {
+					System.out.println("New Transaction details ----> " );
+					transactionDetails = new TransactionDetails();
+					transactionDetails.setCreatedUser(tempItemDtl.getCreatedUser());
+					transactionDetails.setCreatedDate(tempItemDtl.getCreatedDate());
+					transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
+					transactionDetails.setModifiedDate(new java.util.Date());
+					transactionDetails.setItemDetails(tempItemDtl);
+					transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
+					transactionDetails.setTrasactionItem(trasactionItem);
 					
+				} 
 				
-				//transactionDetails = new TransactionDetails();
-				
-				//transactionDetails = transactionDetailsLst.get(transactionDetailsLst.indexOf());
-				
-				for(TransactionDetails transactionDetails : transactionDetailsLst){
-					
-					if(transactionDetails.getItemDetails().getId() == tempItemDtl.getId()){
-						System.out.println("Transaction details ----> " + transactionDetails.getItemDetails().getId());
-						transactionDetails.setItemDetails(tempItemDtl);
-						transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
-						transactionDetails.setTrasactionItem(trasactionItem);
-						transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
-						transactionDetails.setModifiedDate(new java.util.Date());
-						
-					} else {
-						System.out.println("New Transaction details ----> " );
-						transactionDetails = new TransactionDetails();
-						transactionDetails.setCreatedUser(tempItemDtl.getCreatedUser());
-						transactionDetails.setCreatedDate(tempItemDtl.getCreatedDate());
-						transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
-						transactionDetails.setModifiedDate(new java.util.Date());
-						transactionDetails.setItemDetails(tempItemDtl);
-						transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
-						transactionDetails.setTrasactionItem(trasactionItem);
-						
-					} 
-				}
-				
-				
-				
+				//transactionDetailsRepo.save(transactionDetails);
+				System.out.println("Adding Transaction details with id --------> " + transactionDetails.getId());
+				transDtls.add(transactionDetails);
 			}
 		}	
 		
-			
+		trasactionItem.setTransactionDetails(transDtls);
+				
 		trasactionItem.setItem(item);
 		
 	}
@@ -323,6 +321,7 @@ public class TransactionController {
 				transactionDetails.setModifiedUser(tempItemDtl.getCreatedUser());
 				transactionDetails.setModifiedDate(new java.util.Date());
 				
+		
 				trasactionItem.getTransactionDetails().add(transactionDetails);
 			}
 		}	
