@@ -1544,7 +1544,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 			var total = 0;
 			
 			angular.forEach(curTrasItem.transactionDetails,function(item,index){
-				total += ( (+item.itemDetails.quandity) * (+item.itemDetails.pices) );
+				total += ( (+item.itemDetails.curqundty) * (+item.itemDetails.pices) );
 				totalTransPieces += (+item.itemDetails.pices);
 			
 			});
@@ -1591,7 +1591,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 		var total = 0;
 		for(var i = 0; i < curTrasItem.transactionDetails.length; i++){
 			var item = curTrasItem.transactionDetails[i];
-			total += ( (+item.itemDetails.quandity) * (+item.itemDetails.pices) );
+			total += ( (+item.itemDetails.curqundty) * (+item.itemDetails.pices) );
 			//total  += item.itemDetails.quandity;
 		}
 		curTrasItem.grandTotal = total;
@@ -1620,14 +1620,14 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
    
    
     //$scope.transactions = [];
-	$scope.sales = [];
+	$scope.purchages = [];
      GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
       console.log(" Trsaction Response from DB ----> " + JSON.stringify(response));
-	  $scope.sales = response;
+	  $scope.purchages = response;
 	  
 	  
 		  var itemArray = [];
-		  angular.forEach($scope.sales, function (transaction) {
+		  angular.forEach($scope.purchages, function (transaction) {
 			  console.log(" Trsaction Response BF ---> " + JSON.stringify(response));
 			  angular.forEach(transaction.trasactionItems, function (transItem) {
 				  //console.log('transItem.item ' + transItem.item );	
@@ -1645,7 +1645,7 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 			 });	
         });
 		
-		  angular.forEach($scope.sales, function (transaction) {		
+		  angular.forEach($scope.purchages, function (transaction) {		
 			angular.forEach(transaction.trasactionItems, function (transItem) {
 				  if(transItem.item != null && transItem.item.id == null){
 					  transItem.item = itemArray[transItem.item];
@@ -1668,14 +1668,14 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
    }); 
    
  
-	$scope.selectTransaction =  function(sale) {
+	$scope.selectTransaction =  function(purchage) {
 	
-		angular.forEach(sale.trasactionItems, function (transItem) {
+		angular.forEach(purchage.trasactionItems, function (transItem) {
 			transItem.showSplit=true;
 		});
 	
-	  $scope.purchaseTotal(sale);
-      $scope.callGST(sale);
+	  $scope.purchaseTotal(purchage);
+      $scope.callGST(purchage);
 	
 	
 	 //console.log(" Edit Trsaction Response ---> " + JSON.stringify(purchage));
@@ -1730,13 +1730,18 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 						  //console.log("adding quandity ---------> " + itemTrans.itemDetails.quandity);
 						  var itemDtl = {};
 						  
-							  
-						  itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
-						  itemDtl.quandity = itemTrans.itemDetails.quandity ;
-						  itemDtl.curqundty = itemTrans.itemDetails.quandity ;
+						  if(itemTrans.itemDetails.id == null || itemTrans.itemDetails.id == undefined){
+								itemDtl.createdUser = $rootScope.loggedUser.username;
+								itemDtl.createdDate = new Date();
+						  } else {
+							
+							itemDtl.id = itemTrans.itemDetails.id;			
+						  }	
+							
+							itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
+							itemDtl.quandity = itemTrans.itemDetails.quandity ;
+							itemDtl.curqundty = itemTrans.itemDetails.curqundty ;
 						  
-						  itemDtl.createdUser = $rootScope.loggedUser.username;
-						  itemDtl.createdDate = new Date();
 						  itemDtl.modifiedUser = $rootScope.loggedUser.username;
 						  itemDtl.modifiedDate = new Date();
 											  

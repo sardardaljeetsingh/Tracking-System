@@ -1169,11 +1169,20 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 	$scope.getTotal = function(){
 		$scope.grandTotal = 0;
 		var total = 0;
+		
 		for(var i = 0; i < $scope.items.length; i++){
 			var item = $scope.items[i];
-			if(item.quandity >= 0 && item.pices >=0){
-				total += (item.quandity * item.pices);
+				
+			if($scope.showPage == 'create') {
+				if(item.quandity >= 0 && item.pices >=0){
+					total += (item.quandity * item.pices);
+				}
+			} else {
+				if(item.curqundty >= 0 && item.pices >=0){
+					total += (item.curqundty * item.pices);
+				}
 			}
+		
 		}
 		$scope.grandTotal = total;
 		return total;
