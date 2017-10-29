@@ -191,7 +191,7 @@
                         <form id="loginform" name="loginform" class="form-horizontal" role="form" novalidate >
                                     
 									
-                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : invalidUser}" >
+                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : submitclick || invalidUser}" >
                                         
 										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                    	<input id="login-username" type="text" name="user.username" class="form-control" ng-model="user.username" value="" placeholder="username" required >
@@ -201,7 +201,7 @@
 									
 									                    
 								
-                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : invalidUser }" >
+                            <div style="margin-bottom: 25px" class="input-group" ng-class="{'has-error' : submitclick || invalidUser }" >
                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 										<input id="login-password" type="password" class="form-control" name="user.password" ng-model="user.password" placeholder="password" required>
 										
@@ -214,13 +214,17 @@
 									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
                             </div>-->
 							
-							 <div class="col-md-12" ng-class="{'has-error' : invalidDate }">
+							 <div class="col-md-12" ng-class="{'has-error' : submitclick || loginformform['transDate'].$invalid || invalidDate }">
+									
+									
 									<p class="input-group">
 									  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="transDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" placeholder="dd/MM/yyyy" required/>
 									  <span class="input-group-btn">
 										<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
 									  </span>
 									</p>
+									
+											
 							  </div>		
 
 								
@@ -232,8 +236,8 @@
 										<p class="text-danger"> <Strong> Invalid User Name or Password ! <Strong> </p>
                             </div>
 
-							<div class="input-group" ng-if="formEmpty">
-										<p class="text-danger"> <Strong> Please enter all fields ! <Strong> </p>
+							<div class="input-group" ng-if="submitclick">
+										<p class="text-danger"> <Strong> Please enter all fields and correct errors ! <Strong> </p>
                             </div>
 							
                             <div class="input-group">
@@ -916,14 +920,32 @@
 				
 					<td><input type="number" min="1" step="1" class="form-control input-sm" size="3" ng-model="selItem.pices" style="width : 50px"></td>
 					 
-					 <td> <input type="number" min="0" step="1" class="form-control input-sm" size="" ng-model="selItem.quandity" style="width : 70px" ></td>	
+					 <td> 
 					 
-					<td ng-if="(selItem.quandity >= 0 && selItem.pices >=0)" style="width : 80px"> {{selItem.quandity*selItem.pices}}&nbsp;	
+					 <input type="number" min="0" step="1" class="form-control input-sm" size="" ng-model="selItem.quandity" style="width : 70px" ng-if="showPage == 'create'">	
+					 
+					 <input type="number" min="0" step="1" class="form-control input-sm" size="" ng-model="selItem.curqundty" style="width : 70px" ng-if="showPage != 'create'">
+					 
+					 </td>	
+					 
+					<td ng-if="(selItem.quandity >= 0 && selItem.pices >=0) && showPage == 'create'" style="width : 80px"> {{selItem.quandity*selItem.pices}}&nbsp;	
+					
+					<td ng-if="(selItem.quandity >= 0 && selItem.pices >=0) && showPage != 'create'" style="width : 80px"> {{selItem.curqundty*selItem.pices}}&nbsp;	
+					
 					
 					<button type="button" class="btn btn-success btn-xs" ng-click="items.push({ 'quandity': 1, 'pices':1})"
 					 ng-if="(items.length == $index+1 && (selItem.quandity*selItem.pices >= 0) && showPage == 'create')" >
 					 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
-					 </button></td>
+					 </button>
+					 
+					 <button type="button" class="btn btn-success btn-xs" ng-click="items.push({ 'quandity': 1, 'pices':1})"
+					 ng-if="(items.length == $index+1 && (selItem.curqundty*selItem.pices >= 0) && showPage != 'create')" >
+					 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
+					 </button>
+					 
+					 
+					 
+					 </td>
 				</tr>
 					
 					<tr class="">
@@ -1092,7 +1114,7 @@
 		  <thead> <tr> <th>#</th> <th>Stock Group Name</th> <th>Parent Group Name</th> <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th></tr> </thead> 
 		  <tbody> 
 			  <tr ng-repeat="group in groups | filter:{name : query}" ng-if="group.name != 'DUMMY'" > 
-				<td>{{$index+1}}</td> 
+				<td>{{$index}}</td> 
 				<td>{{group.name}} </td> 
 				<td> {{   group.parent > 1 ? ((groupResult | filter : {id: group.parent})[0].name) : ''    }} </td> 
 			    <td>
