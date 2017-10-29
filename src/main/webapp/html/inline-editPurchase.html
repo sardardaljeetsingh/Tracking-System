@@ -338,15 +338,16 @@
 										</thead>
 										<tr class="warning" ng-repeat="selItem in curTrasItem.transactionDetails" >
 										
-										 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.itemDetails.pices" style="width: 70px;"></td>
+										 <td><input type="number" min="0" step="1" class="form-control input-sm" ng-model="selItem.itemDetails.pices" style="width: 70px;" ng-change="purchaseTotal(purchage.voucher);"></td>
 										 
-										 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.itemDetails.quandity" style="width: 70px;"></td>	
+										 <td> <input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.itemDetails.curqundty" style="width: 70px;" ng-change="purchaseTotal(purchage.voucher);"></td>	
 										 
-										 <td> {{(+selItem.itemDetails.quandity) * (+selItem.itemDetails.pices) }} &nbsp;	&nbsp;	
+										 <td> {{(+selItem.itemDetails.curqundty) * (+selItem.itemDetails.pices) }} &nbsp;	&nbsp;	
 										 
 										 <button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.selItem.push({ 'quandity': 1, 'pices':1})"
-										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && curTrasItem.selItem.length == $index+1 && ( (+selItem.itemDetails.quandity)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 
+										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && curTrasItem.selItem.length == $index+1 && ( (+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 
 										</tr>
+										
 										<tr class="">
 										 <td colspan="2" style="text-align : right" ><b>Total Packets </b></td>
 										 <td> <b>{{getEditTotal(curTrasItem);}}</b>
