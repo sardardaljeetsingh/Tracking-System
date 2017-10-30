@@ -253,7 +253,7 @@
 								   <td> 
 										
 										
-								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" " >
+								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left"  ng-if="curTrasItem.item != null">
 								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}} 
 									  <!--{{ curTrasItem.item.name }} + " : " + {{ curTrasItem.item.shade }}-->
 									  </label>
@@ -270,7 +270,7 @@
 								  
 								  <td > 
 									
-									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.rate != null && curTrasItem.rate != undefined" >
+									 <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
 								      {{curTrasItem.item.desc}} 
 									  </label>
 								  
@@ -280,7 +280,7 @@
 								  
 								  <td >  
 								  
-								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" >
+								   <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null">
 								      {{curTrasItem.item.curqundty}} 
 									  </label>
 								  
@@ -344,8 +344,13 @@
 										 
 										 <td> {{(+selItem.itemDetails.curqundty) * (+selItem.itemDetails.pices) }} &nbsp;	&nbsp;	
 										 
-										 <button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.selItem.push({ 'quandity': 1, 'pices':1})"
-										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && curTrasItem.selItem.length == $index+1 && ( (+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 
+										<!-- <button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.selItem.push({ 'quandity': 1, 'pices':1})"
+										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && selItem.length == $index+1 && ( (+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 -->
+										
+										
+										<button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.transactionDetails.push({ 'selItem.itemDetails.curqundty': 1, 'selItem.itemDetails.pices':1})"
+										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity)  && (curTrasItem.transactionDetails.length == $index+1) && ((+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0)" >Add</button></td>						 
+										
 										</tr>
 										
 										<tr class="">
@@ -382,7 +387,7 @@
 										 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
 										 </button>
 								     <button type="button" class="btn btn-danger btn-xs" 
-									     ng-click="removeItem($index,purchage);purchaseTotal(purchage.voucher);" >
+									     ng-click="removeItem($index,purchage.voucher);purchaseTotal(purchage.voucher);" >
 										 <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" ></span>
 										 </button>										 
 								  </td>
