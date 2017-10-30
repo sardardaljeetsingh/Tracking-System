@@ -1240,8 +1240,8 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		  var itemDtl = {};
 		  for(i=0;i<itemTrans.pices;i++){
 			  
-			if($scope.showPage == 'create') {	
-			  if(itemTrans.quandity >= 0) {
+			if($scope.showPage == 'create' && itemTrans.quandity >= 0) {	
+			  
 				  itemDtl.name = selItem.name +"_" + selItem.shade + "_" + index  + "_" + (i+1) ;
 				  itemDtl.quandity = itemTrans.quandity ;
 				  itemDtl.curqundty = itemTrans.quandity ;
@@ -1251,19 +1251,22 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 				  itemDtl.createdDate = new Date();
 				  itemDtl.modifiedUser = $rootScope.loggedUser.username;
 				  itemDtl.modifiedDate = new Date();
-			  }
-			} else {
+			  
+			} else if($scope.showPage != 'create' && itemTrans.curqundty >= 0) {
 			  itemDtl.id = itemTrans.id;
 			  itemDtl.name = selItem.name +"_" + selItem.shade + "_" + index  + "_" + (i+1) ;
-			  itemDtl.quandity = itemTrans.quandity ;
-			  itemDtl.curqundty = itemTrans.quandity ;
+			  itemDtl.quandity = itemTrans.curqundty ;
+			  itemDtl.curqundty = itemTrans.curqundty ;
 			  itemDtl.pices =1;
 			  itemDtl.curpices =1;
 			  itemDtl.createdUser = selItem.createdUser;
 			  itemDtl.createdDate = selItem.createdDate;
 			  itemDtl.modifiedUser = $rootScope.loggedUser.username;
 			  itemDtl.modifiedDate = new Date();
+			} else {
+				//nothing for now
 			}
+			
 			tempItemTrans.push(itemDtl);
 		  
 		  }
@@ -1274,7 +1277,7 @@ app.controller('stockItemController', function($scope,$rootScope,$location,$http
 		
 		
 		var dataObj = JSON.stringify(selItem);
-		console.log(dataObj);
+		console.log("Saving Item data ----> " + dataObj);
 		
 		var perform = '';
 		if ($scope.showPage == 'create')
