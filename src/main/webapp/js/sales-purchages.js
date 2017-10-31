@@ -1425,13 +1425,7 @@ app.controller('SaleReturnController', function($scope,$rootScope,$location,$htt
 
 app.controller('EditTransactionController', function($scope,$rootScope,$location,$http,ItemService,AccGroupService,GenericSrvc,StockGrpSrvc,$filter) {
 	
-	$scope.purchage = {};
 	
-     $scope.purchage.inputTrnsDate = new Date(
-		 $rootScope.transDate.getFullYear(),
-		 $rootScope.transDate.getMonth(),
-		 $rootScope.transDate.getDate()
-	  );
 	
   
    if($rootScope.transType == 1) {
@@ -1532,6 +1526,8 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
    
    $scope.purchaseTotal = function(purchage){
 		
+	
+		
 		var totalTransQuandity = 0;
 		var totalTransPieces = 0;
 		var totalTransPrice = 0;
@@ -1539,32 +1535,36 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 		
 		if(purchage != null && purchage != undefined) {
 			
-			
-		angular.forEach(purchage.trasactionItems,function(curTrasItem,index){
-			var total = 0;
-			
-			angular.forEach(curTrasItem.transactionDetails,function(item,index){
-				total += ( (+item.itemDetails.curqundty) * (+item.itemDetails.pices) );
-				totalTransPieces += (+item.itemDetails.pices);
-			
+		
+			angular.forEach(purchage.trasactionItems,function(curTrasItem,index){
+				var total = 0;
+				//if(curTrasItem.item.name != null) {
+					angular.forEach(curTrasItem.transactionDetails,function(item,index){
+						if(item.itemDetails != null && item.itemDetails != undefined) {
+							total += ( (+item.itemDetails.curqundty) * (+item.itemDetails.pices) );
+							totalTransPieces += (+item.itemDetails.pices);
+						}
+					});
+				//	alert("totalTransPieces " + totalTransPieces);
+					//alert("curTrasItem.quandity " + curTrasItem.quandity);
+					
+					if(curTrasItem.quandity != null && curTrasItem.quandity != undefined) {
+						if(total != (+curTrasItem.quandity)){
+							validQuandity = false;
+						}
+						totalTransQuandity += (+curTrasItem.quandity);
+						
+							
+						if($scope.returnType == 'TR_P'){
+							totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.purcrate);
+							//totalTransPrice += (+totalTransQuandity) * (curTrasItem.purcrate);
+						} else {
+							totalTransPrice += (curTrasItem.quandity) * (curTrasItem.rate);
+							//totalTransPrice += (+totalTransQuandity) * (curTrasItem.rate);
+						}
+					}
+				//}
 			});
-			
-			if(total != (+curTrasItem.quandity)){
-			 	validQuandity = false;
-			}
-			totalTransQuandity += (+curTrasItem.quandity);
-			
-		
-			
-			if($scope.returnType == 'TR_P'){
-				totalTransPrice += (+curTrasItem.quandity) * (+curTrasItem.purcrate);
-				//totalTransPrice += (+totalTransQuandity) * (curTrasItem.purcrate);
-			} else {
-				totalTransPrice += (curTrasItem.quandity) * (curTrasItem.rate);
-				//totalTransPrice += (+totalTransQuandity) * (curTrasItem.rate);
-			}
-		
-		});
 		}
 	
 	  purchage.totalPieces = isNaN(totalTransPieces)? 0: totalTransPieces;	
@@ -1589,21 +1589,27 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 	
 	$scope.getEditTotal = function(curTrasItem){
 		var total = 0;
-		for(var i = 0; i < curTrasItem.transactionDetails.length; i++){
-			var item = curTrasItem.transactionDetails[i];
-			total += ( (+item.itemDetails.curqundty) * (+item.itemDetails.pices) );
-			//total  += item.itemDetails.quandity;
-		}
-		curTrasItem.grandTotal = total;
+		
+		if(curTrasItem != null && curTrasItem != undefined) {
+			for(var i = 0; i < curTrasItem.transactionDetails.length; i++){
+				var item = curTrasItem.transactionDetails[i];
+				if(item.itemDetails != null && item.itemDetails != undefined) {
+					total += ( (+item.itemDetails.curqundty) * (+item.itemDetails.pices) );
+					//total  += item.itemDetails.quandity;
+				}
+			}
+			curTrasItem.grandTotal = total;
+		}		
 		return total;
 	}
    
    //changes on 9/29
-	$scope.callGST = function(purchaseForm){
+	$scope.callGST = function(purchage){
+	
 		//if(purchaseForm.fromledger != null && purchaseForm.fromledger.accGroup.parent == 1){
-		if(purchaseForm.fromledger != null){
+		if(purchage.fromledger != null){
 			$scope.GSTapplicable = true;
-			if($scope.company.state == purchaseForm.fromledger.mailingstate){
+			if($scope.company.state == purchage.fromledger.mailingstate){
 				$scope.showSCGST = true;
 				$scope.showIGST = false;
 			} else {
@@ -1618,18 +1624,39 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 		
 	}
    
+   $scope.selectTransaction =  function(purchage) {
+	
+		angular.forEach(purchage.trasactionItems, function (transItem) {
+			transItem.showSplit=true;
+		});
+	
+		 //console.log(" Edit Trsaction Response ---> " + JSON.stringify(purchage));
+	}
+   
+   
+   $scope.purchage = {};
+	
+     /*$scope.purchage.inputTrnsDate = new Date(
+		 $rootScope.transDate.getFullYear(),
+		 $rootScope.transDate.getMonth(),
+		 $rootScope.transDate.getDate()
+	  );*/
    
     //$scope.transactions = [];
-	$scope.purchages = [];
-     GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
-      console.log(" Trsaction Response from DB ----> " + JSON.stringify(response));
-	  $scope.purchages = response;
+	//$scope.purchages = [];
+     //GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
+      $http.get(hostname + '/transactions/find-by-id/'+ $rootScope.transId).then(function(response) {
 	  
+	  
+	  //console.log(" Trsaction Response from DB ----> " + JSON.stringify(response.data));
+	 
+	// $scope.purchages = response;
+	  $scope.purchage = response.data;
 	  
 		  var itemArray = [];
-		  angular.forEach($scope.purchages, function (transaction) {
-			  console.log(" Trsaction Response BF ---> " + JSON.stringify(response));
-			  angular.forEach(transaction.trasactionItems, function (transItem) {
+		  //angular.forEach($scope.purchages, function (transaction) {
+			  //console.log(" Trsaction Response BF ---> " + JSON.stringify(response));
+			  angular.forEach($scope.purchage.trasactionItems, function (transItem) {
 				  //console.log('transItem.item ' + transItem.item );	
 				  if(transItem.item != null && transItem.item.id != null){
 					  itemArray[transItem.item["@id"]] = transItem.item;
@@ -1638,48 +1665,49 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 				 angular.forEach(transItem.transactionDetails, function (transDetils) {
 					 
 					  //console.log('transDetils.itemDetails.item ' + transDetils.itemDetails.item);
-					  if(transDetils.itemDetails.item != null && transDetils.itemDetails.item.id != null){
-						  itemArray[transDetils.itemDetails.item["@id"]] = transDetils.itemDetails.item;
-					  }		 
+					 if(transDetils.itemDetails != null && transDetils.itemDetails != undefined) {
+						if(transDetils.itemDetails.item != null && transDetils.itemDetails.item.id != null){
+							itemArray[transDetils.itemDetails.item["@id"]] = transDetils.itemDetails.item;
+						}
+					 }						
 				 });	
 			 });	
-        });
+        //});
 		
-		  angular.forEach($scope.purchages, function (transaction) {		
-			angular.forEach(transaction.trasactionItems, function (transItem) {
+		 // angular.forEach($scope.purchages, function (transaction) {		
+			angular.forEach($scope.purchage.trasactionItems, function (transItem) {
 				  if(transItem.item != null && transItem.item.id == null){
 					  transItem.item = itemArray[transItem.item];
 				  }
 				 // console.log('transItem.item ' + transItem.item +' transItem.item.id '+ transItem.item.id);
 				 angular.forEach(transItem.transactionDetails, function (transDetils) {
-					  if(transDetils.itemDetails.item != null && transDetils.itemDetails.item.id == null){
-						  transDetils.itemDetails.item = itemArray[transDetils.itemDetails.item];
-					  }		 
+					   if(transDetils.itemDetails != null && transDetils.itemDetails != undefined) {
+							if(transDetils.itemDetails.item != null && transDetils.itemDetails.item.id == null){
+								transDetils.itemDetails.item = itemArray[transDetils.itemDetails.item];
+							}
+					   }						
 				 });
 				// console.log('transDetils.itemDetails.item ' + transDetils.itemDetails.item +' transDetils.itemDetails.item.id '+ transDetils.itemDetails.item.id);		 
 			 });	  
-	    });
-		//  console.log(" Trsaction Response AF---> " + JSON.stringify(response));
+	    //});
+		  console.log(" Trsaction Response AF---> " + JSON.stringify($scope.purchage));
 	  
 	  
-	  
-	  
-	  
-   }); 
-   
- 
-	$scope.selectTransaction =  function(purchage) {
-	
-		angular.forEach(purchage.trasactionItems, function (transItem) {
+	  	angular.forEach($scope.purchage.trasactionItems, function (transItem) {
 			transItem.showSplit=true;
 		});
 	
-	  $scope.purchaseTotal(purchage);
-      $scope.callGST(purchage);
+	  $scope.callGST($scope.purchage);
+	  $scope.purchaseTotal($scope.purchage);
+      
+	  var transDate = new Date($scope.purchage.transdate);
+	  $scope.purchage.inputTrnsDate = new Date(transDate.getFullYear(),transDate.getMonth(),transDate.getDate());
+	  
+   }); 
+   
+   //$scope.selectTransaction($scope.purchage);
+ 
 	
-	
-	 //console.log(" Edit Trsaction Response ---> " + JSON.stringify(purchage));
-	}
   
   //Edit flow -- setting form data ends here
   
