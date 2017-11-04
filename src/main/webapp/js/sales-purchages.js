@@ -1648,10 +1648,10 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
       $http.get(hostname + '/transactions/find-by-id/'+ $rootScope.transId).then(function(response) {
 	  
 	  
-	  //console.log(" Trsaction Response from DB ----> " + JSON.stringify(response.data));
+	  console.log(" Trsaction Response from DB ----> " + JSON.stringify(response.data));
 	 
 	// $scope.purchages = response;
-	  $scope.purchage = response.data;
+	  $scope.purchage = response.dataa
 	  
 		  var itemArray = [];
 		  //angular.forEach($scope.purchages, function (transaction) {
@@ -1743,66 +1743,74 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 			//transItem.transactionDetails = [];
 			//console.log("Getting into 1 ---------> " );
 			
-			var finalItemsDtls = [];
-			var count = 1;
-			//angular.forEach(transItem.curItems,function(itemTrans,index2){
-			angular.forEach(transItem.transactionDetails,function(itemTrans,index2){	
+			if(transItem.item != null && transItem.item != undefined) {
 			
-				if(itemTrans.itemDetails.quandity > 0 && itemTrans.itemDetails.pices > 0){
+				var finalItemsDtls = [];
+				var count = 1;
+				//angular.forEach(transItem.curItems,function(itemTrans,index2){
+				angular.forEach(transItem.transactionDetails,function(itemTrans,index2){	
 				
-					//console.log("Getting into 2 ---------> " );
-					//itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
-					//finalItemsDtls.push(itemTrans);
-					  for(i=0;i<itemTrans.itemDetails.pices;i++){
-						  
-						  //console.log("adding quandity ---------> " + itemTrans.itemDetails.quandity);
-						  var itemDtl = {};
-						  
-						  if(itemTrans.itemDetails.id == null || itemTrans.itemDetails.id == undefined){
-								itemDtl.createdUser = $rootScope.loggedUser.username;
-								itemDtl.createdDate = new Date();
-						  } else {
-							
-							itemDtl.id = itemTrans.itemDetails.id;			
-						  }	
-							
-							itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
-							itemDtl.quandity = itemTrans.itemDetails.quandity ;
-							itemDtl.curqundty = itemTrans.itemDetails.curqundty ;
-						  
-						  itemDtl.modifiedUser = $rootScope.loggedUser.username;
-						  itemDtl.modifiedDate = new Date();
-											  
-						  itemDtl.pices =1;
-						  itemDtl.curpices =1;
-						  finalItemsDtls.push(itemDtl);
-					  }					
+					if(itemTrans.itemDetails.quandity > 0 && itemTrans.itemDetails.pices > 0){
 					
-				}
-			  
-			});
-            transItem.item.itemDtls = finalItemsDtls;
+						//console.log("Getting into 2 ---------> " );
+						//itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
+						//finalItemsDtls.push(itemTrans);
+						  for(i=0;i<itemTrans.itemDetails.pices;i++){
+							  
+							  //console.log("adding quandity ---------> " + itemTrans.itemDetails.quandity);
+							  var itemDtl = {};
+							  
+							  if(itemTrans.itemDetails.id == null || itemTrans.itemDetails.id == undefined){
+									itemDtl.createdUser = $rootScope.loggedUser.username;
+									itemDtl.createdDate = new Date();
+							  } else {
+								
+								itemDtl.id = itemTrans.itemDetails.id;			
+							  }	
+								
+								itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
+								itemDtl.quandity = itemTrans.itemDetails.quandity ;
+								itemDtl.curqundty = itemTrans.itemDetails.curqundty ;
+							  
+							  itemDtl.modifiedUser = $rootScope.loggedUser.username;
+							  itemDtl.modifiedDate = new Date();
+												  
+							  itemDtl.pices =1;
+							  itemDtl.curpices =1;
+							  finalItemsDtls.push(itemDtl);
+						  }					
+						
+					}
+				  
+				});
+
 			
-					
-			transItem.createdUser = $rootScope.loggedUser.username;
-			transItem.createdDate = new Date();
-			transItem.modifiedUser = $rootScope.loggedUser.username;
-			transItem.modifiedDate = new Date();
-			
-			transItem.item.modifiedUser = $rootScope.loggedUser.username;
-			transItem.item.modifiedDate = new Date();
+				transItem.item.itemDtls = finalItemsDtls;
 				
-			
-			transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
-			transItem.item.itemDtls.createdDate = new Date();
-			transItem.item.itemDtls.modifiedUser = $rootScope.loggedUser.username;
-			transItem.item.itemDtls.modifiedDate = new Date();
-			
-			//console.log("transItem.item.itemDtls------> "+ transItem.item.itemDtls);
-			//delete transItem['@id'];
-			//delete transItem['id'];
-			delete transItem.item['@id'];	
-			delete transItem.item.stockGroup['@id'];				
+				transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
+				transItem.item.itemDtls.createdDate = new Date();
+				transItem.item.itemDtls.modifiedUser = $rootScope.loggedUser.username;
+				transItem.item.itemDtls.modifiedDate = new Date();
+				
+				transItem.item.modifiedUser = $rootScope.loggedUser.username;
+				transItem.item.modifiedDate = new Date();
+
+				transItem.createdUser = $rootScope.loggedUser.username;
+				transItem.createdDate = new Date();
+				transItem.modifiedUser = $rootScope.loggedUser.username;
+				transItem.modifiedDate = new Date();
+				
+				
+					
+				
+				
+				
+				//console.log("transItem.item.itemDtls------> "+ transItem.item.itemDtls);
+				//delete transItem['@id'];
+				//delete transItem['id'];
+				delete transItem.item['@id'];	
+				delete transItem.item.stockGroup['@id'];				
+			}
 		});
 		
 		delete purchage.ledger['@id'];
