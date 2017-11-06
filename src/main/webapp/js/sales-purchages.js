@@ -2260,8 +2260,7 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 				angular.forEach(transItem.transactionDetails,function(itemTrans,index2){	
 				
 					if(itemTrans.quandity > 0){
-						alert("itemTrans.quandity ----> " + itemTrans.quandity);
-					
+						
 						//console.log("Getting into 2 ---------> " );
 						//itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
 						//finalItemsDtls.push(itemTrans);
@@ -2281,8 +2280,8 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 								//itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
 								//itemDtl.quandity = itemTrans.quandity ;
 								//itemDtl.curqundty = itemTrans.itemDetails.curqundty ;
-								itemDtl.curqundty = itemTrans.quandity ;
-								
+								//itemDtl.curqundty = itemTrans.quandity ;
+								itemTrans.itemDetails.curqundty =  itemTrans.quandity ;
 							  
 							  itemDtl.modifiedUser = $rootScope.loggedUser.username;
 							  itemDtl.modifiedDate = new Date();
