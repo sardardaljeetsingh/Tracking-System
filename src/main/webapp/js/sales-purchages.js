@@ -2019,15 +2019,18 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 			//var item = curTrasItem.item.itemDtls[i];
 			var item = curTrasItem.transactionDetails[i];
 			//total += ( (+item.quandity) * (+item.pices) );
-			if(type==1){
-				total += item.itemDetails.curqundty;
-			}else{
-				//total += item.itemDetails.inputqundty;
-				total += item.quandity;
-				if(item.itemDetails.inputqundty > item.itemDetails.curqundty){
-					$scope.invalidCount = true;
+			if(	item.itemDetails != null) {
+				if(type==1){
+					total += item.itemDetails.curqundty;
+				}else{
+					//total += item.itemDetails.inputqundty;
+					total += item.quandity;
+					if(item.itemDetails.inputqundty > item.itemDetails.curqundty){
+						$scope.invalidCount = true;
+					}
 				}
-			}			
+			}
+			
 		}
 		
 		if(type==2)
@@ -2053,8 +2056,12 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 				
 					angular.forEach(curTrasItem.transactionDetails,function(item,index){
 						//total += ( (+item.itemDetails.inputqundty) * (+item.itemDetails.pices) );
-						total += ( (+item.quandity) * (+item.itemDetails.pices) );
-						totalTransPieces += (+item.itemDetails.pices);
+						
+						if(	item.itemDetails != null) {
+							total += ( (+item.quandity) * (+item.itemDetails.pices) );
+							totalTransPieces += (+item.itemDetails.pices);
+						}
+					
 					});
 					//alert("total  " + total);
 					if(total != (+curTrasItem.quandity)){
@@ -2129,11 +2136,11 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 				  }
 
 				 angular.forEach(transItem.transactionDetails, function (transDetils) {
-					 
-					  //console.log('transDetils.itemDetails.item ' + transDetils.itemDetails.item);
+					 if(transDetils.itemDetails != null) {
 					  if(transDetils.itemDetails.item != null && transDetils.itemDetails.item.id != null){
 						  itemArray[transDetils.itemDetails.item["@id"]] = transDetils.itemDetails.item;
 					  }		 
+					 }
 				 });	
 			 });	
         //});
@@ -2145,14 +2152,16 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 				  }
 				 // console.log('transItem.item ' + transItem.item +' transItem.item.id '+ transItem.item.id);
 				 angular.forEach(transItem.transactionDetails, function (transDetils) {
+					  if(transDetils.itemDetails != null) {
 					  if(transDetils.itemDetails.item != null && transDetils.itemDetails.item.id == null){
 						  transDetils.itemDetails.item = itemArray[transDetils.itemDetails.item];
 					  }		 
+					  }
 				 });
 				// console.log('transDetils.itemDetails.item ' + transDetils.itemDetails.item +' transDetils.itemDetails.item.id '+ transDetils.itemDetails.item.id);		 
 			 });	  
 	    //});
-		//  console.log(" Trsaction Response AF---> " + JSON.stringify(response));
+		 // console.log(" Trsaction Response AF---> " + JSON.stringify($scope.sale));
 	  
 	  
 		angular.forEach($scope.sale.trasactionItems, function (transItem) {
@@ -2193,7 +2202,7 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 		}
        
 
-		angular.forEach(sale.trasactionItems,function(transItem,index1){
+		/*angular.forEach(sale.trasactionItems,function(transItem,index1){
 			transItem.transactionDetails = [];
 			var finalItemsDtls = [];
 			var count = 1;
@@ -2223,8 +2232,9 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 	
 
 			//console.log(transItem.item.itemDtls);
-			delete transItem.item['@id'];	
-			delete transItem.item.stockGroup['@id'];				
+			
+			//delete transItem.item['@id'];	
+			//delete transItem.item.stockGroup['@id'];				
 
 //...................................................................................................
 		    	
@@ -2236,7 +2246,88 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 			
 	
 
-	});
+	});*/
+		
+		angular.forEach(sale.trasactionItems,function(transItem,index1){
+			//transItem.transactionDetails = [];
+			//console.log("Getting into 1 ---------> " );
+			
+			if(transItem.item != null && transItem.item != undefined) {
+			
+				var finalItemsDtls = [];
+				var count = 1;
+				//angular.forEach(transItem.curItems,function(itemTrans,index2){
+				angular.forEach(transItem.transactionDetails,function(itemTrans,index2){	
+				
+					if(itemTrans.quandity > 0){
+						alert("itemTrans.quandity ----> " + itemTrans.quandity);
+					
+						//console.log("Getting into 2 ---------> " );
+						//itemTrans.name = transItem.item.name +"_" + transItem.item.shade + "_" + index1 +"_"+(count++) ;
+						//finalItemsDtls.push(itemTrans);
+						  for(i=0;i<itemTrans.itemDetails.pices;i++){
+							  
+							  //console.log("adding quandity ---------> " + itemTrans.itemDetails.quandity);
+							  var itemDtl = {};
+							  
+							  if(itemTrans.itemDetails.id == null || itemTrans.itemDetails.id == undefined){
+									itemDtl.createdUser = $rootScope.loggedUser.username;
+									itemDtl.createdDate = new Date();
+							  } else {
+								
+								itemDtl.id = itemTrans.itemDetails.id;			
+							  }	
+								
+								//itemDtl.name = transItem.item.name +"_" + transItem.item.shade + "_" + index2  + "_" + (i+1) ;
+								//itemDtl.quandity = itemTrans.quandity ;
+								//itemDtl.curqundty = itemTrans.itemDetails.curqundty ;
+								itemDtl.curqundty = itemTrans.quandity ;
+								
+							  
+							  itemDtl.modifiedUser = $rootScope.loggedUser.username;
+							  itemDtl.modifiedDate = new Date();
+												  
+							  itemDtl.pices =1;
+							  itemDtl.curpices =1;
+							  finalItemsDtls.push(itemDtl);
+						  }					
+						
+					}
+				  
+				});
+
+			
+				transItem.item.itemDtls = finalItemsDtls;
+				
+				transItem.item.itemDtls.createdUser = $rootScope.loggedUser.username;
+				transItem.item.itemDtls.createdDate = new Date();
+				transItem.item.itemDtls.modifiedUser = $rootScope.loggedUser.username;
+				transItem.item.itemDtls.modifiedDate = new Date();
+				
+				transItem.item.modifiedUser = $rootScope.loggedUser.username;
+				transItem.item.modifiedDate = new Date();
+
+				transItem.createdUser = $rootScope.loggedUser.username;
+				transItem.createdDate = new Date();
+				transItem.modifiedUser = $rootScope.loggedUser.username;
+				transItem.modifiedDate = new Date();
+				
+				
+					
+				
+				
+				
+				//console.log("transItem.item.itemDtls------> "+ transItem.item.itemDtls);
+				//delete transItem['@id'];
+				//delete transItem['id'];
+				delete transItem.item['@id'];	
+				delete transItem.item.stockGroup['@id'];				
+			}
+		});
+		
+		
+		
+		
 		
 		delete sale.ledger['@id'];
 		delete sale.ledger.accGroup;
@@ -2259,7 +2350,7 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 
 		//console.log(dataObj);
 			
-			$http.post(hostname+'/transactions/create', dataObj, {
+			$http.post(hostname+'/transactions/update', dataObj, {
 			  headers: {
 				'Content-Type': 'application/json; charset=UTF-8'
 			  },
@@ -2272,9 +2363,9 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 					
 					
 					if($scope.returnType == 'TR_S') {
-						alert("Sales order created successfully.");
+						alert("Sales order updated successfully.");
 					} else {
-						alert("Purchase return order created successfully.");
+						alert("Purchase return order updated successfully.");
 					}
 					
 					//$scope.agentform.$setPristine();
