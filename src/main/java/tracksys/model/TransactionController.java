@@ -193,34 +193,52 @@ public class TransactionController {
 		ItemDetails tempItemDtl = null;
 		ItemDetails itemDetail = null;
 		
+		List dupList =  new ArrayList<String>(); 
 		
 		if(transactionDetailsLst != null) {
 			for(TransactionDetails transactionDetails : transactionDetailsLst){
 				
 				if(transactionDetails != null) {
+					
 					itemDetail = transactionDetails.getItemDetails();
 					
-					System.out.println("itemDetail quantity ---------> " + itemDetail.getCurqundty());
+					if(!dupList.contains(String.valueOf(itemDetail.getId()))){
+						
+						dupList.add(String.valueOf(itemDetail.getId()));
 					
-					tempItemDtl = itemDtlsRepo.findOne(transactionDetails.getItemDetails().getId());
-					System.out.println("tempItemDtl quantity ---------> " + tempItemDtl.getCurqundty());
+						System.out.println("itemDetail cquantity ---------> " + itemDetail.getCurqundty());
+						System.out.println("itemDetail quantity ---------> " + itemDetail.getQuandity());
+						
+						
+						tempItemDtl = itemDtlsRepo.findOne(transactionDetails.getItemDetails().getId());
+						System.out.println("tempItemDtl Cquantity ---------> " + tempItemDtl.getCurqundty());
+						System.out.println("tempItemDtl quantity ---------> " + tempItemDtl.getQuandity());
+						
+						//For purchase transactions
+						//tempItemDtl.setCurqundty(itemDetail.getCurqundty());
+						
+						//For sales transactions
+						tempItemDtl.setCurqundty(itemDetail.getQuandity() - itemDetail.getCurqundty());
+						
+						tempItemDtl.setCurpices(itemDetail.getPices());
+						tempItemDtl.setModifiedUser(trasactionItem.getModifiedUser());
+						tempItemDtl.setModifiedDate(new java.util.Date());
+						
+						tempItemDtl = itemDtlsRepo.save(tempItemDtl);
 					
-					tempItemDtl.setCurqundty(itemDetail.getCurqundty());
-					tempItemDtl.setCurpices(itemDetail.getPices());
-					tempItemDtl.setModifiedUser(trasactionItem.getModifiedUser());
-					tempItemDtl.setModifiedDate(new java.util.Date());
+						System.out.println("Saved itemDetail quantity ---------> " );
 					
-					tempItemDtl = itemDtlsRepo.save(tempItemDtl);
-				
-					System.out.println("Saved itemDetail quantity ---------> " );
-				
-					transactionDetails.setItemDetails(tempItemDtl);
-					transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
-					transactionDetails.setTrasactionItem(trasactionItem);
-					transactionDetails.setModifiedUser(trasactionItem.getModifiedUser());
-					transactionDetails.setModifiedDate(new java.util.Date());
-					
-				
+						transactionDetails.setItemDetails(tempItemDtl);
+						//For purchase transaction
+						//transactionDetails.setQuandity(tempItemDtl.getCurqundty() * tempItemDtl.getCurpices());
+						
+						//For Sales transaction
+						transactionDetails.setQuandity(itemDetail.getCurqundty());
+						transactionDetails.setTrasactionItem(trasactionItem);
+						transactionDetails.setModifiedUser(trasactionItem.getModifiedUser());
+						transactionDetails.setModifiedDate(new java.util.Date());
+						
+					}
 				}
 		
 			}
