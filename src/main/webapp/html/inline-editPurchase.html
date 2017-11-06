@@ -348,11 +348,14 @@
 										 <td> {{(+selItem.itemDetails.curqundty) * (+selItem.itemDetails.pices) }} &nbsp;	&nbsp;	
 										 
 										<!-- <button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.selItem.push({ 'quandity': 1, 'pices':1})"
-										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && selItem.length == $index+1 && ( (+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 -->
+										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity && selItem.length == $index+1 && ( (+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0) )">Add</button></td>						 
 										
-										
+																				
 										<button type="button" class="btn btn-warning btn-sm" ng-click="curTrasItem.transactionDetails.push({ 'selItem.itemDetails.curqundty': 1, 'selItem.itemDetails.pices':1})"
-										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity)  && (curTrasItem.transactionDetails.length == $index+1) && ((+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0)" >Add</button></td>						 
+										 ng-if="(curTrasItem.grandTotal < curTrasItem.quandity)  && (curTrasItem.transactionDetails.length == $index+1) && ((+selItem.itemDetails.curqundty)* (+selItem.itemDetails.pices) > 0)" >Add</button>
+										 -->
+										 
+										 </td>						 
 										
 										</tr>
 										
@@ -384,7 +387,7 @@
 								  
 								  
 								  </td>
-								  <td> 
+								  <td ng-show="false"> 
 								     <button type="button" class="btn btn-success btn-xs" 
 									     ng-click="addItem(purchage);" ng-if="purchage.trasactionItems.length == $index+1" >
 										 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>

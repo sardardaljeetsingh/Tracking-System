@@ -50,16 +50,15 @@
 								<label for="inputPassword3" class="col-sm-4 control-label">Voucher</label>
 								<div class="col-sm-5">
 
-								<!--
-									<input type="text" class="form-control input-sm" id="trasaction.voucher" name="trasaction.voucher" ng-model="trasaction.voucher"
-								  required  >	
 								
-								-->
+									<input type="text" class="form-control input-sm" id="sale.voucher" name="sale.voucher" ng-model="sale.voucher" readonly  >	
+								
+								<!--
 									<input type="text" ng-model="sale.voucher"  uib-typeahead="sale as sale.voucher for sale in sales | filter:$viewValue | limitTo:8"  
 										ng-blur="selectTransaction(sale.voucher);"
 										class="form-control input-sm" style="width:150px" placeholder="Type Voucher #" required />
 						
-								
+								-->
 								</div>
 							 
 							 </div>	
@@ -72,51 +71,37 @@
 								</div>
 							  </div>	
 							  
-					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['sale.voucher.agent'].$invalid  }" ng-if="returnType == 'TR_S'">
+					  		<div class="form-group col-xs-6" ng-class="{'has-error' : submitclick && salesform['sale.agent'].$invalid  }" ng-if="returnType == 'TR_S'">
 								<label for="inputPassword3" class="col-sm-4 control-label">Agent</label>
 								<div class="col-sm-5" >
-									<select class="form-control input-sm" ng-model="sale.voucher.agent" name="sale.voucher.agent" 
-											ng-init="sale.voucher.agent = sale.voucher.agent || options[0].value"
-											ng-options="option as option.name for option in agents  track by option.id""
+									<select class="form-control input-sm" ng-model="sale.agent" name="sale.agent" 
+											ng-init="sale.agent = sale.agent"
+											ng-options="option as option.name for option in agents track by option.id"
 											required >
 											<option value="">-- Choose Agent --</option>
 									</select>	
 								</div>
-									<label for="inputPassword3" class="col-sm-3 control-label" ng-if="sale.voucher.agent != null"
-											style="display: inline-block;padding-top: 4px;" >{{sale.voucher.agent.commission}}%</label>
+									<label for="inputPassword3" class="col-sm-3 control-label" ng-if="sale.agent != null"
+											style="display: inline-block;padding-top: 4px;" >{{sale.agent.commission}}%</label>
 							  </div>								  
 							  
+							  
 					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px;;margin-right:0px;" 
-							ng-class="{'has-error' : submitclick && salesform['sale.voucher.fromledger'].$invalid  }" >
+							ng-class="{'has-error' : submitclick && salesform['sale.fromledger'].$invalid  }" >
 								<label for="inputPassword3" class="col-sm-4 control-label">Party Account</label>
 								<div class="col-sm-5" >
-									<!--
-									<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
-											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:filterForSales"
-											required ng-if="returnType == 'TR_S'">
-											<option value="">-- Choose Account --</option>
-									</select>	
-				
-								<select class="form-control input-sm" ng-model="trasaction.fromledger" name="trasaction.fromledger" 
-											ng-init="trasaction.fromledger = trasaction.fromledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:filterForPurchases"
-											required ng-if="returnType == 'TR_PR'">
-											<option value="">-- Choose Account --</option>
-									</select>	
-								-->
 								
-								<select class="form-control input-sm" ng-model="sale.voucher.fromledger" name="sale.voucher.fromledger" 
-											ng-init="sale.voucher.fromledger = sale.voucher.fromledger || options[0].value"
-											ng-options="option as option.name for option in partyACNameForSales  track by option.id""
+								<select class="form-control input-sm" ng-model="sale.fromledger" name="sale.fromledger" 
+											ng-init="sale.fromledger = sale.fromledger || options[0].value"
+											ng-options="option as option.name for option in partyACNameForSales  track by option.id"
 											ng-change="callGST(sale)"
 											required ng-if="returnType == 'TR_S'">
 											<option value="">-- Choose Account --</option>
 									</select>	
 				
-								<select class="form-control input-sm" ng-model="sale.voucher.fromledger" name="sale.voucher.fromledger" 
-											ng-init="sale.voucher.fromledger = sale.voucher.fromledger || options[0].value"
-											ng-options="option as option.name for option in partyACNameForPurchase  track by option.id""
+								<select class="form-control input-sm" ng-model="sale.fromledger" name="sale.fromledger" 
+											ng-init="sale.fromledger = sale.fromledger || options[0].value"
+											ng-options="option as option.name for option in partyACNameForPurchase  track by option.id"
 											ng-change="callGST(sale)"
 											required ng-if="returnType == 'TR_PR'">
 											<option value="">-- Choose Account --</option>
@@ -124,47 +109,33 @@
 
 
 								</div>
-									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="sale.voucher.fromledger != null"
-											style="display: inline-block;padding-top: 4px;" >{{currency}}{{sale.voucher.fromledger.curbal}}</label>
+									<label for="inputPassword3" class="col-sm-2 control-label" ng-if="sale.fromledger != null"
+											style="display: inline-block;padding-top: 4px;" >{{currency}}{{sale.fromledger.curbal}}</label>
 							  </div>	
 							  
-					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px;margin-right:0px;" ng-class="{'has-error' : submitclick && salesform['sale.voucher.ledger'].$invalid  }">
+					  		<div class="form-group col-xs-6" style="margin-top:10px;margin-bottom:10px;margin-right:0px;" ng-class="{'has-error' : submitclick && salesform['sale.ledger'].$invalid  }">
 								<label for="inputPassword3" class="col-sm-4 control-label" ng-if="returnType == 'TR_S'">Sales Account</label>
 								<label for="inputPassword3" class="col-sm-4 control-label" ng-if="returnType == 'TR_PR'">Purchase Account</label>
 								<div class="col-sm-5">
 									
-									<!--<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
-											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Sales'}}  "
-											required ng-if="returnType == 'TR_S'">
-											<option value="">-- Choose Account --</option>
-									</select>
-									
-									<select class="form-control input-sm" ng-model="trasaction.ledger" name="trasaction.ledger" 
-											ng-init="trasaction.ledger = trasaction.ledger || options[0].value"
-											ng-options="option as option.name for option in ledgers | filter:{ accGroup:{name :'Purchases'}}  "
-											required ng-if="returnType == 'TR_PR'">
-											<option value="">-- Choose Account --</option>
-									</select>
-									-->
 									<!--changes on 9/29-->
-									<select class="form-control input-sm" ng-model="sale.voucher.ledger" name="sale.voucher.ledger" 
-											ng-init="sale.voucher.ledger = sale.voucher.ledger || options[0].value"
-											ng-options="option as option.name for option in SalesACName  track by option.id""
+									<select class="form-control input-sm" ng-model="sale.ledger" name="sale.ledger" 
+											ng-init="sale.ledger = sale.ledger || options[0].value"
+											ng-options="option as option.name for option in SalesACName  track by option.id"
 											required ng-if="returnType == 'TR_S'">
 											<option value="">-- Choose Account --</option>
 									</select>
 									<!--changes on 9/29-->
-									<select class="form-control input-sm" ng-model="sale.voucher.ledger" name="sale.voucher.ledger" 
-											ng-init="sale.voucher.ledger = sale.voucher.ledger || options[0].value"
-											ng-options="option as option.name for option in PurchaseACName  track by option.id""
+									<select class="form-control input-sm" ng-model="sale.ledger" name="sale.ledger" 
+											ng-init="sale.ledger = sale.ledger || options[0].value"
+											ng-options="option as option.name for option in PurchaseACName  track by option.id"
 											required ng-if="returnType == 'TR_PR'">
 											<option value="">-- Choose Account --</option>
 									</select>
 									
 									</div>
-									<label for="inputPassword3" class="col-sm-2 control-label" style="display: inline-block;padding-top: 4px;" ng-if="sale.voucher.ledger != null"
-								 >{{currency}}{{sale.voucher.ledger.curbal}}</label>									
+									<label for="inputPassword3" class="col-sm-2 control-label" style="display: inline-block;padding-top: 4px;" ng-if="sale.ledger != null"
+								 >{{currency}}{{sale.ledger.curbal}}</label>									
 								
 							  </div>	
 					  
@@ -182,28 +153,14 @@
 							  <th class="col-sm-1 input-sm">Avaliable Quantity</th>
 							   <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_PR'">Purchase Rate</th>
 							  <th class="col-sm-1 input-sm" ng-if="returnType == 'TR_S'">Sales Rate</th>
-							  <th class="col-sm-3 input-sm">Current Quantity</th>
+							  <th class="col-sm-3 input-sm" ng-if="returnType == 'TR_PR'">Return Quantity</th>
+							  <th class="col-sm-3 input-sm" ng-if="returnType == 'TR_S'">Sales Quantity</th>
 							  <th class="col-sm-2 input-sm">Action</th>
 							</tr>
 							</thead>
-							<tr class="warning" ng-repeat="curTrasItem in sale.voucher.trasactionItems" > 
+							<tr class="warning" ng-repeat="curTrasItem in sale.trasactionItems  track by $index" ng-if="curTrasItem.item.name != null"  > 
 								  <td ng-class="{'has-error' : ( submitclick && !(curTrasItem.item.id >0) ) }" >
 										
-										<!--
-										<select class="form-control input-sm" ng-model="curTrasItem.item" name="curTrasItem.item"  style="width:150px" 
-												ng-init="curTrasItem.item = curTrasItem.item || options[0].value"
-												ng-options="option as option.name for option in items"
-												ng-change="curTrasItem.rate = curTrasItem.item.rate;
-												curTrasItem.purcrate = curTrasItem.item.purcrate;
-												curTrasItem.curItems = [];
-												curTrasItem.showSplit=false;
-												curTrasItem.quandity = 0;
-												curTrasItem.curItems.push({ 'quandity': 1, 'pices':1})"
-												required>
-												<option value="">-- Choose Item Name --</option>
-										</select>		
-										-->
-
 										<input type="text" ng-model="curTrasItem.item"  uib-typeahead="option as option.name + ' : ' + option.shade for option in items | filter:$viewValue | limitTo:8"  
 										ng-blur="curTrasItem.rate = curTrasItem.item.rate;
 												curTrasItem.purcrate = curTrasItem.item.purcrate;
@@ -273,7 +230,7 @@
 								  
                                   <input type="number" min="1" step="1" class="form-control input-sm-2" style="display: table-row-group;width: 50%;width: 70px;" id="inputPassword3" 
 								  name="curTrasItem.quandity" ng-model="curTrasItem.quandity"  required 
-								  ng-change="getTotal(curTrasItem);purchaseTotal(sale.voucher);curTrasItem.showSplit=true;">
+								  ng-change="getTotal(curTrasItem);purchaseTotal(sale);curTrasItem.showSplit=true;">
 								  
 								  	<div class="alert alert-danger" role="alert" ng-if="curTrasItem.quandity > (curTrasItem.item.curqundty)" >
 											ERROR : Current  quandity <b> {{curTrasItem.quandity}} </b> should not exeeds avaliable quantity <b>{{curTrasItem.item.curqundty}}</b>
@@ -298,7 +255,7 @@
 										  <th class="col-sm-1 input-sm">No of Pieces</th>
 										  <th class="col-sm-2 input-sm">Each Piece Quantity</th>
 										  <th class="col-sm-1 input-sm">Total available Quantity </th>
-										  <th class="col-sm-1 input-sm"> Choose Quantity </th>
+										  <th class="col-sm-1 input-sm">Enter Quantity </th>
 										</tr>
 										</thead>
 										
@@ -310,7 +267,7 @@
 										<td> {{(+selItem.itemDetails.curqundty) * (+selItem.itemDetails.pices) }} &nbsp;	&nbsp;	</td>	
 										 
 										 <td ng-class="{'has-error' : selItem.quandity > selItem.itemDetails.curqundty  }" >
-											<input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity" style="width: 70px;">
+											<input type="number" min="0" step="1" class="col-md-2 form-control input-sm"  ng-model="selItem.quandity" ng-change="purchaseTotal(sale);" style="width: 70px;">
 										 </td>						 
 										
 										</tr>
@@ -360,82 +317,70 @@
 							<tr class="warning">
 								<td colspan="5" style="text-align : right;" > <b> Total Quantity </b> </td>
 								<td colspan="3" style="text-align : left;" >
-								{{sale.voucher.quandity}}
+								{{sale.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
 								<td colspan="5" style="text-align : right;" > <b> Taxable Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{currency}} &nbsp; {{sale.voucher.rate}}
+								{{currency}} &nbsp; {{sale.rate}}
 								</td>
 							</tr>	
 							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
 								<td colspan="5" style="text-align : right;" > <b> GST --> SGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{currency}} &nbsp; {{(sale.voucher.rate * 2.5/100)}}
+								{{currency}} &nbsp; {{(sale.rate * 2.5/100)}}
 								</td>
 							</tr>	
 							<tr class="warning" ng-if="GSTapplicable == true && showSCGST == true">
 								<td colspan="5" style="text-align : right;" > <b> GST --> CGST(2.5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{currency}} &nbsp; {{(sale.voucher.rate * 2.5/100)}}
+								{{currency}} &nbsp; {{(sale.rate * 2.5/100)}}
 								</td>
 							</tr>
 							
 							<tr class="warning" ng-if="GSTapplicable == true && showIGST == true">
 								<td colspan="5" style="text-align : right;" > <b> GST --> IGST(5%) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{currency}} &nbsp; {{(sale.voucher.rate * 5/100)}}
+								{{currency}} &nbsp; {{(sale.rate * 5/100)}}
 								</td>
 							</tr>
 							<tr class="warning" ng-if="GSTapplicable == true">
 								<td colspan="5" style="text-align : right;" > <b> Total Amount (with GST) </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{currency}} &nbsp; {{(sale.voucher.rate + (sale.voucher.rate * 5/100) )}}
+								{{currency}} &nbsp; {{(sale.rate + (sale.rate * 5/100) )}}
 								</td>
 							</tr>	
 							
 							<tr class="warning" ng-if="GSTapplicable == false">
 								<td colspan="5" style="text-align : right;" > <b> Total Amount </b>  </td>
 								<td colspan="3" style="text-align : left;" >
-								{{currency}} &nbsp; {{sale.voucher.rate}}
+								{{currency}} &nbsp; {{sale.rate}}
 								</td>
 							</tr>	
 							
 							
 							<tr class="warning" ng-if="returnType == 'TR_S'" >
 								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
-								<td colspan="3" style="text-align : left;" ng-if="sale.voucher.agent.commission != null">
-								{{currency}} &nbsp; {{ (sale.voucher.rate * sale.voucher.agent.commission) / 100 }}
+								<td colspan="3" style="text-align : left;" ng-if="sale.agent.commission != null">
+								{{currency}} &nbsp; {{ (sale.rate * sale.agent.commission) / 100 }}
 								</td>
-								<td colspan="3" style="text-align : left;" ng-if="sale.voucher.agent.commission == null">
+								<td colspan="3" style="text-align : left;" ng-if="sale.agent.commission == null">
 								{{currency}} &nbsp; 0
 								</td>
 							</tr>
 							
 							<tr class="">
 							
-							<!--
-							<td colspan="9" style="text-align : center;" >
-							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['trasaction.desc'].$invalid }">
-								<label for="inputPassword3" class="col-sm-5 control-label">Narration</label>
-								<div class="col-sm-5">
-								  <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="trasaction.desc" ng-model="trasaction.desc"
-								  placeholder="Narration" required></textarea>
-								</div>
-							  </div>
-								</td>
-							
-							-->
 							
 							<td colspan="1" style="text-align : right;" >
-							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['sale.voucher.desc'].$invalid }" >
+							  <div class="form-group" ng-class="{'has-error' : submitclick && salesform['sale.desc'].$invalid }" >
 								<label for="inputPassword3" class="col-sm-5 control-label" style="padding:0px;margin-right:0px;">Narration</label>
 								</div>
 							</td>	
 								<td colspan="8" style="text-align : left;" >
 								<div class="col-sm-12" style="padding:0px;">
-								  <textarea rows="2" class="form-control" style="min-width: 100%" id="inputPassword3" name="trasaction.desc" ng-model="sale.voucher.desc"
+								  <textarea rows="2" class="form-control" style="min-width: 100%" id="inputPassword3" name="trasaction.desc" ng-model="sale.desc"
 								  placeholder="Narration" required></textarea>
 								</div>
 							  </td>
