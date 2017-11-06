@@ -262,40 +262,6 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 					$scope.curItems[0] = {'quandity':1 ,'pices':1 };
 					$scope.purchage = {};
 					
-					//$scope.purchage.type = 1;
-					//$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
-					//code added for using this js for both purchases and sales return
-					
-					/*
-					
-					if($rootScope.returnType == 'TR_P') {
-						$scope.purchage.type = 1;
-						$scope.purchage.voucher = "P"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
-					} else {
-						$scope.purchage.type = 4;
-						$scope.purchage.voucher = "SR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
-					}
-
-					//alert("TR Type " + $rootScope.returnType + " " + $scope.purchage.type);
-					
-					$scope.purchage.trasactionItems = [];
-					$scope.purchage.trasactionItems.push({});
-					
-					  $scope.purchage.inputTrnsDate = new Date(
-						 $rootScope.transDate.getFullYear(),
-						 $rootScope.transDate.getMonth(),
-						 $rootScope.transDate.getDate()
-					  );					
-					
-					     ItemService.getAllItems($scope.company.id,function(response){
-						  $rootScope.items = response;
-					   });
-	
-						 GenericSrvc.getAll('/ledger/findAll',function(response){
-							$scope.ledgers = response;
-						});  
-						
-						*/
 						
 						$scope.GSTapplicable = false;
 						$scope.showSCGST = false;
@@ -352,28 +318,6 @@ app.controller('PurchagesController', function($scope,$rootScope,$location,$http
 		}
 		
 	}
-	
-	
-	//method added to autofill fields based on item selection
-
-	//$scope.setGroup = false;
-	//$scope.fillData = function(value){
-	//	$scope.setGroup = value;
-	/*if(currentItem != null && currentItem != undefined) {
-		//$scope.itemHSN = currentItem.itemHSN;
-		//$scope.shade = currentItem.shade;
-		//$scope.description = currentItem.desc;
-		//$scope.curqundty = currentItem.curqundty;
-		//currentItem.stockGroup = $scope.showGrp($scope.stockGroups[currentItem.stockGroup],'');
-	} else {
-		//$scope.itemHSN = '';
-		//$scope.shade = '';
-		//$scope.curqundty = '';
-		//$scope.stockGroup = '';
-	
-	}*/
-	
-//}
 	
 	
 	
@@ -669,9 +613,11 @@ app.controller('SalesController', function($scope,$rootScope,$location,$http,Ite
 			transItem.transactionDetails = [];
 			var finalItemsDtls = [];
 			var count = 1;
+			
 			angular.forEach(transItem.item.itemDtls,function(itemTrans,index2){
 				if(itemTrans.inputqundty > 0){
 					itemTrans.curqundty = itemTrans.inputqundty ;
+					
 					delete itemTrans.item;	
 					delete itemTrans['@id'];
 					finalItemsDtls.push(itemTrans);
@@ -1164,14 +1110,15 @@ app.controller('PurchaseReturnController', function($scope,$rootScope,$location,
         delete transObj.fromledger['@id'];
 	    delete transObj.fromledger.accGroup;	
         transObj.transdate = $filter('date')($scope.trasaction.inputTrnsDate,'MM/dd/yyyy');	
-		console.log(transObj.transdate +"   "+ transObj.inputTrnsDate); 
+		//console.log(transObj.transdate +"   "+ transObj.inputTrnsDate); 
 		transObj.type = 3;
-		transObj.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);			
+		//transObj.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);			
+		
 		console.log(transObj); 
 		
 		
 			var dataObj = JSON.stringify(transObj);
-			console.log(dataObj);
+			console.log("Purchase return data to be stored ----> " + dataObj);
 			//return ;
 			$http.post(hostname+'/transactions/create', dataObj, {
 			  headers: {
@@ -1636,22 +1583,13 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
    
    $scope.purchage = {};
 	
-     /*$scope.purchage.inputTrnsDate = new Date(
-		 $rootScope.transDate.getFullYear(),
-		 $rootScope.transDate.getMonth(),
-		 $rootScope.transDate.getDate()
-	  );*/
-   
-    //$scope.transactions = [];
-	//$scope.purchages = [];
-     //GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
       $http.get(hostname + '/transactions/find-by-id/'+ $rootScope.transId).then(function(response) {
 	  
 	  
 	  console.log(" Trsaction Response from DB ----> " + JSON.stringify(response.data));
 	 
 	// $scope.purchages = response;
-	  $scope.purchage = response.dataa
+	  $scope.purchage = response.data
 	  
 		  var itemArray = [];
 		  //angular.forEach($scope.purchages, function (transaction) {
@@ -1984,15 +1922,6 @@ app.controller('EditTransactionController', function($scope,$rootScope,$location
 
 app.controller('EditSalesTransactionController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
 
-	$scope.sale = {};
-	
-     $scope.sale.inputTrnsDate = new Date(
-		 $rootScope.transDate.getFullYear(),
-		 $rootScope.transDate.getMonth(),
-		 $rootScope.transDate.getDate()
-	  );
-	
-  
   
    if($rootScope.transType == 2) {
       $scope.returnType = 'TR_S';
@@ -2082,29 +2011,6 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 		return $scope.showGrp($scope.stockGroups[group.parent],  group.name +" > "+ grpName );
 	}
 	
-	
- /*
-     $scope.curItems = [];
-   	$scope.curItems[0] = {'quandity':1 ,'pices':1 };
-	$scope.trasaction = {};
-	
-	/*if($rootScope.returnType == 'TR_S') {
-		$scope.trasaction.type = 2;
-		$scope.trasaction.voucher = "S"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
-	} else {
-		$scope.trasaction.type = 3;
-		$scope.trasaction.voucher = "PR"+  $filter('date')(new Date(), 'MMddyy') + Math.round((Math.random() * 1000) * 1000);
-	}
-	
-	$scope.trasaction.trasactionItems = [];
-	$scope.trasaction.trasactionItems.push({});
-	
-	  $scope.trasaction.inputTrnsDate = new Date(
-		 $rootScope.transDate.getFullYear(),
-		 $rootScope.transDate.getMonth(),
-		 $rootScope.transDate.getDate()
-	  );	
-	  */
 	
 	$scope.invalidCount = false;
 	$scope.getTotal = function(curTrasItem,type){
@@ -2197,16 +2103,26 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 	}
    
    //$scope.transactions = [];
-	$scope.sales = [];
-     GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
-      console.log(" Trsaction Response from DB ----> " + JSON.stringify(response));
-	  $scope.sales = response;
+//	$scope.sales = [];
+  //   GenericSrvc.getAll('/transactions/findAll-by-type/'+ $scope.company.id + '/' + $rootScope.transType,function(response){
+    
+    $scope.sale = {};
+	
+	$http.get(hostname + '/transactions/find-by-id/'+ $rootScope.transId).then(function(response) {
+	  
+	  
+	  console.log(" Trsaction Response from DB ----> " + JSON.stringify(response.data));
+	 
+	// $scope.purchages = response;
+	  $scope.sale = response.data
+
+	 // $scope.sales = response;
 	  
 	  
 		  var itemArray = [];
-		  angular.forEach($scope.sales, function (transaction) {
-			  console.log(" Trsaction Response BF ---> " + JSON.stringify(response));
-			  angular.forEach(transaction.trasactionItems, function (transItem) {
+		  //angular.forEach($scope.sales, function (transaction) {
+			//  console.log(" Trsaction Response BF ---> " + JSON.stringify(response));
+			  angular.forEach($scope.sale.trasactionItems, function (transItem) {
 				  //console.log('transItem.item ' + transItem.item );	
 				  if(transItem.item != null && transItem.item.id != null){
 					  itemArray[transItem.item["@id"]] = transItem.item;
@@ -2220,10 +2136,10 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 					  }		 
 				 });	
 			 });	
-        });
+        //});
 		
-		  angular.forEach($scope.sales, function (transaction) {		
-			angular.forEach(transaction.trasactionItems, function (transItem) {
+		  //angular.forEach($scope.sales, function (transaction) {		
+			angular.forEach($scope.sale.trasactionItems, function (transItem) {
 				  if(transItem.item != null && transItem.item.id == null){
 					  transItem.item = itemArray[transItem.item];
 				  }
@@ -2235,31 +2151,25 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 				 });
 				// console.log('transDetils.itemDetails.item ' + transDetils.itemDetails.item +' transDetils.itemDetails.item.id '+ transDetils.itemDetails.item.id);		 
 			 });	  
-	    });
+	    //});
 		//  console.log(" Trsaction Response AF---> " + JSON.stringify(response));
 	  
 	  
-	  
-	  
-	  
-   }); 
-   
- 
-	$scope.selectTransaction =  function(sale) {
-	
-		angular.forEach(sale.trasactionItems, function (transItem) {
+		angular.forEach($scope.sale.trasactionItems, function (transItem) {
 			transItem.showSplit=true;
 		});
 	
-	  $scope.purchaseTotal(sale);
-      $scope.callGST(sale);
+		$scope.purchaseTotal($scope.sale);
+		$scope.callGST($scope.sale);
+
+   
+     var transDate = new Date($scope.sale.transdate);
+	  $scope.sale.inputTrnsDate = new Date(transDate.getFullYear(),transDate.getMonth(),transDate.getDate());
 	
-	
-	 //console.log(" Edit Trsaction Response ---> " + JSON.stringify(purchage));
-	}
    
    
    
+   }); 
    
    
    $scope.removeItem = function(index,trasaction){
@@ -2287,31 +2197,32 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 			transItem.transactionDetails = [];
 			var finalItemsDtls = [];
 			var count = 1;
-			angular.forEach(transItem.item.itemDtls,function(itemTrans,index2){
-				if(itemTrans.inputqundty > 0){
-					itemTrans.curqundty = itemTrans.inputqundty ;
-					delete itemTrans.item;	
+			//angular.forEach(transItem.item.itemDtls,function(itemTrans,index2){
+			angular.forEach(transItem.transactionDetails,function(itemTrans,index2){
+				if(itemTrans.quandity > 0){
+					itemTrans.itemDetails.curqundty = itemTrans.quandity ;
+					//delete itemTrans.item;	
 					delete itemTrans['@id'];
-					finalItemsDtls.push(itemTrans);
+					//finalItemsDtls.push(itemTrans);
 					
 				}
 			  
 			});
-            transItem.item.itemDtls = finalItemsDtls;
+            //transItem.item.itemDtls = finalItemsDtls;
 	
 			//code added on 10/6 for audit purpose
-			transItem.createdUser = $rootScope.loggedUser.username;
-			transItem.createdDate = new Date();
+			//transItem.createdUser = $rootScope.loggedUser.username;
+			//transItem.createdDate = new Date();
 			transItem.modifiedUser = $rootScope.loggedUser.username;
 			transItem.modifiedDate = new Date();
 			
-			transItem.item.modifiedUser = $rootScope.loggedUser.username;
-			transItem.item.modifiedDate = new Date();
+			//transItem.item.modifiedUser = $rootScope.loggedUser.username;
+			//transItem.item.modifiedDate = new Date();
 			
 	
 	
 
-			console.log(transItem.item.itemDtls);
+			//console.log(transItem.item.itemDtls);
 			delete transItem.item['@id'];	
 			delete transItem.item.stockGroup['@id'];				
 
@@ -2333,8 +2244,8 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
 	    delete sale.fromledger.accGroup;	
         sale.transdate	= $filter('date')(sale.inputTrnsDate,'MM/dd/yyyy');	
 		
-		sale.createdUser = $rootScope.loggedUser.username;
-		sale.createdDate = new Date();
+		//sale.createdUser = $rootScope.loggedUser.username;
+		//sale.createdDate = new Date();
 		sale.modifiedUser = $rootScope.loggedUser.username;
 		sale.modifiedDate = new Date();
 	
