@@ -22,22 +22,14 @@
 							  <div class="form-group col-sm-7" style="margin-top: 10px;margin-bottom: 10px;" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher'].$invalid  }" >
 								<label for="inputPassword3" class="col-sm-4 control-label">Voucher</label>
 								<div class="col-sm-6">
-
-					<!--	
 									<select class="form-control input-sm" ng-model="trasaction.voucher" name="trasaction.voucher" 
 											ng-init="trasaction.voucher = trasaction.voucher || options[0].value"
 											ng-options="option as option.voucher for option in transactions"
 											ng-change="selectItem(trasaction.voucher)"
 											required >
 											<option value="">-- Choose Vocher --</option>
-									</select>
-									-->
-								
-								<label for="inputPassword3" class="control-label" style="text-align : left">
-										{{transaction.voucher}}
-									</label>							
-								
-												</div>
+									</select>	
+								</div>
 							  </div>	
 							  
 					  		<div class="form-group col-sm-5" style="margin-top: 10px;margin-bottom: 10px" >
@@ -54,8 +46,8 @@
 								<label for="inputPassword3" class="col-sm-4 control-label">From Account</label>
 								
 								<div class="col-sm-6">
-									<label for="inputPassword3" class="control-label" style="text-align : left" >
-										{{transaction.fromledger.name}} ( {{transaction.fromledger.curbal}} )
+									<label for="inputPassword3" class="control-label" style="text-align : left" ng-if="trasaction.voucher != null">
+										{{trasaction.voucher.fromledger.name}} ( {{trasaction.voucher.fromledger.curbal}} )
 									</label>							
 								</div>
 							  </div>	
@@ -63,8 +55,8 @@
 					  		<div class="form-group col-sm-5" style="margin-top: 10px;margin-bottom: 10px" >
 								<label for="inputPassword3" class="col-sm-4 control-label">To Account</label>
 								<div class="col-sm-8">
-									<label for="inputPassword3" class="control-label" style="text-align : left" >
-										{{transaction.ledger.name}} ( {{transaction.ledger.curbal}} )
+									<label for="inputPassword3" class="control-label" style="text-align : left" ng-if="trasaction.voucher != null">
+										{{trasaction.voucher.ledger.name}} ( {{trasaction.voucher.ledger.curbal}} )
 									</label>							
 								
 								</div>
@@ -86,14 +78,12 @@
 							  <th class="col-sm-1 input-sm" ng-if="false" ></th>
 							</tr>
 							</thead>
-							<tr class="warning" ng-repeat="curTrasItem in transaction.trasactionItems" > 
+							<tr class="warning" ng-repeat="curTrasItem in trasaction.voucher.trasactionItems" > 
 								  <td>  {{curTrasItem.item.name}} </td>
 						          <td> 
-								      <!--
-									  
-									  <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
+								      <label for="inputPassword3" class="col-sm-10 control-label" style="text-align : left" ng-if="curTrasItem.item != null" >
 								      {{showGrp(stockGroups[curTrasItem.item.stockGroup],'')}}
-									  </label> -->
+									  </label>
 								  </td>
 								  <td>  {{curTrasItem.item.shade}} </td>
 								  <td>  {{curTrasItem.item.curqundty}} </td>
@@ -169,11 +159,11 @@
 								  </td>
 								  <td ng-if="false"> 
 								     <button type="button" class="btn btn-success btn-xs" 
-									     ng-click="addItem(transaction);" ng-if="transaction.trasactionItems.length == $index+1" >
+									     ng-click="addItem(trasaction);" ng-if="trasaction.trasactionItems.length == $index+1" >
 										 <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" ></span>
 										 </button>
 								     <button type="button" class="btn btn-danger btn-xs" 
-									     ng-click="removeItem($index,transaction);purchaseTotal(transaction);" >
+									     ng-click="removeItem($index,trasaction);purchaseTotal(trasaction);" >
 										 <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" ></span>
 										 </button>										 
 								  </td>
@@ -181,26 +171,27 @@
 							<tr class="warning">
 								<td colspan="5" style="text-align : right;" > <b> Grand Total </b> </td>
 								<td colspan="2" style="text-align : left;" >
-								{{transaction.quandity}}
+								{{trasaction.voucher.quandity}}
 								</td>
 							</tr>	
 							<tr class="warning">
 								<td colspan="5" style="text-align : right;" > <b> Total Price </b>  </td>
 								<td colspan="2" style="text-align : left;" >
-								{{transaction.rate}}
+								{{trasaction.voucher.rate}}
 								</td>
 							</tr>	
 							<tr class="warning">
 								<td colspan="5" style="text-align : right;" > <b> Agent Commission </b>  </td>
 								<td colspan="2" style="text-align : left;" >
+								{{ (trasaction.voucher.rate * trasaction.voucher.agent.commission) / 100 }}
 								</td>
 							</tr>
 							<tr class="">
 								<td colspan="7" style="text-align : center;" >
-							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['transaction.desc'].$invalid }">
+							  <div class="form-group" ng-class="{'has-error' : submitclick && purchagesform['trasaction.voucher.desc'].$invalid }">
 								<label for="inputPassword3" class="col-sm-5 control-label">Narration</label>
 								<div class="col-sm-5">
-								  <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="transaction.desc" ng-model="transaction.desc"
+								  <textarea rows="5" class="form-control input-sm" id="inputPassword3" name="trasaction.voucher.desc" ng-model="trasaction.voucher.desc"
 								  placeholder="Narration" required></textarea>
 								</div>
 							  </div>
@@ -209,8 +200,8 @@
 							  
 							<tr class="">
 								<td colspan="7" style="text-align : center;" >
-								{{purchaseTotal(transaction)}}
-			                        <button type="button" ng-click="purchaseReturn(transaction);" 
+								{{purchaseTotal(trasaction.voucher)}}
+			                        <button type="button" ng-click="purchaseReturn(trasaction.voucher);" 
 								    class="btn btn-success">Submit</button>	
 								</td>
 							</tr>							
