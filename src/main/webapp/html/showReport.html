@@ -1,36 +1,106 @@
-		<div class="panel panel-success" >
+		<!-- Transaction report covers Purchase, Sales, Purchase and Sales Return ------>
+		
+		
+		<div class="panel panel-success" ng-if="transType == 1 || transType == 2 || transType == 3 || transType == 4 ">
 		  <!-- Default panel contents -->
 		  
 		  
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 1" >Purchase Report</div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 1" ><Strong>Purchase Report</Strong></div>
+			  
+			  
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 2" ><Strong>Sales Report</Strong></div>
+				
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 3" ><Strong>Purchase Return Report</Strong></div>
+
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 4" ><Strong>Sales Return Report</Strong></div>
+				  
+			  <div class="panel-body" >
+				<form class="form-inline" name="reportForm">
+				  <div class="form-group">
+					<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Voucher Number">
+				  </div>
+				  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
+				   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
+					Cancel
+				  </button>
+				</form>
+				
+			  </div>
+			 
+			  <div class="form-group" ng-if="optStatus != null">
+				<label for="inputPassword3" class="col-sm-5 control-label"></label>
+				<div class="col-sm-5">
+					<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
+					<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
+				</div>
+			  </div>	  
+		      
+			  <!-- Table -->
+			  <table class="table table-hover input-sm">
+			  <thead> <tr> <th>#</th> <th>Transaction Date</th> <th>Voucher Number</th> <th>From Ledger Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> <th>Action</th> </tr> </thead> 
+			  <tbody> 
+				  <tr ng-repeat="report in reports | filter : {voucher : query}" > 
+					
+					<th scope="row">{{$index+1}}</th> 
+					<td>{{report.transdate}}</td> 
+					<td>{{report.voucher}}</td> 
+					<td>{{report.fromledger.name}}</td> 
+					<td>{{report.ledger.name}}</td> 
+					<td>{{report.desc}}</td> 
+					<td>{{report.quandity}}</td> 
+					<td>{{report.rate}}</td> 
+					<td>
+					<form class="form-inline">
+						<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
+						<!--<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAgent(agent)">Delete</button>-->
+					</form>				
+					</td> 
+				 </tr>  
+				 <tr ng-if="searchMessage.length > 0" >
+					<td colspan="8" align="center">{{searchMessage}} </td>
+				 </tr>	
+			  </tbody> 
+			  </table>
+		
+		
+		</div>
+		
+		<!-- Transaction report view ends here ----------------------->
+		
+		
+		<!-- Item Report view starts here ------------------------------->
+		
+		<div class="panel panel-success" ng-if="transType == 'itemReport'">
+		  <!-- Default panel contents -->
 		  
 		  
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ng-if="transType == 2" >Sales Report</div>
-			
-		  <div class="panel-body">
-					<form class="form-inline" name="reportForm">
-					  <div class="form-group">
-						<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Voucher Number">
-					  </div>
-					  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
-					   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
-						Cancel
-					  </button>
-					</form>
-			
-		  </div>
-							  <div class="form-group" ng-if="optStatus != null">
-								<label for="inputPassword3" class="col-sm-5 control-label"></label>
-								<div class="col-sm-5">
-									<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
-									<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
-								</div>
-							  </div>	  
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><Strong>Item Report</Strong></div>
+						  
+			  <div class="panel-body">
+				<form class="form-inline" name="reportForm">
+				  <div class="form-group">
+					<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Voucher Number">
+				  </div>
+				  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
+				   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
+					Cancel
+				  </button>
+				</form>
+				
+			  </div>
+				  <div class="form-group" ng-if="optStatus != null">
+					<label for="inputPassword3" class="col-sm-5 control-label"></label>
+					<div class="col-sm-5">
+						<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
+						<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
+					</div>
+				  </div>	  
 		  <!-- Table -->
-          <table class="table table-hover input-sm">
-		  <thead> <tr> <th>#</th> <th>Transaction Date</th> <th>Voucher Number</th> <th>From Ledger Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> </tr> </thead> 
-		  <tbody> 
-			  <tr ng-repeat="report in reports | filter : {voucher : query}" > 
+			  <table class="table table-hover input-sm">
+			  <thead> <tr> <th>#</th> <th>Transaction Date</th> <th>Voucher Number</th> <th>From Ledger Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> <th>Action</th> </tr> </thead> 
+			  <tbody> 
+			
+<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
 				
 				<th scope="row">{{$index+1}}</th> 
 				<td>{{report.transdate}}</td> 
@@ -40,16 +110,196 @@
 				<td>{{report.desc}}</td> 
 				<td>{{report.quandity}}</td> 
 			    <td>{{report.rate}}</td> 
-				<td>
+				<td> 
 			    <form class="form-inline">
-					<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
-					<button type="button" class="btn btn-danger btn-xs" ng-click="deleteAgent(agent)">Delete</button>
-				</form>				
-				</td> 
-			 </tr>  
-			 <tr ng-if="searchMessage.length > 0" >
-				<td colspan="8" align="center">{{searchMessage}} </td>
-			 </tr>	
-		  </tbody> 
-		  </table>
+					
+				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
+							
+						</form>				
+						</td> 
+					 </tr>  -->
+					 <tr ng-if="searchMessage.length > 0" >
+						<td colspan="8" align="center">{{searchMessage}} </td>
+					 </tr>	
+				  </tbody> 
+				  </table>
+		
+		
+		</div>
+
+		<!-- Ledger Report view starts here ------------------------------->
+		
+		<div class="panel panel-success" ng-if="transType == 'ledgerReport'">
+		  <!-- Default panel contents -->
+		  
+		  
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><Strong>Ledger Report</Strong></div>
+						  
+			  <div class="panel-body">
+				<form class="form-inline" name="reportForm">
+				  <div class="form-group">
+					<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Ledger Name">
+				  </div>
+				  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
+				   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
+					Cancel
+				  </button>
+				</form>
+				
+			  </div>
+				  <div class="form-group" ng-if="optStatus != null">
+					<label for="inputPassword3" class="col-sm-5 control-label"></label>
+					<div class="col-sm-5">
+						<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
+						<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
+					</div>
+				  </div>	  
+		  <!-- Table -->
+			  <table class="table table-hover input-sm">
+			  <thead> <tr> <th>#</th> <th>Ledger Account</th> <th>Total Purchases</th> <th>Total Sales</th><th>Total Purchase Return</th> <th>Total Sales Return</th> <th>Quantity</th>  <th>Cost</th> <th>Action</th> </tr> </thead> 
+			  <tbody> 
+			
+<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+				
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{report.transdate}}</td> 
+				<td>{{report.voucher}}</td> 
+				<td>{{report.fromledger.name}}</td> 
+				<td>{{report.ledger.name}}</td> 
+				<td>{{report.desc}}</td> 
+				<td>{{report.quandity}}</td> 
+			    <td>{{report.rate}}</td> 
+				<td> 
+			    <form class="form-inline">
+					
+				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
+							
+						</form>				
+						</td> 
+					 </tr>  -->
+					 <tr ng-if="searchMessage.length > 0" >
+						<td colspan="8" align="center">{{searchMessage}} </td>
+					 </tr>	
+				  </tbody> 
+				  </table>
+		
+		
+		</div>
+		
+		<!-- Transaction Report view starts here ------------------------------->
+		
+		<div class="panel panel-success" ng-if="transType == 'transactionReport'">
+		  <!-- Default panel contents -->
+		  
+		  
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><Strong>Transaction Report</Strong></div>
+						  
+			  <div class="panel-body">
+				<form class="form-inline" name="reportForm">
+				  <div class="form-group">
+					<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Voucher Number">
+				  </div>
+				  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
+				   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
+					Cancel
+				  </button>
+				</form>
+				
+			  </div>
+				  <div class="form-group" ng-if="optStatus != null">
+					<label for="inputPassword3" class="col-sm-5 control-label"></label>
+					<div class="col-sm-5">
+						<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
+						<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
+					</div>
+				  </div>	  
+		  <!-- Table -->
+			  <table class="table table-hover input-sm">
+			  <thead> <tr> <th>#</th> <th>Transaction Date</th> <th>Voucher Number</th> <th>From Ledger Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> </tr> </thead> 
+			  <tbody> 
+			
+<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+				
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{report.transdate}}</td> 
+				<td>{{report.voucher}}</td> 
+				<td>{{report.fromledger.name}}</td> 
+				<td>{{report.ledger.name}}</td> 
+				<td>{{report.desc}}</td> 
+				<td>{{report.quandity}}</td> 
+			    <td>{{report.rate}}</td> 
+				<td> 
+			    <form class="form-inline">
+					
+				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
+							
+						</form>				
+						</td> 
+					 </tr>  -->
+					 <tr ng-if="searchMessage.length > 0" >
+						<td colspan="8" align="center">{{searchMessage}} </td>
+					 </tr>	
+				  </tbody> 
+				  </table>
+		
+		
+		</div>
+		
+		<!-- Agent Report view starts here ------------------------------->
+		
+		<div class="panel panel-success" ng-if="transType == 'agentReport'">
+		  <!-- Default panel contents -->
+		  
+		  
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><Strong>Agent Report</Strong></div>
+						  
+			  <div class="panel-body">
+				<form class="form-inline" name="reportForm">
+				  <div class="form-group">
+					<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Agent Name">
+				  </div>
+				  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
+				   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
+					Cancel
+				  </button>
+				</form>
+				
+			  </div>
+				  <div class="form-group" ng-if="optStatus != null">
+					<label for="inputPassword3" class="col-sm-5 control-label"></label>
+					<div class="col-sm-5">
+						<span class="label label-success" ng-if="optStatus == 'Success'" > {{message}}</span>
+						<span class="label label-danger" ng-if="optStatus == 'Failed'" > {{message}} </span>	
+					</div>
+				  </div>	  
+		  <!-- Table -->
+			  <table class="table table-hover input-sm">
+			  <thead> <tr> <th>#</th> <th>Agent Name</th> <th>Total Sales Amount</th> <th>Total Sales Commission</th><th>Total Sales Return Amount</th> <th>Total Sales Return Commission</th> <th>Total Amount Commission</th>  </tr> </thead> 
+			  <tbody> 
+			
+<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+				
+				<th scope="row">{{$index+1}}</th> 
+				<td>{{report.transdate}}</td> 
+				<td>{{report.voucher}}</td> 
+				<td>{{report.fromledger.name}}</td> 
+				<td>{{report.ledger.name}}</td> 
+				<td>{{report.desc}}</td> 
+				<td>{{report.quandity}}</td> 
+			    <td>{{report.rate}}</td> 
+				<td> 
+			    <form class="form-inline">
+					
+				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
+							
+						</form>				
+						</td> 
+					 </tr>  -->
+					 <tr ng-if="searchMessage.length > 0" >
+						<td colspan="8" align="center">{{searchMessage}} </td>
+					 </tr>	
+				  </tbody> 
+				  </table>
+		
+		
 		</div>
