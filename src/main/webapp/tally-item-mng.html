@@ -583,14 +583,18 @@
 						  </div>
 						
 						<div class="col-xs-5 panel panel-success" style="margin:5px;padding:0px" ng-if="previliges.inventoryinfo == true"  >
+							
 							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 							<strong>Inventory Info</strong></div>
+								
 								<div class="panel-body">
 								
 									<div class="row" >
+										
 										<div class="col-xs-6 panel panel-success" style="margin:10px; margin-right: 0px; padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
 											<strong>Stock Groups</strong></div>
+											
 											<div class="panel-body">
 												<div class="list-group">
 												  <a href="#create-stock-groups" class="list-group-item list-group-item-success"><strong>Create Stock Group</strong></a>
@@ -598,6 +602,7 @@
 												</div>											
 											</div>	
 										</div>									
+										
 										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 											<strong>Stock Items</strong></div>
@@ -622,7 +627,60 @@
 			 <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Transactions</strong></div>
 			 
 			 <div class="panel-body">
+				<div class="row" >
+					
+					<div class="col-xs-3 panel panel-success" style="margin:10px; margin-right: 0px; padding:0px" >
+						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
+						<strong>Purchase</strong></div>
+						
+						<div class="panel-body">
+							<div class="list-group">
+							  <a href="" ng-click="Purchages()" class="list-group-item list-group-item-success"><strong>New Purchase Order</strong></a>
+							  <a href="" ng-click="purchaseReport(1)" class="list-group-item list-group-item-success"><strong>View Purchases</strong></a>
+							</div>											
+						</div>	
+					</div>									
+					
+					<div class="col-xs-2 panel panel-success" style="margin:10px;padding:0px" >
+						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+						<strong>Sales</strong></div>
+						
+						<div class="panel-body">
+							<div class="list-group">
+							  <a href="" ng-click="Sales()" class="list-group-item list-group-item-success"><strong>New Sales Order</strong></a>
+							  <a href="" ng-click="salesReport(2)" class="list-group-item list-group-item-success"><strong>View Sales</strong></a>
+							</div>											
+						</div>												
+					</div>	
+					
+					<div class="col-xs-3 panel panel-success" style="margin:10px;padding:0px" >
+						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+						<strong>Purchase Return</strong></div>
+						
+						<div class="panel-body">
+							<div class="list-group">
+							  <a href="" ng-click="PurchaseReturn()" class="list-group-item list-group-item-success"><strong>New Purchase Return Order</strong></a>
+							  <a href="" ng-click="purchaseReturnReport(3)" class="list-group-item list-group-item-success"><strong>View Purchase Returns</strong></a>
+							</div>											
+						</div>												
+					</div>
+				
+					<div class="col-xs-3 panel panel-success" style="margin:10px;padding:0px" >
+						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+						<strong>Sales Return</strong></div>
+						
+						<div class="panel-body">
+							<div class="list-group">
+							  <a href="" ng-click="SaleReturn()" class="list-group-item list-group-item-success"><strong>New Sales Return Order</strong></a>
+							  <a href="" ng-click="salesReturnReport(4)" class="list-group-item list-group-item-success"><strong>View Sales Returns</strong></a>
+							</div>											
+						</div>												
+					</div>
+					
+				</div>									
+			 
 			  
+					<!--
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
 					  
 					  <div class="btn-group" role="group">
@@ -690,7 +748,7 @@
 					
 					  </div>
 					-->		
-					</div>			  
+					<!--</div>			  -->
 			  
 			  </div>			  
 	        
@@ -703,17 +761,17 @@
 				<div class="btn-group btn-group-justified" role="group" aria-label="...">
 					  <div class="btn-group" role="group" text-align:'center'>
 					 
-					<button type="button" class="btn btn-success" ng-click="purchaseReport(1)" >Purchase Report</button>
+					<button type="button" class="btn btn-success" ng-click="itemReport()" >Item Report</button>
 					  </div>
 					  
 					  <div class="btn-group" role="group" text-align:'center'>
-						<button type="button" class="btn btn-success" ng-click="salesReport(2)" >Sales Report</button> 
+						<button type="button" class="btn btn-success" ng-click="ledgerReport()" >Ledger Report</button> 
 					  </div>
 					  <div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" ng-click="purchaseReturnReport(3)" >Purchase Return</button>
+						<button type="button" class="btn btn-success" ng-click="transactionReport()" >Transaction Return</button>
 					  </div>
 					  <div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" ng-click="salesReturnReport(4)" >Sales Return</button>
+						<button type="button" class="btn btn-success" ng-click="agentReport()" >Agent Report</button>
 					  </div>					  
 					</div>			  
 
