@@ -249,7 +249,9 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 	$rootScope.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	$scope.transDate = new Date();;	
 	$rootScope.transDay = "";
-		
+	
+	$scope.invalidDate = false;
+	
 	$scope.login = function(user){
 		
 		$rootScope.transDate = $scope.transDate ;
@@ -257,8 +259,11 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 		try {
 			
 			var date = $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) +"/"+ $scope.transDate.getFullYear();
-			var pattern = /[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}/i;
-		
+			var pattern = new RegExp(/[0-9]{2}[/]{1}[0-9]{2}[/]{1}[1-9]{4}/);
+			//var pattern = new RegExp(/[0-9\/]{2}[0-9\/]{2}[1-9]{4}/);
+			
+			//alert("Date test " + pattern.test(date));
+			
 			if(!pattern.test(date)) {
 				$scope.invalidDate = true;
 			} else {
@@ -709,6 +714,33 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 		$location.path("/showReport");
 	}
 	
+	$scope.itemReport = function(){
+		$rootScope.currentPage = 'ItemReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = 'itemReport';
+		$location.path("/showReport");
+	}
+	
+	$scope.ledgerReport = function(){
+		$rootScope.currentPage = 'LedgerReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = 'ledgerReport';
+		$location.path("/showReport");
+	}
+	
+	$scope.transactionReport = function(){
+		$rootScope.currentPage = 'TransactionReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = 'transactionReport';
+		$location.path("/showReport");
+	}
+	
+	$scope.agentReport = function(){
+		$rootScope.currentPage = 'AgentReport';
+		//this variable will identify the type of return transaction
+		$rootScope.transType = 'agentReport';
+		$location.path("/showReport");
+	}
 	
 });
 
@@ -717,6 +749,8 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 	$rootScope.currentPage = 'showReport';
 	//$scope.transType = $location.search().optType;
 	$scope.transType = $rootScope.transType;
+	
+	$rootScope.transType = '';
 	
 	$http.get(hostname + '/transactions/findAll-by-type/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
 	//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
