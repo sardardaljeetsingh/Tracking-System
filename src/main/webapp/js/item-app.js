@@ -752,32 +752,99 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 	
 	$rootScope.transType = '';
 	
+	
+	/*$http.get(hostname + '/advReportController/findAllItemTransNo').then(function(response) 
+	//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
+		{
+			//$rootScope.reports = response.data;
+			console.log(" Item report result --> " + JSON.stringify(response.data));
+			$rootScope.reporting = response.data;
+			//console.log(" Item report result --> " + JSON.stringify($rootScope.reporting));
+		});	
+	*/
+	
+	
+	
+	if($scope.transType == 1 || $scope.transType == 2 || $scope.transType == 3 || $scope.transType == 4 ) {
+	
+	
+	
+	
 	$http.get(hostname + '/transactions/findAll-by-type/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
 	//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
 		{
 			//$rootScope.reports = response.data;
 			$rootScope.reports = response.data;
+			
+		});	
+	
+
+	} else if ($scope.transType == 'transactionReport') {
+		
+		$http.get(hostname + '/reportController/findAll/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
+	    //$http.get(hostname + '/advReportController/findAllItemTransNo').then(function(response) 
+		{
+			$scope.reports = response.data;
+		
+		if($scope.reports.length == 0){
+			$scope.searchMessage = "No Transactions found";
+		}
+		
 		});	
 		
+		
+	
+	} else if ($scope.transType == 'itemReport') {
+		
+		
+	    $http.get(hostname + '/reportController/findAllItemTransNo').then(function(response) 
+		{
+			console.log(" Item report result --> " + JSON.stringify(response.data));
+			$scope.reports = response.data;
+		
+		if($scope.reports.length == 0){
+			$scope.searchMessage = "No Transactions found";
+		}
+		
+		});	
+		
+		
+	
+	} else if ($scope.transType == 'ledgerReport') {
+		
+		
+	    $http.get(hostname + '/reportController/findAllLedgerTransNo').then(function(response) 
+		{
+			console.log(" Ledger report result --> " + JSON.stringify(response.data));
+			$scope.reports = response.data;
+		
+		if($scope.reports.length == 0){
+			$scope.searchMessage = "No Transactions found";
+		}
+		
+		});	
+		
+		
+	
+	}
+
+
+
+	
 	$scope.editPurchase = function(report){
 		$rootScope.currentPage = 'PurchaseReturn';
-		//console.log("mine ----> " + JSON.stringify(report));
-		//$rootScope.optType = 'editPurchase';
-		//$rootScope.voucher = report.voucher;
-		//$rootScope.trasaction = {};
-		//$rootScope.editTransaction = report;
-		
-		//$rootScope.transType = 'edit';
-		//$location.path("/PurchaseReturn");
 		
 		$rootScope.transId = report.id;
 		
 		var targetLoc = '';
+		
+		$rootScope.transType = report.type;
+		
 		if($rootScope.transType == 1 || $rootScope.transType == 4) {
 			targetLoc = "/editPurchase";
 		} else {
 			targetLoc = "/editSales";
-		}
+		} 
 			
 		
 		$location.path(targetLoc);
