@@ -1,5 +1,6 @@
 package tracksys.model;
 
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -20,62 +21,53 @@ import java.util.ArrayList;
 
 import java.math.BigInteger;
 
-
 @Controller
-@RequestMapping("/reportController")
-public class ReportController {
+@RequestMapping("/advReportController")
+public class AdvReportController {
 
-	@Autowired
-	private ReportRepository reportRepository;
+	//@Autowired
+	//private AdvReportRepository reportRepository;
 	
 	@PersistenceContext
 	private EntityManager entityMng;
 
 /*	
-	
-	
-	@RequestMapping(value ="/findAllTransType/{optType}",method = RequestMethod.GET)
-	  public @ResponseBody List<Report> findAllTransType(@PathVariable("optType") int optType) {
-		List<Report> reportList = null;
-		//if(optType.equals("P")){
-			reportList = reportRepository.findAllByType(optType);//new ArrayList<>();
-		//} else {
-			//reportList = reportRepository.findAllTransType(2);//new ArrayList<>();
-		//}
-		
-		return reportList; 		
-
-	  } 	  
-	
-		
-	/**
-	Method for search
-	*/
-	@RequestMapping(value ="/find-by-name-search/{optType}/{voucherNumber}",method = RequestMethod.GET)
-	public ResponseEntity<Iterable<Report>> findByNameSearch(@PathVariable("optType") int optType, @PathVariable("voucherNumber") String voucherNumber) {
-		Iterable<Report> reportList = null;
-		try {
-			reportList = reportRepository.findByTypeAndVoucherIgnoreCaseContaining(optType,voucherNumber);
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<Iterable<Report>>(reportList, HttpStatus.OK);
+	@RequestMapping(value ="/create",method = RequestMethod.POST)
+	public @ResponseBody Report  create(@RequestBody Report report) {
+		return reportRepository.save(report);
 	}	
-		
-		
-		
-		
-	@RequestMapping(value ="/findAll",method = RequestMethod.GET)
-	public @ResponseBody Iterable<Report> findAll() {
-		return reportRepository.findAll();
-
+	
+	@RequestMapping(value ="/update",method = RequestMethod.POST)
+	@Transactional
+	public @ResponseBody Report  update(@RequestBody Report report) {
+		return reportRepository.save(entityMng.merge(report));
+	}		
+	
+	@RequestMapping(value ="/delete/{agentId}",method = RequestMethod.DELETE)
+	@Transactional
+	public @ResponseBody boolean  delete(@PathVariable("agentId") int agentId) {
+		reportRepository.delete(agentId);
+		return true;
+	}		
 	
 	
+	@RequestMapping(value ="/find/{agentId}",method = RequestMethod.GET)
+	public @ResponseBody Report findbyId(@PathVariable("agentId") int agentId) {
+		return reportRepository.findOne(agentId);
 	}
+	*/	
+	//	public List<Report> findAllTransType(int optType);
 	
 	
+	
+	//Method to return Item transaction numbers
+	/*@RequestMapping(value ="/findAllItemTrans",method = RequestMethod.GET)
+	public @ResponseBody Iterable<ItemReport> findAllItemTrans() {
+		System.out.println("Test report called----------------->");
+		return reportRepository.findAllByItemName();
+	}*/
+	
+	//Method to return Item transaction numbers
 	@RequestMapping(value ="/findAllItemTransNo",method = RequestMethod.GET)
 	public @ResponseBody  Iterable<ItemReport> findAllItemTransNo() {
 		System.out.println("Test report called----------------->");
@@ -139,66 +131,6 @@ public class ReportController {
 		} else {
 			return Double.valueOf((Double)result);
 		}
-	}
-	
-	
-	@RequestMapping(value ="/findAllLedgerTransNo",method = RequestMethod.GET)
-	public @ResponseBody  Iterable<ItemReport> findAllLedgerTransNo() {
-		System.out.println("Test report called----------------->");
-		
-										
-		
-		Query qry = entityMng.createNativeQuery("select ldgr.name as ldgrname, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = "
-		+ " tr.fromledger where tr.transtype = 1) Purchases, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger where tr.transtype = 2) Sales, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger where tr.transtype = 3) PurchaseRtn, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger where tr.transtype = 4) SalesRtn from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger Group by ldgrname");
-		
-		List<Object[]> itemResults = qry.getResultList();
-		List<ItemReport> itemReportList = new ArrayList<ItemReport>();
-		
-		System.out.println("Records fetched ---------> " + itemResults.size());
-		
-		for (Object[] itemResult: itemResults) {
-			
-			ItemReport itemReport = new ItemReport();
-			itemReport.setItemName(itemResult[0].toString());
-			itemReport.setPurchaseCount(checkNull(itemResult[1]));
-			itemReport.setSalesCount(checkNull(itemResult[2]));
-			itemReport.setPurchaseRtnCount(checkNull(itemResult[3]));
-			itemReport.setSalesRtnCount(checkNull(itemResult[4]));
-			
-			
-			itemReportList.add(itemReport);
-		}
-		
-		return itemReportList;
-	}
-	
-	@RequestMapping(value ="/findAllAgentTransNo",method = RequestMethod.GET)
-	public @ResponseBody  Iterable<ItemReport> findAllLedgerTransNo() {
-		System.out.println("Agent report called----------------->");
-		
-		
-		Query qry = entityMng.createNativeQuery("select agnt.name as agentname, (select sum(rate) from transactions tr JOIN agents agnt on agnt.id = "
-		+ " tr.agentid where tr.transtype = 2) Sales, ((Sales * agnt.commission)/100) SalesCom,(select sum(rate) from transactions tr  JOIN agents agnt on agnt.id = tr.agentid  where tr.transtype = 4) SalesRtn, ((SalesRtn * agnt.commission)/100) SalesRtnCom from  transactions tr JOIN agents agnt on agnt.id = tr.agentid group by agentname" );
-		
-		List<Object[]> itemResults = qry.getResultList();
-		List<ItemReport> itemReportList = new ArrayList<ItemReport>();
-		
-		System.out.println("Records fetched ---------> " + itemResults.size());
-		
-		for (Object[] itemResult: itemResults) {
-			
-			ItemReport itemReport = new ItemReport();
-			itemReport.setItemName(itemResult[0].toString());
-			itemReport.setPurchaseCount(checkNull(itemResult[1]));
-			itemReport.setSalesCount(checkNull(itemResult[2]));
-			itemReport.setPurchaseRtnCount(checkNull(itemResult[3]));
-			itemReport.setSalesRtnCount(checkNull(itemResult[4]));
-			
-			
-			itemReportList.add(itemReport);
-		}
-		
-		return itemReportList;
 	}
 	
 }
