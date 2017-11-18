@@ -79,7 +79,7 @@
 			  <div class="panel-body">
 				<form class="form-inline" name="reportForm">
 				  <div class="form-group">
-					<input type="text" class="form-control input-sm" id="voucherNumber" name="voucherNumber" ng-model="query" placeholder="Type Voucher Number">
+					<input type="text" class="form-control input-sm" id="itemname" name="itemname" ng-model="query" placeholder="Type Item Name to search">
 				  </div>
 				  <!--<button type="button" class="btn btn-success btn-sm" ng-click="searchVoucherNumber()">Search</button>-->
 				   <button type="button" class="btn btn-warning btn-sm" ng-click="cancelReport()" >
@@ -97,33 +97,26 @@
 				  </div>	  
 		  <!-- Table -->
 			  <table class="table table-hover input-sm">
-			  <thead> <tr> <th>#</th> <th>Transaction Date</th> <th>Voucher Number</th> <th>From Ledger Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> <th>Action</th> </tr> </thead> 
+			  <thead> <tr> <th>#</th> <th align="center">ItemName</th> <th align="center">Initial Quantity</th> <th align="center">Total Purchases(Qty)</th><th align="center">Total Sales(Qty)</th> <th align="center">Total Purchases Returned(Qty)</th> <th align="center">Total Sales Returned(Qty)</th>  <th align="center">Current Quantity</th> </tr> </thead> 
 			  <tbody> 
 			
-<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+			<tr ng-repeat="report in reports | filter : {itemName : query}" > 
 				
 				<th scope="row">{{$index+1}}</th> 
-				<td>{{report.transdate}}</td> 
-				<td>{{report.voucher}}</td> 
-				<td>{{report.fromledger.name}}</td> 
-				<td>{{report.ledger.name}}</td> 
-				<td>{{report.desc}}</td> 
-				<td>{{report.quandity}}</td> 
-			    <td>{{report.rate}}</td> 
-				<td> 
-			    <form class="form-inline">
-					
-				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
-							
-						</form>				
-						</td> 
-					 </tr>  -->
-					 <tr ng-if="searchMessage.length > 0" >
-						<td colspan="8" align="center">{{searchMessage}} </td>
-					 </tr>	
-				  </tbody> 
-				  </table>
-		
+				<td align="center">{{report.itemName}}</td> 
+				<td align="center">{{report.intlQty}}</td> 
+				<td align="center">{{report.purchaseCount}}</td> 
+				<td align="center">{{report.salesCount}}</td> 
+				<td align="center">{{report.purchaseRtnCount}}</td> 
+				<td align="center">{{report.salesRtnCount}}</td> 
+			    <td align="center">{{report.curQty}}</td> 
+			 </tr>  
+			 <tr ng-if="searchMessage.length > 0" >
+				<td colspan="8" align="center">{{searchMessage}} </td>
+			 </tr>	
+		  </tbody> 
+		  </table>
+
 		
 		</div>
 
@@ -133,7 +126,7 @@
 		  <!-- Default panel contents -->
 		  
 		  
-		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><Strong>Ledger Report</Strong></div>
+		  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><Strong>Ledger Report(without GST)</Strong></div>
 						  
 			  <div class="panel-body">
 				<form class="form-inline" name="reportForm">
@@ -155,28 +148,19 @@
 					</div>
 				  </div>	  
 		  <!-- Table -->
-			  <table class="table table-hover input-sm">
-			  <thead> <tr> <th>#</th> <th>Ledger Account</th> <th>Total Purchases</th> <th>Total Sales</th><th>Total Purchase Return</th> <th>Total Sales Return</th> <th>Quantity</th>  <th>Cost</th> <th>Action</th> </tr> </thead> 
+			  <table class="table table-condensed input-sm">
+			  <thead> <tr> <th>#</th> <th align="center">Ledger Account</th> <th align="center">Total Purchases</th> <th align="center">Total Sales</th><th align="center">Total Purchase Return</th> <th align="center">Total Sales Return</th> </tr> </thead> 
 			  <tbody> 
 			
-<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+			<tr ng-repeat="report in reports | filter : {itemName : query}" > 
 				
 				<th scope="row">{{$index+1}}</th> 
-				<td>{{report.transdate}}</td> 
-				<td>{{report.voucher}}</td> 
-				<td>{{report.fromledger.name}}</td> 
-				<td>{{report.ledger.name}}</td> 
-				<td>{{report.desc}}</td> 
-				<td>{{report.quandity}}</td> 
-			    <td>{{report.rate}}</td> 
-				<td> 
-			    <form class="form-inline">
-					
-				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
-							
-						</form>				
-						</td> 
-					 </tr>  -->
+				<td align="left">{{report.itemName}}</td> 
+				<td align="left">{{company.currencesymbol}} {{report.purchaseCount}}</td> 
+				<td align="left">{{company.currencesymbol}} {{report.salesCount}}</td> 
+				<td align="left">{{company.currencesymbol}} {{report.purchaseRtnCount}}</td> 
+				<td align="left">{{company.currencesymbol}} {{report.salesRtnCount}}</td> 
+				</tr>  
 					 <tr ng-if="searchMessage.length > 0" >
 						<td colspan="8" align="center">{{searchMessage}} </td>
 					 </tr>	
@@ -215,12 +199,17 @@
 				  </div>	  
 		  <!-- Table -->
 			  <table class="table table-hover input-sm">
-			  <thead> <tr> <th>#</th> <th>Transaction Date</th> <th>Voucher Number</th> <th>From Ledger Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> </tr> </thead> 
+			  <thead> <tr> <th>#</th> <th>Transaction Type</th> <th>Agent Name</th>  <th>Transaction Date</th> <th>Voucher Number</th> <th>Party Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> </tr> </thead> 
 			  <tbody> 
 			
-<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
 				
 				<th scope="row">{{$index+1}}</th> 
+				<td ng-if="report.type == 1">Purchase</td> 
+				<td ng-if="report.type == 2">Sales</td> 
+				<td ng-if="report.type == 3">Purchase Return</td> 
+				<td ng-if="report.type == 4">Sales Return</td> 
+				<td>{{report.agent.name}}</td> 
 				<td>{{report.transdate}}</td> 
 				<td>{{report.voucher}}</td> 
 				<td>{{report.fromledger.name}}</td> 
@@ -233,9 +222,9 @@
 					
 				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
 							
-						</form>				
+						</form>			
 						</td> 
-					 </tr>  -->
+					 </tr>  
 					 <tr ng-if="searchMessage.length > 0" >
 						<td colspan="8" align="center">{{searchMessage}} </td>
 					 </tr>	
