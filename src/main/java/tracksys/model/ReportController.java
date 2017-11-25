@@ -78,7 +78,7 @@ public class ReportController {
 	
 	@RequestMapping(value ="/findAllItemTransNo",method = RequestMethod.GET)
 	public @ResponseBody  Iterable<ItemReport> findAllItemTransNo() {
-		System.out.println("Test report called----------------->");
+		System.out.println("Item report called----------------->");
 		
 			
 		//Query q = entityMng.createNativeQuery("select (select name from item_dtl itmdtl JOIN transactions_item tranitm on tranitm.itemid = itmdtl.id) Itemname, (select count(itemid) from transactions_item tranitm JOIN transactions tr on tr.id = tranitm.transid and tr.transtype = 1) Purchases, (select count(itemid) from transactions_item tranitm JOIN transactions tr on tr.id = tranitm.transid and tr.transtype = 2) Sales, (select count(itemid) from transactions_item tranitm JOIN transactions tr on tr.id = tranitm.transid and tr.transtype = 3) PurchasesRtn, (select count(itemid) from transactions_item tranitm JOIN transactions tr on tr.id = tranitm.transid and tr.transtype = 4) SalesRtn from transactions_item tranitm group by Itemname");
@@ -94,7 +94,7 @@ public class ReportController {
 												+ " and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = 2 ) Sales, (SELECT SUM(tranitm.quandity) FROM "   
 												+ " transactions_item tranitm JOIN transactions tr ON(tr.id = tranitm.transid and tranitm.itemid = "
 												+ " tran.itemid) where TR.TRANSTYPE = 3 ) PurchasesRtn, (SELECT SUM(tranitm.quandity) FROM transactions_item tranitm " 
-												+ " JOIN  transactions tr ON(tr.id = tranitm.transid and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = " + " 4) SalesRtn FROM transactions_item tran GROUP BY tran.itemid");*/
+												+ " JOIN  transactions tr ON(tr.id = tranitm.transid and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = " + " 4) SalesRtn FROM transactions_item tran GROUP BY tran.itemid");
 												
 		Query qry = entityMng.createNativeQuery("SELECT itmdtl.name as itemname, itmdtl.initqundty as intlqty, itmdtl.curqundty as curqty, (SELECT SUM(tranitm.quandity) FROM transactions_item tranitm JOIN transactions tr " 
 											+ " ON(tr.id  = tranitm.transid and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = 1) Purchases, "
@@ -102,8 +102,13 @@ public class ReportController {
 											+ " and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = 2 ) Sales, (SELECT SUM(tranitm.quandity) FROM "   
 											+ " transactions_item tranitm JOIN transactions tr ON(tr.id = tranitm.transid and tranitm.itemid = "
 											+ " tran.itemid) where TR.TRANSTYPE = 3 ) PurchasesRtn, (SELECT SUM(tranitm.quandity) FROM transactions_item tranitm " 
-											+ " JOIN  transactions tr ON(tr.id = tranitm.transid and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = " + " 4) SalesRtn FROM transactions_item tran JOIN item_dtl itmdtl on tran.itemid = itmdtl.id GROUP BY itemname, intlqty, curqty");
-										
+											+ " JOIN  transactions tr ON(tr.id = tranitm.transid and tranitm.itemid = tran.itemid) where TR.TRANSTYPE = " + " 4) SalesRtn FROM transactions_item tran JOIN item_dtl itmdtl on tran.itemid = itmdtl.id GROUP BY itemname, intlqty, curqty");*/
+		
+		Query qry = entityMng.createNativeQuery("SELECT itm.name, itm.initqundty, itm.curqundty, SUM(IF(tr.transtype = 1, tran.quandity, 0)) AS Purchases,"
+        + " SUM(IF(tr.transtype = 2, tran.quandity, 0)) AS Sales, SUM(IF(tr.transtype = 3, tran.quandity, 0)) AS PurchasesRtn, "
+        + " SUM(IF(tr.transtype = 4, tran.quandity, 0)) AS SalesRtn FROM transactions_item AS tran "
+        + " JOIN item_dtl AS itm ON itm.id = tran.itemid JOIN transactions AS tr ON tran.transid = tr.id GROUP BY tran.itemid");
+			
 		
 		List<Object[]> itemResults = qry.getResultList();
 		List<ItemReport> itemReportList = new ArrayList<ItemReport>();
@@ -144,12 +149,19 @@ public class ReportController {
 	
 	@RequestMapping(value ="/findAllLedgerTransNo",method = RequestMethod.GET)
 	public @ResponseBody  Iterable<ItemReport> findAllLedgerTransNo() {
-		System.out.println("Test report called----------------->");
+		System.out.println("Ledger report called----------------->");
 		
 										
 		
-		Query qry = entityMng.createNativeQuery("select ldgr.name as ldgrname, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = "
-		+ " tr.fromledger where tr.transtype = 1) Purchases, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger where tr.transtype = 2) Sales, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger where tr.transtype = 3) PurchaseRtn, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger where tr.transtype = 4) SalesRtn from transactions tr JOIN ledger ldgr on ldgr.id = tr.fromledger Group by ldgrname");
+		/*Query qry = entityMng.createNativeQuery("select ldgr.name as ldgrname, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on (ldgr.id = "
+		+ " tr.fromledger and tr.fromledger = tran.fromledger) where tr.transtype = 1) Purchases, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on (ldgr.id = tr.fromledger  and tr.fromledger = tran.fromledger) where tr.transtype = 2) Sales, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on (ldgr.id = tr.fromledger  and tr.fromledger = tran.fromledger) where tr.transtype = 3) PurchaseRtn, (select sum(tr.rate) from transactions tr JOIN ledger ldgr on (ldgr.id = tr.fromledger  and tr.fromledger = tran.fromledger) where tr.transtype = 4) SalesRtn from transactions tran JOIN ledger ldgr on ldgr.id = tran.fromledger Group by ldgrname");*/
+		
+		Query qry = entityMng.createNativeQuery("Select ldgr.name, SUM(IF(tr.transtype = 1, tr.rate, 0)) AS Purchases,"
+        + " SUM(IF(tr.transtype = 2, tr.rate, 0)) AS Sales, SUM(IF(tr.transtype = 3, tr.rate, 0)) AS PurchasesRtn,"
+        + " SUM(IF(tr.transtype = 4, tr.rate, 0)) AS SalesRtn from transactions AS tr "
+		+ " JOIN ledger AS ldgr on ldgr.id = tr.fromledger GROUP BY tr.fromledger");
+	
+		
 		
 		List<Object[]> itemResults = qry.getResultList();
 		List<ItemReport> itemReportList = new ArrayList<ItemReport>();
@@ -172,13 +184,22 @@ public class ReportController {
 		return itemReportList;
 	}
 	
+	
+	
 	@RequestMapping(value ="/findAllAgentTransNo",method = RequestMethod.GET)
-	public @ResponseBody  Iterable<ItemReport> findAllLedgerTransNo() {
+	public @ResponseBody  Iterable<ItemReport> findAllAgentTransNo() {
 		System.out.println("Agent report called----------------->");
 		
 		
-		Query qry = entityMng.createNativeQuery("select agnt.name as agentname, (select sum(rate) from transactions tr JOIN agents agnt on agnt.id = "
-		+ " tr.agentid where tr.transtype = 2) Sales, ((Sales * agnt.commission)/100) SalesCom,(select sum(rate) from transactions tr  JOIN agents agnt on agnt.id = tr.agentid  where tr.transtype = 4) SalesRtn, ((SalesRtn * agnt.commission)/100) SalesRtnCom from  transactions tr JOIN agents agnt on agnt.id = tr.agentid group by agentname" );
+		/*Query qry = entityMng.createNativeQuery("select agnt.name as agentname, (select sum(rate) from transactions tr JOIN agents agnt on (agnt.id = "
+		+ " tr.agentid and tr.agentid = tran.agentid) where tr.transtype = 2) Sales, (((select sum(rate) from transactions tr JOIN agents agnt on (agnt.id = "
+		+ " tr.agentid and tr.agentid = tran.agentid) where tr.transtype = 2) * agnt.commission)/100) SalesCom,(select sum(rate) from transactions tr  JOIN agents agnt on (agnt.id = tr.agentid  and tr.agentid = tran.agentid)  where tr.transtype = 4) SalesRtn, (((select sum(rate) from transactions tr JOIN agents agnt on (agnt.id = "
+		+ " tr.agentid  and tr.agentid = tran.agentid) where tr.transtype = 4) * agnt.commission)/100) SalesRtnCom from  transactions tran JOIN agents agnt on agnt.id = tran.agentid group by agentname" );*/
+		
+		Query qry = entityMng.createNativeQuery("Select agnt.name, SUM(IF(tr.transtype = 2, tr.rate, 0)) AS Sales,"
+		+ " (SUM(IF(tr.transtype = 2, tr.rate, 0)) * agnt.commission/100) AS SalesCom, SUM(IF(tr.transtype = 4, tr.rate, 0)) AS SalesRtn,"
+		+ " (SUM(IF(tr.transtype = 4, tr.rate, 0))* agnt.commission/100) AS SalesRtnCom from transactions AS tr "
+		+ " JOIN agents AS agnt on agnt.id = tr.agentid GROUP BY tr.agentid");
 		
 		List<Object[]> itemResults = qry.getResultList();
 		List<ItemReport> itemReportList = new ArrayList<ItemReport>();
@@ -193,6 +214,39 @@ public class ReportController {
 			itemReport.setSalesCount(checkNull(itemResult[2]));
 			itemReport.setPurchaseRtnCount(checkNull(itemResult[3]));
 			itemReport.setSalesRtnCount(checkNull(itemResult[4]));
+			
+			
+			itemReportList.add(itemReport);
+		}
+		
+		return itemReportList;
+	}
+	
+	
+	@RequestMapping(value ="/findAllTransNo",method = RequestMethod.GET)
+	public @ResponseBody  Iterable<ItemReport> findAllTransNo() {
+		System.out.println("Transaction Summary report called----------------->");
+		
+		
+		//Query qry = entityMng.createNativeQuery("select sum(rate) from transactions tr where tr.transtype = 1, select sum(rate) from transactions tr where tr.transtype = 2, select sum(rate) from transactions tr where tr.transtype = 3, select sum(rate) from transactions tr where tr.transtype = 4");
+		
+		Query qry = entityMng.createNativeQuery("select SUM(DECODE(TRANSTYPE,1,RATE)),SUM(DECODE(TRANSTYPE,2,RATE)),SUM(DECODE(TRANSTYPE,3,RATE)),"
+		+ " sum(decode(transtype,4,rate)) from TRANSACTIONS");
+		
+		
+		List<Object[]> itemResults = qry.getResultList();
+		List<ItemReport> itemReportList = new ArrayList<ItemReport>();
+		
+		System.out.println("Records fetched ---------> " + itemResults.size());
+		
+		for (Object[] itemResult: itemResults) {
+			
+			ItemReport itemReport = new ItemReport();
+			//itemReport.setItemName(itemResult[0].toString());
+			itemReport.setPurchaseCount(checkNull(itemResult[0]));
+			itemReport.setSalesCount(checkNull(itemResult[1]));
+			itemReport.setPurchaseRtnCount(checkNull(itemResult[2]));
+			itemReport.setSalesRtnCount(checkNull(itemResult[3]));
 			
 			
 			itemReportList.add(itemReport);
