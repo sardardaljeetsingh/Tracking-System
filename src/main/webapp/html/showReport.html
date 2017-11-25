@@ -199,31 +199,18 @@
 				  </div>	  
 		  <!-- Table -->
 			  <table class="table table-hover input-sm">
-			  <thead> <tr> <th>#</th> <th>Transaction Type</th> <th>Agent Name</th>  <th>Transaction Date</th> <th>Voucher Number</th> <th>Party Account</th><th>To Ledger Account</th> <th>Description</th> <th>Quantity</th>  <th>Cost</th> </tr> </thead> 
+			  <thead> <tr> <th>#</th> <th>Total Purchases Amount</th> <th>Total Sales Amount</th>  <th>Total Purchase Return Amount</th> <th>Total Sales Return Cost</th> </tr> </thead> 
 			  <tbody> 
 			
 			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
 				
 				<th scope="row">{{$index+1}}</th> 
-				<td ng-if="report.type == 1">Purchase</td> 
-				<td ng-if="report.type == 2">Sales</td> 
-				<td ng-if="report.type == 3">Purchase Return</td> 
-				<td ng-if="report.type == 4">Sales Return</td> 
-				<td>{{report.agent.name}}</td> 
-				<td>{{report.transdate}}</td> 
-				<td>{{report.voucher}}</td> 
-				<td>{{report.fromledger.name}}</td> 
-				<td>{{report.ledger.name}}</td> 
-				<td>{{report.desc}}</td> 
-				<td>{{report.quandity}}</td> 
-			    <td>{{report.rate}}</td> 
-				<td> 
-			    <form class="form-inline">
-					
-				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
-							
-						</form>			
-						</td> 
+				
+				<td align="center">{{report.purchaseCount}}</td> 
+				<td align="center">{{report.salesCount}}</td> 
+				<td align="center">{{report.purchaseRtnCount}}</td> 
+				<td align="center">{{report.salesRtnCount}}</td>  
+			   
 					 </tr>  
 					 <tr ng-if="searchMessage.length > 0" >
 						<td colspan="8" align="center">{{searchMessage}} </td>
@@ -266,24 +253,19 @@
 			  <thead> <tr> <th>#</th> <th>Agent Name</th> <th>Total Sales Amount</th> <th>Total Sales Commission</th><th>Total Sales Return Amount</th> <th>Total Sales Return Commission</th> <th>Total Amount Commission</th>  </tr> </thead> 
 			  <tbody> 
 			
-<!--			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
+			<tr ng-repeat="report in reports | filter : {voucher : query}" > 
 				
 				<th scope="row">{{$index+1}}</th> 
-				<td>{{report.transdate}}</td> 
-				<td>{{report.voucher}}</td> 
-				<td>{{report.fromledger.name}}</td> 
-				<td>{{report.ledger.name}}</td> 
-				<td>{{report.desc}}</td> 
-				<td>{{report.quandity}}</td> 
-			    <td>{{report.rate}}</td> 
-				<td> 
-			    <form class="form-inline">
-					
-				<button type="button" class="btn btn-warning btn-xs" ng-click="editPurchase(report);">Edit</button>
-							
-						</form>				
-						</td> 
-					 </tr>  -->
+				<td align="center">{{report.itemName}}</td> 
+				<td align="center">{{report.purchaseCount}}</td> 
+				<td align="center">{{report.salesCount}}</td> 
+				<td align="center">{{report.purchaseRtnCount}}</td> 
+				<td align="center">{{report.salesRtnCount}}</td> 
+				<td align="center">{{(report.salesCount + report.salesRtnCount)}}</td> 
+			    <td> 
+			   	 
+				 
+				 </tr>  
 					 <tr ng-if="searchMessage.length > 0" >
 						<td colspan="8" align="center">{{searchMessage}} </td>
 					 </tr>	
