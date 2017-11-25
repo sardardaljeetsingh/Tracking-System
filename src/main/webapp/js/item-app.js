@@ -753,83 +753,99 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 	$rootScope.transType = '';
 	
 	
-	/*$http.get(hostname + '/advReportController/findAllItemTransNo').then(function(response) 
-	//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
-		{
-			//$rootScope.reports = response.data;
-			console.log(" Item report result --> " + JSON.stringify(response.data));
-			$rootScope.reporting = response.data;
-			//console.log(" Item report result --> " + JSON.stringify($rootScope.reporting));
-		});	
-	*/
-	
-	
-	
-	if($scope.transType == 1 || $scope.transType == 2 || $scope.transType == 3 || $scope.transType == 4 ) {
-	
-	
-	
-	
-	$http.get(hostname + '/transactions/findAll-by-type/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
-	//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
-		{
-			//$rootScope.reports = response.data;
-			$rootScope.reports = response.data;
+		
+		if($scope.transType == 1 || $scope.transType == 2 || $scope.transType == 3 || $scope.transType == 4 ) {
+
+		$http.get(hostname + '/transactions/findAll-by-type/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
+		//$http.get(hostname + '/reportController/findAllTransType/'+ $scope.transType).then(function(response) 
+			{
+				//$rootScope.reports = response.data;
+				$rootScope.reports = response.data;
 			
-		});	
-	
+			}).catch(function(data) {
+				//console.log("Error in Purchase Update --->  " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.searchMessage = JSON.stringify(data);	
+			});	
+		
 
-	} else if ($scope.transType == 'transactionReport') {
+		} else if ($scope.transType == 'transactionReport') {
+			
+			//$http.get(hostname + '/reportController/findAll/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
+			$http.get(hostname + '/reportController/findAllTransNo').then(function(response) 
+			{
+				console.log(" Transaction report result --> " + JSON.stringify(response.data));
+				$scope.reports = response.data;
+			
+			if($scope.reports.length == 0){
+				$scope.searchMessage = "No Transactions found";
+			}
+			
+			}).catch(function(data) {
+				//console.log("Error in Purchase Update --->  " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.searchMessage = JSON.stringify(data);
+				
+			});	
+			
+			
 		
-		$http.get(hostname + '/reportController/findAll/'+ $scope.company.id + '/' + $scope.transType).then(function(response) 
-	    //$http.get(hostname + '/advReportController/findAllItemTransNo').then(function(response) 
-		{
-			$scope.reports = response.data;
+		} else if ($scope.transType == 'itemReport') {
+			
+			
+			$http.get(hostname + '/reportController/findAllItemTransNo').then(function(response) 
+			{
+				console.log(" Item report result --> " + JSON.stringify(response.data));
+				$scope.reports = response.data;
+			
+			if($scope.reports.length == 0){
+				$scope.searchMessage = "No Items transactions found";
+			}
+			
+			}).catch(function(data) {
+				//console.log("Error in Purchase Update --->  " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.searchMessage = JSON.stringify(data);
+				
+			});
 		
-		if($scope.reports.length == 0){
-			$scope.searchMessage = "No Transactions found";
+		} else if ($scope.transType == 'ledgerReport') {
+			
+			
+			$http.get(hostname + '/reportController/findAllLedgerTransNo').then(function(response) 
+			{
+				console.log(" Ledger report result --> " + JSON.stringify(response.data));
+				$scope.reports = response.data;
+			
+			if($scope.reports.length == 0){
+				$scope.searchMessage = "No Ledger transactions found";
+			}
+			
+			}).catch(function(data) {
+				//console.log("Error in Purchase Update --->  " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.searchMessage = JSON.stringify(data);
+			});	
+			
+			
+		
+		} else if ($scope.transType == 'agentReport') {
+			
+			
+			$http.get(hostname + '/reportController/findAllAgentTransNo').then(function(response) 
+			{
+				console.log(" Agent report result --> " + JSON.stringify(response.data));
+				$scope.reports = response.data;
+			
+			if($scope.reports.length == 0){
+				$scope.searchMessage = "No Agent transactions found";
+			}
+			
+			}).catch(function(data) {
+				//console.log("Error in Purchase Update --->  " + JSON.stringify(data) +" headers : "+ JSON.stringify(headers) +"  status : " + status);
+				$scope.searchMessage = JSON.stringify(data);
+			});	
+			
+			
+		
 		}
-		
-		});	
-		
-		
 	
-	} else if ($scope.transType == 'itemReport') {
-		
-		
-	    $http.get(hostname + '/reportController/findAllItemTransNo').then(function(response) 
-		{
-			console.log(" Item report result --> " + JSON.stringify(response.data));
-			$scope.reports = response.data;
-		
-		if($scope.reports.length == 0){
-			$scope.searchMessage = "No Transactions found";
-		}
-		
-		});	
-		
-		
-	
-	} else if ($scope.transType == 'ledgerReport') {
-		
-		
-	    $http.get(hostname + '/reportController/findAllLedgerTransNo').then(function(response) 
-		{
-			console.log(" Ledger report result --> " + JSON.stringify(response.data));
-			$scope.reports = response.data;
-		
-		if($scope.reports.length == 0){
-			$scope.searchMessage = "No Transactions found";
-		}
-		
-		});	
-		
-		
-	
-	}
-
-
-
 	
 	$scope.editPurchase = function(report){
 		$rootScope.currentPage = 'PurchaseReturn';
@@ -877,10 +893,6 @@ app.controller('reportsController', function($scope,$rootScope,$location,$http) 
 			if($rootScope.reports.length == 0){
 				$scope.searchMessage = "No Voucher number found";
 			}
-			//console.log(" items Length : " + $scope.items.length);
-        	//console.log(" items : " + JSON.stringify($scope.items));
-            
-			//$rootScope.currentPage = 'showStockItems';			
 		});			
 		
 	}
