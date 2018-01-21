@@ -146,7 +146,12 @@ app.config(['$routeProvider', '$locationProvider','localStorageServiceProvider',
 	      { 
 		    controller: 'SaleReturnController',
 		    templateUrl :'/inline-SaleReturn.html',
-		  })	
+		  })
+	.when('/Receipts'	,
+	      { 
+		    controller: 'ReceiptController',
+		    templateUrl :'html/inline-Receipts.html',
+		  })
 	.when('/create-agent'	,
 	      { 
 		    controller: 'AgentCreateController',
@@ -250,7 +255,7 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 	$scope.transDate = new Date();;	
 	$rootScope.transDay = "";
 	
-	$scope.invalidDate = false;
+	$scope.validDate = true;
 	
 	$scope.login = function(user){
 		
@@ -259,20 +264,18 @@ app.controller('loginController', function($scope,$rootScope,$location,$http,loc
 		try {
 			
 			var date = $scope.transDate.getDate() +"/"+ ($scope.transDate.getMonth()+1) +"/"+ $scope.transDate.getFullYear();
-			var pattern = new RegExp(/[0-9]{2}[/]{1}[0-9]{2}[/]{1}[1-9]{4}/);
-			//var pattern = new RegExp(/[0-9\/]{2}[0-9\/]{2}[1-9]{4}/);
 			
-			//alert("Date test " + pattern.test(date));
+				
+			if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)) {	
+				$scope.validDate = false;
+				return;
+			} 
 			
-			if(!pattern.test(date)) {
-				$scope.invalidDate = true;
-			} else {
-				$scope.invalidDate = false;
-			}
+		
 		} catch (err) {
 		
 			console.log("Date parse error --> " + JSON.stringify(err));
-			$scope.invalidDate = true;
+			$scope.validDate = false;
 			return;
 		  }	
 		  
@@ -676,6 +679,15 @@ app.controller('performActionController', function($scope,$rootScope,$location,$
 		$location.path("/Purchages");
 	}
 
+	$scope.Receipts = function(){
+		$rootScope.currentPage = 'Receipts';
+		//this variable will identify the type of return transaction
+		//$rootScope.returnType = 'TR_SR';
+		//Back end code to edit Company
+		//$location.path("/SaleReturn");
+		$location.path("/Receipts");
+	}
+	
 	$scope.PurchaseReturn = function(){
 		$rootScope.currentPage = 'PurchaseReturn';
 		//this variable will identify the type of return transaction
