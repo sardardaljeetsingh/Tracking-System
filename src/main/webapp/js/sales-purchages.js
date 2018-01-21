@@ -2478,3 +2478,5 @@ app.controller('EditSalesTransactionController', function($scope,$rootScope,$loc
    
 });
 
+app.controller('ReceiptController', function($scope,$rootScope,$location,$http,ItemService,$filter,StockGrpSrvc,GenericSrvc) {
+});
