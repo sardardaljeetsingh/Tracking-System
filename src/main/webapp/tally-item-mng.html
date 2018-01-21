@@ -28,7 +28,7 @@
 
     <div class="container-fluid" >
 	
-		<div class="col-md-3" style="width: 15%; height: 530px; padding: 1px; background-color: #dff0d8;" 
+		<div class="col-md-3" style="width: 15%; height: 800px; padding: 1px; background-color: #dff0d8;" 
 		ng-if="(loggedUser != null &&  loggedUser.type =='Admin' )" >
 			<ul class="nav nav-pills nav-stacked panel-success">
 				<li ng-class="{ active: (curTab == null ||  curTab =='companyTab') }">
@@ -214,7 +214,7 @@
 									  md-min-date="minDate" md-max-date="maxDate"></md-datepicker> 
                             </div>-->
 							
-							 <div class="col-md-12" ng-class="{'has-error' : submitclick || loginformform['transDate'].$invalid || invalidDate }">
+							 <div class="col-md-12" ng-class="{'has-error' : submitclick || loginformform['transDate'].$invalid || !validDate }">
 									
 									
 									<p class="input-group">
@@ -228,7 +228,7 @@
 							  </div>		
 
 								
-                            <div class="input-group" ng-if="invalidDate">
+                            <div class="input-group" ng-if="!validDate">
 										<p class="text-danger"> <Strong> Invalid Date Format! <Strong> </p>
                             </div>
 							
@@ -520,15 +520,27 @@
 	  <script type="text/ng-template" id="/inline-perform-action.html">	
 		<div class="container-fluid">
 		
-			<div class="panel panel-success"  > 
+			<!-- insert configuration panel code here -->
+			
+			
+			<div class="panel panel-success" > 
 			  <!-- Default panel contents -->
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Configuration</strong></div>
+			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Masters</strong></div>
 			  <div class="panel-body">
+			  
+					<div class="row input-sm" style="margin:5px;padding:0px"> 
+
+						 <div class="col-xs-2 panel panel-success" style="margin:5px;margin-right:15px;padding:0px" ng-if="previliges.accountinfo == true ">
+							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000"> 
+							<strong>Agent Info</strong></div>
+								<div class="panel-body" >
+									
 									<div class="row" >
-										<div class="col-xs-3 panel panel-success" style="margin:10px;padding:0px" ng-if="previliges.configuration == true " >
+										
+										<div class="col-xs-3 panel panel-success" style="margin:5px;padding:0px;min-width: 90%" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
-											<strong>Agents </strong></div>
-											<div class="panel-body">
+											<strong>Agents</strong></div>
+											<div class="panel-body" style="padding-bottom:2px">
 												<div class="list-group">
 												  <a href="#create-agent" class="list-group-item list-group-item-success">
 												  <strong>Create Agent </strong></a>
@@ -537,27 +549,25 @@
 												</div>											
 											</div>	
 										</div>									
-									</div>				  
-			  </div>			  
-	        </div>
-			
-			<div class="panel panel-success" > 
-			  <!-- Default panel contents -->
-			  <div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" ><strong>Masters</strong></div>
-			  <div class="panel-body">
-			  
-					<div class="row input-sm" > 
-						  <div class="col-xs-6 panel panel-success" style="margin:10px;padding:0px" ng-if="previliges.accountinfo == true ">
+										
+									
+									</div>	
+									
+								</div>
+						  </div>
+					
+					
+						  <div class="col-xs-4 panel panel-success" style="margin:5px;margin-right:15px;padding:0px" ng-if="previliges.accountinfo == true ">
 							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000"> 
 							<strong>Accounting Info</strong></div>
 								<div class="panel-body">
 									
 									<div class="row" >
 										
-										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+										<div class="col-xs-5 panel panel-success" style="margin:5px;padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
-											<strong>Groups </strong></div>
-											<div class="panel-body">
+											<strong>Account Groups </strong></div>
+											<div class="panel-body" style="padding-bottom:2px">
 												<div class="list-group">
 												  <a href="#create-account-groups" class="list-group-item list-group-item-success">
 												  <strong>Create Group </strong></a>
@@ -567,35 +577,31 @@
 											</div>	
 										</div>									
 										
-										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+										<div class="col-xs-6 panel panel-success" style="margin:5px;padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
-											<strong>Ledgers</strong></div>
-											<div class="panel-body">
+											<strong>Account Ledgers</strong></div>
+											<div class="panel-body" style="padding-bottom:2px">
 												<div class="list-group">
 												  <a href="#create-ledgers" class="list-group-item list-group-item-success"><strong>Create Ledger</strong></a>
 												  <a href="#view-ledgers" class="list-group-item list-group-item-success"><strong>View Ledgers</strong></a>
 												</div>											
 											</div>												
 										</div>	
+									
 									</div>	
 									
 								</div>
 						  </div>
-						
-						<div class="col-xs-5 panel panel-success" style="margin:5px;padding:0px" ng-if="previliges.inventoryinfo == true"  >
-							
+						<div class="col-xs-5 panel panel-success" style="margin:5px;margin-right:15px;padding:0px" ng-if="previliges.inventoryinfo == true"  >
 							<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 							<strong>Inventory Info</strong></div>
-								
 								<div class="panel-body">
-								
 									<div class="row" >
-										
-										<div class="col-xs-6 panel panel-success" style="margin:10px; margin-right: 0px; padding:0px" >
+										<div class="col-xs-6 panel panel-success" style="margin:5px;padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
 											<strong>Stock Groups</strong></div>
 											
-											<div class="panel-body">
+											<div class="panel-body" style="padding-bottom:2px">
 												<div class="list-group">
 												  <a href="#create-stock-groups" class="list-group-item list-group-item-success"><strong>Create Stock Group</strong></a>
 												  <a href="#view-stock-groups" class="list-group-item list-group-item-success"><strong>View Stock Groups</strong></a>
@@ -603,10 +609,10 @@
 											</div>	
 										</div>									
 										
-										<div class="col-xs-5 panel panel-success" style="margin:10px;padding:0px" >
+										<div class="col-xs-5 panel panel-success" style="margin:5px;margin-right:5px;padding:0px" >
 											<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 											<strong>Stock Items</strong></div>
-											<div class="panel-body">
+											<div class="panel-body" style="margin-right:0px;padding-bottom:2px"">
 												<div class="list-group">
 												  <a href="#create-stock-items" class="list-group-item list-group-item-success"><strong>Create Stock Item</strong></a>
 												  <a href="#view-stock-items" class="list-group-item list-group-item-success"><strong>View Stock Items</strong></a>
@@ -629,50 +635,62 @@
 			 <div class="panel-body">
 				<div class="row" >
 					
-					<div class="col-xs-3 panel panel-success" style="margin:10px; margin-right: 0px; padding:0px" >
+					<div class="col-xs-2 panel panel-success" style="margin:5px; margin-left:5px;margin-right: 5px; padding:0px" >
 						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000" >
 						<strong>Purchase</strong></div>
 						
-						<div class="panel-body">
+						<div class="panel-body" style="margin:10px;padding:1px">
 							<div class="list-group">
-							  <a href="" ng-click="Purchages()" class="list-group-item list-group-item-success"><strong>New Purchase Order</strong></a>
+							  <a href="" ng-click="Purchages()" class="list-group-item list-group-item-success"><strong>New Purchase</strong></a>
 							  <a href="" ng-click="purchaseReport(1)" class="list-group-item list-group-item-success"><strong>View Purchases</strong></a>
 							</div>											
 						</div>	
 					</div>									
 					
-					<div class="col-xs-2 panel panel-success" style="margin:10px;padding:0px" >
+					<div class="col-xs-2 panel panel-success" style="margin:5px;margin-right: 5px;padding:0px" >
 						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 						<strong>Sales</strong></div>
 						
-						<div class="panel-body">
+						<div class="panel-body" style="margin:10px;padding:1px">
 							<div class="list-group">
-							  <a href="" ng-click="Sales()" class="list-group-item list-group-item-success"><strong>New Sales Order</strong></a>
+							  <a href="" ng-click="Sales()" class="list-group-item list-group-item-success"><strong>New Sales</strong></a>
 							  <a href="" ng-click="salesReport(2)" class="list-group-item list-group-item-success"><strong>View Sales</strong></a>
 							</div>											
 						</div>												
 					</div>	
 					
-					<div class="col-xs-3 panel panel-success" style="margin:10px;padding:0px" >
+					<div class="col-xs-3 panel panel-success" style="margin:5px;margin-right: 5px;padding:0px" >
 						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 						<strong>Purchase Return</strong></div>
 						
-						<div class="panel-body">
+						<div class="panel-body" style="margin:10px;padding:1px">
 							<div class="list-group">
-							  <a href="" ng-click="PurchaseReturn()" class="list-group-item list-group-item-success"><strong>New Purchase Return Order</strong></a>
+							  <a href="" ng-click="PurchaseReturn()" class="list-group-item list-group-item-success"><strong>New Purchase Return</strong></a>
 							  <a href="" ng-click="purchaseReturnReport(3)" class="list-group-item list-group-item-success"><strong>View Purchase Returns</strong></a>
 							</div>											
 						</div>												
 					</div>
 				
-					<div class="col-xs-3 panel panel-success" style="margin:10px;padding:0px" >
+					<div class="col-xs-2 panel panel-success" style="margin:5px;margin-right: 5px;padding:0px" >
 						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
 						<strong>Sales Return</strong></div>
 						
-						<div class="panel-body">
+						<div class="panel-body" style="margin:10px;padding:1px">
 							<div class="list-group">
-							  <a href="" ng-click="SaleReturn()" class="list-group-item list-group-item-success"><strong>New Sales Return Order</strong></a>
+							  <a href="" ng-click="SaleReturn()" class="list-group-item list-group-item-success"><strong>New Sales Return</strong></a>
 							  <a href="" ng-click="salesReturnReport(4)" class="list-group-item list-group-item-success"><strong>View Sales Returns</strong></a>
+							</div>											
+						</div>												
+					</div>
+					
+					<div class="col-xs-2 panel panel-success" style="margin:5px;margin-right: 0px;padding:0px" >
+						<div class="panel-heading" style="background-image: linear-gradient(to bottom,#ffffff 0,#7dd05c 100%);color:#000000">
+						<strong>Receipts</strong></div>
+						
+						<div class="panel-body" style="margin:10px;padding:1px">
+							<div class="list-group">
+							  <a href="" ng-click="Receipts()" class="list-group-item list-group-item-success"><strong>New Receipt</strong></a>
+							  <a href="" ng-click="salesReturnReport(4)" class="list-group-item list-group-item-success"><strong>View Receipts</strong></a>
 							</div>											
 						</div>												
 					</div>
